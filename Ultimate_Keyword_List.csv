@@ -8,6 +8,7 @@ aquaculture,2,113
 finfish,2,32
 hatchery,2,24
 pond,2,24
+drought,3,3
 flood,3,39
 landslide,3,9
 sea-level,3,2
@@ -16,13 +17,15 @@ angler,2,39
 angling,2,139
 fishery,2,319
 fishing,2,1034
-harvest,2,147
+net,2,271
 seine,2,44
-exotic,3,6
+trawl,2,160
+disease,2,114
 invasive,3,65
-tidal,3,79
+non-native,3,2
 leaching,3,5
 leakage,3,36
+nutrient,3,64
 septic,3,17
 sewage,3,86
 spill,3,253
@@ -30,6 +33,7 @@ tailings,3,15
 toxic,3,283
 biodiversity,4,40
 endangered,4,64
+listed,4,270
 threatened,4,41
 aqueduct,3,3
 bridge,3,103
@@ -48,9 +52,10 @@ water,3,2834
 wetland,3,40
 bait,3,11
 corkline,3,11
+creek,3,15
 fish,2,169
 fishwheel,3,13
-gear,3,16
 kokanee,1,7
+lakes,3,14
 mesh,3,12
 purse,3,23
