@@ -3,10 +3,12 @@
 # A tool for compiling and assessing Canadian and British Columbian legislation relevant to Pacific Salmon management
 #///////////////////////////////////////////////////////////////////////////////
 
-# INITIALIZING ------------------------------------------------------------
+# INITIALIZING -----------------------------------------------------------------
 
 ## i) Set Working Directory ----------------------------------------------------
-setwd("~/3. Management Domains/Interactive Tool/R Code/FA Trial/FA Trial")
+library(here)
+# Get the root directory of the project
+here()
 
 ## ii) Load Libraries ----------------------------------------------------------
 library(xml2)
@@ -21,58 +23,78 @@ library(stringr)
 library(tidytext)  # For NLP tasks
 library(dplyr)
 library(tidyr)
+library(here)
 
 ## iii) Read in files and models------------------------------------------------
 
-# Define file path using the working directory
-file_path_mgmt <- file.path(getwd(), "Management Domain Threats and Keywords.csv")
+### Read in Management Domain Keywords and IUCN Threats-------------------------
+
+# Define file path using the `here()` function
+file_path_mgmt <- here("Management Domain Threats and Keywords.csv")
+
 # Check if file exists before reading
 if (!file.exists(file_path_mgmt)) stop("Error: Management Domain Threats and Keywords file not found.")
+
 # Read CSV into a data table while preserving multi-word phrases in double quotes
 mgmt_d_keywords <- tryCatch({
   fread(file_path_mgmt, quote = "\"")
 }, error = function(e) {
   stop("Error reading CSV file: ", e$message)
 })
+
 # Verify expected columns exist
 required_columns <- c("Management Domain", "L1", "L2", "Keyword", "Specificity")
 if (!all(required_columns %in% colnames(mgmt_d_keywords))) {
   stop("Error: Expected columns missing from the dataset.")
 }
 
-# Define the path to your UDPipe model using the working directory
-udpipe_model_path <- file.path(getwd(), "english-ewt-ud-2.5-191206.udpipe")
+### Read in Udpipe model for word frequency analysis----------------------------
 
-# Create the salmon_keywords data table
+# Define the path to your UDPipe model using the `here()` function
+udpipe_model_path <- here("english-ewt-ud-2.5-191206.udpipe")
+
+### Create the salmon_keywords data table---------------------------------------
 salmon_keywords <- data.table(
   Keyword = c("salmon", "chinook", "sockeye", "coho", "chum"),
   Specificity = 1,
   Frequency = NA
 )
 
-# Define file path using the working directory
-file_path_exclusion <- file.path(getwd(), "Exclusion_keywords.csv")
+### Read in Exclusion Keywords CSV----------------------------------------------
+
+# Define file path using the `here()` function
+file_path_exclusion <- here("Exclusion_keywords.csv")
+
 # Check if file exists before reading
 if (!file.exists(file_path_exclusion)) stop("Error: Exclusion_keywords file not found.")
+
 # Read CSV into a data table without modifying it
 exclusion_keywords <- fread(file_path_exclusion, quote = "\"", stringsAsFactors = FALSE)
+
+# Remove any leading or trailing quotation marks from Keyword values
 exclusion_keywords[, Keyword := gsub('^"|"$', '', Keyword)]
 
-# Define file path using the working directory
-file_path_clause <- file.path(getwd(), "Clause Type Keywords.csv")
+### Read in Clause Type Keywrds CSV---------------------------------------------
+
+# Define file path using the `here()` function
+file_path_clause <- here("Clause Type Keywords.csv")
+
 # Check if file exists before reading
 if (!file.exists(file_path_clause)) stop("Error: Clause Type Keywords file not found.")
+
 # Read CSV into a data table while preserving multi-word phrases in double quotes
 clause_keywords <- tryCatch({
   fread(file_path_clause, quote = "\"", stringsAsFactors = FALSE)
 }, error = function(e) {
   stop("Error reading CSV file: ", e$message)
 })
+
 # Verify expected columns exist
 required_columns <- c("Keyword", "Clause_Type")
 if (!all(required_columns %in% colnames(clause_keywords))) {
   stop("Error: Expected columns missing from the dataset.")
 }
+
 # Remove redundant double quotes but keep multi-word phrases intact
 clause_keywords[, Clause_Type := gsub('""', '"', Clause_Type)]
 
@@ -248,6 +270,8 @@ Type_A_filtered <- Type_A_parsed[
 ]
 
 ### 1.1.4 - Extract Type A Unigrams --------------------------------------------
+
+ud_model <- udpipe_load_model(udpipe_model_path)
 
 # Perform annotation on the Paragraph column
 annotation <- udpipe_annotate(ud_model, x = tolower(Type_A_filtered$Paragraph))  # Convert text to lowercase before processing
