@@ -201,7 +201,7 @@ for (file in html_files) {
 Paragraphs_DT <- Paragraphs_DT[!is.na(`Section`)]
 
 # Step 3: Remove Rows Containing "repeal", "repealed", or "revoked"
-filter_words <- c("repeal", "repealed", "revoked")
+filter_words <- c("repeal", "repealed", "revoked", "Marginal note", "Not in force")
 Paragraphs_DT <- Paragraphs_DT[!grepl(paste(filter_words, collapse = "|"), `Paragraph`, ignore.case = TRUE)]
 
 ## 2.2 - Group paragraphs by Heading and Section--------------------------------
