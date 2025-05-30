@@ -1,6 +1,6 @@
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-# PACIFIC SALMON MANAGEMENT DOMAINS
-# A tool for compiling and assessing Canadian and British Columbian legislation relevant to Pacific Salmon management
+# PART 3 - BUILDING A FILTER KEYWORD LIST---------------------------------------
+# 
 #///////////////////////////////////////////////////////////////////////////////
 
 # INITIALIZING -----------------------------------------------------------------
