@@ -15,80 +15,107 @@ library(data.table)
 library(here)
 library(sortable)  # Enables drag-and-drop functionality
 
-# Load R Object using `here()`
-rds_path <- here("mgmt_d_1.RData")
+# Define file path for saving results
+rds_path <- here("keyword_selection.RData")
 
-# Check if file exists before loading
-if (!file.exists(rds_path)) stop("Error: mgmt_d_1.RData file not found.")
-
-# Load the R object
-load(rds_path)
-
-# Ensure required data tables exist
-if (!exists("salmon_keywords") || !exists("mgmt_d_keywords") || !exists("Type_A_unigrams_highest_quartile")) {
-  stop("Error: One or more required datasets are missing.")
-}
-
-# Extract only the `Keyword` column and merge them
-merged_keywords <- rbindlist(list(
-  salmon_keywords[, .(Keyword)], 
-  mgmt_d_keywords[, .(Keyword)], 
-  Type_A_unigrams_highest_quartile[, .(Keyword)]
-), fill = TRUE)[!is.na(Keyword) & Keyword != ""]
-
-# Clean `Keyword` column
-merged_keywords[, Keyword := gsub("\\\\b", "", Keyword)]  # Remove boundary markers
-merged_keywords[, Keyword := gsub('["]', "", Keyword)]  # Remove double quotes
-merged_keywords[, Keyword := trimws(Keyword)]  # Trim leading/trailing spaces
-
-# Ensure `Keyword` column exists and has values
-if (nrow(merged_keywords) == 0) {
-  stop("Error: No Keywords found in merged dataset.")
+# Load previous selections if available, else start fresh
+if (file.exists(rds_path)) {
+  load(rds_path)
+} else {
+  merged_keywords <- rbindlist(list(
+    salmon_keywords[, .(Keyword)], 
+    mgmt_d_keywords[, .(Keyword)], 
+    Type_A_unigrams_highest_quartile[, .(Keyword)]
+  ), fill = TRUE)[!is.na(Keyword) & Keyword != ""]
+  
+  merged_keywords[, Keyword := gsub("\\\\b", "", Keyword)]
+  merged_keywords[, Keyword := gsub('["]', "", Keyword)]
+  merged_keywords[, Keyword := trimws(Keyword)]
+  
+  included_keywords <- merged_keywords$Keyword
+  removed_keywords <- character(0)
 }
 
 # Define UI
 ui <- fluidPage(
-  titlePanel("Drag-and-Drop Keyword Selection"),
+  titlePanel("Refining Keyword Selection Iteratively"),
   
   fluidRow(
-    bucket_list(
-      header = "Drag keywords between lists:",
-      
-      add_rank_list("included_list", 
-                    labels = merged_keywords$Keyword, 
-                    input_id = "included_keywords", 
-                    text = "Included Keywords"),
-      
-      add_rank_list("removed_list", 
-                    labels = character(0), 
-                    input_id = "removed_keywords", 
-                    text = "Removed Keywords")
-    )
+    textInput("new_keyword", "Add a new keyword:", ""),
+    actionButton("add_keyword", "Add to Included Keywords")
   ),
   
-  actionButton("submit", "Finalize Selection"),  # Submit button
+  uiOutput("keyword_ui"),  # Dynamically rendered UI
   
-  verbatimTextOutput("summary_output")  # Display selected keywords
+  actionButton("submit", "Finalize Selection"),
+  verbatimTextOutput("summary_output")
 )
 
 # Define Server
 server <- function(input, output, session) {
+  keywords_data <- reactiveValues(
+    included = included_keywords,
+    removed = removed_keywords
+  )
   
-  # Observe changes in lists and update reactively
-  observe({
-    included_keywords <- input$included_keywords
-    removed_keywords <- input$removed_keywords
+  # Observe adding new keyword
+  observeEvent(input$add_keyword, {
+    new_word <- trimws(input$new_keyword)
     
-    # Save final selections as a data table
-    final_data <- data.table(
-      Keyword = c(included_keywords, removed_keywords),
-      Status = c(rep("Included", length(included_keywords)), rep("Removed", length(removed_keywords)))
-    )
+    if (new_word != "" && !(new_word %in% keywords_data$included)) {
+      keywords_data$included <- c(keywords_data$included, new_word)
+      
+      # Dynamically re-render UI instead of using update functions
+      output$keyword_ui <- renderUI({
+        bucket_list(
+          header = "Drag keywords between lists:",
+          
+          add_rank_list("included_list", 
+                        labels = keywords_data$included, 
+                        input_id = "included_keywords", 
+                        text = "Included Keywords"),
+          
+          add_rank_list("removed_list", 
+                        labels = keywords_data$removed, 
+                        input_id = "removed_keywords", 
+                        text = "Removed Keywords")
+        )
+      })
+    }
+  })
+  
+  # Observe submission and save results
+  observeEvent(input$submit, {
+    keywords_data$included <- input$included_keywords
+    keywords_data$removed <- input$removed_keywords
     
+    save(keywords_data$included, keywords_data$removed, file = rds_path)
+    
+    # Display final keyword selection
     output$summary_output <- renderPrint({
-      cat("Final Keyword Selection:\n")
+      final_data <- data.table(
+        Keyword = c(keywords_data$included, keywords_data$removed),
+        Status = c(rep("Included", length(keywords_data$included)), rep("Removed", length(keywords_data$removed)))
+      )
       print(final_data)
     })
+  })
+  
+  # Initial render of the keyword UI
+  output$keyword_ui <- renderUI({
+    bucket_list(
+      header = "Drag keywords between lists:",
+      
+      add_rank_list("included_list", 
+                    labels = keywords_data$included, 
+                    input_id = "included_keywords", 
+                    text = "Included Keywords"),
+      
+      add_rank_list("removed_list", 
+                    labels = keywords_data$removed, 
+                    input_id = "removed_keywords", 
+                    text = "Removed Keywords")
+    )
   })
 }
 
