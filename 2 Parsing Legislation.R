@@ -1,6 +1,6 @@
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 # PART 2 - PARSING LEGISALTION--------------------------------------------------
-# Assuming completion of Part 1, and the user has compiled salmon relevant HTML 
+# Summary: Assuming completion of Part 1, and the user has compiled salmon relevant HTML 
 # files into folders in the working directory called Type 1 Legislation and
 # Type 2 Legislation. 
 # Outputs: datatable of salmon relevant legislation parsed by section and paragraph
@@ -206,11 +206,29 @@ Paragraphs_DT <- Paragraphs_DT[!grepl(paste(filter_words, collapse = "|"), `Para
 
 ## 2.2 - Group paragraphs by Heading and Section--------------------------------
 
+# Remove Subsection column
+Paragraphs_DT[, Subsection := NULL]
+
+# Create Grouped_DT by grouping paragraphs while preserving structure
+Grouped_DT <- Paragraphs_DT[, .(
+  Jurisdiction = first(Jurisdiction),
+  `Act Name` = first(`Act Name`),
+  `Legislation Name` = first(`Legislation Name`),
+  `Legislation Type` = first(`Legislation Type`),
+  Section = first(Section),
+  Heading = first(Heading),
+  Paragraph = paste(Paragraph, collapse = " ")  # Merge paragraphs within the same Heading & Section
+), by = .(Heading, Section)]  # Grouping criteria
+
+# Remove columns only if they exist
+if ("XPath" %in% names(Grouped_DT)) Grouped_DT[, `XPath` := NULL]
+if ("Section.1" %in% names(Grouped_DT)) Grouped_DT[, `Section.1` := NULL]
+
 # Remove XPath and Section.1 columns
 Grouped_DT[, `XPath` := NULL]
 Grouped_DT[, `Section.1` := NULL]
 
-# Reorder columns explicitly by creating a new table and renaming the output
+# Reorder columns explicitly and rename output
 Full_legislation_parsed_DT <- Grouped_DT[, .(
   Jurisdiction,
   `Legislation Type`,
