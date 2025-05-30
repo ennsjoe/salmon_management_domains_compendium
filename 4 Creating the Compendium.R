@@ -3,6 +3,8 @@
 # A tool for compiling and assessing Canadian and British Columbian legislation relevant to Pacific Salmon management
 #///////////////////////////////////////////////////////////////////////////////
 
+rm(list = ls())  # Removes all objects in the global environment
+
 # INITIALIZING -----------------------------------------------------------------
 
 ## i) Set Working Directory ----------------------------------------------------
