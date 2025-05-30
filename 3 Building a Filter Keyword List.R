@@ -463,10 +463,6 @@ for (file in html_files) {
   jurisdiction <- ifelse(any(grepl("www.gov.bc.ca", head_attrs)) || grepl("British Columbia", meta_breadcrumb), "Provincial",
                          ifelse(!is.na(meta_description) && grepl("Federal laws of Canada", meta_description), "Federal", "Unknown"))
   
-  # Extract legislation name
-  legislation_name <- html_file %>% html_nodes("h1, div#title h2") %>% html_text(trim = TRUE)
-  legislation_name <- ifelse(length(legislation_name) > 0, clean_text(legislation_name[1]), "Unknown Legislation")
-  
   # Extract legislation type
   legislation_type <- fifelse(
     grepl("\\bRegulation\\b", legislation_name, ignore.case = TRUE) | 
