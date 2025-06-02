@@ -1,17 +1,17 @@
 ﻿Keyword,Exclude
-"""other than salmon""",yes
+other than salmon,yes
 repealed,yes
 revoked,yes
-"""Salmon Arm""",yes
-"""Little River""",yes
-"""Yukon Territory""",yes
+Salmon Arm,yes
+Little River,yes
+Yukon Territory,yes
 rockfish,yes
 eulachon,yes
 smelt,yes
 crab,yes
 shrimp,yes
 octopus,yes
-"""Salmon River""",yes
+Salmon River,yes
 Morne,yes
 Breton,yes
 Newfoundland,yes
@@ -33,7 +33,7 @@ Yoho,yes
 thence,yes
 waterton,yes
 liability,yes
-"""His Excellency""",yes
+His Excellency,yes
 sturgeon,yes
 largemouth,yes
 smallmouth,yes
