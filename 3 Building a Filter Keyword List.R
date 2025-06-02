@@ -28,7 +28,7 @@ if (file.exists(rds_path)) {
   if (file.exists(mgmt_d_1_path)) {
     load(mgmt_d_1_path)  # Load previous management data
     
-    # Combine keywords from salmon_keywords, mgmt_d_keywords, and Type_A_unigrams_highest_quartile
+    # Combine keywords and ensure Specificity stays assigned
     removed_keywords_dt <- rbindlist(list(
       salmon_keywords[, .(Keyword)], 
       mgmt_d_keywords[, .(Keyword)], 
@@ -39,10 +39,16 @@ if (file.exists(rds_path)) {
     removed_keywords_dt[, Keyword := gsub('["]', "", Keyword)]
     removed_keywords_dt[, Keyword := trimws(Keyword)]
     
-    included_keywords_dt <- data.table(Keyword = character(0))  # Start with an empty included list
+    # Ensure Specificity column is properly initialized
+    included_keywords_dt <- data.table(Keyword = character(0), Specificity = NA_integer_)
   } else {
     stop("Error: mgmt_d_1.RData not found. Ensure it exists in the expected directory.")
   }
+}
+
+# Ensure Specificity values remain assigned across iterations
+if (!"Specificity" %in% colnames(included_keywords_dt)) {
+  included_keywords_dt[, Specificity := NA_integer_]
 }
 
 # Assign to Global Environment for iterative use
@@ -52,7 +58,7 @@ assign("removed_keywords_dt", removed_keywords_dt, envir = .GlobalEnv)
 # Define UI
 ui <- fluidPage(
   titlePanel("Select Most Specific Salmon Management Keywords"),
-  # Add instructions below the title panel
+  
   tags$div(
     tags$p("Pacific salmon legislation filtering:"),
     tags$ul(
@@ -63,7 +69,6 @@ ui <- fluidPage(
       tags$li("Click 'Finalize' button at bottom when finished.")
     )
   ),
-      
   
   fluidRow(
     textInput("new_keyword", "Add a new keyword:", ""),
@@ -89,7 +94,8 @@ server <- function(input, output, session) {
     
     if (nzchar(new_word) && !(new_word %in% keywords_data$included)) {
       keywords_data$included <- c(keywords_data$included, new_word)
-      included_keywords_dt <- data.table(Keyword = keywords_data$included)
+      
+      included_keywords_dt <- data.table(Keyword = keywords_data$included, Specificity = NA_integer_)
       assign("included_keywords_dt", included_keywords_dt, envir = .GlobalEnv)
       
       updateRankListInput(session, "included_list", labels = keywords_data$included)
@@ -101,7 +107,12 @@ server <- function(input, output, session) {
     keywords_data$included <- input$included_keywords %||% keywords_data$included
     keywords_data$removed <- input$removed_keywords %||% keywords_data$removed
     
-    included_keywords_dt <- data.table(Keyword = keywords_data$included)
+    # Ensure Specificity values remain when saving
+    included_keywords_dt <- data.table(
+      Keyword = keywords_data$included, 
+      Specificity = included_keywords_dt[Keyword %in% keywords_data$included, Specificity]
+    )
+    
     removed_keywords_dt <- data.table(Keyword = keywords_data$removed)
     
     assign("included_keywords_dt", included_keywords_dt, envir = .GlobalEnv)
