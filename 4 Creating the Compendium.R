@@ -5,14 +5,33 @@
 
 library(data.table)
 library(here)
+library(writexl)
+
+# Define file path for export
+output_file <- "Pacific Salmon Management Domain Compendium.xlsx"
+
+# Export filtered_legislation_dt to an xlsx file
+write_xlsx(filtered_legislation_dt, path = output_file)
+
+print(paste("Export successful:", output_file))
 
 # Define file paths for the R objects
 full_legislation_path <- here("Full_legislation_parsed_DT.rds")
 mgmt_d_1_path <- here("mgmt_d_1.RData")
 keyword_selection_path <- here("keyword_selection.RData")
 exclusion_keyword_selection_path <- here("exclusion_keyword_selection.RData")
+clause_type_selection_path <- here("clause_type_selection.RData")
 
-# Load Full_legislation_parsed_DT.rds
+# Load datasets
+load_object <- function(path, object_name) {
+  if (file.exists(path)) {
+    load(path, envir = .GlobalEnv)
+    print(paste("Loaded:", object_name))
+  } else {
+    stop(paste("Error:", object_name, "not found."))
+  }
+}
+
 if (file.exists(full_legislation_path)) {
   full_legislation_parsed_DT <- readRDS(full_legislation_path)
   print("Loaded: Full_legislation_parsed_DT.rds")
@@ -20,60 +39,104 @@ if (file.exists(full_legislation_path)) {
   stop("Error: Full_legislation_parsed_DT.rds not found.")
 }
 
-# Load mgmt_d_1.RData
-if (file.exists(mgmt_d_1_path)) {
-  load(mgmt_d_1_path)  # Objects will be loaded into the environment
-  print("Loaded: mgmt_d_1.RData")
-} else {
-  stop("Error: mgmt_d_1.RData not found.")
-}
-
-# Load keyword_selection.RData
-if (file.exists(keyword_selection_path)) {
-  load(keyword_selection_path)  # Objects will be loaded into the environment
-  print("Loaded: keyword_selection.RData")
-} else {
-  stop("Error: keyword_selection.RData not found.")
-}
-
-# Load exclusion_keyword_selection.RData
-if (file.exists(exclusion_keyword_selection_path)) {
-  load(exclusion_keyword_selection_path)  # Objects will be loaded into the environment
-  print("Loaded: exclusion_keyword_selection.RData")
-} else {
-  stop("Error: exclusion_keyword_selection.RData not found.")
-}
-
-###############################################################
-
-library(data.table)
+load_object(mgmt_d_1_path, "mgmt_d_1.RData")
+load_object(keyword_selection_path, "keyword_selection.RData")
+load_object(exclusion_keyword_selection_path, "exclusion_keyword_selection.RData")
+load_object(clause_type_selection_path, "clause_type_selection.RData")
 
 # Ensure required datasets are loaded
-if (!exists("full_legislation_parsed_DT") || !exists("mgmt_d_keywords")) {
+if (!exists("full_legislation_parsed_DT") || !exists("included_keywords_dt") || 
+    !exists("exclusion_keywords_dt") || !exists("mgmt_d_keywords") || !exists("clause_selection_dt")) {
   stop("Error: Required datasets not found. Ensure they are loaded.")
 }
 
 # Convert Keyword and Paragraph columns to lowercase for consistent matching
-mgmt_d_keywords[, Keyword := tolower(Keyword)]
-full_legislation_parsed_DT[, Paragraph := tolower(Paragraph)]
+included_keywords_dt[, Keyword := tolower(trimws(Keyword))]
+exclusion_keywords_dt[, Keyword := tolower(trimws(Keyword))]
+full_legislation_parsed_DT[, Paragraph := tolower(trimws(Paragraph))]
+mgmt_d_keywords[, Keyword := tolower(trimws(Keyword))]
+clause_selection_dt[, Keyword := tolower(trimws(Keyword))]
 
-# Initialize Specificity column in full_legislation_parsed_DT
+### Step 1: Filter rows using `included_keywords_dt`, prioritizing specificity ###
+setorder(included_keywords_dt, Specificity)  # Prioritize by Specificity
 full_legislation_parsed_DT[, Specificity := NA_integer_]
 
-# Iteratively assign Specificity starting with 1, then 2, etc.
-for (spec_level in sort(unique(mgmt_d_keywords$Specificity), decreasing = FALSE)) {
-  keyword_subset <- mgmt_d_keywords[Specificity == spec_level, Keyword]
+for (spec_level in unique(included_keywords_dt$Specificity)) {
+  keyword_subset <- included_keywords_dt[Specificity == spec_level, Keyword]
+  keyword_pattern <- paste0("\\b(", paste(keyword_subset, collapse = "|"), ")\\b")
   
   full_legislation_parsed_DT[
-    grepl(paste(keyword_subset, collapse = "|"), Paragraph, ignore.case = TRUE),
+    grepl(keyword_pattern, Paragraph, ignore.case = TRUE),
     Specificity := spec_level
   ]
 }
 
-# Remove rows with NA Specificity
+# Keep only rows where Specificity was assigned (keyword match occurred)
 filtered_legislation_dt <- full_legislation_parsed_DT[!is.na(Specificity)]
 
-###################################################
+### Step 2: Remove rows using `exclusion_keywords_dt` ###
+exclusion_pattern <- paste0("\\b(", paste(exclusion_keywords_dt$Keyword, collapse = "|"), ")\\b")
+filtered_legislation_dt <- filtered_legislation_dt[!grepl(exclusion_pattern, Paragraph, ignore.case = TRUE)]
 
-#** Next Exclusion words 
+### Step 3: Initialize columns before assignment ###
+filtered_legislation_dt[, `:=`(L1 = NA_character_, L2 = NA_character_, `Management Domain` = NA_character_, Clause_Type = NA_character_)]
 
+### Step 4: Assign values sequentially by Specificity level ###
+for (spec_level in sort(unique(filtered_legislation_dt$Specificity), decreasing = FALSE)) {
+  
+  # Get rows for the current specificity level that are **still unassigned**
+  unassigned_rows <- filtered_legislation_dt[Specificity == spec_level]
+  
+  if (nrow(unassigned_rows) > 0) {
+    # Initialize paragraph_words column
+    unassigned_rows[, paragraph_words := lapply(Paragraph, function(text) {
+      unlist(strsplit(tolower(text), "\\s+"))
+    })]
+    
+    # Iterate through rows and assign values based on the first matched keyword
+    for (i in seq_len(nrow(unassigned_rows))) {
+      paragraph_words <- unassigned_rows[i, paragraph_words][[1]]
+      
+      # Find the first keyword that matches a word in `mgmt_d_keywords`
+      match_word <- paragraph_words[paragraph_words %in% mgmt_d_keywords$Keyword][1]
+      
+      # Assign L1, L2, and Management Domain using the first matched word
+      if (!is.na(match_word)) {
+        first_domain_match <- mgmt_d_keywords[Keyword == match_word, .(`L1`, `L2`, `Management Domain`)][1]
+        
+        # Update values **only if they are still NA**
+        filtered_legislation_dt[Paragraph == unassigned_rows[i, Paragraph] & is.na(L1), `:=`(
+          L1 = first_domain_match$L1,
+          L2 = first_domain_match$L2
+        )]
+        filtered_legislation_dt[Paragraph == unassigned_rows[i, Paragraph] & is.na(`Management Domain`), `:=`(
+          `Management Domain` = first_domain_match$`Management Domain`
+        )]
+      }
+      
+      # Find the first keyword that matches a word in `clause_selection_dt`
+      match_word_clause <- paragraph_words[paragraph_words %in% clause_selection_dt$Keyword][1]
+      
+      # Assign Clause Type using the first matched word
+      if (!is.na(match_word_clause)) {
+        first_clause_match <- clause_selection_dt[Keyword == match_word_clause, Clause_Type][1]
+        
+        # Update values **only if they are still NA**
+        filtered_legislation_dt[Paragraph == unassigned_rows[i, Paragraph] & is.na(Clause_Type), `:=`(
+          Clause_Type = first_clause_match
+        )]
+      }
+    }
+  }
+}
+
+# Remove temporary column safely
+if ("paragraph_words" %in% names(filtered_legislation_dt)) {
+  filtered_legislation_dt[, paragraph_words := NULL]
+}
+
+# Define file path for export
+output_file <- "Pacific Salmon Management Domain Compendium.xlsx"
+
+# Export filtered_legislation_dt to an xlsx file
+write_xlsx(filtered_legislation_dt, path = output_file)
