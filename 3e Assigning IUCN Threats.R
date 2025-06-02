@@ -16,7 +16,7 @@ md_rds_path <- here("management_domain_selection.RData")
 
 # Load Management Domain Keywords CSV
 if (file.exists(md_csv_path)) {
-  md_keywords_dt <- fread(md_csv_path)
+  included_keywords_dt <- fread(md_csv_path)
   print("Loaded: Management Domain Threats and Keywords.csv")
 } else {
   stop("Error: Management Domain Threats and Keywords.csv not found.")
@@ -24,25 +24,34 @@ if (file.exists(md_csv_path)) {
 
 # Ensure required columns exist
 required_cols <- c("Keyword", "Management Domain", "L1", "L2", "Specificity")
-missing_cols <- setdiff(required_cols, colnames(md_keywords_dt))
+missing_cols <- setdiff(required_cols, colnames(included_keywords_dt))
 if (length(missing_cols) > 0) {
   stop(paste("Error: Missing columns:", paste(missing_cols, collapse=", ")))
 }
 
-# Load previous selections if available
+# Load previous selections if available, else initialize md_selection_dt
 if (file.exists(md_rds_path)) {
-  load(md_rds_path)  # Load previous domain selections
-  print("Loaded: management_domain_selection.RData")
+  load(md_rds_path)  # Load previous selections
+  if (!exists("md_selection_dt")) {
+    print("Warning: md_selection_dt not found in loaded file. Initializing new selection data.")
+    md_selection_dt <- copy(included_keywords_dt)
+  } else {
+    print("Loaded: management_domain_selection.RData")
+  }
 } else {
-  # Initialize selection data with pre-assigned values
-  md_selection_dt <- copy(md_keywords_dt)
-  md_selection_dt[, Assigned_Domain := `Management Domain`]
-  md_selection_dt[, Assigned_L1 := L1]
-  md_selection_dt[, Assigned_L2 := L2]
-  
-  # Ensure Assigned_Specificity starts as character before numeric conversion
-  md_selection_dt[, Assigned_Specificity := as.character(Specificity)]
+  print("No previous selections found. Initializing md_selection_dt.")
+  md_selection_dt <- copy(included_keywords_dt)
 }
+
+# Ensure required columns exist in md_selection_dt
+md_selection_dt[, Assigned_Domain := `Management Domain`]
+md_selection_dt[, Assigned_L1 := L1]
+md_selection_dt[, Assigned_L2 := L2]
+md_selection_dt[, Assigned_Specificity := as.character(Specificity)]
+
+# Save to ensure persistence
+save(md_selection_dt, file = md_rds_path)
+print("Initialized and saved: md_selection_dt")
 
 # Assign to global environment for iterative updates
 assign("md_selection_dt", md_selection_dt, envir = .GlobalEnv)
@@ -140,7 +149,7 @@ server <- function(input, output, session) {
       dt[i, Assigned_L2 := input[[paste0("l2_", i)]]]
       
       # Convert Assigned_Specificity to integer before storing
-      dt[i, Assigned_Specificity := as.integer(input[[paste0("specificity_", i)]])]
+      dt[i, Assigned_Specificity := suppressWarnings(as.integer(input[[paste0("specificity_", i)]]))]
     }
     
     # Debugging print before saving
