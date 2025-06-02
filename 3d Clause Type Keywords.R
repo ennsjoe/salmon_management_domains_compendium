@@ -1,9 +1,10 @@
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 # PART 3d - CLAUSE TYPE KEYWORDS------------------------------------------------
 # 
-# Summary: this is an RShiny script 
+# Summary: this is an RShiny script that uploads keywords that assign "clause type"
+# categories domain procedural elements.
 #
-# Output: 
+# Output: a clause type datatable in an R object
 #///////////////////////////////////////////////////////////////////////////////
 
 library(shiny)
