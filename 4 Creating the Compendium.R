@@ -81,7 +81,7 @@ if (length(missing_objects) > 0) {
 # Convert Keyword and Paragraph columns to lowercase, then trim long strings safely
 included_keywords_dt[, Keyword := trim_string(trimws(tolower(Keyword)))]
 exclusion_keywords_dt[, Keyword := trim_string(trimws(tolower(Keyword)))]
-full_legislation_parsed_DT[, Paragraph := trim_string(trimws(tolower(Paragraph)), max_length = 250)]
+full_legislation_parsed_DT[, Paragraph := trim_string(trimws(tolower(Paragraph)), max_length = 5000)]
 md_selection_dt[, Keyword := trim_string(trimws(tolower(Keyword)))]
 md_selection_dt[, `Management Domain` := trim_string(`Management Domain`, max_length = 100)]
 md_selection_dt[, L1 := trim_string(L1, max_length = 100)]
