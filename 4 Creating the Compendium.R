@@ -156,8 +156,6 @@ for (spec_level in sort(unique(filtered_legislation_dt$Specificity), decreasing 
   }
 }
 
-# Remove temporary column safely
-filtered_legislation_dt[, paragraph_words := NULL]
 
 # Define file path for export
 output_file <- "Pacific Salmon Management Domain Compendium.xlsx"
