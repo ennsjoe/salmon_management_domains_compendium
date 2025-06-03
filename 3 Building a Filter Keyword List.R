@@ -18,17 +18,15 @@ library(sortable)  # Enables drag-and-drop functionality
 # Define file path for saving results
 rds_path <- here("keyword_selection.RData")
 
-# Check if keyword_selection.RData exists
+# Check if previous selections exist
 if (file.exists(rds_path)) {
-  load(rds_path)  # Load previous keyword selections
+  load(rds_path)
 } else {
-  # Load mgmt_d_1.RData and extract keywords if keyword_selection.RData does not exist
   mgmt_d_1_path <- here("mgmt_d_1.RData")
   
   if (file.exists(mgmt_d_1_path)) {
-    load(mgmt_d_1_path)  # Load previous management data
+    load(mgmt_d_1_path)
     
-    # Combine keywords and ensure Specificity stays assigned
     removed_keywords_dt <- rbindlist(list(
       salmon_keywords[, .(Keyword)], 
       mgmt_d_keywords[, .(Keyword)], 
@@ -39,19 +37,16 @@ if (file.exists(rds_path)) {
     removed_keywords_dt[, Keyword := gsub('["]', "", Keyword)]
     removed_keywords_dt[, Keyword := trimws(Keyword)]
     
-    # Ensure Specificity column is properly initialized
     included_keywords_dt <- data.table(Keyword = character(0), Specificity = NA_integer_)
   } else {
-    stop("Error: mgmt_d_1.RData not found. Ensure it exists in the expected directory.")
+    stop("Error: mgmt_d_1.RData not found.")
   }
 }
 
-# Ensure Specificity values remain assigned across iterations
 if (!"Specificity" %in% colnames(included_keywords_dt)) {
   included_keywords_dt[, Specificity := NA_integer_]
 }
 
-# Assign to Global Environment for iterative use
 assign("included_keywords_dt", included_keywords_dt, envir = .GlobalEnv)
 assign("removed_keywords_dt", removed_keywords_dt, envir = .GlobalEnv)
 
@@ -62,11 +57,10 @@ ui <- fluidPage(
   tags$div(
     tags$p("Pacific salmon legislation filtering:"),
     tags$ul(
-      tags$li("These keywords filter which sections to include."),
       tags$li("Choose words that MUST include salmon and/or habitat."),
-      tags$li("The 'removed' words will still be used later to assign IUCN Threat categories."),
-      tags$li("The selections will be stored for future iterations."),
-      tags$li("Click 'Finalize' button at bottom when finished.")
+      tags$li("Removed words will still be used to assign IUCN Threat categories."),
+      tags$li("Selections will be stored for future iterations."),
+      tags$li("Click 'Finalize' when finished.")
     )
   ),
   
@@ -88,7 +82,6 @@ server <- function(input, output, session) {
     removed = removed_keywords_dt$Keyword
   )
   
-  # Observe adding new keyword
   observeEvent(input$add_keyword, {
     new_word <- trimws(input$new_keyword)
     
@@ -98,16 +91,32 @@ server <- function(input, output, session) {
       included_keywords_dt <- data.table(Keyword = keywords_data$included, Specificity = NA_integer_)
       assign("included_keywords_dt", included_keywords_dt, envir = .GlobalEnv)
       
-      updateRankListInput(session, "included_list", labels = keywords_data$included)
+      # Re-render UI dynamically to update displayed keywords
+      output$keyword_ui <- renderUI({
+        bucket_list(
+          header = "Drag keywords between lists:",
+          
+          add_rank_list("included_list", 
+                        labels = keywords_data$included, 
+                        input_id = "included_keywords", 
+                        text = "Included Keywords"),
+          
+          add_rank_list("removed_list", 
+                        labels = keywords_data$removed, 
+                        input_id = "removed_keywords", 
+                        text = "Removed Keywords")
+        )
+      })
+      
+      # Clear input field after adding the word
+      updateTextInput(session, "new_keyword", value = "")
     }
   })
   
-  # Observe submission and save results
   observeEvent(input$submit, {
     keywords_data$included <- input$included_keywords %||% keywords_data$included
     keywords_data$removed <- input$removed_keywords %||% keywords_data$removed
     
-    # Ensure Specificity values remain when saving
     included_keywords_dt <- data.table(
       Keyword = keywords_data$included, 
       Specificity = included_keywords_dt[Keyword %in% keywords_data$included, Specificity]
@@ -118,30 +127,18 @@ server <- function(input, output, session) {
     assign("included_keywords_dt", included_keywords_dt, envir = .GlobalEnv)
     assign("removed_keywords_dt", removed_keywords_dt, envir = .GlobalEnv)
     
-    print("Saving keyword selections...")  # Debugging print
-    print(included_keywords_dt)
-    print(removed_keywords_dt)
-    
-    if (length(keywords_data$included) == 0 && length(keywords_data$removed) == 0) {
-      showNotification("Error: No keywords found to save.", type = "error")
-    } else {
-      tryCatch(
-        {
-          save(included_keywords_dt, removed_keywords_dt, file = rds_path)
-          flush.console()  # Ensure save completes before closing
-          print("Save successful!")
-          Sys.sleep(1)  # Small delay before closing
-          stopApp()  # Close app after successful save
-        },
-        error = function(e) {
-          showNotification(paste("Save Error:", e$message), type = "error")
-          print(paste("Save Error:", e$message))  # Debugging output
-        }
-      )
-    }
+    tryCatch({
+      save(included_keywords_dt, removed_keywords_dt, file = rds_path)
+      flush.console()
+      print("Save successful!")
+      Sys.sleep(1)
+      stopApp()
+    }, error = function(e) {
+      showNotification(paste("Save Error:", e$message), type = "error")
+      print(paste("Save Error:", e$message))
+    })
   })
   
-  # Initial render of the keyword UI
   output$keyword_ui <- renderUI({
     bucket_list(
       header = "Drag keywords between lists:",
