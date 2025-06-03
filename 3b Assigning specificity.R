@@ -15,44 +15,45 @@ library(here)
 rds_path <- here("keyword_selection.RData")
 mgmt_d_1_path <- here("mgmt_d_1.RData")
 
-# Load mgmt_d_1.RData if available
+# Load management data, including `salmon_keywords`
 if (file.exists(mgmt_d_1_path)) {
-  load(mgmt_d_1_path)  # Load management data
+  load(mgmt_d_1_path)
+  
+  # Ensure salmon_keywords exists
+  if (!exists("salmon_keywords")) {
+    stop("Error: 'salmon_keywords' not found in mgmt_d_1.RData. Check data initialization.")
+  }
 } else {
   stop("Error: mgmt_d_1.RData not found. Ensure it exists in the expected directory.")
 }
 
-# Load keyword selections if available, otherwise initialize
+# Load keyword selections from keyword_selection.RData
 if (file.exists(rds_path)) {
-  load(rds_path)  # Load previous keyword selections
+  load(rds_path)
 } else {
-  stop("Error: keyword_selection.RData does not exist. Please run the keyword selection script first.")
+  stop("Error: keyword_selection.RData does not exist. Run the keyword selection script first.")
 }
 
-# Ensure dataset exists before using it
-if (!exists("included_keywords_dt", envir = .GlobalEnv)) {
-  stop("Error: included_keywords_dt does not exist in the global environment.")
+# Ensure included_keywords_dt exists
+if (!exists("included_keywords_dt")) {
+  stop("Error: included_keywords_dt not found in keyword_selection.RData.")
 }
 
-# Ensure Specificity column exists and retains values
+# Ensure Specificity column exists in included_keywords_dt
 if (!"Specificity" %in% colnames(included_keywords_dt)) {
   included_keywords_dt[, Specificity := NA_integer_]
 }
 
-# Assign Specificity only if missing (prevent overwriting existing values)
+# Assign Specificity based on keyword matches (preserve previous values)
 included_keywords_dt[, Specificity := fifelse(
   is.na(Specificity) & Keyword %in% salmon_keywords$Keyword, 4, 
   fifelse(is.na(Specificity) & Keyword %in% mgmt_d_keywords$Keyword, 3, Specificity)
 )]
 
-# Assign to the global environment for iterative updates
-assign("included_keywords_dt", included_keywords_dt, envir = .GlobalEnv)
-
 # Define UI
 ui <- fluidPage(
   titlePanel("Assign Specificity to Keywords"),
   
-  # Add CSS for alternating row colors
   tags$style(HTML("
     .striped-row:nth-child(odd) { background-color: #f9f9f9; padding: 10px; }
     .striped-row:nth-child(even) { background-color: #e3e3e3; padding: 10px; }
@@ -69,16 +70,15 @@ ui <- fluidPage(
     )
   ),
   
-  uiOutput("questionnaire_ui"),  # Display keyword list dynamically
+  uiOutput("questionnaire_ui"),  # Dynamically generated keyword list
   
   actionButton("submit", "Submit Selection"),
   verbatimTextOutput("summary_output")
 )
 
-# Define Server Logic
+# Define Server
 server <- function(input, output, session) {
-  
-  # Dynamically generate questionnaire-style UI with row shading
+  # Render the questionnaire with dynamic rows
   output$questionnaire_ui <- renderUI({
     tagList(
       lapply(1:nrow(included_keywords_dt), function(i) {
@@ -94,23 +94,20 @@ server <- function(input, output, session) {
     )
   })
   
-  # Capture user selections & ensure each keyword retains its chosen value
+  # Capture user selections & ensure each keyword retains its value
   observeEvent(input$submit, {
     for (i in 1:nrow(included_keywords_dt)) {
       included_keywords_dt[i, Specificity := as.integer(input[[paste0("specificity_", i)]])]
     }
     
-    # Debugging prints to verify Specificity retention
-    print("Before saving: Included Keywords Table")
+    # Debugging prints to verify retention
+    print("Before saving:")
     print(included_keywords_dt)
     
-    # Save the updated table in the global environment
-    assign("included_keywords_dt", included_keywords_dt, envir = .GlobalEnv)
-    
-    # Save changes back to keyword_selection.RData
+    # Save the updated table back into keyword_selection.RData for iterative use
     save(included_keywords_dt, removed_keywords_dt, file = rds_path)
     
-    # Debugging print after saving
+    # Verify saved data
     print("After saving and reloading:")
     load(rds_path)
     print(included_keywords_dt)
@@ -122,5 +119,5 @@ server <- function(input, output, session) {
   })
 }
 
-# Run the Shiny app
+# Run the App
 shinyApp(ui, server)
