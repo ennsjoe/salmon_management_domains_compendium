@@ -156,7 +156,6 @@ for (spec_level in sort(unique(filtered_legislation_dt$Specificity), decreasing 
   }
 }
 
-
 # Define file path for export
 output_file <- "Pacific Salmon Management Domain Compendium.xlsx"
 
@@ -164,3 +163,4 @@ output_file <- "Pacific Salmon Management Domain Compendium.xlsx"
 write_xlsx(filtered_legislation_dt, path = output_file)
 
 print(paste("Export successful:", output_file))
+
