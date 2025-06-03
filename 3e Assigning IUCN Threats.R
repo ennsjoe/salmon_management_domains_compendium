@@ -29,14 +29,19 @@ if (length(missing_cols) > 0) {
   stop(paste("Error: Missing columns:", paste(missing_cols, collapse=", ")))
 }
 
-# Load previous selections if available, else initialize md_selection_dt
+# Load previous selections safely
+md_selection_dt <- NULL
+
 if (file.exists(md_rds_path)) {
-  load(md_rds_path)  # Load previous selections
-  if (!exists("md_selection_dt")) {
+  temp_env <- new.env()
+  load(md_rds_path, envir = temp_env)
+  
+  if ("md_selection_dt" %in% ls(temp_env)) {
+    md_selection_dt <- get("md_selection_dt", envir = temp_env)
+    print("Loaded existing md_selection_dt from management_domain_selection.RData")
+  } else {
     print("Warning: md_selection_dt not found in loaded file. Initializing new selection data.")
     md_selection_dt <- copy(included_keywords_dt)
-  } else {
-    print("Loaded: management_domain_selection.RData")
   }
 } else {
   print("No previous selections found. Initializing md_selection_dt.")
@@ -44,14 +49,19 @@ if (file.exists(md_rds_path)) {
 }
 
 # Ensure required columns exist in md_selection_dt
+setDT(md_selection_dt)  # Convert to data.table
 md_selection_dt[, Assigned_Domain := `Management Domain`]
 md_selection_dt[, Assigned_L1 := L1]
 md_selection_dt[, Assigned_L2 := L2]
 md_selection_dt[, Assigned_Specificity := as.character(Specificity)]
 
 # Save to ensure persistence
-save(md_selection_dt, file = md_rds_path)
-print("Initialized and saved: md_selection_dt")
+if (exists("md_selection_dt") && nrow(md_selection_dt) > 0) {
+  save(md_selection_dt, file = md_rds_path)
+  print("Successfully saved md_selection_dt.")
+} else {
+  stop("Error: md_selection_dt is empty and cannot be saved!")
+}
 
 # Assign to global environment for iterative updates
 assign("md_selection_dt", md_selection_dt, envir = .GlobalEnv)
@@ -154,18 +164,18 @@ server <- function(input, output, session) {
     
     # Debugging print before saving
     print("Before saving:")
-    print(dt)
+    print(head(dt))
     
     # Save the updated table in the global environment
     assign("md_selection_dt", dt, envir = .GlobalEnv)
     
-    # Save changes back to management_domain_selection.RData
-    save(dt, file = md_rds_path)
+    # Save changes back to management_domain_selection.RData safely
+    save(md_selection_dt, file = md_rds_path)
     
     # Debugging print after saving
     print("After saving:")
     load(md_rds_path)
-    print(md_selection_dt)
+    print(head(md_selection_dt))
     
     showNotification("Management Domains assigned & saved!", type = "message")
     output$summary_output <- renderPrint({ print(dt) })
