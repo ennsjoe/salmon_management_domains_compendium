@@ -135,9 +135,11 @@ if ("paragraph_words" %in% names(filtered_legislation_dt)) {
 }
 
 # Define file path for export
-output_file <- "Pacific Salmon Management Domain Compendium.xlsx"
+output_file <- "Pacific Salmon Management Domain Compendium 2.xlsx"
 
 # Export filtered_legislation_dt to an xlsx file
-write_xlsx(filtered_legislation_dt, path = output_file)
+write_xlsx(list(filtered_legislation_dt, included_keywords_dt, exclusion_keywords_dt,
+             mgmt_d_keywords),
+             path = output_file)
 
 print(paste("Export successful:", output_file))
