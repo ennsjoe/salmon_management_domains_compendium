@@ -209,21 +209,31 @@ Paragraphs_DT[, Subsection := NULL]
 # Convert keywords into a lookup table for faster matching
 keyword_lookup <- md_threats_keywords[, .(Keyword, `Management Domain`, L1, L2, Specificity)]
 
-# Function to find the first keyword match and return its associated attributes
+# Modify the function to ensure proper type conversion
 assign_attributes <- function(paragraph) {
   words <- unlist(strsplit(paragraph, "\\s+"))  # Split paragraph into words
-  match <- keyword_lookup[Keyword %in% words]  # Find matching rows
+  match <- md_threats_keywords[Keyword %in% words]  # Find matching rows
   
   if (nrow(match) > 0) {
-    # Return the first match found
+    # Return the first match found with character conversion
     return(match[1, .(`Management Domain`, L1, L2, Specificity)])
   } else {
-    return(data.table(`Management Domain` = NA, L1 = NA, L2 = NA, Specificity = NA))
+    return(data.table(
+      `Management Domain` = as.character(NA), 
+      L1 = as.character(NA), 
+      L2 = as.character(NA), 
+      Specificity = as.character(NA)
+    ))
   }
 }
 
-# Apply the function row-wise to extract individual attributes----
-Paragraphs_DT[, c("Management Domain", "L1", "L2", "Specificity") := assign_attributes(Paragraph), by = 1:nrow(Paragraphs_DT)]
+# Reapply the function with explicit type conversion
+Paragraphs_DT[, `:=`(
+  `Management Domain` = as.character(assign_attributes(Paragraph)$`Management Domain`),
+  L1 = as.character(assign_attributes(Paragraph)$L1),
+  L2 = as.character(assign_attributes(Paragraph)$L2),
+  Specificity = as.character(assign_attributes(Paragraph)$Specificity)
+)]
 
 # Combine Paragraphs while keeping all original columns except XPath----
 Full_legislation_parsed_DT <- Paragraphs_DT[, .(
