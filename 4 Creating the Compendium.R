@@ -135,7 +135,7 @@ if ("paragraph_words" %in% names(filtered_legislation_dt)) {
 }
 
 # Define file path for export
-output_file <- "Pacific Salmon Management Domain Compendium 2.xlsx"
+output_file <- "Pacific Salmon Management Domain Compendium.xlsx"
 
 # Export filtered_legislation_dt to an xlsx file
 write_xlsx(list(filtered_legislation_dt, included_keywords_dt, exclusion_keywords_dt,
@@ -143,3 +143,12 @@ write_xlsx(list(filtered_legislation_dt, included_keywords_dt, exclusion_keyword
              path = output_file)
 
 print(paste("Export successful:", output_file))
+
+#make a full version of the legislation with joined compendium fields
+full_compendium <- full_legislation_parsed_DT |>
+  left_join(select(filtered_legislation_dt, legislation_name, heading, section, specificity:last_col()), 
+            by = c("legislation_name", "heading", "section")) 
+
+# Save the joined dataset
+saveRDS(full_compendium, here("Full_legislation_parsed_compendium.rds"))
+
