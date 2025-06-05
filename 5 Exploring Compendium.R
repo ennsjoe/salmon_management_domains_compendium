@@ -32,20 +32,22 @@ compend <- read_excel(here("Pacific Salmon Management Domain Compendium.xlsx")) 
 
 # Load other R data objects
 # Define file paths
-full_legislation_path <- here("Full_legislation_parsed_DT.rds")
 management_domain_path <- here("management_domain_selection.RData")  
 mgmt_d_1_path <- here("mgmt_d_1.RData")  # Reintroducing mgmt_d_1.RData
 keyword_selection_path <- here("keyword_selection.RData")
 exclusion_keyword_selection_path <- here("exclusion_keyword_selection.RData")
 clause_type_selection_path <- here("clause_type_selection.RData")
 
-
-full_compendium <- readRDS(here("Full_legislation_parsed_compendium.rds"))
 load_object(management_domain_path, "management_domain_selection.RData")
 load_object(mgmt_d_1_path, "mgmt_d_1.RData")  # Reintroduced dataset
 load_object(keyword_selection_path, "keyword_selection.RData")
 load_object(exclusion_keyword_selection_path, "exclusion_keyword_selection.RData")
 load_object(clause_type_selection_path, "clause_type_selection.RData")
+
+
+full_compendium <- readRDS(here("Full_legislation_parsed_compendium.rds")) |>
+  clean_names() |>
+  mutate(across(c("jurisdiction", "legislation_type", "specificity", "l1", "l2", "management_domain", "clause_type"), as.factor))
 
 
 # R shiny app for exploration

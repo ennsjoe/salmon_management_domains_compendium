@@ -159,7 +159,6 @@ for (spec_level in sort(unique(filtered_legislation_dt$Specificity), decreasing 
 # Define file path for export
 output_file <- "Pacific Salmon Management Domain Compendium.xlsx"
 
-<<<<<<< HEAD
 # Export filtered_legislation_dt to an xlsx file
 write_xlsx(list(filtered_legislation_dt, included_keywords_dt, exclusion_keywords_dt,
              mgmt_d_keywords),
@@ -170,15 +169,13 @@ print(paste("Export successful:", output_file))
 #make a full version of the legislation with joined compendium fields
 full_compendium <- full_legislation_parsed_DT |>
   left_join(select(filtered_legislation_dt, legislation_name, heading, section, specificity:last_col()), 
-            by = c("legislation_name", "heading", "section")) 
+            by = c("Legislation Name", "Heading", "Section")) 
 
 # Save the joined dataset
 saveRDS(full_compendium, here("Full_legislation_parsed_compendium.rds"))
 
-=======
 # Export filtered_legislation_dt
 write_xlsx(filtered_legislation_dt, path = output_file)
 
 print(paste("Export successful:", output_file))
 
->>>>>>> 8b94bc7397e271197d8724a8293e63cb4047356e
