@@ -17,6 +17,7 @@ library(data.table)
 library(xml2)
 library(rvest)
 library(stringi)
+library(stringr)
 
 # Define the folders dynamically using `here()`----
 html_dirs <- c(here("Type A Legislation"), here("Type B Legislation"))
@@ -200,10 +201,10 @@ for (file in html_files) {
   }
 }
 
-# Step 2: Remove Rows with NA Sections
+# Remove Rows with NA Sections----
 Paragraphs_DT <- Paragraphs_DT[!is.na(`Section`)]
 
-# Step 3: Remove Rows Containing "repeal", "repealed", or "revoked"
+# Remove Rows Containing "repeal", "repealed", or "revoked"----
 filter_words <- c("repeal", "repealed", "revoked", "Marginal note", "Not in force")
 Paragraphs_DT <- Paragraphs_DT[!grepl(paste(filter_words, collapse = "|"), `Paragraph`, ignore.case = TRUE)]
 
@@ -240,14 +241,23 @@ Full_legislation_parsed_DT <- Paragraphs_DT[, .(
   Paragraph = paste(Paragraph, collapse = "\n\n")  # Add line breaks between paragraphs
 ), by = .(`Management Domain`, Section, Heading, `Legislation Name`, `Legislation Type`, `Act Name`, `Jurisdiction`, L1, L2, Specificity)]  # Grouping in specified order
 
-# Function to assign Clause_Type based on first matched word----
+# Function to assign Clause_Type based on first matched word with improved matching----
 assign_clause_type <- function(paragraph, keywords_dt) {
-  words <- unlist(strsplit(paragraph, "\\s+"))  # Split paragraph into words
-  matches <- keywords_dt[Keyword %in% words]  # Find matching rows
+  # Standardize text: Remove punctuation (except word boundaries) and convert to lowercase
+  clean_paragraph <- str_to_lower(gsub("[[:punct:]]", " ", paragraph))
+  
+  # Split paragraph into words
+  words <- unlist(strsplit(clean_paragraph, "\\s+"))  
+  
+  # Find matches in keyword list (case-insensitive)
+  matches <- keywords_dt[Keyword %in% words]
   
   if (nrow(matches) > 0) {
-    first_match <- words[words %in% matches$Keyword][1]  # Get first matched word
-    clause_type <- matches[Keyword == first_match, Clause_Type][1]  # Retrieve Clause_Type
+    # Get first matched word
+    first_match <- words[words %in% matches$Keyword][1]
+    
+    # Retrieve Clause_Type corresponding to the first matched keyword
+    clause_type <- matches[Keyword == first_match, Clause_Type][1]
     
     return(clause_type)
   } else {
