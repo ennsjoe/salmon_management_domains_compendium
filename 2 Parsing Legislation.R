@@ -18,6 +18,7 @@ library(xml2)
 library(rvest)
 library(stringi)
 library(stringr)
+library(writexl)
 
 # Define the folders dynamically using `here()`----
 html_dirs <- c(here("Type A Legislation"), here("Type B Legislation"))
@@ -25,7 +26,7 @@ html_dirs <- c(here("Type A Legislation"), here("Type B Legislation"))
 # Create the salmon_keywords data table----
 salmon_keywords <- data.table(
   Keyword = c("salmon", "chinook", "sockeye", "coho", "chum"),
-  Specificity = 1,
+  Scope = '1 - Salmon',
   Frequency = NA
 )
 
@@ -211,7 +212,6 @@ for (file in html_files) {
 }
 
 ################################################################################
-
 # Remove Rows with NA Sections----
 Paragraphs_DT <- Paragraphs_DT[!is.na(`Section`)]
 
@@ -226,7 +226,7 @@ Paragraphs_DT[, Subsection := NULL]
 
 ################################################################################
 # Convert keywords into a lookup table for faster matching
-keyword_lookup <- md_threats_keywords[, .(Keyword, `Management Domain`, L1, L2, Specificity)]
+keyword_lookup <- md_threats_keywords[, .(Keyword, `Management Domain`, L1, L2, Scope)]
 
 # Function to assign attributes based on first matched keyword----
 assign_attributes <- function(paragraph) {
@@ -237,31 +237,30 @@ assign_attributes <- function(paragraph) {
     # Find the first matching word in the paragraph
     first_match <- words[words %in% matches$Keyword][1]
     selected_row <- matches[Keyword == first_match][1]  # Retrieve attributes from first match
-    return(selected_row[, .(`Management Domain`, L1, L2, Specificity)])
+    return(selected_row[, .(`Management Domain`, L1, L2, Scope)])
   } else {
     return(data.table(
       `Management Domain` = NA_character_,
       L1 = NA_character_,
       L2 = NA_character_,
-      Specificity = NA_character_
+      Scope = NA_character_
     ))
   }
 }
 
 # Apply function to extract the first match per rowAdd commentMore actions
-Paragraphs_DT[, c("Management Domain", "L1", "L2", "Specificity") := assign_attributes(Paragraph), by = Paragraph]
+Paragraphs_DT[, c("Management Domain", "L1", "L2", "Scope") := assign_attributes(Paragraph), by = Paragraph]
 
 
 ################################################################################
 # Combine Paragraphs while keeping all original columns except XPath----
 Full_legislation_parsed_DT <- Paragraphs_DT[, .(
   Paragraph = paste(Paragraph, collapse = "\n\n")  # Add line breaks between paragraphs
-), by = .(`Management Domain`, Section, Heading, `Legislation Name`, `Legislation Type`, `Act Name`, `Jurisdiction`, L1, L2, Specificity)]  # Grouping in specified order
+), by = .(`Management Domain`, Section, Heading, `Legislation Name`, `Legislation Type`, `Act Name`, `Jurisdiction`, L1, L2, Scope)]  # Grouping in specified order
 
 ##########################################
-
-# Function to update Specificity only for matching rows
-update_specificity_salmon <- function(paragraph, existing_specificity, keywords_dt) {
+# Function to update Scope only for matching rows
+update_scope_salmon <- function(paragraph, existing_scope, keywords_dt) {
   # Standardize text: Remove punctuation and convert to lowercase
   clean_paragraph <- tolower(gsub("[[:punct:]]", " ", paragraph))
   
@@ -275,17 +274,17 @@ update_specificity_salmon <- function(paragraph, existing_specificity, keywords_
     # Get first matched word
     first_match <- words[words %in% matches$Keyword][1]
     
-    # Retrieve Specificity corresponding to the first matched keyword
-    specificity_value <- matches[Keyword == first_match, Specificity][1]
+    # Retrieve Scope corresponding to the first matched keyword
+    scope_value <- matches[Keyword == first_match, Scope][1]
     
-    return(specificity_value)  # Update only for matched rows
+    return(scope_value)  # Update only for matched rows
   } else {
-    return(existing_specificity)  # Keep original value for non-matching rows
+    return(existing_scope)  # Keep original value for non-matching rows
   }
 }
 
-# Apply function to update Specificity only where a match is found
-Full_legislation_parsed_DT[, Specificity := mapply(update_specificity_salmon, Paragraph, Specificity, MoreArgs = list(keywords_dt = salmon_keywords))]
+# Apply function to update Scope only where a match is found
+Full_legislation_parsed_DT[, Scope := mapply(update_scope_salmon, Paragraph, Scope, MoreArgs = list(keywords_dt = salmon_keywords))]
 
 ################################################################################
 # Function to assign Clause_Type based on first matched word with improved matching----
@@ -323,10 +322,19 @@ Full_legislation_parsed_DT[, Paragraph := substr(Paragraph, 1, 5000)]
 setcolorder(Full_legislation_parsed_DT, c(
   "Jurisdiction", "Legislation Type", "Act Name", "Legislation Name",
   "Heading", "Section", "Paragraph",
-  "Management Domain", "L1", "L2", "Specificity"
+  "Management Domain", "L1", "L2", "Scope", "Clause_Type"
 ))
 
 ################################################################################
 # Save Full_legislation_parsed_DT as an R object----
 saveRDS(Full_legislation_parsed_DT, "Full_legislation_parsed_DT.rds")
+
+# Define file path using here()
+file_path <- here("Full_legislation_parsed.xlsx")
+
+# Export data table to XLSX
+write_xlsx(Full_legislation_parsed_DT, path = file_path)
+
+# Confirmation message
+cat("File successfully saved to:", file_path, "\n")
 
