@@ -33,6 +33,7 @@ definitions,Interpretation & Purpose
 objective,Interpretation & Purpose
 objectives,Interpretation & Purpose
 purpose,Interpretation & Purpose
+means,Interpretation & Purpose
 agreement,"Licence, Permitting, & Exemptions"
 exception,"Licence, Permitting, & Exemptions"
 exceptions,"Licence, Permitting, & Exemptions"
@@ -48,6 +49,8 @@ permitted,"Licence, Permitting, & Exemptions"
 permitting,"Licence, Permitting, & Exemptions"
 quota,"Licence, Permitting, & Exemptions"
 quotas,"Licence, Permitting, & Exemptions"
+licensee,"Licence, Permitting, & Exemptions"
+tag,"Licence, Permitting, & Exemptions"
 limit,"Prohibition, Restriction, or Limitation"
 limitation,"Prohibition, Restriction, or Limitation"
 limitations,"Prohibition, Restriction, or Limitation"
