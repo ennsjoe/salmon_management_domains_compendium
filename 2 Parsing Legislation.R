@@ -25,7 +25,7 @@ html_dirs <- c(here("Type A Legislation"), here("Type B Legislation"))
 
 # Create the salmon_keywords data table----
 salmon_keywords <- data.table(
-  Keyword = c("salmon", "chinook", "sockeye", "coho", "chum"),
+  Keyword = c("salmon", "chinook", "sockeye", "coho", "chum", "salmonid"),
   Scope = '1 - Salmon',
   Frequency = NA
 )
@@ -250,7 +250,6 @@ assign_attributes <- function(paragraph) {
 
 # Apply function to extract the first match per rowAdd commentMore actions
 Paragraphs_DT[, c("Management Domain", "L1", "L2", "Scope") := assign_attributes(Paragraph), by = Paragraph]
-
 
 ################################################################################
 # Combine Paragraphs while keeping all original columns except XPath----
