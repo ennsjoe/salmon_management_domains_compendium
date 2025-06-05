@@ -23,6 +23,10 @@ html_dirs <- c(here("Type A Legislation"), here("Type B Legislation"))
 
 # Load the CSV file---
 md_threats_keywords <- fread(here("Management Domain Threats and Keywords.csv"))
+file_path <- here("Clause Type Keywords.csv")
+
+# Read CSV file while ensuring columns are characters
+clause_type_keywords <- fread(file_path, colClasses = c("Keyword" = "character", "Clause_Type" = "character"))
 
 # Ensure both directories exist----
 missing_dirs <- html_dirs[!dir.exists(html_dirs)]
@@ -150,7 +154,7 @@ for (file in html_files) {
   last_heading <- NA
   last_xpath <- NA
   
-  # Step 1: Capture Section Numbers, Subsections, and Assign Headings
+  # Step 1: Capture Section Numbers, Subsections, and Assign Headings----
   for (node in all_paragraphs) {
     current_xpath <- xml_path(node)
     paragraph_class <- xml_attr(node, "class")  # Check paragraph class
@@ -235,6 +239,27 @@ Paragraphs_DT[, c("Management Domain", "L1", "L2", "Specificity") := assign_attr
 Full_legislation_parsed_DT <- Paragraphs_DT[, .(
   Paragraph = paste(Paragraph, collapse = "\n\n")  # Add line breaks between paragraphs
 ), by = .(`Management Domain`, Section, Heading, `Legislation Name`, `Legislation Type`, `Act Name`, `Jurisdiction`, L1, L2, Specificity)]  # Grouping in specified order
+
+# Function to assign Clause_Type based on first matched word----
+assign_clause_type <- function(paragraph, keywords_dt) {
+  words <- unlist(strsplit(paragraph, "\\s+"))  # Split paragraph into words
+  matches <- keywords_dt[Keyword %in% words]  # Find matching rows
+  
+  if (nrow(matches) > 0) {
+    first_match <- words[words %in% matches$Keyword][1]  # Get first matched word
+    clause_type <- matches[Keyword == first_match, Clause_Type][1]  # Retrieve Clause_Type
+    
+    return(clause_type)
+  } else {
+    return(NA_character_)
+  }
+}
+
+# Apply function to assign Clause_Type----
+Full_legislation_parsed_DT[, Clause_Type := sapply(Paragraph, assign_clause_type, keywords_dt = clause_type_keywords)]
+
+# Trim Paragraph column to a maximum of 5,000 characters----
+Full_legislation_parsed_DT[, Paragraph := substr(Paragraph, 1, 5000)]
 
 # Reorder the columns----
 setcolorder(Full_legislation_parsed_DT, c(
