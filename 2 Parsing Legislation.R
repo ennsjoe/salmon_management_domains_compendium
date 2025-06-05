@@ -326,15 +326,18 @@ setcolorder(Full_legislation_parsed_DT, c(
 ))
 
 ################################################################################
-# Save Full_legislation_parsed_DT as an R object----
-saveRDS(Full_legislation_parsed_DT, "Full_legislation_parsed_DT.rds")
+# Save dtatables as an R object----
+saved_data<- list(
+  Full_legislation_parsed_DT = Full_legislation_parsed_DT,
+  salmon_keywords = salmon_keywords,
+  md_threats_keywords = md_threats_keywords,
+  clause_type_keywords = clause_type_keywords
+)
+saveRDS(saved_data, "Full_legislation_compendium.rds")
 
 # Define file path using here()
-file_path <- here("Full_legislation_parsed.xlsx")
+file_path <- here("Full_legislation_compendium.xlsx")
 
 # Export data table to XLSX
 write_xlsx(Full_legislation_parsed_DT, path = file_path)
-
-# Confirmation message
-cat("File successfully saved to:", file_path, "\n")
 
