@@ -1,9 +1,27 @@
 ---
-title: "6 Technical Brief"
+title: "Compendium of Pacific Salmon and Habitat Legislation (CoPSaHL)"
+subtitle: "Technical Brief"
 author: "Joe Enns"
 date: "`r Sys.Date()`"
 output: html_document
 ---
+
+# INTRODUCTION
+## Background
+
+Resource conservation and stewardship in Canada is governed through a decentralized, multi-sector array of constitutional authority administered through federal, provincial, territorial, and municipal governments (Ray et al 2021; Campbell and Thomas 2002). Stemming from the Constitution Act, legislative control over ecological conservation has been a reactionary process of assigning authority to multiple jurisdictions over new environmental issues as they arise, which creates a complex and overlapping distribution of governance (Becklumb 2013). This patchwork of authority is most prominent in Pacific salmon management due to the complicated geographic nature of their anadromous life cycle, spanning a variety of freshwater and marine ecosystems coast-wide and across international boundaries.
+
+While legislation and programs may often operate on a sector-by-sector and individual resource basis, integrated stewardship relies on scale-appropriate planning and decision making (Ray et al 2021). The need for collaboration in salmon conservation is often recognized in status assessments, recovery plans, and initiatives, such as Recovery Potential Assessments for at-risk conservation units of Pacific salmon developed by Fisheries and Oceans Canada. Successful conservation and rebuilding of Pacific salmon  therefore requires coordination of activities across discrete administrative responsibilities and regulatory frameworks. However, such coordination requires adequate organizational capacity and systems for effective implementation to ensure that regulatory controls and mitigation activities address underlying threats and factors limiting productivity.
+
+In this report, we present a framework for relating threats to salmon with their legislative and regulatory context within British Columbia. We define discrete areas of administrative responsibility for Pacific salmon as “management domains” and conduct a review of legislation to assess the relevancy of each clause to Pacific salmon. Our purpose for creating a management domains framework is to:
+- facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia;
+- relate Pacific salmon threat categories to legislation; and
+- support comprehensive management and conservation planning for Pacific salmon by assigning discrete areas for the administration of human activities across jurisdictions.
+
+# METHODS
+## Defining Management Domains
+Management domains represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Since management domains are defined as a “separation of administrative concerns,” it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 16 specific management domains were delineated for the purpose of this exercise. The 16 domains were developed to comprehensively encompass IUCN threat categories, legislative context, and administrative functions related to Pacific salmon in British Columbia:
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
