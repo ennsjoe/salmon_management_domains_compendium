@@ -1,216 +1,219 @@
 ﻿Management Domain,L1,L2,Keyword,Specificity
-Climate Change and Natural Disasters,11. Climate Change,11.1 Changes in Physical & Chemical Regimes,acidification,3
-Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,agricultural,3
-Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,agriculture,3
-Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,agroforestry,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,airports,3
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.2 Problematic Native Species,alga,3
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",angler,2
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",angling,2
-Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,aquaculture,2
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",aquarium,2
-Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.2 Utility & Service Lines,aqueduct,3
-Spatial Designation,NA,NA,area,4
-Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,artificial,2
-Climate Change and Natural Disasters,10. Natural Disasters,10.1 Geological Events,avalanch,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.5 Biological System Management,barrier,3
-Human Disturbance,6. Human Intrusions & Disturbances,6.3 Other Human Disturbances,bathing,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,beach,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,beaver,3
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,biocontrol,3
-Species Status and Assessment,NA,NA,biodiversity,4
-Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,biofuel,3
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,blight,2
-Climate Change and Natural Disasters,10. Natural Disasters,10.2 Severe Weather Events,blizzard,3
-"Governance, Policy, and Organizational Structure",NA,NA,board,4
-Aquaculture and Hatcheries,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.3 Introduced Genetic Material,breeding,2
-Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",bridge,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,campground,3
-Human Disturbance,6. Human Intrusions & Disturbances,6.1 Recreational Activities,campsites,3
-Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,canals,3
-Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,cargo,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,catchment,3
-Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",causeway,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,cemetery,3
-Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,channel,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,channelization,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,chemical,3
-Climate Change and Natural Disasters,11. Climate Change,11.1 Changes in Physical & Chemical Regimes,CO2,3
-Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,coal,3
-Climate Change and Natural Disasters,11. Climate Change,11.2 Changes in Temperature Regimes,cold,3
-"Governance, Policy, and Organizational Structure",NA,NA,committee,4
-Species Status and Assessment,NA,NA,concern,4
-Species Status and Assessment,NA,NA,critical,4
-Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,crop,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,culvert,3
-Climate Change and Natural Disasters,10. Natural Disasters,10.2 Severe Weather Events,cyclone,3
-Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",dairy,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,dam,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,deleterious,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,desalination,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,development,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,dike,3
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,disease,2
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",dressed,2
-Mining and Energy,3. Energy Production & Mining,3.1 Oil & Gas Exploration & Extraction,drilling,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,drinking,3
-Climate Change and Natural Disasters,11. Climate Change,11.3 Changes in Precipitation & Hydrological Regimes,drought,3
-Climate Change and Natural Disasters,10. Natural Disasters,10.1 Geological Events,earthquake,3
-Spatial Designation,NA,NA,ecologic,4
-Species Status and Assessment,NA,NA,endangered,4
-Spatial Designation,NA,NA,environ,4
-Climate Change and Natural Disasters,10. Natural Disasters,10.1 Geological Events,eruption,3
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,exotic,3
-Species Status and Assessment,NA,NA,extinct,4
-Species Status and Assessment,NA,NA,extirpated,4
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,facilities,3
-Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,farm,3
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,feral,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,fertilizer,3
-Forest and Range,2. Agriculture & Aquaculture,2.2 Wood & Pulp Plantations,fiber,3
-Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,finfish,2
-Forest and Range,2. Agriculture & Aquaculture,2.2 Wood & Pulp Plantations,firewood,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,fish habitat,3
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fishery,2
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fishing,2
-Climate Change and Natural Disasters,11. Climate Change,11.3 Changes in Precipitation & Hydrological Regimes,flood,3
-Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",forest,3
-Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",forestry,3
-Mining and Energy,3. Energy Production & Mining,3.1 Oil & Gas Exploration & Extraction,fracturing,3
-Climate Change and Natural Disasters,11. Climate Change,11.2 Changes in Temperature Regimes,freeze,3
-Mining and Energy,3. Energy Production & Mining,3.1 Oil & Gas Exploration & Extraction,gas,3
-Aquaculture and Hatcheries,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.3 Introduced Genetic Material,genetically-modified,2
-Mining and Energy,3. Energy Production & Mining,3.3 Renewable Energy,geothermal,3
-Climate Change and Natural Disasters,11. Climate Change,11.2 Changes in Temperature Regimes,glacier,3
-Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,gold,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,golf,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,groundwater,3
-Climate Change and Natural Disasters,10. Natural Disasters,10.2 Severe Weather Events,hail,3
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",harvest,2
-Aquaculture and Hatcheries,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.3 Introduced Genetic Material,hatchery,2
-Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,hay,3
-Climate Change and Natural Disasters,11. Climate Change,11.2 Changes in Temperature Regimes,heat,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,herbicide,3
-Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",herding,3
-Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",highway,3
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",hook,2
 Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.1 Residential Areas,hospital,3
 Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.1 Residential Areas,house,3
 Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.1 Residential Areas,housing,3
-Climate Change and Natural Disasters,10. Natural Disasters,10.2 Severe Weather Events,hurricane,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,industrial,3
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,introduced,3
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,invasive,3
-Human Disturbance,6. Human Intrusions & Disturbances,6.1 Recreational Activities,jet-skis,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,lake,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,landfills,3
-Climate Change and Natural Disasters,10. Natural Disasters,10.1 Geological Events,landslide,3
-Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,lane,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,leaching,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,leakage,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,levee,3
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",limit,2
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",line,2
-Species Status and Assessment,NA,NA,listed,4
-Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",logging,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,manufacturing,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,manure,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,marina,3
-Climate Change and Natural Disasters,11. Climate Change,11.2 Changes in Temperature Regimes,melt,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,military,3
-Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,mines,3
-Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,mining,3
-Human Disturbance,6. Human Intrusions & Disturbances,6.1 Recreational Activities,motorboats,3
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,mussel,3
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",net,2
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,nonferal,3
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,non-native,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,nutrient,3
-Human Disturbance,6. Human Intrusions & Disturbances,6.1 Recreational Activities,off-road,3
-Mining and Energy,3. Energy Production & Mining,3.1 Oil & Gas Exploration & Extraction,oil,3
-Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,orchard,3
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.2 Problematic Native Species,outbreak,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,outhouses,3
-Climate Change and Natural Disasters,11. Climate Change,11.1 Changes in Physical & Chemical Regimes,oxygen,3
-Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,panning,3
-Spatial Designation,NA,NA,park,4
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.5 Biological System Management,passage,3
-Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,pen,2
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,pest,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,pesticide,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,pier,3
-Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.2 Utility & Service Lines,pipeline,3
-Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,placer,3
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,plague,2
-Forest and Range,2. Agriculture & Aquaculture,2.2 Wood & Pulp Plantations,plantation,3
-Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,pond,2
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,ports,3
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",possess,2
-Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.2 Utility & Service Lines,powerline,3
-"Governance, Policy, and Organizational Structure",NA,NA,powers,4
-Forest and Range,2. Agriculture & Aquaculture,2.2 Wood & Pulp Plantations,pulp,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,pumping,3
-Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,quarries,3
-Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,quarry,3
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",quota,2
-Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",railroad,3
-Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",ranch,3
-Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",range,3
-Human Disturbance,6. Human Intrusions & Disturbances,6.3 Other Human Disturbances,research,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,reservoir,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.5 Biological System Management,riparian,3
-Species Status and Assessment,NA,NA,risk,4
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.5 Biological System Management,river,3
-Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",road,3
 Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.1 Residential Areas,rural,3
-Climate Change and Natural Disasters,11. Climate Change,11.1 Changes in Physical & Chemical Regimes,salinity,3
 Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.1 Residential Areas,school,3
-Climate Change and Natural Disasters,11. Climate Change,11.3 Changes in Precipitation & Hydrological Regimes,sea-level,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,sedimentation,3
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",seine,2
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,septic,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,sewage,3
-Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,shipping,3
 Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.1 Residential Areas,shop,3
-Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",silviculture,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,ski,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.5 Biological System Management,snag,3
-Climate Change and Natural Disasters,11. Climate Change,11.2 Changes in Temperature Regimes,snowpack,3
-Mining and Energy,3. Energy Production & Mining,3.3 Renewable Energy,solar,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,spill,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,sport,3
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",sportfish,2
-Species Status and Assessment,NA,NA,stewardship,4
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",stock,2
-Climate Change and Natural Disasters,10. Natural Disasters,10.2 Severe Weather Events,storm,3
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.5 Biological System Management,stream,3
 Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.1 Residential Areas,suburb,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,tailings,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.1 Residential Areas,urban,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.1 Residential Areas,village,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,airports,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,development,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,industrial,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,landfills,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,manufacturing,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,military,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,ports,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,yards,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,beach,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,campground,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,cemetery,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,facilities,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,golf,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,marina,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,pier,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,ski,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,sport,3
+Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,tourist,3
+Climate Change and Natural Disasters,10. Natural Disasters,10.1 Geological Events,avalanch,3
+Climate Change and Natural Disasters,10. Natural Disasters,10.1 Geological Events,earthquake,3
+Climate Change and Natural Disasters,10. Natural Disasters,10.1 Geological Events,eruption,3
+Climate Change and Natural Disasters,10. Natural Disasters,10.1 Geological Events,landslide,3
+Climate Change and Natural Disasters,10. Natural Disasters,10.1 Geological Events,tsunami,3
+Climate Change and Natural Disasters,10. Natural Disasters,10.1 Geological Events,volcano,3
+Climate Change and Natural Disasters,10. Natural Disasters,10.2 Severe Weather Events,blizzard,3
+Climate Change and Natural Disasters,10. Natural Disasters,10.2 Severe Weather Events,cyclone,3
+Climate Change and Natural Disasters,10. Natural Disasters,10.2 Severe Weather Events,hail,3
+Climate Change and Natural Disasters,10. Natural Disasters,10.2 Severe Weather Events,hurricane,3
+Climate Change and Natural Disasters,10. Natural Disasters,10.2 Severe Weather Events,storm,3
+Climate Change and Natural Disasters,10. Natural Disasters,10.2 Severe Weather Events,typhoon,3
+Climate Change and Natural Disasters,11. Climate Change,11.1 Changes in Physical & Chemical Regimes,acidification,3
+Climate Change and Natural Disasters,11. Climate Change,11.1 Changes in Physical & Chemical Regimes,CO2,3
+Climate Change and Natural Disasters,11. Climate Change,11.1 Changes in Physical & Chemical Regimes,oxygen,3
+Climate Change and Natural Disasters,11. Climate Change,11.1 Changes in Physical & Chemical Regimes,salinity,3
+Climate Change and Natural Disasters,11. Climate Change,11.2 Changes in Temperature Regimes,cold,3
+Climate Change and Natural Disasters,11. Climate Change,11.2 Changes in Temperature Regimes,freeze,3
+Climate Change and Natural Disasters,11. Climate Change,11.2 Changes in Temperature Regimes,glacier,3
+Climate Change and Natural Disasters,11. Climate Change,11.2 Changes in Temperature Regimes,heat,3
+Climate Change and Natural Disasters,11. Climate Change,11.2 Changes in Temperature Regimes,melt,3
+Climate Change and Natural Disasters,11. Climate Change,11.2 Changes in Temperature Regimes,snowpack,3
 Climate Change and Natural Disasters,11. Climate Change,11.2 Changes in Temperature Regimes,temperature,3
 Climate Change and Natural Disasters,11. Climate Change,11.2 Changes in Temperature Regimes,thaw,3
-Species Status and Assessment,NA,NA,threatened,4
+Climate Change and Natural Disasters,11. Climate Change,11.3 Changes in Precipitation & Hydrological Regimes,drought,3
+Climate Change and Natural Disasters,11. Climate Change,11.3 Changes in Precipitation & Hydrological Regimes,flood,3
+Climate Change and Natural Disasters,11. Climate Change,11.3 Changes in Precipitation & Hydrological Regimes,sea-level,3
+Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,agricultural,3
+Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,agriculture,3
+Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,agroforestry,3
+Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,biofuel,3
+Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,crop,3
+Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,hay,3
+Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,orchard,3
+Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,vineyard,3
+Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,farm operation,3
+Forest and Range,2. Agriculture & Aquaculture,2.2 Wood & Pulp Plantations,fiber,3
+Forest and Range,2. Agriculture & Aquaculture,2.2 Wood & Pulp Plantations,firewood,3
+Forest and Range,2. Agriculture & Aquaculture,2.2 Wood & Pulp Plantations,plantation,3
+Forest and Range,2. Agriculture & Aquaculture,2.2 Wood & Pulp Plantations,pulp,3
+Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",dairy,3
+Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",herding,3
+Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",ranch,3
+Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",range,3
+Agriculture,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",farm animal,3
+Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,aquaculture,2
+Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,artificial,2
+Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,finfish,2
+Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,pen,2
+Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,pond,2
+Mining and Energy,3. Energy Production & Mining,3.1 Oil & Gas Exploration & Extraction,drilling,3
+Mining and Energy,3. Energy Production & Mining,3.1 Oil & Gas Exploration & Extraction,fracturing,3
+Mining and Energy,3. Energy Production & Mining,3.1 Oil & Gas Exploration & Extraction,gas,3
+Mining and Energy,3. Energy Production & Mining,3.1 Oil & Gas Exploration & Extraction,oil,3
+Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,coal,3
+Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,gold,3
+Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,mines,3
+Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,mining,3
+Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,panning,3
+Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,placer,3
+Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,quarries,3
+Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,quarry,3
+Mining and Energy,3. Energy Production & Mining,3.3 Renewable Energy,geothermal,3
+Mining and Energy,3. Energy Production & Mining,3.3 Renewable Energy,solar,3
 Mining and Energy,3. Energy Production & Mining,3.3 Renewable Energy,tidal,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.3 Recreation & Tourism Areas,tourist,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,toxic,3
+Mining and Energy,3. Energy Production & Mining,3.3 Renewable Energy,windmill,3
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",bridge,3
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",causeway,3
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",highway,3
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",railroad,3
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",road,3
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",trail,3
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",transport,3
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",trawl,2
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,treatment,3
-Climate Change and Natural Disasters,10. Natural Disasters,10.1 Geological Events,tsunami,3
-Climate Change and Natural Disasters,10. Natural Disasters,10.2 Severe Weather Events,typhoon,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.1 Residential Areas,urban,3
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",vehicle,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.1 Residential Areas,village,3
-Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,vineyard,3
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,virus,2
-Climate Change and Natural Disasters,10. Natural Disasters,10.1 Geological Events,volcano,3
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.2 Utility & Service Lines,aqueduct,3
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.2 Utility & Service Lines,pipeline,3
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.2 Utility & Service Lines,powerline,3
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.2 Utility & Service Lines,wire,3
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,canals,3
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,cargo,3
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,channel,3
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,lane,3
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,shipping,3
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,wake,3
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,waste,3
+Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",forest,3
+Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",forestry,3
+Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",logging,3
+Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",silviculture,3
+Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",tree farm,3
+Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",forester,3
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",angler,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",angling,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",aquarium,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",dressed,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fishery,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fishing,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fisheries,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",harvest,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",hook,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",limit,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",possess,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",quota,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",seine,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",sportfish,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",stock,2
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",trawl,2
+Human Disturbance,6. Human Intrusions & Disturbances,6.1 Recreational Activities,campsites,3
+Human Disturbance,6. Human Intrusions & Disturbances,6.1 Recreational Activities,jet-skis,3
+Human Disturbance,6. Human Intrusions & Disturbances,6.1 Recreational Activities,motorboats,3
+Human Disturbance,6. Human Intrusions & Disturbances,6.1 Recreational Activities,off-road,3
+Human Disturbance,6. Human Intrusions & Disturbances,6.3 Other Human Disturbances,bathing,3
+Human Disturbance,6. Human Intrusions & Disturbances,6.3 Other Human Disturbances,research,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,beaver,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,catchment,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,channelization,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,culvert,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,dam,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,desalination,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,dike,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,drinking,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,fish habitat,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,groundwater,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,lake,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,levee,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,pumping,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,reservoir,3
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,water,3
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,water use,3
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,wetland,3
-Mining and Energy,3. Energy Production & Mining,3.3 Renewable Energy,windmill,3
-Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.2 Utility & Service Lines,wire,3
-Residential and Industrial Development,"1. Residential, Commercial & Recreation Areas",1.2 Commercial & Industrial Areas,yards,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,barrier,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,passage,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,river,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,stream,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,watershed,3
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.5 Biological System Management,riparian,3
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,biocontrol,3
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,exotic,3
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,feral,3
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,introduced,3
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,invasive,3
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,mussel,3
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,nonferal,3
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,non-native,3
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,pest,3
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.2 Problematic Native Species,alga,3
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.2 Problematic Native Species,outbreak,3
+Aquaculture and Hatcheries,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.3 Introduced Genetic Material,breeding,2
+Aquaculture and Hatcheries,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.3 Introduced Genetic Material,genetically-modified,2
+Aquaculture and Hatcheries,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.3 Introduced Genetic Material,hatchery,2
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,blight,2
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,disease,2
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,plague,2
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,virus,2
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,chemical,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,deleterious,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,fertilizer,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,herbicide,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,leaching,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,leakage,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,manure,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,nutrient,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,outhouses,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,pesticide,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,sedimentation,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,septic,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,sewage,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,spill,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,tailings,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,toxic,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,treatment,3
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,waste,3
+Spatial Designation,NA,NA,area,4
+Species Status and Assessment,NA,NA,biodiversity,4
+"Governance, Policy, and Organizational Structure",NA,NA,board,4
+"Governance, Policy, and Organizational Structure",NA,NA,committee,4
+Species Status and Assessment,NA,NA,concern,4
+Species Status and Assessment,NA,NA,critical,4
+Spatial Designation,NA,NA,ecologic,4
+Species Status and Assessment,NA,NA,endangered,4
+Spatial Designation,NA,NA,environ,4
+Species Status and Assessment,NA,NA,extinct,4
+Species Status and Assessment,NA,NA,extirpated,4
+Species Status and Assessment,NA,NA,listed,4
+Spatial Designation,NA,NA,park,4
+"Governance, Policy, and Organizational Structure",NA,NA,powers,4
+Species Status and Assessment,NA,NA,risk,4
+Species Status and Assessment,NA,NA,stewardship,4
+Species Status and Assessment,NA,NA,threatened,4
 Spatial Designation,NA,NA,zone,4
 Spatial Designation,NA,NA,boundary,4
+Spatial Designation,NA,NA,district,4
