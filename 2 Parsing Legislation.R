@@ -7,12 +7,12 @@
 # with assigned Legislation Name, Legislation Type, Jursidiction, Act Name, and Heading
 #///////////////////////////////////////////////////////////////////////////////
 
-## i) Set Working Directory ----------------------------------------------------
+# Set Working Directory ----
 library(here)
 # Get the root directory of the project
 here()
 
-## ii) Load Libraries ----------------------------------------------------------
+# Load Libraries ----
 library(data.table)
 library(xml2)
 library(rvest)
@@ -21,6 +21,13 @@ library(stringr)
 
 # Define the folders dynamically using `here()`----
 html_dirs <- c(here("Type A Legislation"), here("Type B Legislation"))
+
+# Create the salmon_keywords data table----
+salmon_keywords <- data.table(
+  Keyword = c("salmon", "chinook", "sockeye", "coho", "chum"),
+  Specificity = 1,
+  Frequency = NA
+)
 
 # Load the CSV file---
 md_threats_keywords <- fread(here("Management Domain Threats and Keywords.csv"))
@@ -60,6 +67,7 @@ Paragraphs_DT <- data.table(
   `XPath` = character()
 )
 
+################################################################################
 # Function to clean text and remove special characters
 clean_text <- function(text) {
   text <- stri_trans_general(text, "Latin-ASCII")  # Convert special characters to ASCII equivalents
@@ -134,6 +142,7 @@ extract_act_name <- function(html_file, legislation_name, legislation_type) {
   return(act_name)
 }
 
+################################################################################
 # Process each HTML file----
 for (file in html_files) {
   html_file <- read_html(file)
@@ -201,28 +210,34 @@ for (file in html_files) {
   }
 }
 
+################################################################################
+
 # Remove Rows with NA Sections----
 Paragraphs_DT <- Paragraphs_DT[!is.na(`Section`)]
 
-# Remove Rows Containing "repeal", "repealed", or "revoked"----
+# Define keywords to filter
 filter_words <- c("repeal", "repealed", "revoked", "Marginal note", "Not in force")
-Paragraphs_DT <- Paragraphs_DT[!grepl(paste(filter_words, collapse = "|"), `Paragraph`, ignore.case = TRUE)]
+
+# Ensure proper word-boundary matching and case insensitivity
+Paragraphs_DT <- Paragraphs_DT[!grepl(paste0("\\b(", paste(filter_words, collapse = "|"), ")\\b"), Paragraph, ignore.case = TRUE)]
 
 # Remove Subsection column----
 Paragraphs_DT[, Subsection := NULL]
 
+################################################################################
 # Convert keywords into a lookup table for faster matching
 keyword_lookup <- md_threats_keywords[, .(Keyword, `Management Domain`, L1, L2, Specificity)]
 
+# Function to assign attributes based on first matched keyword----
 assign_attributes <- function(paragraph) {
-  words <- unlist(strsplit(paragraph, "\\s+"))  
+  words <- unlist(strsplit(paragraph, "\\s+"))
   matches <- md_threats_keywords[Keyword %in% words]  
   
   if (nrow(matches) > 0) {
     # Find the first matching word in the paragraph
     first_match <- words[words %in% matches$Keyword][1]
     selected_row <- matches[Keyword == first_match][1]  # Retrieve attributes from first match
-    return(selected_row[, .(`Management Domain`, L1, L2, Specificity)])  
+    return(selected_row[, .(`Management Domain`, L1, L2, Specificity)])
   } else {
     return(data.table(
       `Management Domain` = NA_character_,
@@ -233,14 +248,46 @@ assign_attributes <- function(paragraph) {
   }
 }
 
-# Apply function to extract the first match per row
+# Apply function to extract the first match per rowAdd commentMore actions
 Paragraphs_DT[, c("Management Domain", "L1", "L2", "Specificity") := assign_attributes(Paragraph), by = Paragraph]
 
+
+################################################################################
 # Combine Paragraphs while keeping all original columns except XPath----
 Full_legislation_parsed_DT <- Paragraphs_DT[, .(
   Paragraph = paste(Paragraph, collapse = "\n\n")  # Add line breaks between paragraphs
 ), by = .(`Management Domain`, Section, Heading, `Legislation Name`, `Legislation Type`, `Act Name`, `Jurisdiction`, L1, L2, Specificity)]  # Grouping in specified order
 
+##########################################
+
+# Function to update Specificity only for matching rows
+update_specificity_salmon <- function(paragraph, existing_specificity, keywords_dt) {
+  # Standardize text: Remove punctuation and convert to lowercase
+  clean_paragraph <- tolower(gsub("[[:punct:]]", " ", paragraph))
+  
+  # Split paragraph into words
+  words <- unlist(strsplit(clean_paragraph, "\\s+"))
+  
+  # Find matches in keyword list
+  matches <- keywords_dt[Keyword %in% words]
+  
+  if (nrow(matches) > 0) {
+    # Get first matched word
+    first_match <- words[words %in% matches$Keyword][1]
+    
+    # Retrieve Specificity corresponding to the first matched keyword
+    specificity_value <- matches[Keyword == first_match, Specificity][1]
+    
+    return(specificity_value)  # Update only for matched rows
+  } else {
+    return(existing_specificity)  # Keep original value for non-matching rows
+  }
+}
+
+# Apply function to update Specificity only where a match is found
+Full_legislation_parsed_DT[, Specificity := mapply(update_specificity_salmon, Paragraph, Specificity, MoreArgs = list(keywords_dt = salmon_keywords))]
+
+################################################################################
 # Function to assign Clause_Type based on first matched word with improved matching----
 assign_clause_type <- function(paragraph, keywords_dt) {
   # Standardize text: Remove punctuation (except word boundaries) and convert to lowercase
@@ -268,6 +315,7 @@ assign_clause_type <- function(paragraph, keywords_dt) {
 # Apply function to assign Clause_Type----
 Full_legislation_parsed_DT[, Clause_Type := sapply(Paragraph, assign_clause_type, keywords_dt = clause_type_keywords)]
 
+################################################################################
 # Trim Paragraph column to a maximum of 5,000 characters----
 Full_legislation_parsed_DT[, Paragraph := substr(Paragraph, 1, 5000)]
 
@@ -278,7 +326,7 @@ setcolorder(Full_legislation_parsed_DT, c(
   "Management Domain", "L1", "L2", "Specificity"
 ))
 
+################################################################################
 # Save Full_legislation_parsed_DT as an R object----
 saveRDS(Full_legislation_parsed_DT, "Full_legislation_parsed_DT.rds")
-
 
