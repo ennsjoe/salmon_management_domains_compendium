@@ -10,7 +10,7 @@ library(shiny)
 library(data.table)
 library(here)
 
-# Define file paths
+# Define file paths----
 md_csv_path <- here("Management Domain Threats and Keywords.csv")
 md_rds_path <- here("management_domain_selection.RData")
 
