@@ -1,5 +1,5 @@
 ---
-title: "Compendium of Pacific Salmon and Habitat Legislation (CoPSaHL)"
+title: "Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CLAPSE)"
 subtitle: "Technical Brief"
 author: "Joe Enns, Cory Lagasse"
 date: "`r Sys.Date()`"
@@ -34,37 +34,52 @@ if ("Full_legislation_parsed_DT" %in% names(loaded_data)) {
 } else {
     stop("❌ Object 'Full_legislation_parsed_DT' not found in the dataset.")
 }
+
+# Extract md_threats_keywords from loaded_data
+if ("md_threats_keywords" %in% names(loaded_data)) {
+    md_threats_keywords <- loaded_data$md_threats_keywords
+    message("✅ Extracted 'md_threats_keywords' successfully!")
+} else {
+    stop("❌ Object 'md_threats_keywords' not found in the dataset.")
+}
+
+# Ensure it was properly assigned (but suppress unnecessary printing)
+invisible(str(md_threats_keywords))
 ```
 
 # INTRODUCTION
 ## Background
-
 Resource conservation and stewardship in Canada is governed through a decentralized, multi-sector array of constitutional authority administered through federal, provincial, territorial, and municipal governments (Ray et al 2021; Campbell and Thomas 2002). Stemming from the Constitution Act, legislative control over ecological conservation has been a reactionary process of assigning authority to multiple jurisdictions over new environmental issues as they arise, which creates a complex and overlapping distribution of governance (Becklumb 2013). This patchwork of authority is most prominent in Pacific salmon management due to the complicated geographic nature of their anadromous life cycle, spanning a variety of freshwater and marine ecosystems coast-wide and across international boundaries.
 
 While legislation and programs may often operate on a sector-by-sector and individual resource basis, integrated stewardship relies on scale-appropriate planning and decision making (Ray et al 2021). The need for collaboration in salmon conservation is often recognized in status assessments, recovery plans, and initiatives, such as Recovery Potential Assessments for at-risk conservation units of Pacific salmon developed by Fisheries and Oceans Canada. Successful conservation and rebuilding of Pacific salmon  therefore requires coordination of activities across discrete administrative responsibilities and regulatory frameworks. However, such coordination requires adequate organizational capacity and systems for effective implementation to ensure that regulatory controls and mitigation activities address underlying threats and factors limiting productivity.
 
 In this report, we present a framework for relating threats to salmon with their legislative and regulatory context within British Columbia. We define discrete areas of administrative responsibility for Pacific salmon as “management domains” and conduct a review of legislation to assess the relevancy of each clause to Pacific salmon. Our purpose for creating a management domains framework is to:
-- facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia;
-- relate Pacific salmon threat categories to legislation; and
-- support comprehensive management and conservation planning for Pacific salmon by assigning discrete areas for the administration of human activities across jurisdictions.
+
+<ul>
+  <li>facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia;</li>
+  <li>relate Pacific salmon threat categories to legislation; and</li>
+  <li>support comprehensive management and conservation planning for Pacific salmon by assigning discrete areas for the administration of human activities across jurisdictions.</li>
+</ul>
 
 # METHODS
 ## Defining Management Domains
 Management domains represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Since management domains are defined as a “separation of administrative concerns,” it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 16 specific management domains were delineated for the purpose of this exercise. The 16 domains were developed to comprehensively encompass IUCN threat categories, legislative context, and administrative functions related to Pacific salmon in British Columbia:
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 # Extract unique management domains, remove NA values, and sort alphabetically
 if ("Management Domain" %in% names(Full_legislation_parsed_DT)) {
     unique_management_domains <- sort(na.omit(unique(Full_legislation_parsed_DT$`Management Domain`)))
     
-    # Print as a bullet list in plain text
-    cat(paste0("- ", unique_management_domains, collapse = "\n"))
+    # Print formatted list as an unordered list (`<ul>`)
+    cat("<ul>")
+    cat(paste0("<li>", unique_management_domains, "</li>", collapse = "\n"))
+    cat("</ul>")
 } else {
     stop("❌ The required column 'Management Domain' was not found in the dataset.")
 }
 ```
 
-Historically, much of the management decisions and activities related to salmon have been in response to identifiable threats to salmon health and population status. One common framework used to describe impacts to salmon are the Four H’s: Habitat, Hydropower, Harvest, and Hatcheries. Each Management Domain, as defined in this report, intentionally aligns with one of the Four H’s (Figure 1). However, there are aspects of salmon management associated with governance and agreements rather than one of the other H’s, which was categorized as “Handshaking.”
+Historically, much of the management decisions and activities related to salmon have been in response to identifiable threats to salmon health and population status. One common framework used to describe impacts to salmon are the Four H’s: Habitat, Hydropower, Harvest, and Hatcheries. Each Management Domain, as defined in this report, intentionally aligns with one of the Four H’s. However, there are aspects of salmon management associated with governance and agreements rather than one of the other H’s, which was categorized as “Handshaking.”
 
 ```{r, echo=FALSE, fig.cap="Flowchart showing alignment of Pacific salmon threat factors (Four H's) with Management Domains in relation to legislation and jurisdiction."}
 library(knitr)
@@ -80,21 +95,47 @@ if (file.exists(image_path)) {
 }
 ```
 
-## Legislation Review
+## Process
+Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the sections within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable. Other researchers may repeat this process as future legislation and language changes. The process steps are:
+
+<ol>
+<li>Legislation Accumulation and Review (CanLii)</li>
+<li>Parsing Legislation by Section and Heading (R)</li>
+<li>Assigning Management Domain and IUCN Threats (R)</li>
+  <ul>
+  <li>Building a Keyword List</li>
+  <li>Assigning to Sections/Subsections (R)</li>
+  </ul>
+<li>Assigning Scope (R)</li>
+<li>Assigning Clause Type (R)</li>
+</ol>
+
+## Legislation Accumulation and Review
 We focused our review on established federal and provincial legislation (acts and regulations), as the scope for inclusion in assessing management domains. We did not include specific departmental policy frameworks and processes throughout this exercise unless specifically referenced in the statutes, because  these executive strategies are prone to changes in the political, administrative, and budgetary landscape. Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were not included explicitly. Although these laws are important for management of Pacific salmon, considering these regionally diverse rules was outside the scope of a systematic literature review. 
 
 The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular subject. For the purpose of the review, we used the individual clause as the sample unit for assignment into management domains and other corresponding attributes.
 
-Legislation included in this analysis was collected through a process of literature review and keyword search on the CanLII website. Once a piece of legislation was included, we studied each clause in the legislation to determine its direct or indirect relevancy to Pacific salmon and habitat management.  Each clause was assessed according to its taxonomic context; geographic and salmon habitat context; and administration and management domain applicability. Clauses that we determined were relevant to Pacific salmon management we refer to as “procedure elements,” because these clauses, as we interpret them, comprise the legislative network that underpins salmon management procedures.
+CanLii...Results in Appendix I
 
 ## R Automated Process for Domain, Threats, Scope, and Clause Type Assignment
 ### Parsing Legislation from HTML Files
 ### Assigning Management Domains and IUCN Threats from Keywords
+
+
+
 ### Assigning Clause Type from Keywords
 ### Assigning Scope
 
+<h3><strong>Scope</strong></h3>
+<ul>
+  <li>1 - Salmon</li>
+  <li>2 - Fish</li>
+  <li>3 - Habitat</li>
+  <li>4 - Governance</li>
+
+
 # RESULTS
-## Compendium of Pacific Salmon and Habitat Legislation (CoPSaHL)
+## Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CLAPSE)
 
 # REFERENCES
 <style>
@@ -135,3 +176,143 @@ Swerdfager, Trevor, and Andrea Olive. “Laws Matter: A Foundational Approach to
 Westwood AR, Otto SP, Mooers A, Darimont C, Hodges KE, Johnson C, et al. 2019. Protecting biodiversity in British Columbia: recommendations for developing species at risk legislation. FACETS, 4(1): 136–160. DOI: 10.1139/facets-2018-0042
 </div>
 
+<hr>
+
+# APPENDICES
+
+<hr>
+
+# Appendix I - Legislation Accumulation and Review
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(dplyr)
+
+# Check if required columns exist
+if (all(c("Jurisdiction", "Legislation Name", "Legislation Type") %in% names(Full_legislation_parsed_DT))) {
+    
+    # Count Acts by Jurisdiction
+    acts_count <- Full_legislation_parsed_DT %>%
+        filter(`Legislation Type` == "Act") %>%
+        group_by(Jurisdiction) %>%
+        summarise(count = n_distinct(`Legislation Name`)) %>%
+        arrange(desc(count))
+    
+    # Count Regulations by Jurisdiction
+    regs_count <- Full_legislation_parsed_DT %>%
+        filter(`Legislation Type` == "Regulations") %>%
+        group_by(Jurisdiction) %>%
+        summarise(count = n_distinct(`Legislation Name`)) %>%
+        arrange(desc(count))
+    
+    # Print formatted output
+    cat("<h2>Acts per Jurisdiction</h2><ul>")
+    for (i in seq_len(nrow(acts_count))) {
+        cat(paste0("<li><strong>", acts_count$Jurisdiction[i], ":</strong> ", acts_count$count[i], " Acts</li>"))
+    }
+    cat("</ul>")
+    
+    cat("<h2>Regulations per Jurisdiction</h2><ul>")
+    for (i in seq_len(nrow(regs_count))) {
+        cat(paste0("<li><strong>", regs_count$Jurisdiction[i], ":</strong> ", regs_count$count[i], " Regulations</li>"))
+    }
+    cat("</ul>")
+    
+} else {
+    stop("❌ The required columns 'Jurisdiction', 'Legislation Name', or 'Legislation Type' were not found in the dataset.")
+}
+```
+<hr>
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(dplyr)
+library(tidyr)
+
+# Check if required columns exist
+if (all(c("Jurisdiction", "Act Name", "Legislation Name", "Legislation Type") %in% names(Full_legislation_parsed_DT))) {
+    
+    # Get all distinct Acts grouped by Jurisdiction
+    all_acts <- Full_legislation_parsed_DT %>%
+        filter(`Legislation Type` == "Act") %>%
+        distinct(Jurisdiction, `Act Name`) %>%
+        arrange(Jurisdiction, `Act Name`)  # Sorting jurisdictions properly
+    
+    # Get Acts with Regulations
+    acts_with_regs <- Full_legislation_parsed_DT %>%
+        filter(`Legislation Type` == "Regulations") %>%
+        group_by(Jurisdiction, `Act Name`) %>%
+        summarise(regs_list = paste(sort(unique(`Legislation Name`)), collapse="<br>")) %>%
+        arrange(Jurisdiction, `Act Name`)
+    
+    # Ensure all Acts are included, even if they have no Regulations
+    full_list <- left_join(all_acts, acts_with_regs, by = c("Jurisdiction", "Act Name")) %>%
+        mutate(regs_list = replace_na(regs_list, "No regulations included"))
+    
+    # Print formatted output grouped by sorted Jurisdiction
+    cat("<h2>Acts and Their Regulations by Jurisdiction</h2>")
+
+    jurisdictions <- sort(unique(full_list$Jurisdiction))  # Now properly sorted
+
+    for (j in jurisdictions) {
+        cat(paste0("<p style='font-size:18pt; font-weight:bold; margin:10px 0; padding:5px;'>", j, "</p>"))  # Larger jurisdiction headers
+        subset <- full_list %>% filter(Jurisdiction == j)
+        for (i in seq_len(nrow(subset))) {
+            cat(paste0("<p style='font-size:11pt; line-height:1.4; margin:5px 0;'>",
+                       "<strong>", subset$`Act Name`[i], ":</strong><br>", subset$regs_list[i], "</p>"))
+        }
+    }
+    
+} else {
+    stop("❌ The required columns 'Jurisdiction', 'Act Name', 'Legislation Name', or 'Legislation Type' were not found in the dataset.")
+}
+```
+<hr>
+# Appendix II - Management Domain Keyword List
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(dplyr)
+library(tidyr)
+
+# Check if required columns exist
+if (all(c("L1", "L2", "Management Domain", "Keyword") %in% names(md_threats_keywords))) {
+    
+    # Remove NA values and sort data correctly
+    sorted_keywords <- md_threats_keywords %>%
+        filter(!is.na(Keyword)) %>%
+        arrange(`Management Domain`, L1, L2, Keyword)  # Sorting by Management Domain first
+    
+    # Print formatted output grouped by Management Domain → L1 → L2
+    cat("<h2 style='font-size:22pt; margin-bottom:10px;'>Threat Keywords by Category</h2>")
+
+    for (domain in unique(sorted_keywords$`Management Domain`)) {
+        cat(paste0("<h3 style='font-size:20pt; margin-top:15px; padding:2px 0;'>", domain, "</h3>"))  # Space before Management Domain
+        domain_subset <- sorted_keywords %>% filter(`Management Domain` == domain)
+        
+        for (l1 in unique(domain_subset$L1)) {
+            cat(paste0("<h4 style='margin:0; padding:0; display:inline;'>", l1, "</h4>"))  # Removed extra spacing around L1
+            l1_subset <- domain_subset %>% filter(L1 == l1)
+            
+            for (l2 in unique(l1_subset$L2)) {
+                cat(paste0("<h4 style='margin:0; padding:2px 0;'>", l2, "</h4>"))  # L2 remains compact
+                keyword_subset <- l1_subset %>% filter(L2 == l2)
+
+                # Ensure keywords appear in two direct adjacent columns
+                cat("<div style='display: grid; grid-template-columns: 0.1fr 0.1fr; gap:0;'>")
+                for (keyword in keyword_subset$Keyword) {
+                    cat(paste0("<div style='font-size:11pt; padding:2px;'>", keyword, "</div>"))
+                }
+                cat("</div>")
+            }
+        }
+    }
+    
+} else {
+    stop("❌ The required columns 'L1', 'L2', 'Management Domain', or 'Keyword' were not found in the dataset.")
+}
+```
+<hr>
+# Appendix III - Procedural Elements by Scope
+
+count of PEs by scope / domains etc.
+
+# Appendix IV - Clause Type Keywords
+
+# Appendix V - Compendium Results?
