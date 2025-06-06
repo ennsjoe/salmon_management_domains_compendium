@@ -312,7 +312,12 @@ if (all(c("L1", "L2", "Management Domain", "Keyword") %in% names(md_threats_keyw
 # Appendix III - Procedural Elements by Scope
 
 count of PEs by scope / domains etc.
+<hr>
 
 # Appendix IV - Clause Type Keywords
 
+<hr>
+
 # Appendix V - Compendium Results?
+
+<hr>
