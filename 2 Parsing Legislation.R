@@ -20,14 +20,32 @@ library(stringi)
 library(stringr)
 library(writexl)
 
+# Load R Object----------------------------------------------------------------
+# Define file path using here()
+rds_path <- here("Full_legislation_compendium.rds")
+
+# Check if the file exists before loading
+if (file.exists(rds_path)) {
+  loaded_data <- readRDS(rds_path)
+  message("File loaded successfully!")
+} else {
+  message("File does not exist: ", rds_path)
+}
+
+# Optional: Inspect loaded data structure
+if (exists("loaded_data")) {
+  str(loaded_data)
+}
+
+#-------------------------------------------------------------------------------
 # Define the folders dynamically using `here()`----
 html_dirs <- c(here("Type A Legislation"), here("Type B Legislation"))
 
+#-------------------------------------------------------------------------------
 # Create the salmon_keywords data table----
 salmon_keywords <- data.table(
   Keyword = c("salmon", "chinook", "sockeye", "coho", "chum", "salmonid"),
-  Scope = '1 - Salmon',
-  Frequency = NA
+  Scope = '1 - Salmon'
 )
 
 # Load the CSV file---
@@ -330,7 +348,8 @@ saved_data<- list(
   Full_legislation_parsed_DT = Full_legislation_parsed_DT,
   salmon_keywords = salmon_keywords,
   md_threats_keywords = md_threats_keywords,
-  clause_type_keywords = clause_type_keywords
+  clause_type_keywords = clause_type_keywords,
+  Paragraphs_DT = Paragraphs_DT
 )
 saveRDS(saved_data, "Full_legislation_compendium.rds")
 
