@@ -1,10 +1,40 @@
 ---
 title: "Compendium of Pacific Salmon and Habitat Legislation (CoPSaHL)"
 subtitle: "Technical Brief"
-author: "Joe Enns"
+author: "Joe Enns, Cory Lagasse"
 date: "`r Sys.Date()`"
-output: html_document
+output: tufte::tufte_html
+fig_caption: true
+code_folding: hide
 ---
+
+```{r setup, include=FALSE}
+library(here)
+
+# Define the file path
+rds_path <- here("Full_legislation_compendium.rds")
+
+# Load the full R object
+if (file.exists(rds_path)) {
+    loaded_data <- readRDS(rds_path)
+    message("✅ File loaded successfully!")
+} else {
+    stop("❌ File does not exist: ", rds_path)
+}
+
+# Ensure the dataset is loaded
+if (!exists("loaded_data")) {
+    stop("❌ Loaded data is missing. Check the file content.")
+}
+
+# Extract Full_legislation_parsed_DT from loaded_data
+if ("Full_legislation_parsed_DT" %in% names(loaded_data)) {
+    Full_legislation_parsed_DT <- loaded_data$Full_legislation_parsed_DT
+    message("✅ Extracted 'Full_legislation_parsed_DT' successfully!")
+} else {
+    stop("❌ Object 'Full_legislation_parsed_DT' not found in the dataset.")
+}
+```
 
 # INTRODUCTION
 ## Background
@@ -22,27 +52,86 @@ In this report, we present a framework for relating threats to salmon with their
 ## Defining Management Domains
 Management domains represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Since management domains are defined as a “separation of administrative concerns,” it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 16 specific management domains were delineated for the purpose of this exercise. The 16 domains were developed to comprehensively encompass IUCN threat categories, legislative context, and administrative functions related to Pacific salmon in British Columbia:
 
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r, echo=FALSE}
+# Extract unique management domains, remove NA values, and sort alphabetically
+if ("Management Domain" %in% names(Full_legislation_parsed_DT)) {
+    unique_management_domains <- sort(na.omit(unique(Full_legislation_parsed_DT$`Management Domain`)))
+    
+    # Print as a bullet list in plain text
+    cat(paste0("- ", unique_management_domains, collapse = "\n"))
+} else {
+    stop("❌ The required column 'Management Domain' was not found in the dataset.")
+}
 ```
 
-## R Markdown
+Historically, much of the management decisions and activities related to salmon have been in response to identifiable threats to salmon health and population status. One common framework used to describe impacts to salmon are the Four H’s: Habitat, Hydropower, Harvest, and Hatcheries. Each Management Domain, as defined in this report, intentionally aligns with one of the Four H’s (Figure 1). However, there are aspects of salmon management associated with governance and agreements rather than one of the other H’s, which was categorized as “Handshaking.”
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r, echo=FALSE, fig.cap="Flowchart showing alignment of Pacific salmon threat factors (Four H's) with Management Domains in relation to legislation and jurisdiction."}
+library(knitr)
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+# Define the file path using here()
+image_path <- here("MGMT-D Flowchart.png")
 
-```{r cars}
-summary(cars)
+# Include the image if it exists
+if (file.exists(image_path)) {
+  knitr::include_graphics(image_path)
+} else {
+  message("❌ Image file not found: ", image_path)
+}
 ```
 
-## Including Plots
+## Legislation Review
+We focused our review on established federal and provincial legislation (acts and regulations), as the scope for inclusion in assessing management domains. We did not include specific departmental policy frameworks and processes throughout this exercise unless specifically referenced in the statutes, because  these executive strategies are prone to changes in the political, administrative, and budgetary landscape. Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were not included explicitly. Although these laws are important for management of Pacific salmon, considering these regionally diverse rules was outside the scope of a systematic literature review. 
 
-You can also embed plots, for example:
+The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular subject. For the purpose of the review, we used the individual clause as the sample unit for assignment into management domains and other corresponding attributes.
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+Legislation included in this analysis was collected through a process of literature review and keyword search on the CanLII website. Once a piece of legislation was included, we studied each clause in the legislation to determine its direct or indirect relevancy to Pacific salmon and habitat management.  Each clause was assessed according to its taxonomic context; geographic and salmon habitat context; and administration and management domain applicability. Clauses that we determined were relevant to Pacific salmon management we refer to as “procedure elements,” because these clauses, as we interpret them, comprise the legislative network that underpins salmon management procedures.
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## R Automated Process for Domain, Threats, Scope, and Clause Type Assignment
+### Parsing Legislation from HTML Files
+### Assigning Management Domains and IUCN Threats from Keywords
+### Assigning Clause Type from Keywords
+### Assigning Scope
+
+# RESULTS
+## Compendium of Pacific Salmon and Habitat Legislation (CoPSaHL)
+
+# REFERENCES
+<style>
+.references {
+  padding-left: 40px;
+  text-indent: -40px;
+}
+</style>
+<div class="references">
+Armitage, D., de Loë, R., Plummer, R., 2012. Environmental governance and its implications for conservation practice. Conserv. Lett. 5, 245–255.
+
+Beazley, K.F., and Olive, A. 2021. Transforming conservation in Canada: shifting policies and paradigms. FACETS, 6: 1714–1727. doi:10.1139/ facets-2021-0144.
+
+Becklumb, P. 2013. Federal and provincial jurisdiction to regulate environmental issues. Ottawa.
+
+Bennett NJ, Roth R, Klain SC, Chan K, Christie P, Clark DA, et al. 2017a. Conservation social science: understanding and integrating human dimensions to improve conservation. Biological Conservation, 205: 93–108. DOI: 10.1016/j.biocon.2016.10.006
+
+Campbell ML, and Thomas VG. 2002. Constitutional impacts on conservation—effects of federalism on biodiversity protection. Environment Policy and Law, 32: 223–233.
+
+Collins L, and Sossin L. 2019. Approach to constitutional principles and environmental discretion in Canada. UBC Law Review, 52(1): 293–343. [online]: Available from digitalcommons.osgoode.yorku.ca
+
+Dufresne Y, and Ouellet C. 2019. Conceptualization, measurement and effects of positional issues in the Canadian electoral context. Heliyon, 5(4): e01453. PMID:31025009. DOI:10.1016/j.heliyon. 2019.e01453
+
+Kraus, D., Murphy, S., and Armitage, D. 2021. Ten bridges on the road to recovering Canada’s endangered species. doi:10.1139/facets.
+
+Hutchings JA, Côté IM, Dodson JJ, Fleming IA, Jennings S, Mantua NJ, et al. 2012. Is Canada fulfilling its obligations to sustain marine biodiversity? A summary review, conclusions, and recommendations. Environmental Reviews 20: 353–361. DOI: 10.1139/er-2012-0049
+
+Marentette, J.R. and Kronlund, A.R. 2020. A Cross-Jurisdictional Review of International Fisheries Policies, Standards and Guidelines: Considerations for a Canadian Science Sector Approach. Can. Tech. Rep. Fish. Aquat. Sci. 3342: xiii + 169 p.
+
+McCune JL, Harrower WL, Avery-Gomm S, Brogan JM, Csergő A-M, Davidson LNK, et al. 2013. Threats to Canadian species at risk: an analysis of finalized recovery strategies. Biological Conservation, 166: 254–265. DOI: 10.1016/j.biocon.2013.07.006
+
+Ray, J.C., Grimm, J., and Olive, A. 2021. The biodiversity crisis in Canada: failures and challenges of federal and sub-national strategic and legal frameworks. FACETS. 6: 1044–1068. doi:10.1139/facets.
+
+Salafsky, N., Salzer, D., Stattersfield, A.J., Hilton-Taylor, C., Nuegarten, R., Butchart, S.H.M., Collen, B., Cox, N., Master, L.L., O’Connor, S., Wilkie, D., 2008. A standard lexicon for biodiversity conservation: unified classifications of threats and actions. Conserv. Biol. 22, 897–911.
+
+Swerdfager, Trevor, and Andrea Olive. “Laws Matter: A Foundational Approach to Biodiversity Conservation in Canada.” Edited by David Lesbarreres. FACETS 8 (January 1, 2023): 1–13.
+
+Westwood AR, Otto SP, Mooers A, Darimont C, Hodges KE, Johnson C, et al. 2019. Protecting biodiversity in British Columbia: recommendations for developing species at risk legislation. FACETS, 4(1): 136–160. DOI: 10.1139/facets-2018-0042
+</div>
+
