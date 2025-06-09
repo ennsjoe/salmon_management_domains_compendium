@@ -41,14 +41,13 @@ if (exists("loaded_data")) {
 # Define the folders dynamically using `here()`----
 html_dirs <- c(here("Type A Legislation"), here("Type B Legislation"))
 
-#-------------------------------------------------------------------------------
-# Create the salmon_keywords data table----
+# Create the salmon_keywords data table-----------------------------------------
 salmon_keywords <- data.table(
   Keyword = c("salmon", "chinook", "sockeye", "coho", "chum", "salmonid"),
   Scope = '1 - Salmon'
 )
 
-# Load the CSV file---
+# Load Management Domain Keyword CSV file---------------------------------------
 md_threats_keywords <- fread(here("Management Domain Threats and Keywords.csv"))
 file_path <- here("Clause Type Keywords.csv")
 
@@ -342,8 +341,8 @@ setcolorder(Full_legislation_parsed_DT, c(
   "Management Domain", "L1", "L2", "Scope", "Clause_Type"
 ))
 
-################################################################################
-# Save dtatables as an R object----
+
+# Save datatables as an R object------------------------------------------------
 saved_data<- list(
   Full_legislation_parsed_DT = Full_legislation_parsed_DT,
   salmon_keywords = salmon_keywords,
