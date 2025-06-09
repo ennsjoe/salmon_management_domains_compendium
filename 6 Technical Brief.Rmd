@@ -174,6 +174,63 @@ if ("Clause_Type" %in% names(clause_type_keywords)) {
 # RESULTS
 ## Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CoLAPSE)
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(dplyr)
+
+# Check if required columns exist
+if (all(c("Scope", "Paragraph") %in% names(Full_legislation_parsed_DT))) {
+    
+    # Remove NA values and blank Paragraphs, then count occurrences by Scope
+    scope_count <- Full_legislation_parsed_DT %>%
+        filter(!is.na(Scope) & !is.na(Paragraph) & Paragraph != "") %>%
+        group_by(Scope) %>%
+        summarise(count = n()) %>%
+        arrange(Scope)  # Ordered by Scope alphabetically
+
+    # Print formatted output
+    cat("<h3>Paragraph Count by Scope</h3><ul>")
+    for (i in seq_len(nrow(scope_count))) {
+        cat(paste0("<li><strong>", scope_count$Scope[i], ":</strong> ", scope_count$count[i], " Procedural Elements</li>"))
+    }
+    cat("</ul>")
+    
+} else {
+    stop("❌ The required columns 'Scope' or 'Paragraph' were not found in the dataset.")
+}
+```
+<hr>
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
+
+# Ensure the dataset contains required columns
+if (all(c("Management Domain", "Paragraph", "Scope") %in% names(Full_legislation_parsed_DT))) {
+
+    # Aggregate data: calculate paragraph counts & average Scope by Management Domain
+    summary_data <- Full_legislation_parsed_DT %>%
+        group_by(`Management Domain`) %>%
+        summarize(
+            Paragraph_Count = n(),
+            Avg_Scope = mean(Scope, na.rm = TRUE)
+        )
+
+    # Create a scatter plot with a trend line
+    ggplot(summary_data, aes(x = Paragraph_Count, y = Avg_Scope, label = `Management Domain`)) +
+        geom_point(color = "blue", size = 3) +
+        geom_smooth(method = "lm", color = "red", linetype = "dashed") +
+        labs(
+            title = "Average Scope vs. Paragraph Count by Management Domain",
+            x = "Number of Paragraphs",
+            y = "Average Scope"
+        ) +
+        theme_minimal()
+    
+} else {
+    stop("❌ The required columns 'Management Domain', 'Paragraph', or 'Scope' were not found in the dataset.")
+}
+```
+
 # REFERENCES
 <style>
 .references {
@@ -346,15 +403,41 @@ if (all(c("L1", "L2", "Management Domain", "Keyword") %in% names(md_threats_keyw
 }
 ```
 <hr>
-# Appendix III - Procedural Elements by Scope
+
+# Appendix III - Clause Type Keywords
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(dplyr)
+
+# Check if required columns exist
+if (all(c("Clause_Type", "Keyword") %in% names(clause_type_keywords))) {
+    
+    # Remove NA values and sort data correctly
+    sorted_keywords <- clause_type_keywords %>%
+        filter(!is.na(Keyword)) %>%
+        arrange(Clause_Type, Keyword)
+    
+    # Print formatted output grouped by Clause_Type
+    cat("<h2 style='font-size:22pt; margin-bottom:10px;'>Clause Type Keywords</h2>")
+    
+    for (clause_type in unique(sorted_keywords$Clause_Type)) {
+        cat(paste0("<h3 style='font-size:20pt; margin-top:15px; padding:2px 0;'>", clause_type, "</h3>"))
+        clause_subset <- sorted_keywords %>% filter(Clause_Type == clause_type)
+        
+        # Print keywords as an unordered list with font size 11 pt
+        cat("<ul>")
+        for (keyword in clause_subset$Keyword) {
+            cat(paste0("<li style='font-size:11pt;'>", keyword, "</li>"))
+        }
+        cat("</ul>")
+    }
+    
+} else {
+    stop("❌ The required columns 'Clause_Type' or 'Keyword' were not found in the dataset.")
+}
+```
+
+<hr>
+# Appendix IV - Procedural Elements by Scope
 
 count of PEs by scope / domains etc.
-<hr>
-
-# Appendix IV - Clause Type Keywords
-
-<hr>
-
-# Appendix V - Compendium Results?
-
 <hr>
