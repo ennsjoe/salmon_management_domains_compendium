@@ -20,25 +20,7 @@ library(stringi)
 library(stringr)
 library(writexl)
 
-# Load R Object----------------------------------------------------------------
-# Define file path using here()
-rds_path <- here("Full_legislation_compendium.rds")
-
-# Check if the file exists before loading
-if (file.exists(rds_path)) {
-  loaded_data <- readRDS(rds_path)
-  message("File loaded successfully!")
-} else {
-  message("File does not exist: ", rds_path)
-}
-
-# Optional: Inspect loaded data structure
-if (exists("loaded_data")) {
-  str(loaded_data)
-}
-
-#-------------------------------------------------------------------------------
-# Define the folders dynamically using `here()`----
+# Define the folders dynamically using `here()`---------------------------------
 html_dirs <- c(here("Type A Legislation"), here("Type B Legislation"))
 
 # Create the salmon_keywords data table-----------------------------------------
@@ -58,7 +40,7 @@ clause_type_keywords <- fread(file_path, colClasses = c("Keyword" = "character",
 missing_dirs <- html_dirs[!dir.exists(html_dirs)]
 if (length(missing_dirs) > 0) stop(paste("Error: The following directories do not exist:", paste(missing_dirs, collapse = ", ")))
 
-# Read all HTML files from both directories----
+# Read all HTML files from both directories-------------------------------------
 html_files <- unlist(lapply(html_dirs, function(dir) {
   list.files(path = dir, pattern = "\\.html$", full.names = TRUE, recursive = TRUE)
 }))
@@ -72,7 +54,7 @@ cat("Total HTML files detected:", length(html_files), "\n")
 # Check if no files are found
 if (length(html_files) == 0) stop("No HTML files found in the specified directories.")
 
-# Initialize Paragraphs_DT----
+# Initialize Paragraphs_DT------------------------------------------------------
 Paragraphs_DT <- data.table(
   `Jurisdiction` = character(),
   `Act Name` = character(),
@@ -85,15 +67,14 @@ Paragraphs_DT <- data.table(
   `XPath` = character()
 )
 
-################################################################################
-# Function to clean text and remove special characters
+# Function to clean text and remove special characters--------------------------
 clean_text <- function(text) {
   text <- stri_trans_general(text, "Latin-ASCII")  # Convert special characters to ASCII equivalents
   text <- gsub("[^[:print:]]", "", text)  # Remove any remaining non-printable characters
   return(trimws(text))
 }
 
-# Function to format Act Name----
+# Function to format Act Name---------------------------------------------------
 format_act_name <- function(act_name) {
   act_name <- gsub("\\s*\\(.*?\\)|\\s*\\[.*?\\]", "", act_name)  # Remove anything in brackets
   act_name <- tolower(act_name)  # Convert to lowercase
@@ -101,19 +82,19 @@ format_act_name <- function(act_name) {
   return(trimws(act_name))
 }
 
-# Function to extract section numbers inside `<p>` tags----
+# Function to extract section numbers inside `<p>` tags-------------------------
 extract_inline_section <- function(node) {
   section_label <- node %>% html_nodes("span.secnum span.secnumholder b, a.sectionLabel span.sectionLabel") %>% html_text(trim = TRUE)
   if (length(section_label) > 0) return(clean_text(section_label)) else return(NA)
 }
 
-# Function to extract subsection numbers----
+# Function to extract subsection numbers----------------------------------------
 extract_subsection <- function(node) {
   subsection_label <- node %>% html_nodes("span.lawlabel, span.num span.holder") %>% html_text(trim = TRUE)
   if (length(subsection_label) > 0) return(clean_text(subsection_label)) else return(NA)
 }
 
-# Function to extract headings----
+# Function to extract headings--------------------------------------------------
 extract_headings <- function(html_file) {
   heading_nodes <- html_file %>% html_nodes("p.MarginalNote, h4, h3, h2")
   heading_texts <- clean_text(gsub("^Marginal note:\\s*", "", heading_nodes %>% html_text(trim = TRUE)))
@@ -121,14 +102,14 @@ extract_headings <- function(html_file) {
   return(data.table(XPath = heading_xpaths, Heading = heading_texts))
 }
 
-# Function to extract the legislation name----
+# Function to extract the legislation name--------------------------------------
 extract_legislation_name <- function(html_file) {
   legislation_name <- html_file %>% html_nodes("h1.HeadTitle, div#title h2") %>% html_text(trim = TRUE)
   legislation_name <- ifelse(length(legislation_name) > 0, clean_text(legislation_name[1]), "Unknown Legislation")
   return(legislation_name)
 }
 
-# Function to extract jurisdiction----
+# Function to extract jurisdiction----------------------------------------------
 extract_jurisdiction <- function(html_file) {
   head_attrs <- xml_attrs(html_file %>% html_node("head"))
   meta_description <- html_file %>% html_node("meta[name='description']") %>% html_attr("content")
@@ -139,7 +120,7 @@ extract_jurisdiction <- function(html_file) {
   return(jurisdiction)
 }
 
-# Function to extract legislation type----
+# Function to extract legislation type------------------------------------------
 extract_legislation_type <- function(legislation_name) {
   legislation_type <- fifelse(
     grepl("\\bRegulation\\b", legislation_name, ignore.case = TRUE) | 
@@ -160,8 +141,8 @@ extract_act_name <- function(html_file, legislation_name, legislation_type) {
   return(act_name)
 }
 
-################################################################################
-# Process each HTML file----
+
+# Process each HTML file--------------------------------------------------------
 for (file in html_files) {
   html_file <- read_html(file)
   
@@ -182,7 +163,7 @@ for (file in html_files) {
   last_heading <- NA
   last_xpath <- NA
   
-  # Step 1: Capture Section Numbers, Subsections, and Assign Headings----
+  # Step 1: Capture Section Numbers, Subsections, and Assign Headings-----------
   for (node in all_paragraphs) {
     current_xpath <- xml_path(node)
     paragraph_class <- xml_attr(node, "class")  # Check paragraph class
@@ -228,21 +209,19 @@ for (file in html_files) {
   }
 }
 
-################################################################################
-# Remove Rows with NA Sections----
+# Remove Rows with NA Sections--------------------------------------------------
 Paragraphs_DT <- Paragraphs_DT[!is.na(`Section`)]
 
-# Define keywords to filter
+# Define keywords to filter-----------------------------------------------------
 filter_words <- c("repeal", "repealed", "revoked", "Marginal note", "Not in force")
 
-# Ensure proper word-boundary matching and case insensitivity
+# Ensure proper word-boundary matching and case insensitivity-------------------
 Paragraphs_DT <- Paragraphs_DT[!grepl(paste0("\\b(", paste(filter_words, collapse = "|"), ")\\b"), Paragraph, ignore.case = TRUE)]
 
-# Remove Subsection column----
+# Remove Subsection column------------------------------------------------------
 Paragraphs_DT[, Subsection := NULL]
 
-################################################################################
-# Convert keywords into a lookup table for faster matching
+# Convert keywords into a lookup table for faster matching----------------------
 keyword_lookup <- md_threats_keywords[, .(Keyword, `Management Domain`, L1, L2, Scope)]
 
 # Function to assign attributes based on first matched keyword----
@@ -265,17 +244,16 @@ assign_attributes <- function(paragraph) {
   }
 }
 
-# Apply function to extract the first match per rowAdd commentMore actions
+#-------------------------------------------------------------------------------
+# Apply function to extract the first match per rowAdd commentMore actions------
 Paragraphs_DT[, c("Management Domain", "L1", "L2", "Scope") := assign_attributes(Paragraph), by = Paragraph]
 
-################################################################################
-# Combine Paragraphs while keeping all original columns except XPath----
+# Combine Paragraphs while keeping all original columns except XPath------------
 Full_legislation_parsed_DT <- Paragraphs_DT[, .(
   Paragraph = paste(Paragraph, collapse = "\n\n")  # Add line breaks between paragraphs
 ), by = .(`Management Domain`, Section, Heading, `Legislation Name`, `Legislation Type`, `Act Name`, `Jurisdiction`, L1, L2, Scope)]  # Grouping in specified order
 
-##########################################
-# Function to update Scope only for matching rows
+# Function to update Scope only for matching rows-------------------------------
 update_scope_salmon <- function(paragraph, existing_scope, keywords_dt) {
   # Standardize text: Remove punctuation and convert to lowercase
   clean_paragraph <- tolower(gsub("[[:punct:]]", " ", paragraph))
@@ -302,7 +280,6 @@ update_scope_salmon <- function(paragraph, existing_scope, keywords_dt) {
 # Apply function to update Scope only where a match is found
 Full_legislation_parsed_DT[, Scope := mapply(update_scope_salmon, Paragraph, Scope, MoreArgs = list(keywords_dt = salmon_keywords))]
 
-################################################################################
 # Function to assign Clause_Type based on first matched word with improved matching----
 assign_clause_type <- function(paragraph, keywords_dt) {
   # Standardize text: Remove punctuation (except word boundaries) and convert to lowercase
@@ -330,11 +307,10 @@ assign_clause_type <- function(paragraph, keywords_dt) {
 # Apply function to assign Clause_Type----
 Full_legislation_parsed_DT[, Clause_Type := sapply(Paragraph, assign_clause_type, keywords_dt = clause_type_keywords)]
 
-################################################################################
-# Trim Paragraph column to a maximum of 5,000 characters----
+# Trim Paragraph column to a maximum of 5,000 characters------------------------
 Full_legislation_parsed_DT[, Paragraph := substr(Paragraph, 1, 5000)]
 
-# Reorder the columns----
+# Reorder the columns-----------------------------------------------------------
 setcolorder(Full_legislation_parsed_DT, c(
   "Jurisdiction", "Legislation Type", "Act Name", "Legislation Name",
   "Heading", "Section", "Paragraph",
