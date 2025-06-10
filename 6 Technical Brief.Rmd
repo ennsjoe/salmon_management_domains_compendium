@@ -143,16 +143,16 @@ We parsed the HTML files using R and the <code>rvest</code> package to extract t
 The Management Domains and IUCN threats were assigned to each section based on a keyword list developed from the IUCN threat categories. The keywords were used to identify specific sections and subsections within the legislation. Each section was then assigned to one or more Management Domain and IUCN threat based on the presence of these keywords.Iteratively, we adjusted the keyword list to ensure that it accurately captured the scope of each Management Domain and IUCN threat. The keyword list is available in Appendix II.
 
 ### 4) Assigning Scope
-We developed a scope classification system to categorize the sections based on their relevance to Pacific salmon. The scope was determined by the specificity of the language used in the section. The scope categories were defined as follows:
+We developed a scope classification system to categorize the sections based on their relevance to Pacific salmon. The scope was determined by the specificity of the language used in the section. The Scope categories were defined as follows:
 
 <ol>
-  <li>Salmon</li>
-  <li>Fish</li>
-  <li>Habitat</li>
-  <li>Governance</li>
+  <li>Salmon - refers to salmon specifically</li>
+  <li>Fish - refers to fish that include salmon</li>
+  <li>Habitat - refers to any habitat that includes salmon habitat</li>
+  <li>Governance - refers to administrative processes and structure</li>
 </ol>
 
-Scope 1 - Salmon was assigned separately to sections with the specific salmon keywords. Scope 2-3 were assigned during the Management Domain and IUCN Threat assignment.  
+Scope 1 was assigned separately to sections with the specific salmon keywords. Scope 2-3 were assigned during the Management Domain and IUCN Threat assignment.  
 
 ### 5) Assigning Clause Type from Keywords
 Similar the Management Domain assignment, we created a Clause Type keyword list to assess the nature or purposes of the clauses. Using language patterns within the legislation, we grouped Clause Type by:
@@ -173,6 +173,7 @@ if ("Clause_Type" %in% names(clause_type_keywords)) {
 
 # RESULTS
 ## Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CoLAPSE)
+A summary of results from the initial iterations of the automated compendium are shown below. As the keywords become less specific to salmon, the number of Procedural Elements increases. The compendium is available as an R object, which can be used to query specific sections and subsections by Management Domain, IUCN Threat, Scope, and Clause Type. The full compendium is available in the <code>Full_legislation_compendium.rds</code> file and can be loaded into R using the <code>readRDS()</code> function. The compendium is also available as a CSV file for download from GitHub.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(dplyr)
@@ -187,8 +188,9 @@ if (all(c("Scope", "Paragraph") %in% names(Full_legislation_parsed_DT))) {
         summarise(count = n()) %>%
         arrange(Scope)  # Ordered by Scope alphabetically
 
-    # Print formatted output
-    cat("<h3>Paragraph Count by Scope</h3><ul>")
+    # Print formatted output without bullets
+    cat("<h3>Procedural Element Count by Scope</h3>")
+    cat("<ul style='list-style-type: none; padding: 0; margin: 0;'>")
     for (i in seq_len(nrow(scope_count))) {
         cat(paste0("<li><strong>", scope_count$Scope[i], ":</strong> ", scope_count$count[i], " Procedural Elements</li>"))
     }
@@ -198,38 +200,136 @@ if (all(c("Scope", "Paragraph") %in% names(Full_legislation_parsed_DT))) {
     stop("❌ The required columns 'Scope' or 'Paragraph' were not found in the dataset.")
 }
 ```
-<hr>
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+Using the '1 - Salmon' scope for Procedural Elements shows the Type A Legislation along with a comparison of the number of Procedural Elements by Jurisdiction. The results are shown in the bar chart below, which displays the number of Procedural Elements for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of Procedural Elements across different legislative frameworks.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
 library(dplyr)
 library(ggplot2)
 
-# Ensure the dataset contains required columns
-if (all(c("Management Domain", "Paragraph", "Scope") %in% names(Full_legislation_parsed_DT))) {
+# Verify required columns exist
+if (all(c("Legislation Name", "Paragraph", "Scope", "Jurisdiction") %in% names(Full_legislation_parsed_DT))) {
 
-    # Aggregate data: calculate paragraph counts & average Scope by Management Domain
+    # Filter data where Scope is '1 - Salmon' and count Paragraphs by Legislation Name
     summary_data <- Full_legislation_parsed_DT %>%
-        group_by(`Management Domain`) %>%
-        summarize(
-            Paragraph_Count = n(),
-            Avg_Scope = mean(Scope, na.rm = TRUE)
-        )
+        filter(Scope == "1 - Salmon" & !is.na(Paragraph)) %>%
+        group_by(`Legislation Name`, Jurisdiction) %>%
+        summarise(Paragraph_Count = n()) %>%
+        arrange(desc(Paragraph_Count))
 
-    # Create a scatter plot with a trend line
-    ggplot(summary_data, aes(x = Paragraph_Count, y = Avg_Scope, label = `Management Domain`)) +
-        geom_point(color = "blue", size = 3) +
-        geom_smooth(method = "lm", color = "red", linetype = "dashed") +
-        labs(
-            title = "Average Scope vs. Paragraph Count by Management Domain",
-            x = "Number of Paragraphs",
-            y = "Average Scope"
-        ) +
-        theme_minimal()
-    
+    # Ensure data is not empty before plotting
+    if (nrow(summary_data) > 0) {
+        # Create the bar chart with Jurisdiction color coding
+        ggplot(summary_data, aes(x = reorder(`Legislation Name`, Paragraph_Count), y = Paragraph_Count, fill = Jurisdiction)) +
+    geom_bar(stat = "identity", color = "black") +
+    coord_flip() +  # Horizontal bar chart for readability
+    scale_fill_manual(values = c("Federal" = "#8B0000", "Provincial" = "#00008B")) +  # Custom colors
+    labs(
+        title = "Procedural Element Count by Legislation (Scope: 1 - Salmon)",
+        x = "Legislation",
+        y = "Procedural Element Count",
+        fill = "Jurisdiction"
+    ) +
+    theme_minimal()
+
+    } else {
+        warning("⚠️ No data available for Scope '1 - Salmon'. Check the Scope values in your dataset.")
+    }
+
 } else {
-    stop("❌ The required columns 'Management Domain', 'Paragraph', or 'Scope' were not found in the dataset.")
+    stop("❌ The required columns 'Legislation Name', 'Paragraph', 'Scope', or 'Jurisdiction' were not found in the dataset.")
 }
 ```
+
+## Summary of Management Domains
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
+library(dplyr)
+library(ggplot2)
+
+# Prepare data: Count distinct Legislation Names for each Management Domain, grouped by Jurisdiction
+domain_counts <- Full_legislation_parsed_DT %>%
+    filter(!is.na(`Management Domain`) & !is.na(`Legislation Name`) & !is.na(Jurisdiction)) %>%
+    distinct(`Management Domain`, `Legislation Name`, Jurisdiction) %>%
+    group_by(`Management Domain`, Jurisdiction) %>%
+    summarise(Legislation_Count = n(), .groups = "drop") %>%
+    arrange(desc(Legislation_Count))  # Sort by count
+
+# Generate stacked bar chart split by Jurisdiction
+ggplot(domain_counts, aes(x = reorder(`Management Domain`, Legislation_Count), y = Legislation_Count, fill = Jurisdiction)) +
+    geom_bar(stat = "identity", color = "black", width = 0.9) +
+    coord_flip() +  # Horizontal bars for readability
+    scale_fill_manual(values = c("Federal" = "#8B0000", "Provincial" = "#00008B")) +  # Assign colors
+    labs(
+        title = "Number of Legislation Names per Management Domain (Split by Jurisdiction)",
+        x = "Management Domain",
+        y = "Legislation Count",
+        fill = "Jurisdiction"
+    ) +
+    theme_minimal() +
+    theme(axis.text.y = element_text(size = 12))
+```
+
+## Summary of IUCN Threats
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
+library(dplyr)
+library(ggplot2)
+
+# Prepare data: Count distinct Legislation Names for each L2, grouped by Jurisdiction
+domain_counts <- Full_legislation_parsed_DT %>%
+    filter(!is.na(L2) & !is.na(`Legislation Name`) & !is.na(Jurisdiction)) %>%
+    distinct(L2, `Legislation Name`, Jurisdiction) %>%
+    group_by(L2, Jurisdiction) %>%
+    summarise(Legislation_Count = n(), .groups = "drop") %>%
+    arrange(desc(Legislation_Count))  # Sort by count
+
+# Generate stacked bar chart split by Jurisdiction
+ggplot(domain_counts, aes(x = reorder(L2, Legislation_Count), y = Legislation_Count, fill = Jurisdiction)) +
+    geom_bar(stat = "identity", color = "black", width = 0.9) +
+    coord_flip() +  # Horizontal bars for readability
+    scale_fill_manual(values = c("Federal" = "#8B0000", "Provincial" = "#00008B")) +  # Assign colors
+    labs(
+        title = "Count of Legislation per IUCN Threat (Split by Jurisdiction)",
+        x = "IUCN Threat",
+        y = "Legislation Count",
+        fill = "Jurisdiction"
+    ) +
+    theme_minimal() +
+    theme(axis.text.y = element_text(size = 12))
+```
+
+## Summary of Clause Types
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
+library(dplyr)
+library(ggplot2)
+
+# Prepare data: Count Paragraphs per Clause Type while excluding NA Scope rows
+clause_data <- Full_legislation_parsed_DT %>%
+    filter(!is.na(Clause_Type) & !is.na(Paragraph) & !is.na(Scope) & !is.na(`Legislation Name`)) %>%
+    distinct(Clause_Type, Paragraph, `Legislation Name`) %>%
+    group_by(Clause_Type) %>%
+    summarise(
+        Paragraph_Count = n(),
+        Legislation_Count = n_distinct(`Legislation Name`),
+        .groups = "drop"
+    ) %>%
+    arrange(desc(Paragraph_Count))  # Sort by Paragraph count
+
+# Generate dot plot
+ggplot(clause_data, aes(x = Clause_Type, y = Paragraph_Count)) +
+    geom_point(aes(size = Legislation_Count), color = "steelblue", alpha = 0.7) +  # Dot size reflects Legislation Count
+    scale_size_continuous(range = c(3, 10)) +  # Adjust dot size range for clarity
+    labs(
+        title = "Paragraph Count by Clause Type (Dot Size = Number of Legislation Names)",
+        x = "Clause Type",
+        y = "Paragraph Count",
+        size = "Legislation Count"
+    ) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
 
 # REFERENCES
 <style>
@@ -315,7 +415,9 @@ if (all(c("Jurisdiction", "Legislation Name", "Legislation Type") %in% names(Ful
     stop("❌ The required columns 'Jurisdiction', 'Legislation Name', or 'Legislation Type' were not found in the dataset.")
 }
 ```
+
 <hr>
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(dplyr)
 library(tidyr)
@@ -349,8 +451,8 @@ if (all(c("Jurisdiction", "Act Name", "Legislation Name", "Legislation Type") %i
         cat(paste0("<p style='font-size:18pt; font-weight:bold; margin:10px 0; padding:5px;'>", j, "</p>"))  # Larger jurisdiction headers
         subset <- full_list %>% filter(Jurisdiction == j)
         for (i in seq_len(nrow(subset))) {
-            cat(paste0("<p style='font-size:11pt; line-height:1.4; margin:5px 0;'>",
-                       "<strong>", subset$`Act Name`[i], ":</strong><br>", subset$regs_list[i], "</p>"))
+            cat(paste0("<p style='font-size:12pt; line-height:1.4; margin:5px 0;'>",
+                       "<strong><u>", subset$`Act Name`[i], "</u></strong><br>", subset$regs_list[i], "</p>"))  # Underlined Act Name
         }
     }
     
@@ -360,49 +462,72 @@ if (all(c("Jurisdiction", "Act Name", "Legislation Name", "Legislation Type") %i
 ```
 <hr>
 # Appendix II - Management Domain Keyword List
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(dplyr)
+
+# Check if required columns exist
+if (all(c("L1", "L2", "Management Domain") %in% names(md_threats_keywords))) {
+
+    # Remove NA values and sort data
+    sorted_keywords <- md_threats_keywords %>%
+        filter(!is.na(L1) & !is.na(L2) & !is.na(`Management Domain`)) %>%
+        distinct(`Management Domain`, L1, L2) %>%  # Remove duplicates
+        arrange(`Management Domain`, L1, L2)
+
+    # Print formatted output grouped by Management Domain
+    cat("<h2 style='font-size:22pt; margin-bottom:10px;'>Management Domains & IUCN Threats</h2>")
+
+    for (domain in unique(sorted_keywords$`Management Domain`)) {
+        cat(paste0("<h3 style='font-size:20pt; margin-top:12px; padding:0;'>", domain, "</h3>"))
+        domain_subset <- sorted_keywords %>% filter(`Management Domain` == domain)
+
+        for (i in seq_len(nrow(domain_subset))) {
+            cat(paste0("<p style='font-size:12pt; margin:2px 0; line-height:1.2;'>",
+                       "<strong>", domain_subset$L1[i], ":</strong> ", domain_subset$L2[i], "</p>"))
+        }
+    }
+
+} else {
+    stop("❌ The required columns 'L1', 'L2', or 'Management Domain' were not found in the dataset.")
+}
+```
+
+<hr>
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(dplyr)
-library(tidyr)
 
 # Check if required columns exist
-if (all(c("L1", "L2", "Management Domain", "Keyword") %in% names(md_threats_keywords))) {
+if (all(c("Management Domain", "Keyword") %in% names(md_threats_keywords))) {
     
     # Remove NA values and sort data correctly
     sorted_keywords <- md_threats_keywords %>%
-        filter(!is.na(Keyword)) %>%
-        arrange(`Management Domain`, L1, L2, Keyword)  # Sorting by Management Domain first
-    
-    # Print formatted output grouped by Management Domain → L1 → L2
-    cat("<h2 style='font-size:22pt; margin-bottom:10px;'>Threat Keywords by Category</h2>")
+        filter(!is.na(Keyword) & Keyword != "") %>%
+        arrange(`Management Domain`, Keyword)
+
+    # Print formatted output grouped by Management Domain
+    cat("<h2 style='font-size:22pt; margin-bottom:10px;'>Keywords by Management Domain</h2>")
 
     for (domain in unique(sorted_keywords$`Management Domain`)) {
-        cat(paste0("<h3 style='font-size:20pt; margin-top:15px; padding:2px 0;'>", domain, "</h3>"))  # Space before Management Domain
-        domain_subset <- sorted_keywords %>% filter(`Management Domain` == domain)
+        cat(paste0("<h3 style='font-size:20pt; margin-top:15px;'>", domain, "</h3>"))
         
-        for (l1 in unique(domain_subset$L1)) {
-            cat(paste0("<h4 style='margin:0; padding:0; display:inline;'>", l1, "</h4>"))  # Removed extra spacing around L1
-            l1_subset <- domain_subset %>% filter(L1 == l1)
-            
-            for (l2 in unique(l1_subset$L2)) {
-                cat(paste0("<h4 style='margin:0; padding:2px 0;'>", l2, "</h4>"))  # L2 remains compact
-                keyword_subset <- l1_subset %>% filter(L2 == l2)
+        domain_subset <- sorted_keywords %>% filter(`Management Domain` == domain)
 
-                # Ensure keywords appear in two direct adjacent columns
-                cat("<div style='display: grid; grid-template-columns: 0.1fr 0.1fr; gap:0;'>")
-                for (keyword in keyword_subset$Keyword) {
-                    cat(paste0("<div style='font-size:11pt; padding:2px;'>", keyword, "</div>"))
-                }
-                cat("</div>")
-            }
+        # Create a two-column layout
+        cat("<div style='display: grid; grid-template-columns: 0.1fr 0.1fr; gap:0px;'>")
+        for (keyword in domain_subset$Keyword) {
+            cat(paste0("<div style='font-size:11pt; padding:2px;'>", keyword, "</div>"))
         }
+        cat("</div>")
     }
-    
+
 } else {
-    stop("❌ The required columns 'L1', 'L2', 'Management Domain', or 'Keyword' were not found in the dataset.")
+    stop("❌ The required columns 'Management Domain' or 'Keyword' were not found in the dataset.")
 }
 ```
+
 <hr>
+
 
 # Appendix III - Clause Type Keywords
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
@@ -420,15 +545,15 @@ if (all(c("Clause_Type", "Keyword") %in% names(clause_type_keywords))) {
     cat("<h2 style='font-size:22pt; margin-bottom:10px;'>Clause Type Keywords</h2>")
     
     for (clause_type in unique(sorted_keywords$Clause_Type)) {
-        cat(paste0("<h3 style='font-size:20pt; margin-top:15px; padding:2px 0;'>", clause_type, "</h3>"))
+        cat(paste0("<h3 style='font-size:20pt; margin-top:15px;'>", clause_type, "</h3>"))
         clause_subset <- sorted_keywords %>% filter(Clause_Type == clause_type)
         
-        # Print keywords as an unordered list with font size 11 pt
-        cat("<ul>")
+        # Print keywords in a two-column grid layout without bullets
+        cat("<div style='display: grid; grid-template-columns: 0.1fr 0.1fr; gap:0px;'>")
         for (keyword in clause_subset$Keyword) {
-            cat(paste0("<li style='font-size:11pt;'>", keyword, "</li>"))
+            cat(paste0("<div style='font-size:11pt; padding:2px;'>", keyword, "</div>"))
         }
-        cat("</ul>")
+        cat("</div>")
     }
     
 } else {
@@ -437,7 +562,81 @@ if (all(c("Clause_Type", "Keyword") %in% names(clause_type_keywords))) {
 ```
 
 <hr>
-# Appendix IV - Procedural Elements by Scope
 
-count of PEs by scope / domains etc.
+# Appendix IV - Example: The Fisheries Act
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(dplyr)
+
+# Check if required columns exist
+if (all(c("Scope", "Section", "Heading", "Legislation Name") %in% names(Full_legislation_parsed_DT))) {
+    
+    # Filter dataset for 'Fisheries Act (R.S.C., 1985, c. F-14)' and remove NA Scope values, sorting by Section
+    filtered_sections <- Full_legislation_parsed_DT %>%
+        filter(`Legislation Name` == "Fisheries Act (R.S.C., 1985, c. F-14)" & !is.na(Scope)) %>%
+        select(Scope, Section, Heading) %>%
+        arrange(Scope, as.numeric(Section))  # Ensures Sections are sorted numerically
+
+   filtered_sections <- Full_legislation_parsed_DT %>%
+    filter(`Legislation Name` == "Fisheries Act (R.S.C., 1985, c. F-14)" & !is.na(Scope)) %>%
+    select(Scope, Section, Heading) %>%
+    distinct() %>%  # Removes duplicate Section-Heading pairs
+    arrange(Scope, as.numeric(Section))  # Sorts numerically
+    
+     # Print formatted output grouped by Scope
+    cat("<h2 style='font-size:22pt; margin-bottom:10px;'>Sections and Headings in Fisheries Act</h2>")
+
+    for (scope_val in unique(filtered_sections$Scope)) {
+        cat(paste0("<h3 style='font-size:20pt; margin-top:15px;'>", scope_val, "</h3>"))
+        
+        scope_subset <- filtered_sections %>% filter(Scope == scope_val)
+
+        for (i in 1:nrow(scope_subset)) {
+            cat(paste0("<p style='font-size:12pt;margin:2px 0; line-height:1.2;'>", scope_subset$Section[i], " - ", scope_subset$Heading[i], "</p>"))
+        }
+    }
+
+} else {
+    stop("❌ The required columns 'Scope', 'Section', 'Heading', or 'Legislation Name' were not found in the dataset.")
+}
+```
+
 <hr>
+
+# Appendix V - Example: The Water Sustainability Act
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(dplyr)
+
+# Check if required columns exist
+if (all(c("Scope", "Section", "Heading", "Legislation Name") %in% names(Full_legislation_parsed_DT))) {
+    
+    # Filter dataset for 'Water Sustainability Act' and remove NA Scope values, sorting by Section
+    filtered_sections <- Full_legislation_parsed_DT %>%
+        filter(`Legislation Name` == "Water Sustainability Act" & !is.na(Scope)) %>%
+        select(Scope, Section, Heading) %>%
+        arrange(Scope, as.numeric(Section))  # Ensures Sections are sorted numerically
+
+    filtered_sections <- Full_legislation_parsed_DT %>%
+    filter(`Legislation Name` == "Water Sustainability Act" & !is.na(Scope)) %>%
+    select(Scope, Section, Heading) %>%
+    distinct() %>%  # Removes duplicate Section-Heading pairs
+    arrange(Scope, as.numeric(Section))  # Sorts numerically
+
+    # Print formatted output grouped by Scope
+    cat("<h2 style='font-size:22pt; margin-bottom:10px;'>Sections and Headings in Water Sustainability Act</h2>")
+
+    for (scope_val in unique(filtered_sections$Scope)) {
+        cat(paste0("<h3 style='font-size:20pt; margin-top:15px;'>", scope_val, "</h3>"))
+        
+        scope_subset <- filtered_sections %>% filter(Scope == scope_val)
+
+        for (i in 1:nrow(scope_subset)) {
+            cat(paste0("<p style='font-size:12pt; margin:2px 0; line-height:1.2;'>", scope_subset$Section[i], " - ", scope_subset$Heading[i], "</p>"))
+        }
+    }
+
+} else {
+    stop("❌ The required columns 'Scope', 'Section', 'Heading', or 'Legislation Name' were not found in the dataset.")
+}
+```
+
+
