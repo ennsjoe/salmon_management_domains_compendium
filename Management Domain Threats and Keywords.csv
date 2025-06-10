@@ -1,46 +1,42 @@
 ﻿Management Domain,L1,L2,Keyword,Scope
 Climate Change and Natural Disasters,11. Climate Change,11.1 Changes in Physical & Chemical Regimes,acidification,3 - Habitat
-Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,agricultural,3 - Habitat
-Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,agriculture,3 - Habitat
-Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,agroforestry,3 - Habitat
 Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.2 Problematic Native Species,alga,3 - Habitat
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",angler,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",angling,2 - Fish
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",Angling,2 - Fish
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",angling.,2 - Fish
+Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,animal biproduct,2 - Fish
+Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,animal health,2 - Fish
+Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,animal product,2 - Fish
 Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,aquaculture,2 - Fish
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",aquarium,2 - Fish
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,aquatic ecosystems,3 - Habitat
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.2 Utility & Service Lines,aqueduct,3 - Habitat
-Spatial Designation,NA,NA,area,4 - Governance
-Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,artificial,2 - Fish
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,barrier,3 - Habitat
+Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,artificial breeding,2 - Fish
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,beaver,3 - Habitat
 Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,biochemical,2 - Fish
 Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,biocontrol,3 - Habitat
 Species Status and Assessment,NA,NA,biodiversity,4 - Governance
-Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,biofuel,3 - Habitat
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,blight,2 - Fish
-"Governance, Policy, and Organizational Structure",NA,NA,board,4 - Governance
 Spatial Designation,NA,NA,boundary,4 - Governance
+Spatial Designation,NA,NA,boundaries,4 - Governance
 Aquaculture and Hatcheries,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.3 Introduced Genetic Material,breeding,2 - Fish
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",bridge,3 - Habitat
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,canals,3 - Habitat
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",catch,2 - Fish
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,catch basin,3 - Habitat
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",catch and retain,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",catches,2 - Fish
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,catchment,3 - Habitat
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",caught,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",caught fish,2 - Fish
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",causeway,3 - Habitat
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,channel,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,channelization,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,chemical,3 - Habitat
+Spatial Designation,NA,NA,classified waters,4 - Governance
 Climate Change and Natural Disasters,11. Climate Change,11.1 Changes in Physical & Chemical Regimes,CO2,3 - Habitat
 "Governance, Policy, and Organizational Structure",NA,NA,committee,4 - Governance
 Species Status and Assessment,NA,NA,concern,4 - Governance
+Spatial Designation,NA,NA,conservation area,4 - Governance
+Spatial Designation,NA,NA,conservation areas,4 - Governance
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",conservation stamp,2 - Fish
-Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,crop,3 - Habitat
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.2 Utility & Service Lines,crossing,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,culvert,3 - Habitat
-Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",dairy,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,dam,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,dams,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,deleterious,3 - Habitat
@@ -48,30 +44,41 @@ Water Use and Watercourse Modifications,7. Natural System Management & Modificat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,dike,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,dikes,3 - Habitat
 Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,disease,2 - Fish
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,disposal,3 - Habitat
 Spatial Designation,NA,NA,district,4 - Governance
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",dressed,2 - Fish
 Mining and Energy,3. Energy Production & Mining,3.1 Oil & Gas Exploration & Extraction,drilling,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,drinking,3 - Habitat
 Climate Change and Natural Disasters,11. Climate Change,11.3 Changes in Precipitation & Hydrological Regimes,drought,3 - Habitat
-Spatial Designation,NA,NA,ecologic,3 - Habitat
+Spatial Designation,NA,NA,ecological,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,effluent,3 - Habitat
 Species Status and Assessment,NA,NA,endangered,4 - Governance
-Spatial Designation,NA,NA,environ,3 - Habitat
+Spatial Designation,NA,NA,environmental,4 - Governance
+Spatial Designation,NA,NA,environment,4 - Governance
 Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,exotic,3 - Habitat
 Species Status and Assessment,NA,NA,extinct,4 - Governance
 Species Status and Assessment,NA,NA,extirpated,4 - Governance
 Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,farm operation,3 - Habitat
 Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,feral,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,fertilizer,3 - Habitat
-Forest and Range,2. Agriculture & Aquaculture,2.2 Wood & Pulp Plantations,fiber,3 - Habitat
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fin fish,2 - Fish
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",finfish,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",dip net,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",bait,2 - Fish
+Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,finfish,2 - Fish
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,fish barrier,3 - Habitat
+Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,fish feed,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fish for,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fish guard,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fish guards,2 - Fish
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,fish habitat,3 - Habitat
+Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,fish meal,2 - Fish
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,fish passage,3 - Habitat
+Species Status and Assessment,NA,NA,fish stock,4 - Governance
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fisheries,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fishery,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fishing,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",Fishing,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fishing guide,2 - Fish
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,flood control,3 - Habitat
 Climate Change and Natural Disasters,11. Climate Change,11.3 Changes in Precipitation & Hydrological Regimes,flood hazard,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,flood plain,3 - Habitat
@@ -81,12 +88,18 @@ Water Use and Watercourse Modifications,7. Natural System Management & Modificat
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",foul hook,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",frozen fish,2 - Fish
 Aquaculture and Hatcheries,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.3 Introduced Genetic Material,genetically-modified,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",gill net,2 - Fish
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,groundwater,3 - Habitat
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",harvest,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",guiding for fish,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",harvested salmon,2 - Fish
 Aquaculture and Hatcheries,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.3 Introduced Genetic Material,hatchery,2 - Fish
+Aquaculture and Hatcheries,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.3 Introduced Genetic Material,hatcheries,2 - Fish
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,herbicide,3 - Habitat
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",incidental catch,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",incidental catch,2 - Fish
 Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,introduced,3 - Habitat
 Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,invasive,3 - Habitat
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",kinds of fish,2 - Fish
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,lake,3 - Habitat
 Climate Change and Natural Disasters,10. Natural Disasters,10.1 Geological Events,landslide,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,leaching,3 - Habitat
@@ -94,52 +107,55 @@ Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,leakage,3 - H
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,levee,3 - Habitat
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",limit,2 - Fish
 Species Status and Assessment,NA,NA,listed,4 - Governance
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",live fish,2 - Fish
 Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",logging,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,manure,3 - Habitat
 Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,mussel,3 - Habitat
+Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,net pen,2 - Fish
 Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,nonferal,3 - Habitat
 Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,non-native,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,nutrient,3 - Habitat
 Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.2 Problematic Native Species,outbreak,3 - Habitat
-Spatial Designation,NA,NA,park,4 - Governance
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,passage,3 - Habitat
-Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,pen,2 - Fish
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,passage of fish,3 - Habitat
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,pathogen,2 - Fish
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,pathogens,2 - Fish
 Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,pest,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,pesticide,3 - Habitat
-Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,plague,2 - Fish
 Forest and Range,2. Agriculture & Aquaculture,2.2 Wood & Pulp Plantations,plantation,3 - Habitat
 Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,pond,2 - Fish
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",possess,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",possess fish,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",possession,2 - Fish
-"Governance, Policy, and Organizational Structure",NA,NA,powers,4 - Governance
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",protection of fish,2 - Fish
+Forest and Range,2. Agriculture & Aquaculture,2.2 Wood & Pulp Plantations,pulpwood,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,pumping,3 - Habitat
-Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,quarries,3 - Habitat
-Mining and Energy,3. Energy Production & Mining,3.2 Mining & Quarrying,quarry,3 - Habitat
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",quota,2 - Fish
-Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",ranch,3 - Habitat
-Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",range,3 - Habitat
+Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",range practrice,3 - Habitat
+Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",range stewardship,3 - Habitat
+Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",range use,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,rearing area,3 - Habitat
 Human Disturbance,6. Human Intrusions & Disturbances,6.3 Other Human Disturbances,research,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,reservoir,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,riparian,3 - Habitat
 Species Status and Assessment,NA,NA,risk,4 - Governance
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,river,3 - Habitat
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",roe,2 - Fish
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,salinity,3 - Habitat
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",salmon tag,2 - Fish
 Climate Change and Natural Disasters,11. Climate Change,11.3 Changes in Precipitation & Hydrological Regimes,sea-level,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,sedimentation,3 - Habitat
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",seine,2 - Fish
+Spatial Designation,NA,NA,sensitive area,4 - Governance
+Spatial Designation,NA,NA,sensitive areas,4 - Governance
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,septic,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,sewage,3 - Habitat
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,shipping lane,3 - Habitat
-Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",silviculture,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,spill,3 - Habitat
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",sport fishing,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",sportfish,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",stock,2 - Fish
-Climate Change and Natural Disasters,10. Natural Disasters,10.2 Severe Weather Events,storm,3 - Habitat
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,storm water,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,stream,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,streamside,3 - Habitat
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,substance,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,tailings,3 - Habitat
 Climate Change and Natural Disasters,11. Climate Change,11.3 Changes in Precipitation & Hydrological Regimes,temperature sensitive,3 - Habitat
 Species Status and Assessment,NA,NA,threatened,4 - Governance
@@ -147,11 +163,17 @@ Mining and Energy,3. Energy Production & Mining,3.3 Renewable Energy,tidal,3 - H
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,toxic,3 - Habitat
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",trawl,2 - Fish
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,treatment,3 - Habitat
-Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",tree farm,3 - Habitat
 Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,virus,2 - Fish
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,waste,3 - Habitat
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,water,3 - Habitat
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,water quality,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,water use,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,watershed,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,wetland,3 - Habitat
 Spatial Designation,NA,NA,zone,4 - Governance
+Spatial Designation,NA,NA,land reserve,4 - Governance
+Spatial Designation,NA,NA,management unit,4 - Governance
+Spatial Designation,NA,NA,park reserve,4 - Governance
+Spatial Designation,NA,NA,park reserves,4 - Governance
+Spatial Designation,NA,NA,land use,4 - Governance
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fish,2 - Fish
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,water,3 - Habitat
