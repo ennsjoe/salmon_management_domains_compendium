@@ -13,6 +13,9 @@ code_folding: hide
 
 ```{r setup, include=FALSE}
 library(here)
+library(DT)
+library(data.table)
+library(dplyr)
 
 # Define the file path
 rds_path <- here("Full_legislation_compendium.rds")
@@ -333,7 +336,9 @@ ggplot(clause_data, aes(x = Clause_Type, y = Paragraph_Count)) +
     ) +
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ```
+
 
 
 # REFERENCES
@@ -384,7 +389,7 @@ Westwood AR, Otto SP, Mooers A, Darimont C, Hodges KE, Johnson C, et al. 2019. P
 # Appendix I - Legislation Accumulation and Review
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-library(dplyr)
+
 
 # Check if required columns exist
 if (all(c("Jurisdiction", "Legislation Name", "Legislation Type") %in% names(Full_legislation_parsed_DT))) {
@@ -644,4 +649,35 @@ if (all(c("Scope", "Section", "Heading", "Legislation Name") %in% names(Full_leg
 }
 ```
 
+
+# Appendix VI - Compendium Viewer
+
+The following table contains the full database of legislation and the classification of clauses by IUCN threat level 1 and 2 (L1 and L2), scope, and clause type.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Render interactive table
+Sub_legislation <- Full_legislation_parsed_DT |>
+  select(-c(Jurisdiction, `Legislation Type`, Section, `Management Domain`, Heading))
+# 
+# Sub_legislation[, ':='(Jurisdiction = NULL,    `Legislation Type` = NULL,
+#                                                      Section =NULL,
+#                                                      `Management Domain` = NULL,
+#                                                      Heading = NULL) ]
+
+datatable(Sub_legislation,
+          extensions = c('ColReorder'),
+          options = list(pageLength = 5,
+                         autoWidth = TRUE,
+                         colReorder = TRUE,
+                         dom = 'Bfrtip',
+                         columnDefs = list(
+                           list(width = '400px',
+                                targets = which(names(data) == "Paragraph") - 1)
+                         )
+          ),
+          filter = 'top'
+)
+
+```
 
