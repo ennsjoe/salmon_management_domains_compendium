@@ -6,7 +6,6 @@ date: "`r Sys.Date()`"
 output:
   tufte::tufte_html: 
     toc: true
-
 fig_caption: true
 code_folding: hide
 ---
