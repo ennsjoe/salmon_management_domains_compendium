@@ -8,9 +8,10 @@ library(summarytools)
 library(DT)
 
 # Load the data
-data <- readRDS(here("Full_legislation_parsed_compendium.rds")) |>
-  mutate(across(c("jurisdiction", "legislation_type"), as.character)) |>
-  select(act_name, legislation_name, jurisdiction, clause_type, specificity, l1, l2, management_domain)
+data <- readRDS(here("Full_legislation_compendium.rds")) #|>
+
+legislation <- data$Full_legislation_parsed_DT |>
+  select(`Act Name`, `Legislation Name`, Jurisdiction, `Clause_Type`, Scope, L1, L2, `Management Domain`)
 
 # Define UI
 ui <- fluidPage(
@@ -19,11 +20,11 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       selectInput("leg_type", "Select Act:", 
-                  choices = unique(data$act_name), 
-                  selected = unique(data$act_name)[1]),
+                  choices = unique(legislation$`Act Name`), 
+                  selected = unique(legislation$`Act Name`)[1]),
       checkboxGroupInput("fields", "Select Fields to Summarize:", 
-                         choices = names(data)[!names(data) %in% c("act_name")],
-                         selected = c("jurisdiction", "clause_type"))
+                         choices = names(legislation)[!names(legislation) %in% c("Act Name")],
+                         selected = c("Jurisdiction", "clause Type"))
     ),
     
     mainPanel(
@@ -41,9 +42,9 @@ server <- function(input, output) {
   options(summarytools.view.method = "browser", summarytools.use.viewer = FALSE)
   
   filtered_data <- reactive({
-    df <- data
+    df <- legislation
     selected <- input$leg_type
-    df_filtered <- df[df$act_name == selected, ]
+    df_filtered <- df[df$`Act Name` == selected, ]
     print(paste("Selected:", selected, "Rows:", nrow(df_filtered)))
     df_filtered
   })
