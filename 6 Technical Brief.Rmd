@@ -172,7 +172,7 @@ if ("Clause_Type" %in% names(clause_type_keywords)) {
 ```
 
 # RESULTS
-## Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CoLAPSE)
+## 1) Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CoLAPSE)
 A summary of results from the initial iterations of the automated compendium are shown below. As the keywords become less specific to salmon, the number of Procedural Elements increases. The compendium is available as an R object, which can be used to query specific sections and subsections by Management Domain, IUCN Threat, Scope, and Clause Type. The full compendium is available in the <code>Full_legislation_compendium.rds</code> file and can be loaded into R using the <code>readRDS()</code> function. The compendium is also available as a CSV file for download from GitHub.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
@@ -330,6 +330,11 @@ ggplot(clause_data, aes(x = Clause_Type, y = Paragraph_Count)) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+<hr>
+
+## 2) Interactive Dashboard
+
+<hr>
 
 # REFERENCES
 <style>
