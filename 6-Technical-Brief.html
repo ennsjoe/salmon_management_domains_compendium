@@ -12,7 +12,7 @@
 
 <meta name="author" content="Joe Enns, Cory Lagasse" />
 
-<meta name="date" content="2025-06-09" />
+<meta name="date" content="2025-06-10" />
 
 <title>Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CoLAPSE)</title>
 
@@ -92,16 +92,50 @@ if (window.hljs) {
 <h1 class="title toc-ignore">Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CoLAPSE)</h1>
 <h3 class="subtitle">Technical Brief</h3>
 <h4 class="author">Joe Enns, Cory Lagasse</h4>
-<h4 class="date">2025-06-09</h4>
+<h4 class="date">2025-06-10</h4>
 
 
+<div id="TOC">
+<ul>
+<li><a href="#introduction" id="toc-introduction">INTRODUCTION</a>
+<ul>
+<li><a href="#background" id="toc-background">Background</a></li>
+</ul></li>
+<li><a href="#methods" id="toc-methods">METHODS</a>
+<ul>
+<li><a href="#defining-management-domains" id="toc-defining-management-domains">Defining Management Domains</a></li>
+<li><a href="#process" id="toc-process">Process</a>
+<ul>
+<li><a href="#legislation-accumulation-and-review" id="toc-legislation-accumulation-and-review">1) Legislation Accumulation and Review</a></li>
+<li><a href="#parsing-legislation-from-html-files" id="toc-parsing-legislation-from-html-files">2) Parsing Legislation from HTML Files</a></li>
+<li><a href="#assigning-management-domains-and-iucn-threats-from-keywords" id="toc-assigning-management-domains-and-iucn-threats-from-keywords">3) Assigning Management Domains and IUCN Threats from Keywords</a></li>
+<li><a href="#assigning-scope" id="toc-assigning-scope">4) Assigning Scope</a></li>
+<li><a href="#assigning-clause-type-from-keywords" id="toc-assigning-clause-type-from-keywords">5) Assigning Clause Type from Keywords</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#results" id="toc-results">RESULTS</a>
+<ul>
+<li><a href="#compendium-of-legislation-applicable-to-pacific-salmon-and-ecosystems-colapse" id="toc-compendium-of-legislation-applicable-to-pacific-salmon-and-ecosystems-colapse">Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CoLAPSE)</a></li>
+<li><a href="#summary-of-management-domains" id="toc-summary-of-management-domains">Summary of Management Domains</a></li>
+<li><a href="#summary-of-iucn-threats" id="toc-summary-of-iucn-threats">Summary of IUCN Threats</a></li>
+<li><a href="#summary-of-clause-types" id="toc-summary-of-clause-types">Summary of Clause Types</a></li>
+</ul></li>
+<li><a href="#references" id="toc-references">REFERENCES</a></li>
+<li><a href="#appendices" id="toc-appendices">APPENDICES</a></li>
+<li><a href="#appendix-i---legislation-accumulation-and-review" id="toc-appendix-i---legislation-accumulation-and-review">Appendix I - Legislation Accumulation and Review</a></li>
+<li><a href="#appendix-ii---management-domain-keyword-list" id="toc-appendix-ii---management-domain-keyword-list">Appendix II - Management Domain Keyword List</a></li>
+<li><a href="#appendix-iii---clause-type-keywords" id="toc-appendix-iii---clause-type-keywords">Appendix III - Clause Type Keywords</a></li>
+<li><a href="#appendix-iv---example-the-fisheries-act" id="toc-appendix-iv---example-the-fisheries-act">Appendix IV - Example: The Fisheries Act</a></li>
+<li><a href="#appendix-v---example-the-water-sustainability-act" id="toc-appendix-v---example-the-water-sustainability-act">Appendix V - Example: The Water Sustainability Act</a></li>
+</ul>
+</div>
 
 <div id="introduction" class="section level1">
 <h1>INTRODUCTION</h1>
 <div id="background" class="section level2">
 <h2>Background</h2>
 <p>Resource conservation and stewardship in Canada is governed through a decentralized, multi-sector array of constitutional authority administered through federal, provincial, territorial, and municipal governments (Ray et al 2021; Campbell and Thomas 2002). Stemming from the Constitution Act, legislative control over ecological conservation has been a reactionary process of assigning authority to multiple jurisdictions over new environmental issues as they arise, which creates a complex and overlapping distribution of governance (Becklumb 2013). This patchwork of authority is most prominent in Pacific salmon management due to the complicated geographic nature of their anadromous life cycle, spanning a variety of freshwater and marine ecosystems coast-wide and across international boundaries.</p>
-<p>While legislation and programs may often operate on a sector-by-sector and individual resource basis, integrated stewardship relies on scale-appropriate planning and decision making (Ray et al 2021). The need for collaboration in salmon conservation is often recognized in status assessments, recovery plans, and initiatives, such as Recovery Potential Assessments for at-risk conservation units of Pacific salmon developed by Fisheries and Oceans Canada. Successful conservation and rebuilding of Pacific salmon therefore requires coordination of activities across discrete administrative responsibilities and regulatory frameworks. However, such coordination requires adequate organizational capacity and systems for effective implementation to ensure that regulatory controls and mitigation activities address underlying threats and factors limiting productivity.</p>
+<p>While legislation and programs may often operate on a sector-by-sector and individual resource basis, integrated stewardship relies on scale-appropriate planning and decision making (Ray et al 2021). The need for collaborative, transparent decision-making in salmon management is recognized throughout policies, plans, and initiatives, such as the Pacific Salmon Strategy Initiative and the Wild Salmon Policy. Successful conservation and rebuilding of Pacific salmon therefore requires coordination of activities across discrete administrative responsibilities and regulatory frameworks. However, such coordination requires adequate organizational capacity and systems for effective implementation to ensure that regulatory controls and mitigation activities address underlying threats and factors limiting productivity.</p>
 <p>In this report, we present a framework for relating threats to salmon with their legislative and regulatory context within British Columbia. We define discrete areas of administrative responsibility for Pacific salmon as “management domains” and conduct a review of legislation to assess the specificity or scope of each clause in relation to Pacific salmon. Our purpose for creating a management domains framework is to:</p>
 <ul>
 <li>
@@ -120,7 +154,8 @@ support comprehensive management and conservation planning for Pacific salmon by
 <h1>METHODS</h1>
 <div id="defining-management-domains" class="section level2">
 <h2>Defining Management Domains</h2>
-<p>Management domains represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Since management domains are defined as a “separation of administrative concerns,” it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 13 specific management domains were delineated for the purpose of this exercise. The domains were developed to comprehensively encompass the International Union for Conservation of Nature (IUCN) threat categories, legislative context, and administrative functions related to Pacific salmon in British Columbia:</p>
+<p>Management domains represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Since management domains are defined as a “separation of administrative concerns,” it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 13 specific management domains were delineated for the purpose of this exercise. The domains were developed to comprehensively encompass the legislative context, administrative functions, and anthropogenic threats related to Pacific salmon in British Columbia.</p>
+<p>We used the International Union for Conservation of Nature (IUCN) threat categories (Salafsky et al 2008) to classify legislation into anthropogenic activities that affect salmon. IUCN threat categories are widely used to assess threats as part of IUCN red list assessments, as well as in status assessments for Pacific salmon populations conducted by the Committee for the Status of Endangered Wildlife in Canada (COSEWIC). We assigned level 1 and level 2 threat classification hierarchies from the IUCN categories into management domains to separate anthropogenic activities into different areas of administrative concern.</p>
 <ul>
 <li>
 Agriculture
@@ -1993,16 +2028,8 @@ Sections and Headings in Fisheries Act
 <p style="font-size:12pt;margin:2px 0; line-height:1.2;">
 92 - Five-year review
 </p>
-```html
-<div id="reportAccordion" class="accordion">
-<div class="accordion-item">
-<pre><code>&lt;h2 class=&quot;accordion-header&quot; id=&quot;headingOne&quot;&gt;
-  &lt;button class=&quot;accordion-button&quot; type=&quot;button&quot; data-bs-toggle=&quot;collapse&quot; data-bs-target=&quot;#collapseOne&quot;&gt;
-    Click to Expand Section
-  &lt;/button&gt;
-&lt;/h2&gt;
-&lt;div id=&quot;collapseOne&quot; class=&quot;accordion-collapse collapse&quot; data-bs-parent=&quot;#reportAccordion&quot;&gt;
-  &lt;div class=&quot;accordion-body&quot;&gt;</code></pre>
+<hr>
+</div>
 <div id="appendix-v---example-the-water-sustainability-act" class="section level1">
 <h1>Appendix V - Example: The Water Sustainability Act</h1>
 <h2 style="font-size:22pt; margin-bottom:10px;">
@@ -2500,11 +2527,6 @@ Sections and Headings in Water Sustainability Act
 <p style="font-size:12pt; margin:2px 0; line-height:1.2;">
 137 - Minister’s regulations restricting groundwater activities
 </p>
-</div>
-</div>
-<pre><code>&lt;/div&gt;</code></pre>
-</div>
-</div>
 </div>
 
 
