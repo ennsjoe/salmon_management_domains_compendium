@@ -691,7 +691,7 @@ Sub_legislation <- Full_legislation_parsed_DT |>
          Scope = as.factor(Scope),
          Clause_Type = as.factor(Clause_Type))
 
-  select(-c(Jurisdiction, `Legislation Type`, `Management Domain`, L1, Heading))
+#  select(-c(Jurisdiction, `Legislation Type`, `Management Domain`, L1, Heading))
 # 
 # Sub_legislation[, ':='(Jurisdiction = NULL,    `Legislation Type` = NULL,
 #                                                      L1 = NULL,
@@ -727,7 +727,7 @@ dataListFilter <- function(visible_data, style = "width: 100%; height: 28px;") {
 
 reactable(
   visible_data,
-  groupBy = c("Management Domain", "Act Name"),
+  #groupBy = c("Management Domain", "Act Name"),
   filterable = TRUE,
   searchable = TRUE,
   pagination = TRUE,
