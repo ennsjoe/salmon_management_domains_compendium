@@ -15,6 +15,8 @@ library(here)
 library(DT)
 library(data.table)
 library(dplyr)
+library(reactable)
+library(htmltools)
 
 # Define the file path
 rds_path <- here("Full_legislation_compendium.rds")
@@ -658,30 +660,136 @@ if (all(c("Scope", "Section", "Heading", "Legislation Name") %in% names(Full_leg
 
 The following table contains the full database of legislation and the classification of clauses by IUCN threat level 1 and 2 (L1 and L2), scope, and clause type.
 
+<style>
+  /* Limit dropdown width */
+  .dataTables_wrapper select {
+    max-width: 120px;
+    width: auto;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+/* Prevent column from expanding */
+  table.dataTable th {
+    white-space: nowrap;
+  }
+</style>
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
 # Render interactive table
 Sub_legislation <- Full_legislation_parsed_DT |>
-  select(-c(Jurisdiction, `Legislation Type`, Section, `Management Domain`, Heading))
-# 
-# Sub_legislation[, ':='(Jurisdiction = NULL,    `Legislation Type` = NULL,
-#                                                      Section =NULL,
-#                                                      `Management Domain` = NULL,
-#                                                      Heading = NULL) ]
+  select(-c(Jurisdiction, `Legislation Type`)) %>%
+  filter(!is.na(Scope)) |>
+  mutate(`Management Domain` = as.factor(`Management Domain`),  #turn into factors columns to use for dropdowns
+         `Act Name` = as.factor(`Act Name`),
+         `Legislation Name` = as.factor(`Legislation Name`),
+         L1 = as.factor(L1),
+         L2 = as.factor(L2),
+         Scope = as.factor(Scope),
+         Clause_Type = as.factor(Clause_Type))
 
-datatable(Sub_legislation,
-          extensions = c('ColReorder'),
-          options = list(pageLength = 5,
-                         autoWidth = TRUE,
-                         colReorder = TRUE,
-                         dom = 'Bfrtip',
-                         columnDefs = list(
-                           list(width = '400px',
-                                targets = which(names(data) == "Paragraph") - 1)
-                         )
-          ),
-          filter = 'top'
+# Remove Paragraph from visible table
+visible_data <- Sub_legislation |>
+  select(-Paragraph)
+
+
+# Creates a data list column filter for a table with the given ID
+dataListFilter <- function(visible_data, style = "width: 100%; height: 28px;") {
+  function(values, name) {
+    dataListId <- sprintf("%s-%s-list", visible_data, name)
+    tagList(
+      tags$input(
+        type = "text",
+        list = dataListId,
+        oninput = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", visible_data, name),
+        "aria-label" = sprintf("Filter %s", name),
+        style = style
+      ),
+      tags$datalist(
+        id = dataListId,
+        lapply(unique(values), function(value) tags$option(value = value))
+      )
+    )
+  }
+}
+
+reactable(
+  visible_data,
+  groupBy = c("Management Domain", "Act Name"),
+  filterable = TRUE,
+  searchable = TRUE,
+  pagination = TRUE,
+  resizable = TRUE,
+  defaultColDef = colDef(
+    filterInput = function(values, name) {
+      if (is.factor(values)) {
+        dataListFilter("legislation-list")(values, name)
+      }
+    }
+  ),
+  defaultPageSize = 10,
+  columns = list(
+    # Add dropdown filters for specific columns
+    `Act Name` = colDef(filterable = TRUE),
+    `Legislation Name` = colDef(filterable = TRUE),
+    L1 = colDef(filterable = TRUE),
+    L2 = colDef(filterable = TRUE),
+    Scope = colDef(filterable = TRUE),
+    Clause_Type = colDef(filterable = TRUE),
+    `Management Domain` = colDef(filterable = TRUE)
+  ),
+  details = function(index) {
+    htmltools::div(style = "padding: 10px;",
+                   Sub_legislation$Paragraph[index])
+  },
+  rowStyle = function(index) {
+    list(cursor = "pointer")
+  },
+  elementId = "legislation-list"
 )
+
+
+
+# datatable(visible_data,
+#           extensions = c('ColReorder'),
+#           options = list(pageLength = 5,
+#                          initComplete = JS(dropdown_js),
+#                          autoWidth = TRUE,
+#                          colReorder = TRUE,
+#                          columnDefs = list(
+#                            # list(width = '400px',
+#                            #      targets = which(names(data) == "Paragraph") - 1),
+#                            list(
+#                              className = 'dt-control',
+#                              targets = 0,  # Add control to first column
+#                              orderable = FALSE
+#                            )
+#                          ),
+#                          order = list(list(1, 'asc'))
+#           ),
+#           filter = 'top',
+#           rownames = FALSE,
+#             callback = JS(paste0("
+#     table.column(0).nodes().to$().css({cursor: 'pointer'});
+#     var paragraphs = ", jsonlite::toJSON(Sub_legislation$Paragraph, auto_unbox = TRUE), ";
+#     table.on('click', 'td.dt-control', function() {
+#       var tr = $(this).closest('tr');
+#       var row = table.row(tr);
+#       var idx = row.index();
+# 
+#       if (row.child.isShown()) {
+#         row.child.hide();
+#         tr.removeClass('shown');
+#       } else {
+#         row.child('<div style=\"padding:10px;\">' + paragraphs[idx] + '</div>').show();
+#         tr.addClass('shown');
+#       }
+#     });
+#   "))
+# )
 
 ```
 
