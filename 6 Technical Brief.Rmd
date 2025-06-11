@@ -660,22 +660,6 @@ if (all(c("Scope", "Section", "Heading", "Legislation Name") %in% names(Full_leg
 
 The following table contains the full database of legislation and the classification of clauses by IUCN threat level 2 (L2), scope, and clause type.
 
-<style>
-  /* Limit dropdown width */
-  .dataTables_wrapper select {
-    max-width: 120px;
-    width: auto;
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-/* Prevent column from expanding */
-  table.dataTable th {
-    white-space: nowrap;
-  }
-</style>
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -690,13 +674,6 @@ Sub_legislation <- Full_legislation_parsed_DT |>
          L2 = as.factor(L2),
          Scope = as.factor(Scope),
          Clause_Type = as.factor(Clause_Type))
-
-#  select(-c(Jurisdiction, `Legislation Type`, `Management Domain`, L1, Heading))
-# 
-# Sub_legislation[, ':='(Jurisdiction = NULL,    `Legislation Type` = NULL,
-#                                                      L1 = NULL,
-#                                                      `Management Domain` = NULL,
-#                                                      Heading = NULL) ]
 
 
 # Remove Paragraph from visible table
@@ -760,45 +737,6 @@ reactable(
   elementId = "legislation-list"
 )
 
-
-
-# datatable(visible_data,
-#           extensions = c('ColReorder'),
-#           options = list(pageLength = 5,
-#                          initComplete = JS(dropdown_js),
-#                          autoWidth = TRUE,
-#                          colReorder = TRUE,
-#                          columnDefs = list(
-#                            # list(width = '400px',
-#                            #      targets = which(names(data) == "Paragraph") - 1),
-#                            list(
-#                              className = 'dt-control',
-#                              targets = 0,  # Add control to first column
-#                              orderable = FALSE
-#                            )
-#                          ),
-#                          order = list(list(1, 'asc'))
-#           ),
-#           filter = 'top',
-#           rownames = FALSE,
-#             callback = JS(paste0("
-#     table.column(0).nodes().to$().css({cursor: 'pointer'});
-#     var paragraphs = ", jsonlite::toJSON(Sub_legislation$Paragraph, auto_unbox = TRUE), ";
-#     table.on('click', 'td.dt-control', function() {
-#       var tr = $(this).closest('tr');
-#       var row = table.row(tr);
-#       var idx = row.index();
-# 
-#       if (row.child.isShown()) {
-#         row.child.hide();
-#         tr.removeClass('shown');
-#       } else {
-#         row.child('<div style=\"padding:10px;\">' + paragraphs[idx] + '</div>').show();
-#         tr.addClass('shown');
-#       }
-#     });
-#   "))
-# )
 
 ```
 
