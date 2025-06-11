@@ -658,7 +658,7 @@ if (all(c("Scope", "Section", "Heading", "Legislation Name") %in% names(Full_leg
 
 # Appendix VI - Compendium Viewer
 
-The following table contains the full database of legislation and the classification of clauses by IUCN threat level 1 and 2 (L1 and L2), scope, and clause type.
+The following table contains the full database of legislation and the classification of clauses by IUCN threat level 2 (L2), scope, and clause type.
 
 <style>
   /* Limit dropdown width */
@@ -691,6 +691,14 @@ Sub_legislation <- Full_legislation_parsed_DT |>
          Scope = as.factor(Scope),
          Clause_Type = as.factor(Clause_Type))
 
+  select(-c(Jurisdiction, `Legislation Type`, `Management Domain`, L1, Heading))
+# 
+# Sub_legislation[, ':='(Jurisdiction = NULL,    `Legislation Type` = NULL,
+#                                                      L1 = NULL,
+#                                                      `Management Domain` = NULL,
+#                                                      Heading = NULL) ]
+
+
 # Remove Paragraph from visible table
 visible_data <- Sub_legislation |>
   select(-Paragraph)
@@ -715,6 +723,7 @@ dataListFilter <- function(visible_data, style = "width: 100%; height: 28px;") {
     )
   }
 }
+
 
 reactable(
   visible_data,
