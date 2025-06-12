@@ -39,7 +39,7 @@ if (file.exists(rds_path)) {
 # Optional: Inspect loaded data structure
 if (exists("loaded_data")) {
   str(loaded_data)
-}
+  }
 
 # Load only the Paragraphs_DT object from the RDS file
 Paragraphs_DT <- readRDS(here("Full_legislation_compendium.rds"))$Paragraphs_DT
@@ -78,6 +78,7 @@ cat("Total HTML files detected:", length(html_files), "\n")
 ## Check if no files are found
 if (length(html_files) == 0) stop("No HTML files found in the specified directories.")
 
+################################################################################
 # 2) Parsing Paragraphs and Extracting Legislation Info-------------------------
 ## Initialize Paragraphs_DT------------------------------------------------------
 Paragraphs_DT <- data.table(
@@ -245,6 +246,7 @@ Paragraphs_DT <- Paragraphs_DT[!grepl(paste0("\\b(", paste(filter_words, collaps
 ## Remove Subsection column------------------------------------------------------
 Paragraphs_DT[, Subsection := NULL]
 
+################################################################################
 # 3) Assign Domains, etc and Group----------------------------------------------
 ## Function to assign attributes based on first matched keyword----
 assign_attributes <- function(paragraph) {
@@ -353,8 +355,8 @@ saved_data<- list(
 saveRDS(saved_data, "Full_legislation_compendium.rds")
 
 ## Define file path using here()
-xl_file_path <- here("Compendium_of_Legislation_(full).xlsx")
+file_pathxl <- here("Compendium_of_Legislation_(full).xlsx")
 
 ## Export data table to XLSX
-write_xlsx(Full_legislation_parsed_DT, path = xl_file_path)
+write_xlsx(Full_legislation_parsed_DT, path = file_pathxl)
 
