@@ -25,22 +25,30 @@ library(writexl)
 ## Define the folders dynamically using `here()`--------------------------------
 html_dirs <- c(here("Type A Legislation"), here("Type B Legislation"))
 
+# Define file path using here()Add commentMore actions
+rds_path <- here("Full_legislation_compendium.rds")
+
+# Check if the file exists before loading
+if (file.exists(rds_path)) {
+  loaded_data <- readRDS(rds_path)
+  message("File loaded successfully!")
+} else {
+  message("File does not exist: ", rds_path)
+}
+
+# Optional: Inspect loaded data structure
+if (exists("loaded_data")) {
+  str(loaded_data)
+}
+
+# Load only the Paragraphs_DT object from the RDS file
+Paragraphs_DT <- readRDS(here("Full_legislation_compendium.rds"))$Paragraphs_DT
+
 ## Create the salmon_keywords data table----------------------------------------
 salmon_keywords <- data.table(
   Keyword = c("salmon", "chinook", "sockeye", "coho", "chum", "salmonid"),
   Scope = '1 - Salmon'
 )
-
-## Load R Object with P
-rds_path <- here("Full_legislation_compendium.rds")
-
-if (file.exists(rds_path)) {
-  saved_data <- readRDS(rds_path)
-  Paragraphs_DT <- saved_data$Paragraphs_DT  # Extract Paragraphs_DT
-  message("Paragraphs_DT successfully loaded into the global environment.")
-} else {
-  message("File not found: ", rds_path)
-}
 
 ## Load Management Domain Keyword CSV file---------------------------------------
 md_threats_keywords <- fread(here("Management Domain Threats and Keywords.csv"))
@@ -238,12 +246,6 @@ Paragraphs_DT <- Paragraphs_DT[!grepl(paste0("\\b(", paste(filter_words, collaps
 Paragraphs_DT[, Subsection := NULL]
 
 # 3) Assign Domains, etc and Group----------------------------------------------
-## Create a new datatable to store extracted attributes
-Management_DT <- Paragraphs_DT[, assign_attributes(Paragraph), by = Paragraph]
-
-## Add Paragraph column to maintain reference
-Management_DT[, Paragraph := Paragraphs_DT$Paragraph]
-
 ## Function to assign attributes based on first matched keyword----
 assign_attributes <- function(paragraph) {
   words <- unlist(strsplit(paragraph, "\\s+"))
@@ -264,7 +266,10 @@ assign_attributes <- function(paragraph) {
   }
 }
 
-## Apply function to extract the first match per rowAdd commentMore actions------
+## Create a new datatable by copying Paragraphs_DT first
+Management_DT <- copy(Paragraphs_DT)
+
+## Assign attributes and add new columns without removing existing ones
 Management_DT[, c("Management Domain", "L1", "L2", "Scope") := assign_attributes(Paragraph), by = Paragraph]
 
 ## Combine Paragraphs while keeping all original columns except XPath------------
@@ -343,14 +348,13 @@ saved_data<- list(
   salmon_keywords = salmon_keywords,
   md_threats_keywords = md_threats_keywords,
   clause_type_keywords = clause_type_keywords,
-  Management_DT = Management_DT,
   Paragraphs_DT = Paragraphs_DT
 )
 saveRDS(saved_data, "Full_legislation_compendium.rds")
 
 ## Define file path using here()
-file_path <- here("Compendium_of_Legislation_(full).xlsx")
+xl_file_path <- here("Compendium_of_Legislation_(full).xlsx")
 
 ## Export data table to XLSX
-write_xlsx(Full_legislation_parsed_DT, path = file_path)
+write_xlsx(Full_legislation_parsed_DT, path = xl_file_path)
 
