@@ -12,7 +12,6 @@ code_folding: hide
 
 ```{r setup, include=FALSE}
 library(here)
-library(DT)
 library(data.table)
 library(dplyr)
 library(reactable)
@@ -660,81 +659,156 @@ if (all(c("Scope", "Section", "Heading", "Legislation Name") %in% names(Full_leg
 
 The following table contains the full database of legislation and the classification of clauses by IUCN threat level 2 (L2), scope, and clause type.
 
-
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
-# Render interactive table
-Sub_legislation <- Full_legislation_parsed_DT |>
-  select(-c(Jurisdiction, `Legislation Type`)) %>%
-  filter(!is.na(Scope)) |>
-  mutate(`Management Domain` = as.factor(`Management Domain`),  #turn into factors columns to use for dropdowns
-         `Act Name` = as.factor(`Act Name`),
-         `Legislation Name` = as.factor(`Legislation Name`),
-         L1 = as.factor(L1),
-         L2 = as.factor(L2),
-         Scope = as.factor(Scope),
-         Clause_Type = as.factor(Clause_Type))
+library(dplyr)
+library(reactable)
+library(htmltools)
 
+# Step 1: Prepare cleaned base data
+nested_data <- Full_legislation_parsed_DT %>%
+  filter(
+    !is.na(`Management Domain`), !is.na(L1), !is.na(L2),
+    !is.na(Jurisdiction), !is.na(`Legislation Name`),
+    !is.na(Section), !is.na(Heading), !is.na(Paragraph)
+  ) %>%
+  distinct(`Management Domain`, L1, L2, Jurisdiction,
+           `Legislation Name`, Heading, Section, Paragraph)
 
-# Remove Paragraph from visible table
-visible_data <- Sub_legislation |>
-  select(-Paragraph)
+# Step 2: Precompute Paragraphs preserving their original row order
+paragraph_lookup <- nested_data %>%
+  group_by(`Legislation Name`, Heading, Section) %>%
+  summarise(
+    Paragraphs = toString(Paragraph),  # preserves input order
+    .groups = "drop"
+  )
 
+# Step 3: Construct nested explorer structure
+l1_nested <- nested_data %>%
+  group_by(`Management Domain`, L1, L2, Jurisdiction, `Legislation Name`) %>%
+  summarise(Section_data = list(cur_data()), .groups = "drop") %>%
+  group_by(`Management Domain`, L1, L2, Jurisdiction) %>%
+  summarise(Legislation_data = list(cur_data()), .groups = "drop") %>%
+  group_by(`Management Domain`, L1, L2) %>%
+  summarise(Jurisdiction_data = list(cur_data()), .groups = "drop") %>%
+  group_by(`Management Domain`, L1) %>%
+  summarise(L2_data = list(cur_data()), .groups = "drop")
 
-# Creates a data list column filter for a table with the given ID
-dataListFilter <- function(visible_data, style = "width: 100%; height: 28px;") {
-  function(values, name) {
-    dataListId <- sprintf("%s-%s-list", visible_data, name)
-    tagList(
-      tags$input(
-        type = "text",
-        list = dataListId,
-        oninput = sprintf("Reactable.setFilter('%s', '%s', event.target.value || undefined)", visible_data, name),
-        "aria-label" = sprintf("Filter %s", name),
-        style = style
-      ),
-      tags$datalist(
-        id = dataListId,
-        lapply(unique(values), function(value) tags$option(value = value))
-      )
-    )
-  }
+domain_summary <- l1_nested %>%
+  group_by(`Management Domain`) %>%
+  summarise(L1_data = list(cur_data()), .groups = "drop") %>%
+  arrange(`Management Domain`)
+
+# Step 4: White arrow CSS injection
+white_arrow_css <- tags$head(
+  tags$style(HTML("
+    .reactable .rt-expander {
+      color: white !important;
+    }
+    .reactable .rt-expander:focus {
+      outline: none;
+    }
+  "))
+)
+
+# Step 5: Row styling for nested dark levels
+dark_row <- function(index) {
+  list(background = "darkgrey", color = "white")
 }
 
+# Step 6: Render final nested explorer
+htmltools::browsable(
+  tagList(
+    white_arrow_css,
+    reactable(
+      domain_summary,
+      columns = list(
+        `Management Domain` = colDef(name = "Management Domain"),
+        L1_data = colDef(show = FALSE)
+      ),
+      searchable = TRUE,
+      bordered = TRUE,
+      striped = TRUE,
+      highlight = TRUE,
+      defaultPageSize = 10,
+      details = function(domain_index) {
+        l1_table <- domain_summary$L1_data[[domain_index]]
 
-reactable(
-  visible_data,
-  #groupBy = c("Management Domain", "Act Name"),
-  filterable = TRUE,
-  searchable = TRUE,
-  pagination = TRUE,
-  resizable = TRUE,
-  defaultColDef = colDef(
-    filterInput = function(values, name) {
-      if (is.factor(values)) {
-        dataListFilter("legislation-list")(values, name)
+        reactable(
+          l1_table,
+          rowStyle = dark_row,
+          columns = list(
+            L1 = colDef(name = "IUCN Threat Level 1"),
+            L2_data = colDef(show = FALSE)
+          ),
+          details = function(l1_index) {
+            l2_table <- l1_table$L2_data[[l1_index]]
+
+            reactable(
+              l2_table,
+              rowStyle = dark_row,
+              columns = list(
+                L2 = colDef(name = "IUCN Threat Level 2"),
+                Jurisdiction_data = colDef(show = FALSE)
+              ),
+              details = function(l2_index) {
+                jurisdiction_table <- l2_table$Jurisdiction_data[[l2_index]]
+
+                reactable(
+                  jurisdiction_table,
+                  rowStyle = dark_row,
+                  columns = list(
+                    Jurisdiction = colDef(name = "Jurisdiction"),
+                    Legislation_data = colDef(show = FALSE)
+                  ),
+                  details = function(j_index) {
+                    legislation_table <- jurisdiction_table$Legislation_data[[j_index]]
+
+                    reactable(
+                      legislation_table,
+                      rowStyle = dark_row,
+                      columns = list(
+                        `Legislation Name` = colDef(name = "Legislation"),
+                        Section_data = colDef(show = FALSE)
+                      ),
+                      details = function(law_index) {
+                        leg_name <- legislation_table$`Legislation Name`[[law_index]]
+                        section_data <- legislation_table$Section_data[[law_index]]
+
+                        section_table <- section_data %>%
+                          distinct(Heading, Section) %>%
+                          mutate(`Legislation Name` = leg_name)
+
+                        table_data <- section_table %>%
+                          left_join(paragraph_lookup,
+                                    by = c("Legislation Name", "Heading", "Section")) %>%
+                          select(Heading, Section, Paragraphs) %>%
+                          arrange(Heading, Section)
+
+                        reactable(
+                          table_data,
+                          columns = list(
+                            Heading = colDef(name = "Heading"),
+                            Section = colDef(name = "Section"),
+                            Paragraphs = colDef(name = "Paragraph(s)")
+                          ),
+                          compact = TRUE,
+                          highlight = TRUE,
+                          bordered = TRUE,
+                          striped = TRUE,
+                          defaultPageSize = 5
+                        )
+                      }
+                    )
+                  }
+                )
+              }
+            )
+          }
+        )
       }
-    }
-  ),
-  defaultPageSize = 10,
-  columns = list(
-    # Add dropdown filters for specific columns
-    `Act Name` = colDef(filterable = TRUE),
-    `Legislation Name` = colDef(filterable = TRUE),
-    L1 = colDef(filterable = TRUE),
-    L2 = colDef(filterable = TRUE),
-    Scope = colDef(filterable = TRUE),
-    Clause_Type = colDef(filterable = TRUE),
-    `Management Domain` = colDef(filterable = TRUE)
-  ),
-  details = function(index) {
-    htmltools::div(style = "padding: 10px;",
-                   Sub_legislation$Paragraph[index])
-  },
-  rowStyle = function(index) {
-    list(cursor = "pointer")
-  },
-  elementId = "legislation-list"
+    )
+  )
 )
 
 
