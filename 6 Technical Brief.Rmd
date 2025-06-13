@@ -1,14 +1,42 @@
 ---
 title: "Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CoLAPSE)"
-subtitle: "Technical Brief"
 author: "Joe Enns, Cory Lagasse"
 date: "`r Sys.Date()`"
 output:
-  tufte::tufte_html: 
+  bookdown::tufte_html2:
     toc: true
-fig_caption: true
-code_folding: hide
+    number_sections: false
+    self_contained: true
+    fig_caption: true
+documentclass: article
+link-citations: true
 ---
+
+<style>
+/* Remove bullets and padding from the TOC */
+#TOC ul {
+  list-style-type: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+/* Adjust line spacing and spacing between items */
+#TOC li {
+  margin: 0.2em 0;
+  line-height: 1.2;
+}
+
+/* Style the links */
+#TOC a {
+  text-decoration: none;
+  color: #444;
+}
+
+#TOC a:hover {
+  color: #005588;
+}
+</style>
+
 
 ```{r setup, include=FALSE}
 library(here)
@@ -82,7 +110,7 @@ Management domains represent a reframing of multi-jurisdictional issues by admin
 
 We used the International Union for Conservation of Nature (IUCN) threat categories (Salafsky et al 2008) to classify legislation into anthropogenic activities that affect salmon.  IUCN threat categories are widely used to assess threats as part of IUCN red list assessments, as well as in status assessments for Pacific salmon populations conducted by the Committee for the Status of Endangered Wildlife in Canada (COSEWIC). We assigned level 1 and level 2 threat classification hierarchies from the IUCN categories into management domains to separate anthropogenic activities into different areas of administrative concern. 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+```{r table-marginnote, results='asis', echo=FALSE}
 # Extract unique management domains, remove NA values, and sort alphabetically
 if ("Management Domain" %in% names(Full_legislation_parsed_DT)) {
     unique_management_domains <- sort(na.omit(unique(Full_legislation_parsed_DT$`Management Domain`)))
