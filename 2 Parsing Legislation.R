@@ -359,4 +359,3 @@ file_pathxl <- here("Compendium_of_Legislation_(full).xlsx")
 
 ## Export data table to XLSX
 write_xlsx(Full_legislation_parsed_DT, path = file_pathxl)
-
