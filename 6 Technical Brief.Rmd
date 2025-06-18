@@ -131,7 +131,7 @@ We used the International Union for Conservation of Nature (IUCN) threat categor
 
 Historically, much of the management decisions and activities related to salmon have been in response to identifiable threats to salmon health and population status. One common framework used to describe impacts to salmon are the Four H’s: Habitat, Hydropower, Harvest, and Hatcheries. Each management domain, as defined in this report, intentionally aligns with one of the four H’s. However, there are aspects of salmon management associated with governance and agreements rather than one of the other H’s, which was categorized as “Handshaking.” Because the management domains are centered around salmon/habitat impacts, this allows structurally for a clearer alignment with IUCN threat categories.
 
-```{r, echo=FALSE, fig.cap="Flowchart showing alignment of Pacific salmon threat factors (Four H's) with Management Domains in relation to legislation and jurisdiction."}
+```{r, echo=FALSE, fig.cap="Flowchart showing alignment of Pacific salmon threat factors (Four H's) with Management Domain in relation to legislation and jurisdiction."}
 library(knitr)
 
 # Define the file path using here()
@@ -200,16 +200,16 @@ Similar the Management Domain assignment, we created a Clause Type keyword list 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 # Extract unique clause types, remove NA values, and sort alphabetically
-if ("Clause_Type" %in% names(clause_type_keywords)) {
-    unique_clause_types <- sort(na.omit(unique(clause_type_keywords$Clause_Type)))
+if ("clause_type" %in% names(clause_type_keywords)) {
+    unique_clause_types <- sort(na.omit(unique(clause_type_keywords$clause_type)))
     
     # Print formatted list as an unordered list (`<ul>`)
     cat("<ul>")
     cat(paste0("<li>", unique_clause_types, "</li>", collapse = "\n"))
     cat("</ul>")
 } else {
-    stop("❌ The required column 'Clause_Type' was not found in the dataset.")
-}
+stop("❌ The required column 'Clause_Type' was not found in the dataset.")}
+
 ```
 
 # RESULTS
@@ -317,16 +317,16 @@ ggplot(domain_counts, aes(x = reorder(`Management Domain`, Legislation_Count), y
 library(dplyr)
 library(ggplot2)
 
-# Prepare data: Count distinct Legislation Names for each L2, grouped by Jurisdiction
+# Prepare data: Count distinct Legislation Names for each `IUCN Level 2`, grouped by Jurisdiction
 domain_counts <- Full_legislation_parsed_DT %>%
-    filter(!is.na(L2) & !is.na(`Legislation Name`) & !is.na(Jurisdiction)) %>%
-    distinct(L2, `Legislation Name`, Jurisdiction) %>%
-    group_by(L2, Jurisdiction) %>%
+    filter(!is.na(`IUCN Level 2`), !is.na(`Legislation Name`), !is.na(Jurisdiction)) %>%
+    distinct(`IUCN Level 2`, `Legislation Name`, Jurisdiction) %>%
+    group_by(`IUCN Level 2`, Jurisdiction) %>%
     summarise(Legislation_Count = n(), .groups = "drop") %>%
     arrange(desc(Legislation_Count))  # Sort by count
 
 # Generate stacked bar chart split by Jurisdiction
-ggplot(domain_counts, aes(x = reorder(L2, Legislation_Count), y = Legislation_Count, fill = Jurisdiction)) +
+ggplot(domain_counts, aes(x = reorder(`IUCN Level 2`, Legislation_Count), y = Legislation_Count, fill = Jurisdiction)) +
     geom_bar(stat = "identity", color = "black", width = 0.9) +
     coord_flip() +  # Horizontal bars for readability
     scale_fill_manual(values = c("Federal" = "#8B0000", "Provincial" = "#00008B")) +  # Assign colors
@@ -347,9 +347,9 @@ library(ggplot2)
 
 # Prepare data: Count Paragraphs per Clause Type while excluding NA Scope rows
 clause_data <- Full_legislation_parsed_DT %>%
-    filter(!is.na(Clause_Type) & !is.na(Paragraph) & !is.na(Scope) & !is.na(`Legislation Name`)) %>%
-    distinct(Clause_Type, Paragraph, `Legislation Name`) %>%
-    group_by(Clause_Type) %>%
+    filter(!is.na('Clause Type') & !is.na(Paragraph) & !is.na(Scope) & !is.na(`Legislation Name`)) %>%
+    distinct('Clause Type', Paragraph, `Legislation Name`) %>%
+    group_by('Clause Type') %>%
     summarise(
         Paragraph_Count = n(),
         Legislation_Count = n_distinct(`Legislation Name`),
@@ -358,7 +358,7 @@ clause_data <- Full_legislation_parsed_DT %>%
     arrange(desc(Paragraph_Count))  # Sort by Paragraph count
 
 # Generate dot plot
-ggplot(clause_data, aes(x = Clause_Type, y = Paragraph_Count)) +
+ggplot(clause_data, aes(x = 'Clause Type', y = Paragraph_Count)) +
     geom_point(aes(size = Legislation_Count), color = "steelblue", alpha = 0.7) +  # Dot size reflects Legislation Count
     scale_size_continuous(range = c(3, 10)) +  # Adjust dot size range for clarity
     labs(
@@ -515,52 +515,39 @@ if (all(c("Jurisdiction", "Act Name", "Legislation Name") %in% names(Full_legisl
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(dplyr)
+library(htmltools)
 
-if (all(c("Management Domain", "L1", "L2", "Keyword") %in% names(md_threats_keywords))) {
+# Check if required columns exist
+if (all(c("keyword", "clause_type") %in% names(clause_type_keywords))) {
 
-  # Clean and sort
-  sorted_keywords <- md_threats_keywords %>%
-    filter(!is.na(Keyword) & Keyword != "") %>%
-    distinct(`Management Domain`, L1, L2, Keyword) %>%
-    arrange(`Management Domain`, L1, L2, Keyword)
+  # Clean, sort, and filter out any missing keywords
+  sorted_keywords <- clause_type_keywords %>%
+    filter(!is.na(keyword)) %>%
+    arrange(clause_type, keyword)
 
-  cat("<h3 style='font-size:20pt; margin-bottom:10px;'>Keywords by Management Domain & Threat Level</h3>")
+  # Output title
+  cat(HTML("<h3 style='font-size:20pt; margin-bottom:10px;'>Clause Type Keywords</h3>"))
 
-  for (domain in unique(sorted_keywords$`Management Domain`)) {
-    domain_data <- sorted_keywords %>% filter(`Management Domain` == domain)
+  # Loop through each unique Clause Type
+  for (clause_type in unique(sorted_keywords$clause_type)) {
+    clause_subset <- sorted_keywords %>% filter(clause_type == !!clause_type)
 
-    cat(paste0(
+    cat(HTML(paste0(
       "<details style='margin-bottom:12px;'>",
-      "<summary style='font-size:16pt; cursor:pointer; margin-bottom:6px;'><strong>", domain, "</strong></summary>"
-    ))
+      "<summary style='font-size:16pt; cursor:pointer; margin-bottom:6px;'><strong>", clause_type, "</strong></summary>",
+      "<div style='display: grid; grid-template-columns: repeat(2, minmax(150px, 250px)); gap: 6px 12px; margin-left: 20px; margin-top: 8px;'>"
+    )))
 
-    for (iucn_l1 in unique(domain_data$L1)) {
-      l1_subset <- domain_data %>% filter(L1 == iucn_l1)
-
-      for (iucn_l2 in unique(l1_subset$L2)) {
-        l2_subset <- l1_subset %>% filter(L2 == iucn_l2)
-
-        cat(paste0(
-          "<details style='margin-left:15px; margin-bottom:10px;'>",
-          "<summary style='font-size:13pt; cursor:pointer;'><strong>L1: ", iucn_l1, " | L2: ", iucn_l2, "</strong></summary>",
-          "<div style='display: grid; grid-template-columns: repeat(2, minmax(120px, 200px)); gap: 4px 10px; margin-left: 20px; margin-top: 5px;'>"
-        ))
-
-        for (keyword in l2_subset$Keyword) {
-          cat(paste0(
-            "<div style='font-size:11pt; padding:2px;'>", keyword, "</div>"
-          ))
-        }
-
-        cat("</div></details>")
-      }
+    # Display each keyword under the Clause Type
+    for (kw in clause_subset$keyword) {
+      cat(HTML(paste0("<div style='font-size:12pt; padding:4px;'>", kw, "</div>")))
     }
 
-    cat("</details>")
+    cat(HTML("</div></details>"))
   }
 
 } else {
-  stop("❌ The required columns 'Management Domain', 'L1', 'L2', or 'Keyword' were not found in the dataset.")
+  stop("❌ Required columns 'keyword' or 'clause_type' not found in the dataset.")
 }
 ```
 
@@ -572,18 +559,19 @@ if (all(c("Management Domain", "L1", "L2", "Keyword") %in% names(md_threats_keyw
 library(dplyr)
 
 # Check if required columns exist
-if (all(c("Clause_Type", "Keyword") %in% names(clause_type_keywords))) {
+if (all(c("clause_type", "keyword") %in% names(clause_type_keywords))) {
 
-  # Clean and sort
+  # Clean and sort the clause type keywords
   sorted_keywords <- clause_type_keywords %>%
-    filter(!is.na(Keyword)) %>%
-    arrange(Clause_Type, Keyword)
+    filter(!is.na(keyword)) %>%
+    arrange(clause_type, keyword)
 
   # Output title
   cat("<h3 style='font-size:20pt; margin-bottom:10px;'>Clause Type Keywords</h3>")
 
-  for (clause_type in unique(sorted_keywords$Clause_Type)) {
-    clause_subset <- sorted_keywords %>% filter(Clause_Type == clause_type)
+  # Loop through each unique Clause Type
+  for (clause_type in unique(sorted_keywords$clause_type)) {
+    clause_subset <- sorted_keywords %>% filter(clause_type == !!clause_type)
 
     cat(paste0(
       "<details style='margin-bottom:12px;'>",
@@ -591,17 +579,15 @@ if (all(c("Clause_Type", "Keyword") %in% names(clause_type_keywords))) {
       "<div style='display: grid; grid-template-columns: repeat(2, minmax(100px, 200px)); gap: 4px 10px; margin-left: 15px; margin-top: 5px;'>"
     ))
 
-    for (keyword in clause_subset$Keyword) {
-      cat(paste0(
-        "<div style='font-size:11pt; padding:2px;'>", keyword, "</div>"
-      ))
+    for (kw in clause_subset$keyword) {
+      cat(paste0("<div style='font-size:11pt; padding:2px;'>", kw, "</div>"))
     }
 
     cat("</div></details>")
   }
 
 } else {
-  stop("❌ The required columns 'Clause_Type' or 'Keyword' were not found in the dataset.")
+  stop("❌ The required columns 'clause_type' or 'keyword' were not found in the dataset.")
 }
 ```
 
@@ -695,167 +681,7 @@ if (all(c("Scope", "Section", "Heading", "Legislation Name") %in% names(Full_leg
 
 The following interactive table contains the full compendium of legislation by Management Domain and IUCN Threat category. Search topics by domain and salmon threats to view applicable legislation. 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-
-library(dplyr)
-library(reactable)
-library(htmltools)
-
-# Sticky-header serif theme
-clean_theme <- reactableTheme(
-  color = "#222",
-  backgroundColor = "#fff",
-  borderColor = "#ddd",
-  stripedColor = "#f9f9f9",
-  highlightColor = "#eef6ff",
-  cellPadding = "6px 10px",
-  style = list(fontFamily = "Georgia, serif", fontSize = "0.9em"),
-  headerStyle = list(
-    background = "#fff",
-    fontWeight = "bold",
-    borderBottom = "1px solid #ccc",
-    position = "sticky",
-    top = 0,
-    zIndex = 2
-  )
-)
-
-# Step 1: Tag original row order + clean
-nested_data <- Full_legislation_parsed_DT %>%
-  mutate(row_index = row_number()) %>%
-  filter(
-    !is.na(`Management Domain`), !is.na(L1), !is.na(L2),
-    !is.na(Jurisdiction), !is.na(`Act Name`), !is.na(`Legislation Name`),
-    !is.na(Section), !is.na(Heading), !is.na(Paragraph)
-  ) %>%
-  distinct(`Management Domain`, L1, L2, Jurisdiction,
-           `Act Name`, `Legislation Name`, Heading, Section, Paragraph, row_index)
-
-# Step 2: Aggregate Paragraphs per Legislation Name + Section only
-paragraph_lookup <- nested_data %>%
-  arrange(row_index) %>%
-  group_by(`Legislation Name`, Section) %>%
-  summarise(
-    Paragraphs = paste(Paragraph, collapse = "\n"),
-    .groups = "drop"
-  )
-
-# Step 3: Nest structure
-level4 <- nested_data %>%
-  group_by(`Management Domain`, L1, L2, Jurisdiction,
-           `Act Name`, `Legislation Name`) %>%
-  summarise(Section_data = list(cur_data()), .groups = "drop")
-
-level3 <- level4 %>%
-  group_by(`Management Domain`, L1, L2, Jurisdiction) %>%
-  summarise(Legislation = list(cur_data()), .groups = "drop")
-
-level2 <- level3 %>%
-  group_by(`Management Domain`, L1, L2) %>%
-  summarise(Jurisdiction_data = list(cur_data()), .groups = "drop")
-
-level1 <- level2 %>%
-  group_by(`Management Domain`) %>%
-  summarise(Threats = list(cur_data()), .groups = "drop") %>%
-  arrange(`Management Domain`)
-
-# Optional row contrast
-dark_row <- function(index) {
-  list(background = "#444", color = "white")
-}
-
-# Step 4: Final render
-htmltools::browsable(
-  reactable(
-    level1,
-    theme = clean_theme,
-    searchable = FALSE,
-    columns = list(
-      `Management Domain` = colDef(name = "Management Domain"),
-      Threats = colDef(show = FALSE)
-    ),
-    bordered = TRUE,
-    striped = TRUE,
-    highlight = TRUE,
-    defaultPageSize = 10,
-    details = function(i) {
-      l2_table <- level1$Threats[[i]]
-      reactable(
-        l2_table,
-        theme = clean_theme,
-        rowStyle = dark_row,
-        columns = list(
-          L1 = colDef(name = "IUCN Level 1"),
-          L2 = colDef(name = "IUCN Level 2"),
-          Jurisdiction_data = colDef(show = FALSE)
-        ),
-        details = function(j) {
-          j_table <- l2_table$Jurisdiction_data[[j]]
-          reactable(
-            j_table,
-            theme = clean_theme,
-            rowStyle = dark_row,
-            columns = list(
-              Jurisdiction = colDef(name = "Jurisdiction"),
-              Legislation = colDef(show = FALSE)
-            ),
-            details = function(k) {
-              leg_table <- j_table$Legislation[[k]]
-              reactable(
-                leg_table,
-                theme = clean_theme,
-                rowStyle = dark_row,
-                columns = list(
-                  `Act Name` = colDef(name = "Act"),
-                  `Legislation Name` = colDef(name = "Legislation"),
-                  Section_data = colDef(show = FALSE)
-                ),
-                details = function(m) {
-                  section_data <- leg_table$Section_data[[m]]
-                  leg_name <- leg_table$`Legislation Name`[[m]]
-
-                  section_table <- section_data %>%
-                    distinct(Heading, Section) %>%
-                    mutate(`Legislation Name` = leg_name)
-
-                  table_data <- section_table %>%
-                    left_join(paragraph_lookup, by = c("Legislation Name", "Section")) %>%
-                    select(Heading, Section, Paragraphs) %>%
-                    mutate(Section = suppressWarnings(as.numeric(Section))) %>%
-                    arrange(Section)
-
-                  reactable(
-                    table_data,
-                    theme = clean_theme,
-                    columns = list(
-                      Heading = colDef(name = "Heading"),
-                      Section = colDef(name = "Section", width = 60),
-                      Paragraphs = colDef(
-                        name = "Paragraph(s)",
-                        width = 500,
-                        html = TRUE,
-                        cell = function(value) {
-                          htmltools::div(style = "white-space: pre-wrap;", value)
-                        }
-                      )
-                    ),
-                    compact = TRUE,
-                    highlight = TRUE,
-                    bordered = TRUE,
-                    striped = TRUE,
-                    defaultPageSize = 5,
-                    defaultSorted = list(Section = "asc")
-                  )
-                }
-              )
-            }
-          )
-        }
-      )
-    }
-  )
-)
-```
+Table to come...
 
 <hr>
 
