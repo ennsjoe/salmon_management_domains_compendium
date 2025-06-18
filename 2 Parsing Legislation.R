@@ -2,9 +2,9 @@
 # PART 2 - PARSING LEGISLATION BY PARAGRAPH--------------------------------------------------
 # Summary: Assuming completion of Part 1, and the user has compiled salmon relevant HTML 
 # files into folders in the working directory called Type 1 Legislation and
-# Type 2 Legislation. 
+# Type 2 Legislation.
+# Inputs: HTML files from the specified directories
 # Outputs: datatable of salmon relevant legislation parsed by section and paragraph
-# with assigned Legislation Name, Legislation Type, Jursidiction, Act Name, and Heading
 #///////////////////////////////////////////////////////////////////////////////
 
 # 1) Setup-------------------------------------------------------------------------
