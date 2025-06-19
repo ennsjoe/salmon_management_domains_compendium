@@ -78,31 +78,63 @@ Leg_Sec_ID_DT <- Paragraphs_DT[, .(
   XPath
 )]
 
-## Function to assign attributes based on first matched keyword----
-assign_attributes <- function(paragraph) {
-  words <- unlist(strsplit(paragraph, "\\s+"))  # Split into individual words
-  matches <- which(md_threats_keywords$keyword %in% words)  # Find matching keyword indices
-  
+################################################################################
+library(data.table)
+library(quanteda)
+library(stringr)
+
+# Step 1: Preprocess paragraph text
+No_Punct_DT <- copy(Leg_Sec_ID_DT)
+No_Punct_DT[, Paragraph := tolower(str_replace_all(Paragraph, "[[:punct:]]", " "))]
+No_Punct_DT[, Paragraph := str_squish(Paragraph)]
+
+# Step 2: Build phrase lists
+md_phrases <- phrase(tolower(md_threats_keywords$keyword))
+ct_valid_keywords <- clause_type_keywords[!is.na(keyword), keyword]
+ct_phrases <- phrase(tolower(ct_valid_keywords))
+
+# Step 3: Tokenize and compound both phrase sets
+corpus_obj <- corpus(No_Punct_DT, text_field = "Paragraph")
+tokens_obj <- tokens(corpus_obj, remove_punct = TRUE)
+
+# Compound both threat and clause phrases
+tokens_comp <- tokens_compound(tokens_obj, pattern = md_phrases)
+tokens_comp <- tokens_compound(tokens_comp, pattern = ct_phrases)  # layer compounding
+
+# Step 4: Convert tokens to list for matching
+token_list <- lapply(as.list(tokens_comp), as.character)
+
+# Step 5: Assign management domain attributes
+assign_md_attributes <- function(token_vec) {
+  matches <- which(tolower(md_threats_keywords$keyword) %in% gsub("_", " ", token_vec))
   if (length(matches) > 0) {
-    selected_row <- md_threats_keywords[matches[1], .(management_domain, iucn_l1, iucn_l2, scope)]  # Extract attributes
-    setnames(selected_row, c("management_domain", "iucn_l1", "iucn_l2", "scope"))  # Ensure column names remain correct
-    return(selected_row)
+    return(md_threats_keywords[matches[1], .(management_domain, iucn_l1, iucn_l2, scope)])
   } else {
-    return(data.table(
-      management_domain = NA_character_,
-      iucn_l1 = NA_character_,
-      iucn_l2 = NA_character_,
-      scope = NA_character_
-    ))
+    return(data.table(management_domain = NA_character_,
+                      iucn_l1 = NA_character_,
+                      iucn_l2 = NA_character_,
+                      scope = NA_character_))
   }
 }
 
-## Create new data table storing keyword attributes ----
-MGMT_Attributes_DT <- Leg_Sec_ID_DT[, {
-  attributes <- assign_attributes(Paragraph)
-  c(.SD, attributes)  # Preserve original columns while merging attributes correctly
-}, by = Unique_ID]  # Ensure row consistency
+# Step 6: Assign clause type
+assign_clause_type <- function(token_vec) {
+  matches <- which(tolower(ct_valid_keywords) %in% gsub("_", " ", token_vec))
+  if (length(matches) > 0) {
+    return(clause_type_keywords[keyword == ct_valid_keywords[matches[1]], clause_type])
+  } else {
+    return(NA_character_)
+  }
+}
 
+# Step 7: Apply both attribute assignments
+md_attributes <- lapply(token_list, assign_md_attributes)
+clause_types <- sapply(token_list, assign_clause_type)
+
+# Step 8: Combine everything into MGMT_Attributes_DT
+MGMT_Attributes_DT <- cbind(No_Punct_DT, rbindlist(md_attributes), clause_type = clause_types)
+
+################################################################################
 ## Function to update scope based on matched salmon keywords
 update_scope <- function(paragraph, current_scope) {
   words <- unlist(strsplit(paragraph, "\\s+"))  # Split paragraph into words
@@ -118,6 +150,8 @@ update_scope <- function(paragraph, current_scope) {
 
 ## Apply function to update the scope column
 MGMT_Attributes_DT[, scope := mapply(update_scope, Paragraph, scope)]
+
+################################################################################
 
 ## Remove the Paragraph column ----
 MGMT_Attributes_DT[, Paragraph := NULL]
@@ -145,26 +179,6 @@ Merged_DT <- merge(MGMT_Attributes_DT, Aggregated_Paragraphs_DT, by = "Unique_ID
 
 ## Drop Unique_ID and XPath columns
 Merged_DT[, c("Unique_ID") := NULL]
-
-################################################################################
-# 5) ASSIGNING CLAUSE TYPE------------------------------------------------------
-
-## Function to identify keywords and assign clause_type based on first match
-assign_clause_type <- function(paragraph) {
-  words <- unlist(strsplit(paragraph, "\\s+"))  # Split paragraph into individual words
-  matches <- which(words %in% clause_type_keywords$keyword)  # Find keyword matches
-  
-  if (length(matches) > 0) {
-    first_match <- words[matches[1]]  # Get the first matched keyword
-    clause_type <- clause_type_keywords[keyword == first_match, clause_type]  # Assign clause_type
-    return(clause_type)
-  } else {
-    return(NA_character_)  # Assign NA if no match found
-  }
-}
-
-## Apply function to update Merged_DT with clause_type based on first matched keyword
-Merged_DT[, clause_type := sapply(Paragraph, assign_clause_type)]
 
 ################################################################################
 # 6) FINALIZE AND SAVE THE DATA TABLE-------------------------------------------
