@@ -655,6 +655,44 @@ if (all(c("clause_type", "keyword") %in% names(clause_type_keywords))) {
 <hr>
 
 ## Appendix IV - Example: The Fisheries Act
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(dplyr)
+library(ggplot2)
+
+# Filter dataset
+fa_data <- Full_legislation_parsed_DT %>%
+  filter(`Legislation Name` == "Fisheries Act (R.S.C., 1985, c. F-14)")
+
+# Management Domain Summary Plot
+fa_data %>%
+  filter(!is.na(`Management Domain`)) %>%
+  count(`Management Domain`) %>%
+  ggplot(aes(x = reorder(`Management Domain`, n), y = n)) +
+  geom_col(fill = "#475359") +
+  coord_flip() +
+  labs(
+    title = "Management Domains in WSA",
+    x = NULL,
+    y = "Entries"
+  ) +
+  theme_minimal(base_size = 10)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+# Clause Type Summary Plot
+fa_data %>%
+  filter(!is.na(`Clause Type`)) %>%
+  count(`Clause Type`) %>%
+  ggplot(aes(x = reorder(`Clause Type`, n), y = n)) +
+  geom_col(fill = "#a3a69c") +
+  coord_flip() +
+  labs(
+    title = "Clause Types in WSA",
+    x = NULL,
+    y = "Entries"
+  ) +
+  theme_minimal(base_size = 10)
+```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(dplyr)
@@ -710,6 +748,44 @@ if (all(c("Legislation Name", "Scope", "Section", "Heading", "IUCN Level 1", "IU
 <hr>
 
 ## Appendix V - Example: The Water Sustainability Act
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(dplyr)
+library(ggplot2)
+
+# Filter dataset
+wsa_data <- Full_legislation_parsed_DT %>%
+  filter(`Legislation Name` == "Water Sustainability Act")
+
+# Management Domain Summary Plot
+wsa_data %>%
+  filter(!is.na(`Management Domain`)) %>%
+  count(`Management Domain`) %>%
+  ggplot(aes(x = reorder(`Management Domain`, n), y = n)) +
+  geom_col(fill = "#475359") +
+  coord_flip() +
+  labs(
+    title = "Management Domains in WSA",
+    x = NULL,
+    y = "Entries"
+  ) +
+  theme_minimal(base_size = 10)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+# Clause Type Summary Plot
+wsa_data %>%
+  filter(!is.na(`Clause Type`)) %>%
+  count(`Clause Type`) %>%
+  ggplot(aes(x = reorder(`Clause Type`, n), y = n)) +
+  geom_col(fill = "#a3a69c") +
+  coord_flip() +
+  labs(
+    title = "Clause Types in WSA",
+    x = NULL,
+    y = "Entries"
+  ) +
+  theme_minimal(base_size = 10)
+```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(dplyr)
@@ -718,7 +794,13 @@ if (all(c("Legislation Name", "Scope", "Section", "Heading", "IUCN Level 1", "IU
 
   filtered_data <- Full_legislation_parsed_DT %>%
     filter(`Legislation Name` == "Water Sustainability Act", !is.na(Scope)) %>%
-    select(Legislation_Name = `Legislation Name`, Section, Heading, IUCN_Level_1 = `IUCN Level 1`, IUCN_Level_2 = `IUCN Level 2`, Scope) %>%
+    select(
+      Legislation_Name = `Legislation Name`,
+      Section,
+      Heading,
+      IUCN_Level_1 = `IUCN Level 1`,
+      IUCN_Level_2 = `IUCN Level 2`
+    ) %>%
     distinct() %>%
     arrange(Legislation_Name, as.numeric(Section))
 
@@ -729,27 +811,32 @@ if (all(c("Legislation Name", "Scope", "Section", "Heading", "IUCN Level 1", "IU
     legislation_subset <- filtered_data %>% filter(Legislation_Name == legislation_name)
 
     cat(paste0(
-      "<details style='margin-bottom:12px;'>",
-      "<summary style='font-size:18pt; cursor:pointer; margin-bottom:6px;'><strong>", legislation_name, "</strong></summary>"
+      "<details style='margin-bottom:16px;'>",
+      "<summary style='font-size:18pt; cursor:pointer; margin-bottom:6px;'><strong>",
+      legislation_name,
+      "</strong></summary>"
     ))
 
     for (section_val in unique(legislation_subset$Section)) {
       section_subset <- legislation_subset %>% filter(Section == section_val)
 
       cat(paste0(
-        "<details style='margin-bottom:10px; margin-left:20px;'>",
-        "<summary style='font-size:16pt; cursor:pointer;'><strong>Section ", section_val, " – ", section_subset$Heading[1], "</strong></summary>"
+        "<details style='margin-bottom:12px; margin-left:20px;'>",
+        "<summary style='font-size:16pt; cursor:pointer;'><strong>Section ",
+        section_val, " – ", section_subset$Heading[1], "</strong></summary>"
       ))
 
+      # Begin widened list
+      cat("<ul style='font-size:13pt; margin:8px 0 8px 60px; line-height:1.5;'>")
       for (i in 1:nrow(section_subset)) {
         cat(paste0(
-          "<p style='font-size:12pt; margin:4px 0 4px 40px; line-height:1.4;'>",
+          "<li>",
           section_subset$IUCN_Level_1[i], " | ",
-          section_subset$IUCN_Level_2[i], " | ",
-          section_subset$Scope[i],
-          "</p>"
+          section_subset$IUCN_Level_2[i],
+          "</li>"
         ))
       }
+      cat("</ul>")  # End list
 
       cat("</details>")
     }
@@ -768,6 +855,77 @@ if (all(c("Legislation Name", "Scope", "Section", "Heading", "IUCN Level 1", "IU
 
 The following interactive table contains the full compendium of legislation by Management Domain and IUCN Threat category. Search topics by domain and salmon threats to view applicable legislation.
 
-Table to come...
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(dplyr)
 
+if (all(c("Jurisdiction", "Act Name", "Legislation Name", "Heading", "Section",
+          "Paragraph", "Management Domain", "Clause Type") %in% names(Filtered_legislation_DT))) {
+
+  nested_data <- Filtered_legislation_DT %>%
+    filter(!is.na(Jurisdiction), !is.na(`Act Name`), !is.na(`Legislation Name`)) %>%
+    distinct() %>%
+    arrange(Jurisdiction, `Act Name`, `Legislation Name`, as.numeric(Section))
+
+  cat("<style>
+    details { margin-bottom: 10px; }
+    summary { cursor: pointer; }
+    .jurisdiction { font-size: 18pt; background-color: #e3f2fd; padding: 8px; border-radius: 6px; }
+    .act { font-size: 16pt; background-color: #e8f5e9; padding: 6px; margin-left: 20px; border-radius: 6px; }
+    .section { font-size: 14pt; background-color: #fbe9e7; padding: 5px; margin-left: 40px; border-radius: 4px; }
+    .clause { font-size: 12pt; margin-left: 60px; line-height: 1.5; background-color: #fafafa; 
+              border-left: 4px solid #90caf9; padding-left: 10px; margin-bottom: 6px; }
+    .clause-type { color: #d32f2f; font-weight: bold; }
+    .domain { color: #00796b; font-style: italic; }
+  </style>")
+
+  cat("<h3 style='font-size:20pt; margin-bottom:10px;'>Nested Legislative Structure</h3>")
+
+  for (jurisdiction in unique(nested_data$Jurisdiction)) {
+    juris_subset <- nested_data %>% filter(Jurisdiction == jurisdiction)
+
+    cat(paste0(
+      "<details><summary class='jurisdiction'><strong>", jurisdiction, "</strong></summary>"
+    ))
+
+    for (act in unique(juris_subset$`Act Name`)) {
+      act_subset <- juris_subset %>% filter(`Act Name` == act)
+
+      for (leg_name in unique(act_subset$`Legislation Name`)) {
+        leg_subset <- act_subset %>% filter(`Legislation Name` == leg_name)
+
+        cat(paste0(
+          "<details><summary class='act'><strong>", act, " | ", leg_name, "</strong></summary>"
+        ))
+
+        for (section_val in unique(leg_subset$Section)) {
+          section_subset <- leg_subset %>% filter(Section == section_val)
+
+          cat(paste0(
+            "<details><summary class='section'>", section_subset$Heading[1], " | Section ", section_val, "</summary>"
+          ))
+
+          for (i in 1:nrow(section_subset)) {
+            cat(paste0(
+              "<p class='clause'>• ",
+              "<span class='clause-type'>", section_subset$`Clause Type`[i], "</span> | ",
+              "<span class='domain'>", section_subset$`Management Domain`[i], "</span> | ",
+              section_subset$Paragraph[i],
+              "</p>"
+            ))
+          }
+
+          cat("</details>")
+        }
+
+        cat("</details>")
+      }
+    }
+
+    cat("</details>")
+  }
+
+} else {
+  stop("❌ Missing one or more required columns in the data frame.")
+}
+```
 <hr>
