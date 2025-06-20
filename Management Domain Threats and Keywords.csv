@@ -23,7 +23,6 @@ Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater 
 Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,fish meal,2 - Fish
 Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,net pen,2 - Fish
 Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,pond,2 - Fish
-Mining and Energy,3. Energy Production & Mining,3.1 Oil & Gas Exploration & Extraction,drilling,3 - Habitat
 Mining and Energy,3. Energy Production & Mining,3.3 Renewable Energy,tidal,3 - Habitat
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",bridge,3 - Habitat
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",causeway,3 - Habitat
@@ -31,7 +30,10 @@ Transportation Infrastructure,"4. Transportation, Service & Security Corridors",
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.2 Utility & Service Lines,crossing,3 - Habitat
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,canals,3 - Habitat
 Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,shipping lane,3 - Habitat
+Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",fan destabilization,3 - Habitat
+Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",forest landscape,3 - Habitat
 Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",logging,3 - Habitat
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",allowable catch,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",angler,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",angling,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",bait,2 - Fish
@@ -48,8 +50,8 @@ Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Contro
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fisheries,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fishery,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fishing,2 - Fish
-Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",Fishing,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fishing guide,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",fisher,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",foul hook,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",frozen fish,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",gill net,2 - Fish
@@ -71,6 +73,10 @@ Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Contro
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",sportfish,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",stock,2 - Fish
 Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",trawl,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",trolling,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",any fish,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",drive salmon,2 - Fish
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",drive fish,2 - Fish
 Human Disturbance,6. Human Intrusions & Disturbances,6.3 Other Human Disturbances,research,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,aquatic ecosystem,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,aquifer,3 - Habitat
@@ -107,8 +113,8 @@ Water Use and Watercourse Modifications,7. Natural System Management & Modificat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,stream,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,streamside,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,water,3 - Habitat
-Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,waters,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,water use,3 - Habitat
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,waters,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,watershed,3 - Habitat
 Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,wetland,3 - Habitat
 Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,biocontrol,3 - Habitat
@@ -148,7 +154,6 @@ Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,sewage,3 - Ha
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,spill,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,tailings,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,toxic,3 - Habitat
-Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,treatment,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,waste,3 - Habitat
 Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,water quality,3 - Habitat
 Species Status and Assessment,NA,NA,biodiversity,4 - Governance
@@ -156,13 +161,12 @@ Spatial Designation,NA,NA,boundaries,4 - Governance
 Spatial Designation,NA,NA,boundary,4 - Governance
 Spatial Designation,NA,NA,classified waters,4 - Governance
 "Governance, Policy, and Organizational Structure",NA,NA,committee,4 - Governance
-Species Status and Assessment,NA,NA,concern,4 - Governance
 Spatial Designation,NA,NA,conservation area,4 - Governance
 Spatial Designation,NA,NA,district,4 - Governance
 Spatial Designation,NA,NA,ecological,3 - Habitat
 Species Status and Assessment,NA,NA,endangered,4 - Governance
-Spatial Designation,NA,NA,environment,4 - Governance
-Spatial Designation,NA,NA,environmental,4 - Governance
+Spatial Designation,NA,NA,environment,3 - Habitat
+Spatial Designation,NA,NA,environmental,3 - Habitat
 Species Status and Assessment,NA,NA,extinct,4 - Governance
 Species Status and Assessment,NA,NA,extirpated,4 - Governance
 Species Status and Assessment,NA,NA,fish stock,4 - Governance
@@ -178,4 +182,5 @@ Spatial Designation,NA,NA,sensitive areas,4 - Governance
 Spatial Designation,NA,NA,significant area,4 - Governance
 Species Status and Assessment,NA,NA,threatened,4 - Governance
 "Governance, Policy, and Organizational Structure",NA,NA,water manager,4 - Governance
-Spatial Designation,NA,NA,zone,4 - Governance
+Spatial Designation,NA,NA,wilderness area,4 - Governance
+Species Status and Assessment,NA,NA,wildlife,4 - Governance
