@@ -307,7 +307,7 @@ if (all(c("Legislation Name", "Paragraph", "Scope", "Jurisdiction") %in% names(F
         ggplot(summary_data, aes(x = reorder(`Legislation Name`, Paragraph_Count), y = Paragraph_Count, fill = Jurisdiction)) +
     geom_bar(stat = "identity", color = "black") +
     coord_flip() +  # Horizontal bar chart for readability
-    scale_fill_manual(values = c("Federal" = "#8B0000", "Provincial" = "#00008B")) +  # Custom colors
+    scale_fill_manual(values = c("Federal" = "#996666", "Provincial" = "#668899")) +  # Custom colors
     labs(
         title = "Procedural Element Count by Legislation (Scope: 1 - Salmon)",
         x = "Legislation",
@@ -343,7 +343,7 @@ domain_counts <- Full_legislation_parsed_DT %>%
 ggplot(domain_counts, aes(x = reorder(`Management Domain`, Legislation_Count), y = Legislation_Count, fill = Jurisdiction)) +
     geom_bar(stat = "identity", color = "black", width = 0.9) +
     coord_flip() +  # Horizontal bars for readability
-    scale_fill_manual(values = c("Federal" = "#8B0000", "Provincial" = "#00008B")) +  # Assign colors
+    scale_fill_manual(values = c("Federal" = "#996666", "Provincial" = "#668899")) +  # Assign colors
     labs(
         title = "Number of Legislation Names per Management Domain (Split by Jurisdiction)",
         x = "Management Domain",
@@ -372,7 +372,7 @@ domain_counts <- Full_legislation_parsed_DT %>%
 ggplot(domain_counts, aes(x = reorder(`IUCN Level 2`, Legislation_Count), y = Legislation_Count, fill = Jurisdiction)) +
     geom_bar(stat = "identity", color = "black", width = 0.9) +
     coord_flip() +  # Horizontal bars for readability
-    scale_fill_manual(values = c("Federal" = "#8B0000", "Provincial" = "#00008B")) +  # Assign colors
+    scale_fill_manual(values = c("Federal" = "#996666", "Provincial" = "#668899")) +  # Assign colors
     labs(
         title = "Count of Legislation per IUCN Threat (Split by Jurisdiction)",
         x = "IUCN Threat",
@@ -403,7 +403,7 @@ clause_data <- Full_legislation_parsed_DT %>%
 
 # Generate dot plot
 ggplot(clause_data, aes(x = `Clause Type`, y = Paragraph_Count)) +
-    geom_point(aes(size = Legislation_Count), color = "steelblue", alpha = 0.7) +  # Dot size reflects Legislation Count
+    geom_point(aes(size = Legislation_Count), color = "#889966", alpha = 0.7) +  # Dot size reflects Legislation Count
     scale_size_continuous(range = c(3, 10)) +  # Adjust dot size range for clarity
     labs(
         title = "Paragraph Count by Clause Type (Dot Size = Number of Legislation Names)",
@@ -668,7 +668,7 @@ fa_data %>%
   filter(!is.na(`Management Domain`)) %>%
   count(`Management Domain`) %>%
   ggplot(aes(x = reorder(`Management Domain`, n), y = n)) +
-  geom_col(fill = "#475359") +
+  geom_col(fill = "#996666") +
   coord_flip() +
   labs(
     title = "Management Domains in WSA",
@@ -684,7 +684,7 @@ fa_data %>%
   filter(!is.na(`Clause Type`)) %>%
   count(`Clause Type`) %>%
   ggplot(aes(x = reorder(`Clause Type`, n), y = n)) +
-  geom_col(fill = "#a3a69c") +
+  geom_col(fill = "#4d3333") +
   coord_flip() +
   labs(
     title = "Clause Types in WSA",
@@ -761,7 +761,7 @@ wsa_data %>%
   filter(!is.na(`Management Domain`)) %>%
   count(`Management Domain`) %>%
   ggplot(aes(x = reorder(`Management Domain`, n), y = n)) +
-  geom_col(fill = "#475359") +
+  geom_col(fill = "#668899") +
   coord_flip() +
   labs(
     title = "Management Domains in WSA",
@@ -777,7 +777,7 @@ wsa_data %>%
   filter(!is.na(`Clause Type`)) %>%
   count(`Clause Type`) %>%
   ggplot(aes(x = reorder(`Clause Type`, n), y = n)) +
-  geom_col(fill = "#a3a69c") +
+  geom_col(fill = "#33444d") +
   coord_flip() +
   labs(
     title = "Clause Types in WSA",
@@ -869,9 +869,9 @@ if (all(c("Jurisdiction", "Act Name", "Legislation Name", "Heading", "Section",
   cat("<style>
     details { margin-bottom: 10px; }
     summary { cursor: pointer; }
-    .jurisdiction { font-size: 18pt; background-color: #e3f2fd; padding: 8px; border-radius: 6px; }
-    .act { font-size: 16pt; background-color: #e8f5e9; padding: 6px; margin-left: 20px; border-radius: 6px; }
-    .section { font-size: 14pt; background-color: #fbe9e7; padding: 5px; margin-left: 40px; border-radius: 4px; }
+    .jurisdiction { font-size: 18pt; padding: 8px; border-radius: 6px; }
+    .act { font-size: 16pt; padding: 6px; margin-left: 20px; border-radius: 6px; }
+    .section { font-size: 14pt; padding: 5px; margin-left: 40px; border-radius: 4px; }
     .clause { font-size: 12pt; margin-left: 60px; line-height: 1.5; background-color: #fafafa; 
               border-left: 4px solid #90caf9; padding-left: 10px; margin-bottom: 6px; }
     .clause-type { color: #d32f2f; font-weight: bold; }
@@ -928,4 +928,3 @@ if (all(c("Jurisdiction", "Act Name", "Legislation Name", "Heading", "Section",
   stop("❌ Missing one or more required columns in the data frame.")
 }
 ```
-<hr>
