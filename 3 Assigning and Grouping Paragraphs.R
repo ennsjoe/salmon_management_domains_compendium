@@ -134,6 +134,7 @@ clause_types <- sapply(token_list, assign_clause_type)
 # Step 8: Combine everything into MGMT_Attributes_DT
 MGMT_Attributes_DT <- cbind(No_Punct_DT, rbindlist(md_attributes), clause_type = clause_types)
 
+
 ################################################################################
 ## Function to update scope based on matched salmon keywords
 update_scope <- function(paragraph, current_scope) {
@@ -151,6 +152,7 @@ update_scope <- function(paragraph, current_scope) {
 ## Apply function to update the scope column
 MGMT_Attributes_DT[, scope := mapply(update_scope, Paragraph, scope)]
 
+
 ################################################################################
 
 ## Remove the Paragraph column ----
@@ -161,6 +163,24 @@ MGMT_Attributes_DT[, XPath := NULL]
 
 # Remove duplicate rows
 MGMT_Attributes_DT <- unique(MGMT_Attributes_DT)
+
+##########################################################################
+# Create tables with unique values of domain, clause type and scope assignments by unique ID
+# these are needed because you can have multiple assignments for each section
+md_DT <- MGMT_Attributes_DT %>%
+  select(Unique_ID, management_domain, iucn_l1, iucn_l2) %>%
+  filter(!is.na(management_domain)) %>%   #remove NA rows
+  distinct()  #remove duplicate rows
+
+ct_DT <- MGMT_Attributes_DT %>%
+  select(Unique_ID, clause_type) %>%
+  filter(!is.na(clause_type)) %>%   #remove NA rows
+  distinct()  #remove duplicate rows
+
+scope_DT <- MGMT_Attributes_DT %>%
+  select(Unique_ID, scope) %>%
+  filter(!is.na(scope)) %>%   #remove NA rows
+  distinct()  #remove duplicate rows
 
 ################################################################################
 # 3) CONCATENATING PARAGRAPHS BY UNIQUE_ID--------------------------------------
@@ -174,16 +194,67 @@ Aggregated_Paragraphs_DT <- Aggregated_Paragraphs_DT[nchar(Paragraph) <= 30000]
 
 ################################################################################
 # 4) MERGE MANAGEMENT DOMAIN ATTRIBUTES WITH AGGREGATED PARAGRAPHS--------------
+
+#function for cleaning up aggregated strings with NAs
+concat_clean <- function(x) {
+  # Split the string by semicolon and trim whitespace
+  parts <- strsplit(x, ";")[[1]]
+  parts <- trimws(parts)
+  
+  # Sort and remove duplicates
+  unique_parts <- unique(parts)
+  sorted_parts <- sort(unique_parts)
+  # Remove NA; if present
+  sorted_parts <- sorted_parts[sorted_parts != ";NA "]
+  sorted_parts <- sorted_parts[sorted_parts != "NA"]
+  
+  # Concatenate back to a single string
+  return(paste(sorted_parts, collapse = "; "))
+}
+
+MGMT_Attributes_DT <- MGMT_Attributes_DT[, .(
+  Unique_ID,
+  Jurisdiction,
+  `Act Name`,
+  `Legislation Name`,
+  `Legislation Type`,
+  Section,
+  Heading)]
+
 ## Merge MGMT_Attributes_DT and Aggregated_Paragraphs_DT on Unique_ID
-Merged_DT <- merge(MGMT_Attributes_DT, Aggregated_Paragraphs_DT, by = "Unique_ID", all.x = TRUE)
+Merged_DT <- merge(MGMT_Attributes_DT, Aggregated_Paragraphs_DT, by = "Unique_ID", all.x = TRUE) |>
+  distinct() 
+
+# concatenate management domain and iucn threat assigments to one value per section, then merge with full DT
+Collapsed_md <- md_DT[, .(management_domain = paste(management_domain, collapse = "; "), 
+                           iucn_l1 = paste(iucn_l1, collapse = "; "),
+                           iucn_l2 = paste(iucn_l2, collapse = "; ")), 
+                       by = Unique_ID]
+
+#remove duplicated character strings from collapsed_DT
+Collapsed_md[, management_domain := sapply(management_domain, concat_clean)]
+Collapsed_md[, iucn_l1 := sapply(iucn_l1, concat_clean)]
+Collapsed_md[, iucn_l2 := sapply(iucn_l2, concat_clean)]
+
+#repeat for clause type and scope attributes
+Collapsed_ct <- ct_DT[, .(clause_type = paste(clause_type, collapse = "; ")), by = Unique_ID]
+Collapsed_ct[, clause_type := sapply(clause_type, concat_clean)]
+
+Collapsed_scope <- scope_DT[, .(scope = paste(scope, collapse = "; ")), by = Unique_ID]
+Collapsed_scope[, scope := sapply(scope, concat_clean)]
+
+Merged_DT <- merge(Merged_DT, Collapsed_md, by = "Unique_ID")
+Merged_DT <- merge(Merged_DT, Collapsed_ct, by = "Unique_ID")
+Merged_DT <- merge(Merged_DT, Collapsed_scope, by = "Unique_ID")
 
 ## Drop Unique_ID and XPath columns
-Merged_DT[, c("Unique_ID") := NULL]
+#Merged_DT[, c("Unique_ID") := NULL]
 
 ################################################################################
 # 6) FINALIZE AND SAVE THE DATA TABLE-------------------------------------------
 ## Create new formatted datatable
 Full_legislation_parsed_DT <- Merged_DT[, .(
+  Unique_ID,
   Jurisdiction,
   `Legislation Type`,
   `Act Name`,
@@ -198,12 +269,20 @@ Full_legislation_parsed_DT <- Merged_DT[, .(
   `Clause Type` = clause_type
 )]
 
+#arrange by numeric section value
+Full_legislation_parsed_DT[, Section_num := as.numeric(gsub("s", "", Section))]  # Convert Section to numeric
+Full_legislation_parsed_DT <- Full_legislation_parsed_DT[order(`Act Name`, `Legislation Name`, Section_num)]
+Full_legislation_parsed_DT[, Section_num := NULL]  # Remove temporary numeric section column
+
 # Ensure all objects are correctly passed to the list
 saved_data <- list(
   Full_legislation_parsed_DT = Full_legislation_parsed_DT,
   salmon_keywords = salmon_keywords,
   md_threats_keywords = md_threats_keywords,
-  clause_type_keywords = clause_type_keywords
+  clause_type_keywords = clause_type_keywords,
+  md_table = md_DT,   #table with one row per management domain assignment for each section
+  ct_table = ct_DT,
+  scope_table = scope_DT
 )
 
 # Save as an R object
@@ -213,3 +292,4 @@ file_pathxl <- here("Compendium_of_Legislation_(full).xlsx")
 
 # Export to XLSX
 write_xlsx(Full_legislation_parsed_DT, path = file_pathxl)
+
