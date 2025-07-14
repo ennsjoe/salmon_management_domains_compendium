@@ -26,9 +26,9 @@ load_object <- function(path, object_name) {
 
 
 ## Load compendium from excel
-compend <- read_excel(here("Pacific Salmon Management Domain Compendium.xlsx")) |>
-  clean_names() |>
-  mutate(across(c("jurisdiction", "legislation_type", "specificity", "l1", "l2", "management_domain", "clause_type"), as.factor))
+compend <- read_excel(here("Compendium_of_Legislation_(full).xlsx")) #|>
+  #clean_names() |>
+  #mutate(across(c("jurisdiction", "legislation_type", "specificity", "l1", "l2", "management_domain", "clause_type"), as.factor))
 
 # Load other R data objects
 # Define file paths
@@ -45,9 +45,9 @@ load_object(exclusion_keyword_selection_path, "exclusion_keyword_selection.RData
 load_object(clause_type_selection_path, "clause_type_selection.RData")
 
 
-full_compendium <- readRDS(here("Full_legislation_parsed_compendium.rds")) |>
-  clean_names() |>
-  mutate(across(c("jurisdiction", "legislation_type", "specificity", "l1", "l2", "management_domain", "clause_type"), as.factor))
+full_compendium <- readRDS(here("Full_legislation_compendium.rds")) #|>
+  #clean_names() |>
+  #mutate(across(c("jurisdiction", "legislation_type", "specificity", "l1", "l2", "management_domain", "clause_type"), as.factor))
 
 
 # R shiny app for exploration
