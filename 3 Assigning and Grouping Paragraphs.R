@@ -19,6 +19,7 @@ library(rvest)
 library(stringi)
 library(stringr)
 library(writexl)
+library(dplyr)
 
 ## Define file path using here()
 rds_path <- here("Paragraphs_DT.rds")
