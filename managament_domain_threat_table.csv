@@ -1,0 +1,25 @@
+﻿management_domain,iucn_l1,iucn_l2,scope
+Agriculture,2. Agriculture & Aquaculture,2.1 Annual & Perennial Non-Timber Crops,3 - Habitat
+Aquaculture and Hatcheries,2. Agriculture & Aquaculture,2.4 Marine & Freshwater Aquaculture,2 - Fish
+Aquaculture and Hatcheries,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.3 Introduced Genetic Material,2 - Fish
+Climate Change and Natural Disasters,10. Natural Disasters,10.1 Geological Events,3 - Habitat
+Climate Change and Natural Disasters,11. Climate Change,11.1 Changes in Physical & Chemical Regimes,3 - Habitat
+Climate Change and Natural Disasters,11. Climate Change,11.3 Changes in Precipitation & Hydrological Regimes,3 - Habitat
+Fisheries,5. Biological Resource Use & Control,"5.4 Fishing, Harvesting & Controlling Aquatic Species",2 - Fish
+Forest and Range,2. Agriculture & Aquaculture,2.2 Wood & Pulp Plantations,3 - Habitat
+Forest and Range,2. Agriculture & Aquaculture,"2.3 Terrestrial Animal Farming, Ranching & Herding",3 - Habitat
+Forest and Range,5. Biological Resource Use & Control,"5.3 Logging, Harvesting & Controlling Trees",3 - Habitat
+"Governance, Policy, and Organizational Structure",NA,NA,4 - Governance
+Human Disturbance,6. Human Intrusions & Disturbances,6.3 Other Human Disturbances,3 - Habitat
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.1 Invasive Non-Native / Alien Species,3 - Habitat
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.2 Problematic Native Species,3 - Habitat
+Invasive Species and Disease,"8. Invasive / Other Problematic Species, Genes & Pathogens",8.4 Pathogens,2 - Fish
+Mining and Energy,3. Energy Production & Mining,3.3 Renewable Energy,3 - Habitat
+Pollution,9. Pollution,9.1 Water-Borne & Other Effluent Pollution ,3 - Habitat
+Spatial Designation,NA,NA,3 - Habitat
+Spatial Designation,NA,NA,4 - Governance
+Species Status and Assessment,NA,NA,4 - Governance
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors","4.1 Roads, Trails & Railroads",3 - Habitat
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.2 Utility & Service Lines,3 - Habitat
+Transportation Infrastructure,"4. Transportation, Service & Security Corridors",4.3 Shipping Lanes,3 - Habitat
+Water Use and Watercourse Modifications,7. Natural System Management & Modifications,7.2 Dams & Water Management / Use,3 - Habitat
