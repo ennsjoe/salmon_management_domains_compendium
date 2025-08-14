@@ -637,26 +637,64 @@ if (!file.exists(db_path)) {
 ## CoLAPSE Viewer
 The following interactive table contains the full compendium of legislation by Management Domain and IUCN Threat category. Search topics by domain and salmon threats to view applicable legislation.
 
-```{r legislation-names-table, message=FALSE, warning=FALSE}
+```{r legislation-sections-table, message=FALSE, warning=FALSE, echo=FALSE}
+# Load required libraries
 library(DBI)
 library(RSQLite)
+library(data.table)
+library(here)
 library(reactable)
 
+# Define path to the SQLite database
+db_path <- file.path(here::here("output"), "legislation.db")
+
 # Connect to the database
-conn <- dbConnect(SQLite(), "output/legislation.db")
+conn <- dbConnect(SQLite(), dbname = db_path)
 
-# Query legislation names
-legislation_names <- dbGetQuery(conn, "
-  SELECT DISTINCT legislation_name
-  FROM LegislationMetadata
-  ORDER BY legislation_name
-")
+# Read tables into R
+legislation_metadata <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
+legislation_paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
+provision_labels <- as.data.table(dbReadTable(conn, "provision_label_table"))
 
-# Disconnect
+# Disconnect from the database
 dbDisconnect(conn)
 
-# Display as interactive table
-reactable(legislation_names)
+# Merge metadata with paragraphs
+legislation_sections <- merge(
+  legislation_metadata[, .(legislation_id, legislation_name)],
+  legislation_paragraphs[, .(provision_id, legislation_id, Section)],
+  by = "legislation_id",
+  all.x = TRUE
+)
+
+# Merge with provision labels using provision_id
+legislation_sections <- merge(
+  legislation_sections,
+  provision_labels[, .(provision_id, management_domain)],
+  by = "provision_id",
+  all.x = TRUE
+)
+
+# Summarize: concatenate management_domain values per legislation_name + Section
+summary_table <- legislation_sections[
+  , .(management_domains = paste(unique(na.omit(management_domain)), collapse = " : ")),
+  by = .(legislation_name, Section)
+]
+
+# Render interactive table
+reactable(
+  summary_table,
+  groupBy = "legislation_name",
+  columns = list(
+    legislation_name = colDef(name = "Legislation", filterable = TRUE),
+    Section = colDef(name = "Section", filterable = TRUE),
+    management_domains = colDef(name = "Management Domains", filterable = TRUE)
+  ),
+  searchable = TRUE,
+  highlight = TRUE,
+  striped = TRUE,
+  bordered = TRUE
+)
 ```
              
 <hr>
