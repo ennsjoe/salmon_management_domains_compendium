@@ -659,6 +659,34 @@ if (!file.exists(db_path)) {
 
 ## CoLAPSE Viewer
 The following interactive table contains the full compendium of legislation by Management Domain and IUCN Threat category. Search topics by domain and salmon threats to view applicable legislation.
+```{r domain-filter-list, echo=FALSE}
+library(htmltools)
+
+# Get unique management domains
+domains <- sort(unique(na.omit(provision_labels$management_domain)))
+
+# Create clickable filter list
+tags$div(
+  style = "margin-bottom: 20px;",
+  tags$strong("Filter by Management Domain:"),
+  tags$ul(
+    style = "list-style-type: none; padding-left: 0;",
+    lapply(domains, function(domain) {
+      tags$li(
+        style = "display: inline-block; margin-right: 10px;",
+        tags$a(
+          href = "#",
+          domain,
+          onclick = sprintf(
+            "Reactable.setFilter('act-legislation-summary-table', 'DomainFilter', '%s'); return false;",
+            domain
+          )
+        )
+      )
+    })
+  )
+)
+```
 
 ```{r act-legislation-summary-table, message=FALSE, warning=FALSE, echo=FALSE}
 library(DBI)
