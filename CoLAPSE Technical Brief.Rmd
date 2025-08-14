@@ -255,7 +255,7 @@ cat("</ul>")
 
 ## Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CoLAPSE)
 
-A summary of results from the initial iterations of the automated compendium are shown below. As the keywords become less specific to salmon, the number of Procedural Elements increases. The compendium is available as an R object, which can be used to query specific sections and subsections by Management Domain, IUCN Threat, Scope, and Clause Type. The full compendium is available in the <code>Full_legislation_compendium.rds</code> file and can be loaded into R using the <code>readRDS()</code> function. The compendium is also available as a CSV file for download from GitHub.
+A summary of results from the initial iterations of the automated compendium are shown below. As the keywords become less specific to salmon, the number of Provisions increases. The compendium is available as an R object, which can be used to query specific sections and subsections by Management Domain, IUCN Threat, Scope, and Clause Type. The full compendium is available in the <code>Full_legislation_compendium.rds</code> file and can be loaded into R using the <code>readRDS()</code> function. The compendium is also available as a CSV file for download from GitHub.
 
 ```{r scope-provision-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 # Load required libraries
@@ -295,60 +295,65 @@ for (i in seq_len(nrow(scope_count))) {
 cat("</ul>")
 ```
 
-Using the '1 - Salmon' scope for Procedural Elements shows the Type A Legislation along with a comparison of the number of Procedural Elements by Jurisdiction. The results are shown in the bar chart below, which displays the number of Procedural Elements for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of Procedural Elements across different legislative frameworks.
+Using the '1 - Salmon' scope for Provisions shows the Type A Legislation along with a comparison of the number of Provisions by Jurisdiction. The results are shown in the bar chart below, which displays the number of Provisions for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of Provisions across different legislative frameworks.
 
-```{r salmon-labels-by-legislation, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
-# Load required libraries
+```{r unique-provision-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
 library(DBI)
 library(RSQLite)
 library(here)
 library(dplyr)
 library(ggplot2)
 
-# Define path to the SQLite database
-db_path <- file.path(here("output"), "legislation.db")
-
 # Connect to the database
-conn <- dbConnect(SQLite(), dbname = db_path)
+conn <- dbConnect(SQLite(), dbname = file.path(here("output"), "legislation.db"))
 
-# Query relevant columns from provision_label_table and legislation_metadata
-label_data <- dbGetQuery(conn, "
-  SELECT p.label_id, p.scope, m.legislation_name, m.jurisdiction
-  FROM provision_label_table p
-  JOIN LegislationMetadata m ON p.provision_id = m.legislation_id
-  WHERE p.scope = '1 - Salmon'
-")
+# Load tables
+provision_labels <- dbGetQuery(conn, "SELECT provision_id, scope FROM provision_label_table WHERE scope = '1 - Salmon'")
+provision_table <- dbGetQuery(conn, "SELECT provision_id, legislation_id FROM LegislationParagraphs")
+legislation_metadata <- dbGetQuery(conn, "SELECT legislation_id, legislation_name, jurisdiction FROM LegislationMetadata")
 
-# Disconnect from the database
+# Disconnect
 dbDisconnect(conn)
 
-# Summarize label counts by legislation_name and jurisdiction
-summary_data <- label_data %>%
-  group_by(legislation_name, jurisdiction) %>%
-  summarise(Label_Count = n(), .groups = "drop") %>%
-  arrange(desc(Label_Count))
+# Join and summarize
+salmon_data <- provision_labels %>%
+  inner_join(provision_table, by = "provision_id") %>%
+  inner_join(legislation_metadata, by = "legislation_id")
 
-# Plot if data is available
+summary_data <- salmon_data %>%
+  group_by(legislation_name, jurisdiction) %>%
+  summarise(Unique_Provisions = n_distinct(provision_id), .groups = "drop") %>%
+  arrange(desc(Unique_Provisions))
+
+# Define a manual font scaling factor based on expected figure size
+font_scale <- 1.2  # Increase for larger plots, decrease for smaller ones
+
 if (nrow(summary_data) > 0) {
-  ggplot(summary_data, aes(x = reorder(legislation_name, Label_Count), y = Label_Count, fill = jurisdiction)) +
+  ggplot(summary_data, aes(x = Unique_Provisions, y = reorder(legislation_name, Unique_Provisions), fill = jurisdiction)) +
     geom_bar(stat = "identity", color = "black") +
-    coord_flip() +
     scale_fill_manual(values = c("Federal" = "#996666", "Provincial" = "#668899")) +
     labs(
-      title = "Label Count by Legislation (Scope: 1 - Salmon)",
-      x = "Legislation",
-      y = "Label Count",
+      title = "Provision Count by Legislation (Scope: 1 - Salmon)",
+      x = "Number of Provisions",
+      y = "Legislation",
       fill = "Jurisdiction"
     ) +
-    theme_minimal()
+    theme_minimal(base_size = 14 * font_scale) +
+    theme(
+      axis.text.y = element_text(size = 14 * font_scale),
+      axis.text.x = element_text(size = 14 * font_scale),
+      plot.title = element_text(size = 14 * font_scale, face = "bold")
+    )
 } else {
-  warning("⚠️ No data available for Scope '1 - Salmon'. Check the scope values in your database.")
+  warning("⚠️ No provisions found for Scope '1 - Salmon'.")
 }
+
 ```
 
 ## Summary of Management Domains
+Including all scopes, the number of Provisions by Management Domain is shown in the bar chart below. The chart displays the number of Provisions for each Management Domain, which represents the administrative areas of concern for Pacific salmon management. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of Provisions across different legislative frameworks.
 
-```{r label-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
+```{r provision-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
 # Load required libraries
 library(DBI)
 library(RSQLite)
@@ -362,36 +367,54 @@ db_path <- file.path(here("output"), "legislation.db")
 # Connect to the database
 conn <- dbConnect(SQLite(), dbname = db_path)
 
-# Query relevant columns from provision_label_table and legislation_metadata
-domain_data <- dbGetQuery(conn, "
-  SELECT p.label_id, p.management_domain, m.jurisdiction
-  FROM provision_label_table p
-  JOIN LegislationMetadata m ON p.provision_id = m.legislation_id
-  WHERE p.management_domain IS NOT NULL
+# Load tables
+provision_labels <- dbGetQuery(conn, "
+  SELECT provision_id, management_domain
+  FROM provision_label_table
+  WHERE management_domain IS NOT NULL
+")
+
+provision_table <- dbGetQuery(conn, "
+  SELECT provision_id, legislation_id
+  FROM LegislationParagraphs
+")
+
+legislation_metadata <- dbGetQuery(conn, "
+  SELECT legislation_id, jurisdiction
+  FROM LegislationMetadata
 ")
 
 # Disconnect from the database
 dbDisconnect(conn)
 
-# Summarize label counts by management_domain and jurisdiction
+# Join tables properly
+domain_data <- provision_labels %>%
+  inner_join(provision_table, by = "provision_id") %>%
+  inner_join(legislation_metadata, by = "legislation_id")
+
+# Summarize unique provision counts by management_domain and jurisdiction
 domain_counts <- domain_data %>%
   group_by(management_domain, jurisdiction) %>%
-  summarise(Label_Count = n(), .groups = "drop") %>%
-  arrange(desc(Label_Count))
+  summarise(Provision_Count = n_distinct(provision_id), .groups = "drop") %>%
+  arrange(desc(Provision_Count))
 
 # Generate stacked horizontal bar chart
-ggplot(domain_counts, aes(x = reorder(management_domain, Label_Count), y = Label_Count, fill = jurisdiction)) +
+ggplot(domain_counts, aes(x = reorder(management_domain, Provision_Count), y = Provision_Count, fill = jurisdiction)) +
   geom_bar(stat = "identity", color = "black", width = 0.9) +
   coord_flip() +
   scale_fill_manual(values = c("Federal" = "#996666", "Provincial" = "#668899")) +
   labs(
-    title = "Label Count by Management Domain (Split by Jurisdiction)",
+    title = "Provision Count by Management Domain",
     x = "Management Domain",
-    y = "Label Count",
+    y = "Provision Count",
     fill = "Jurisdiction"
   ) +
-  theme_minimal() +
-  theme(axis.text.y = element_text(size = 12))
+  theme_minimal(base_size = 14 * font_scale) +
+    theme(
+      axis.text.y = element_text(size = 14 * font_scale),
+      axis.text.x = element_text(size = 14 * font_scale),
+      plot.title = element_text(size = 14 * font_scale, face = "bold")
+    )
 ```
 
 ## Summary of IUCN Threats
@@ -702,7 +725,7 @@ reactable(
     act_name = colDef(name = "Act", filterable = TRUE, minWidth = 150),
     legislation_name = colDef(name = "Legislation", filterable = TRUE, minWidth = 250),
     Heading = colDef(name = "Heading", filterable = TRUE, minWidth = 150),
-    Section = colDef(name = "Section", filterable = FALSE, minWidth = 75),
+    Section = colDef(name = "Section", filterable = FALSE, minWidth = 50),
     Paragraphs = colDef(name = "Paragraphs", html = TRUE, minWidth = 400),
     DomainFilter = colDef(name = "Management Domain", filterable = TRUE, show = FALSE),
     Domains = colDef(name = "Management Domains", html = TRUE, minWidth = 150)
