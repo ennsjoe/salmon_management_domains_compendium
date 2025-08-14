@@ -64,7 +64,7 @@ legislation_paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs
 provision_labels <- as.data.table(dbReadTable(conn, "provision_label_table"))
 
 # Disconnect when done (optional if you plan to query later)
-# dbDisconnect(conn)
+dbDisconnect(conn)
 ```
 
 <hr>
@@ -637,64 +637,79 @@ if (!file.exists(db_path)) {
 ## CoLAPSE Viewer
 The following interactive table contains the full compendium of legislation by Management Domain and IUCN Threat category. Search topics by domain and salmon threats to view applicable legislation.
 
-```{r legislation-sections-table, message=FALSE, warning=FALSE, echo=FALSE}
-# Load required libraries
+```{r act-legislation-summary-table, message=FALSE, warning=FALSE, echo=FALSE}
 library(DBI)
 library(RSQLite)
 library(data.table)
 library(here)
 library(reactable)
 
-# Define path to the SQLite database
-db_path <- file.path(here::here("output"), "legislation.db")
-
-# Connect to the database
+# Step 1: Connect and load tables
+db_path <- file.path(here("output"), "legislation.db")
 conn <- dbConnect(SQLite(), dbname = db_path)
 
-# Read tables into R
-legislation_metadata <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
 legislation_paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
+legislation_metadata <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
 provision_labels <- as.data.table(dbReadTable(conn, "provision_label_table"))
 
-# Disconnect from the database
 dbDisconnect(conn)
 
-# Merge metadata with paragraphs
-legislation_sections <- merge(
-  legislation_metadata[, .(legislation_id, legislation_name)],
-  legislation_paragraphs[, .(provision_id, legislation_id, Section)],
+# Step 2: Merge legislation_paragraphs with legislation_metadata
+paragraph_data <- merge(
+  legislation_paragraphs[, .(provision_id, legislation_id, Heading, Section, Paragraph)],
+  legislation_metadata[, .(legislation_id, legislation_name, act_name)],
   by = "legislation_id",
   all.x = TRUE
 )
 
-# Merge with provision labels using provision_id
-legislation_sections <- merge(
-  legislation_sections,
+# Step 3: Merge in management_domain
+section_data <- merge(
+  paragraph_data,
   provision_labels[, .(provision_id, management_domain)],
   by = "provision_id",
   all.x = TRUE
 )
 
-# Summarize: concatenate management_domain values per legislation_name + Section
-summary_table <- legislation_sections[
-  , .(management_domains = paste(unique(na.omit(management_domain)), collapse = " : ")),
-  by = .(legislation_name, Section)
+# Step 4: Aggregate by act_name + legislation_name + Heading + Section
+section_summary <- section_data[
+  !is.na(Section),
+  .(
+    Paragraphs = paste(na.omit(Paragraph), collapse = "\n\n"),
+    DomainFilter = paste(unique(na.omit(management_domain)), collapse = ", "),
+    Domains = paste0(
+      "<div style='padding-left: 10px;'>",
+      "<ul style='list-style-type: disc; padding-left: 20px;'>",
+      paste(sprintf("<li>%s</li>", unique(na.omit(management_domain))), collapse = ""),
+      "</ul></div>"
+    )
+  ),
+  by = .(act_name, legislation_name, Heading, Section)
 ]
 
-# Render interactive table
+# Step 5: Render grouped table
 reactable(
-  summary_table,
-  groupBy = "legislation_name",
-  columns = list(
-    legislation_name = colDef(name = "Legislation", filterable = TRUE),
-    Section = colDef(name = "Section", filterable = TRUE),
-    management_domains = colDef(name = "Management Domains", filterable = TRUE)
-  ),
+  section_summary,
+  elementId = "act-legislation-summary-table",
+  groupBy = c("act_name", "legislation_name"),
   searchable = TRUE,
-  highlight = TRUE,
+  pagination = TRUE,
   striped = TRUE,
-  bordered = TRUE
+  bordered = TRUE,
+  resizable = TRUE,
+  defaultPageSize = 10,
+  defaultColDef = colDef(filterable = TRUE),
+  columns = list(
+    act_name = colDef(name = "Act", filterable = TRUE, minWidth = 150),
+    legislation_name = colDef(name = "Legislation", filterable = TRUE, minWidth = 250),
+    Heading = colDef(name = "Heading", filterable = TRUE, minWidth = 150),
+    Section = colDef(name = "Section", filterable = FALSE, minWidth = 75),
+    Paragraphs = colDef(name = "Paragraphs", html = TRUE, minWidth = 400),
+    DomainFilter = colDef(name = "Management Domain", filterable = TRUE, show = FALSE),
+    Domains = colDef(name = "Management Domains", html = TRUE, minWidth = 150)
+  )
 )
+
+
 ```
              
 <hr>
