@@ -11,7 +11,7 @@
 #   - A SQLite database file named "legislation.db" in the "output" directory,
 #     containing a table "LegislationParagraphs" with legislative provisions.
 #   - CSV files containing keyword tables:
-#       - "managament_domain_threat_table.csv"
+#       - "management_domain_threat_table.csv"
 #       - "clause_type_keywords.csv"
 #       - "iucn_l2_keywords.csv"
 #       - "salmon_scope_keywords.csv"
