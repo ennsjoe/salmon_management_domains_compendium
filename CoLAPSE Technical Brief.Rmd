@@ -15,23 +15,12 @@ output:
 documentclass: article
 ---
 
-```{=html}
 <style>
-  body {
+  body, h1, h2, h3, h4, h5, h6, p, li, td, th {
     font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
   }
 </style>
-```
 
-```{r, echo=FALSE}
-cat("
-<style>
-  body {
-    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-  }
-</style>
-")
-```
 
 ```{r read-legislation-db, message=FALSE, warning=FALSE, echo=FALSE}
 # Load required libraries
@@ -187,7 +176,7 @@ Assessment of legislative context is prone to subjective interpretation. The inc
 
 </ol>
 
-### 1) Legislation Accumulation and Review
+### Legislation Accumulation and Review
 
 We focused our review on established Canadian federal and British Columbian provincial legislation (acts and regulations) for inclusion in the management domain process. We did not include specific departmental policy frameworks and processes throughout this exercise unless specifically referenced in the statutes, because these executive strategies are prone to changes in the political, administrative, and budgetary landscape. Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were not included explicitly. Although these laws are important for management of Pacific salmon, considering these regionally diverse rules was outside the scope of this legislative review.
 
@@ -209,7 +198,7 @@ The Canadian Legal Information Institute website, <a href="https://www.canlii.or
 
 Through the CanLII website, the user may look up the keywords queried in each act and regulation chosen. This allows the user to quickly assess the context of the word in the legislation and determine if the section is relevant to Pacific salmon. The full list of legislation reviewed in this process is available in Appendix I.
 
-### 2) Parsing Legislation from HTML Files
+### Parsing Legislation from HTML Files
 
 The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular subject. For the purpose of the review, we used the individual clause as the sample unit for assignment into management domains and other corresponding attributes.
 
@@ -230,11 +219,11 @@ if (file.exists(image_path)) {
 }
 ```
 
-### 3) Assigning Management Domains and IUCN Threats from Keywords
+### Assigning Management Domains and IUCN Threats from Keywords
 
 The Management Domains and IUCN threats were assigned to each section based on a keyword list developed from the IUCN threat categories. The keywords were used to identify specific sections and subsections within the legislation. Each section was then assigned to one or more Management Domain and IUCN threat based on the presence of these keywords.Iteratively, we adjusted the keyword list to ensure that it accurately captured the scope of each Management Domain and IUCN threat. The keyword list is available in Appendix II.
 
-### 4) Assigning Scope
+### Assigning Scope
 
 We developed a scope classification system to categorize the sections based on their relevance to Pacific salmon. The scope was determined by the specificity of the language used in the section. The Scope categories were defined as follows:
 
@@ -252,7 +241,7 @@ We developed a scope classification system to categorize the sections based on t
 
 Scope 1 was assigned separately to sections with the specific salmon keywords. Scope 2-3 were assigned during the Management Domain and IUCN Threat assignment.
 
-### 5) Assigning Clause Type from Keywords
+### Assigning Clause Type from Keywords
 
 Similar the Management Domain assignment, we created a Clause Type keyword list to assess the nature or purposes of the clauses. Using language patterns within the legislation, we grouped Clause Type by:
 
@@ -622,7 +611,7 @@ Westwood AR, Otto SP, Mooers A, Darimont C, Hodges KE, Johnson C, et al. 2019. P
 
 <hr>
 
-## Appendix I - Legislation Accumulation and Review
+## Legislation Accumulation and Review
 
 ```{r legislation-count-by-type, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 # Load required libraries
@@ -849,8 +838,8 @@ reactable(
              
 <hr>
 
-## Appendix IV - Example: The Fisheries Act
+## Example: The Fisheries Act
 
 <hr>
 
-## Appendix V - Example: The Water Sustainability Act
+## Example: The Water Sustainability Act
