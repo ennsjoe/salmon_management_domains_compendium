@@ -11,16 +11,20 @@ output:
     fig_caption: true
     code_folding: hide
     link_citations: true
-     
 documentclass: article
 ---
-
+<!-- Typography and Background -->
 <style>
-  body, h1, h2, h3, h4, h5, h6, p, li, td, th {
-    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-  }
+body, h1, h2, h3, h4, h5, h6, p, li, td, th {
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+}
 </style>
 
+<style>
+html, body {
+  background-color: #fffaf0 !important;
+}
+</style>
 
 ```{r read-legislation-db, message=FALSE, warning=FALSE, echo=FALSE}
 # Load required libraries
@@ -72,15 +76,16 @@ While legislation and programs may often operate on a sector-by-sector and indiv
 
 In this report, we present a framework for relating threats to salmon with their legislative and regulatory context within British Columbia. We define discrete areas of administrative responsibility for Pacific salmon as “management domains” and conduct a review of legislation to assess the specificity or scope of each clause in relation to Pacific salmon. Our purpose for creating a management domains framework is to:
 
-<ul>
+<div style="margin-left: 30px; padding-left: 10px">
+  <ul>
+    <li>Facilitate a better understanding of the legislative and regulatory context through which Pacific salmon and their ecosystems are governed in British Columbia;</li>
 
-<li>facilitate a better understanding of the legislative and regulatory context through which Pacific salmon and their ecosystems are governed in British Columbia;</li>
+    <li>Relate Pacific salmon threat categories to legislation; and</li>
 
-<li>relate Pacific salmon threat categories to legislation; and</li>
+    <li>Support comprehensive management and conservation planning for Pacific salmon by assigning discrete areas for the administration of human activities across jurisdictions.</li>
+  </ul>
+</div>
 
-<li>support comprehensive management and conservation planning for Pacific salmon by assigning discrete areas for the administration of human activities across jurisdictions.</li>
-
-</ul>
 
 # METHODS
 
@@ -88,12 +93,11 @@ In this report, we present a framework for relating threats to salmon with their
 
 Management domains represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Since management domains are defined as a “separation of administrative concerns,” it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 13 specific management domains were delineated for the purpose of this exercise. The domains were developed to comprehensively encompass the legislative context, administrative functions, and anthropogenic threats related to Pacific salmon in British Columbia.
 
-```{r management-domain-grid, echo=FALSE, message=FALSE, warning=FALSE}
+```{r management-domain-grid, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 # Load required libraries
 library(DBI)
 library(RSQLite)
 library(here)
-library(knitr)
 
 # Define path to the database
 db_path <- here::here("output", "legislation.db")
@@ -114,23 +118,39 @@ management_domains <- dbGetQuery(conn, query)$management_domain
 # Disconnect from the database
 dbDisconnect(conn)
 
-# Define grid dimensions
-n_cols <- 3
-n_rows <- ceiling(length(management_domains) / n_cols)
+# Define CSS for button grid
+cat("
+<style>
+.domain-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+.domain-button {
+  background-color: #fff6f0;
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  font-family: sans-serif;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.domain-button:hover {
+  background-color: #e0e0ff;
+}
+</style>
+")
 
-# Pad with empty strings to fill the matrix
-padded_domains <- c(management_domains, rep("", n_cols * n_rows - length(management_domains)))
-domain_matrix <- matrix(padded_domains, nrow = n_rows, byrow = TRUE)
-
-# Display as HTML table
-kable(
-  domain_matrix,
-  col.names = paste("Domain", 1:n_cols),
-  format = "html",
-  table.attr = "style='width:100%; text-align:left;'"
-)
+# Render buttons in grid
+cat("<div class='domain-grid'>")
+for (domain in management_domains) {
+  cat(sprintf("<div class='domain-button'>%s</div>", domain))
+}
+cat("</div>")
 ```
-
+<br>
 We used the International Union for Conservation of Nature (IUCN) threat categories (Salafsky et al 2008) to classify legislation into anthropogenic activities that affect salmon. IUCN threat categories are widely used to assess threats as part of IUCN red list assessments, as well as in status assessments for Pacific salmon populations conducted by the Committee for the Status of Endangered Wildlife in Canada (COSEWIC). We assigned level 1 and level 2 threat classification hierarchies from the IUCN categories into management domains to separate anthropogenic activities into different areas of administrative concern.
 
 Historically, much of the management decisions and activities related to salmon have been in response to identifiable threats to salmon health and population status. One common framework used to describe impacts to salmon are the Four H’s: Habitat, Hydropower, Harvest, and Hatcheries. Each management domain, as defined in this report, intentionally aligns with one of the four H’s. However, there are aspects of salmon management associated with governance and agreements rather than one of the other H’s, which was categorized as “Handshaking.” Because the management domains are centered around salmon/habitat impacts, this allows structurally for a clearer alignment with IUCN threat categories.
@@ -149,32 +169,24 @@ if (file.exists(image_path)) {
   cat("<p style='color:red;'>❌ Image file not found: ", image_path, "</p>")
 }
 ```
-
+<br>
 ## Process
 
 Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the sections within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable. Other researchers may repeat this process as future legislation and language changes. The process steps are:
 
+<div style="margin-left: 30px; padding-left: 10px">
 <ol>
-
 <li>Legislation Accumulation and Review (CanLii)</li>
-
 <li>Parsing Legislation by Section and Heading (R)</li>
-
 <li>Assigning Management Domain and IUCN Threats (R)</li>
-
 <ul>
-
 <li>Building a Keyword List</li>
-
 <li>Assigning to Sections/Subsections (R)</li>
-
 </ul>
-
 <li>Assigning Scope (R)</li>
-
 <li>Assigning Clause Type (R)</li>
-
 </ol>
+</div>
 
 ### Legislation Accumulation and Review
 
@@ -603,6 +615,8 @@ Salafsky, N., Salzer, D., Stattersfield, A.J., Hilton-Taylor, C., Nuegarten, R.,
 Swerdfager, Trevor, and Andrea Olive. “Laws Matter: A Foundational Approach to Biodiversity Conservation in Canada.” Edited by David Lesbarreres. FACETS 8 (January 1, 2023): 1–13.
 
 Westwood AR, Otto SP, Mooers A, Darimont C, Hodges KE, Johnson C, et al. 2019. Protecting biodiversity in British Columbia: recommendations for developing species at risk legislation. FACETS, 4(1): 136–160. DOI: 10.1139/facets-2018-0042
+
+https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html
 :::
 
 <hr>
