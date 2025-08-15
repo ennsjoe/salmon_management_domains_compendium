@@ -196,6 +196,20 @@ The decentralized overlapping patchwork of Pacific salmon legislation in Canada 
 
 We parsed the HTML files using R and the <code>rvest</code> package to extract the text of each section and subsection grouped by heading. The text was then cleaned and standardized to remove any extraneous characters or formatting issues. Each section was assigned a unique identifier, and metadata such as the act name, jurisdiction, and legislation type (act or regulation) were recorded.
 
+```{r, echo=FALSE, fig.cap="Example of the parts of a statute used for parsing (Fisheries Act)"}
+library(knitr)
+
+# Define the file path using here()
+image_path <- here("Parts of a statute.png")
+
+# Include the image if it exists
+if (file.exists(image_path)) {
+  knitr::include_graphics(image_path)
+} else {
+  message("❌ Image file not found: ", image_path)
+}
+```
+
 ### 3) Assigning Management Domains and IUCN Threats from Keywords
 
 The Management Domains and IUCN threats were assigned to each section based on a keyword list developed from the IUCN threat categories. The keywords were used to identify specific sections and subsections within the legislation. Each section was then assigned to one or more Management Domain and IUCN threat based on the presence of these keywords.Iteratively, we adjusted the keyword list to ensure that it accurately captured the scope of each Management Domain and IUCN threat. The keyword list is available in Appendix II.
@@ -659,24 +673,37 @@ if (!file.exists(db_path)) {
 
 ## CoLAPSE Viewer
 The following interactive table contains the full compendium of legislation by Management Domain and IUCN Threat category. Search topics by domain and salmon threats to view applicable legislation.
+
 ```{r domain-filter-list, echo=FALSE}
 library(htmltools)
 
 # Get unique management domains
 domains <- sort(unique(na.omit(provision_labels$management_domain)))
 
-# Create clickable filter list
+# Create clickable filter grid
 tags$div(
   style = "margin-bottom: 20px;",
   tags$strong("Filter by Management Domain:"),
-  tags$ul(
-    style = "list-style-type: none; padding-left: 0;",
+  tags$div(
+    style = "
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    ",
     lapply(domains, function(domain) {
-      tags$li(
-        style = "display: inline-block; margin-right: 10px;",
+      tags$div(
+        style = "
+          flex: 0 1 calc(25% - 10px);
+          background-color: #f0f0f0;
+          padding: 6px 10px;
+          border-radius: 5px;
+          text-align: center;
+        ",
         tags$a(
           href = "#",
           domain,
+          style = "color: #0073e6; text-decoration: none;",
           onclick = sprintf(
             "Reactable.setFilter('act-legislation-summary-table', 'DomainFilter', '%s'); return false;",
             domain
@@ -686,6 +713,7 @@ tags$div(
     })
   )
 )
+
 ```
 
 ```{r act-legislation-summary-table, message=FALSE, warning=FALSE, echo=FALSE}
