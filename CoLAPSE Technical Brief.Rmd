@@ -855,7 +855,7 @@ section_summary <- section_data[
   by = .(Act, Legislation, HeadingSection)
 ]
 
-# Step 6: Render reactable with hidden DomainFilter column
+# Step 6: Render reactable with smaller font in Paragraphs column
 reactable(
   section_summary,
   elementId = "act-legislation-summary-table",
@@ -867,18 +867,26 @@ reactable(
   resizable = TRUE,
   defaultPageSize = 10,
   defaultColDef = colDef(filterable = TRUE),
+  width = "100%",
   columns = list(
-    Act = colDef(name = "Act", filterable = TRUE, minWidth = 200),
-    Legislation = colDef(name = "Legislation", filterable = TRUE, minWidth = 300),
-    HeadingSection = colDef(name = "Heading & Section", filterable = TRUE, minWidth = 200),
+    Act = colDef(name = "Act", filterable = TRUE, minWidth = 150),
+    Legislation = colDef(name = "Legislation", filterable = TRUE, minWidth = 200),
+    HeadingSection = colDef(name = "Heading & Section", filterable = TRUE, minWidth = 150),
     DomainFilter = colDef(
       name = "Management Domain",
       filterable = TRUE,
-      show = FALSE  # ✅ Fully hides the column from display
+      show = FALSE
     ),
-    Paragraphs = colDef(name = "Paragraphs", html = TRUE, minWidth = 500)
+    Paragraphs = colDef(
+      name = "Paragraphs",
+      html = TRUE,
+      minWidth = 600,
+      maxWidth = 1000,
+      style = list(fontSize = "0.85em")  # ✅ Smaller font for Paragraphs
+    )
   )
 )
+
 ```
              
 <hr>
