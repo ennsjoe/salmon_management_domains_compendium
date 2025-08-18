@@ -165,7 +165,13 @@ if (file.exists(image_path)) {
 }
 ```
 
-## Assignment Process
+## Defining IUCN Threats
+
+## Defining Clause Types
+
+## Defining Scope
+
+## Categorization Process
 
 Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the clauses within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable. Other researchers may repeat this process as future legislation and language changes. The process steps are:
 
@@ -222,7 +228,7 @@ if (file.exists(image_path)) {
 Legislation presented on Canadian and British Columbian government websites--and corresponding HTML code--is structured such that each clause and subclause is separated individually as a paragraph element (<p>). HTML code for paragraph elements is generally consistent across legislation, but section, subsection, and heading elements are not. As shown in Figure 2, when we refer to a “clause” we are including subclauses, but also sections, subsections, and opening words (chapeau or umbrella) when they are stand-alone paragraph elements in the HTML. We parsed the HTML files using R and the <code>rvest</code> package to extract the text of each clause, then grouped by section and heading.
 
 ### Database Schema
-The parsed legislation was stored in a SQLite database with the following schema:
+The parsed legislation was stored in a SQLite database with datatables legislation 
 
 
 ### Assigning Management Domains and IUCN Threats from Keywords
