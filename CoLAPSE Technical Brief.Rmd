@@ -219,6 +219,9 @@ if (file.exists(image_path)) {
 }
 ```
 
+Legislation presented on federal and provincial websites, and corresponding HTML code, is stuctured 
+
+
 We parsed the HTML files using R and the <code>rvest</code> package to extract the text of each subclause, then grouped by section and heading. Standard acro
 
 The text was then cleaned and standardized to remove any extraneous characters or formatting issues. 
