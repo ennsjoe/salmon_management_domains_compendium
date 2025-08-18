@@ -892,3 +892,7 @@ reactable(
 <hr>
 
 ## Example: The Water Sustainability Act
+
+<hr>
+
+## External Resources
