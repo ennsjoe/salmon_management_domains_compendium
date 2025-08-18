@@ -847,7 +847,7 @@ section_summary <- section_data[
   by = .(Act, Legislation, HeadingSection)
 ]
 
-# Step 6: Render reactable (fully static)
+# Step 6: Render reactable with hidden DomainFilter column
 reactable(
   section_summary,
   elementId = "act-legislation-summary-table",
@@ -863,11 +863,14 @@ reactable(
     Act = colDef(name = "Act", filterable = TRUE, minWidth = 200),
     Legislation = colDef(name = "Legislation", filterable = TRUE, minWidth = 300),
     HeadingSection = colDef(name = "Heading & Section", filterable = TRUE, minWidth = 200),
-    DomainFilter = colDef(name = "Management Domain", filterable = TRUE, minWidth = 150),
+    DomainFilter = colDef(
+      name = "Management Domain",
+      filterable = TRUE,
+      style = list(display = "none")  # Hide column but keep it filterable
+    ),
     Paragraphs = colDef(name = "Paragraphs", html = TRUE, minWidth = 500)
   )
 )
-
 ```
              
 <hr>
