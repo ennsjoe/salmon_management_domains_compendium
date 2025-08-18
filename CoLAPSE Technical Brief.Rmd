@@ -66,20 +66,17 @@ dbDisconnect(conn)
 
 Resource conservation and stewardship in Canada is governed through a decentralized, multi-sector array of constitutional authority administered through federal, provincial, territorial, and municipal governments (Ray et al 2021; Campbell and Thomas 2002). Stemming from the Constitution Act, legislative control over ecological conservation has been a reactionary process of assigning authority to multiple jurisdictions over new environmental issues as they arise, which creates a complex and overlapping distribution of governance (Becklumb 2013). This patchwork of authority is most prominent in Pacific salmon management due to the complicated geographic nature of their anadromous life cycle, spanning a variety of freshwater and marine ecosystems coast-wide and across international boundaries.
 
-While legislation and programs may often operate on a sector-by-sector and individual resource basis, integrated stewardship relies on scale-appropriate planning and decision making (Ray et al 2021). The need for collaborative, transparent decision-making in salmon management is recognized throughout policies, plans, and initiatives, such as the Pacific Salmon Strategy Initiative and the Wild Salmon Policy. Successful conservation and rebuilding of Pacific salmon therefore requires coordination of activities across discrete administrative responsibilities and regulatory frameworks. However, such coordination requires adequate organizational capacity and systems for effective implementation to ensure that regulatory controls and mitigation activities address underlying threats and factors limiting productivity.
+While legislation and programs may often operate on a sector-by-sector and individual resource basis, integrated stewardship relies on scale-appropriate planning and decision making (Ray et al 2021). The need for collaborative, transparent decision-making in salmon management is recognized throughout policies, plans, and initiatives, such as the Pacific Salmon Strategy Initiative and the Wild Salmon Policy. Successful conservation and rebuilding of Pacific salmon therefore requires coordination of activities across discrete administrative responsibilities and regulatory frameworks. However, such coordination requires adequate organizational capacity and systems for effective implementation to ensure that regulatory controls and mitigation activities address underlying threats and factors that limit capacity and reduce productivity.
 
-In this report, we present a framework for relating threats to salmon with their legislative and regulatory context within British Columbia. We define discrete areas of administrative responsibility for Pacific salmon as “management domains” and conduct a review of legislation to assess the specificity or scope of each clause in relation to Pacific salmon. Our purpose for creating a management domains framework is to:
+In this report, we present a framework to relate salmon threats with their legislative and regulatory context within British Columbia. We define discrete areas of administrative responsibility for Pacific salmon as “management domains” and conduct a review of legislation to assess the specificity or scope of each clause in relation to Pacific salmon. Our purpose for creating a management domains framework is to:
 
 <div style="margin-left: 30px; padding-left: 10px">
   <ul>
-    <li>Facilitate a better understanding of the legislative and regulatory context through which Pacific salmon and their ecosystems are governed in British Columbia;</li>
-
-    <li>Relate Pacific salmon threat categories to legislation; and</li>
-
-    <li>Support comprehensive management and conservation planning for Pacific salmon by assigning discrete areas for the administration of human activities across jurisdictions.</li>
+    <li>better understand the legislative and regulatory context that governs Pacific salmon and their ecosystems in British Columbia;</li>
+    <li>relate Pacific salmon threat categories to legislation; and</li>
+    <li>categorize discrete human activities by administrative concern to support conservation planning across jurisdictions.</li>
   </ul>
 </div>
-
 
 # METHODS
 
@@ -122,7 +119,8 @@ cat("
   margin-top: 20px;
 }
 .domain-button {
-  background-color: #fff6f0;
+  background-color: #668899;
+  color: white; /* ✅ Font color changed to white */
   border: 1px solid #ccc;
   padding: 10px;
   text-align: center;
@@ -132,7 +130,7 @@ cat("
   transition: background-color 0.3s;
 }
 .domain-button:hover {
-  background-color: #e0e0ff;
+  background-color: #996666;
 }
 </style>
 ")
@@ -142,51 +140,50 @@ cat("<div class='domain-grid'>")
 for (domain in management_domains) {
   cat(sprintf("<div class='domain-button'>%s</div>", domain))
 }
-cat("</div>")
+cat("</div>")  # ✅ Properly closed the outer div
 ```
 <br>
-We used the International Union for Conservation of Nature (IUCN) threat categories (Salafsky et al 2008) to classify legislation into anthropogenic activities that affect salmon. IUCN threat categories are widely used to assess threats as part of IUCN red list assessments, as well as in status assessments for Pacific salmon populations conducted by the Committee for the Status of Endangered Wildlife in Canada (COSEWIC). We assigned level 1 and level 2 threat classification hierarchies from the IUCN categories into management domains to separate anthropogenic activities into different areas of administrative concern.
+We used the International Union for Conservation of Nature (IUCN) threat categories (Salafsky et al 2008) to classify legislation into anthropogenic activities that affect salmon. IUCN threat categories are widely used to assess threats as part of IUCN red list assessments, as well as in status assessments for Pacific salmon populations conducted by the Committee for the Status of Endangered Wildlife in Canada (COSEWIC). We assigned Level 1 and Level 2 threat classification hierarchies from the IUCN categories into management domains to separate anthropogenic activities into different areas of administrative concern.
 
-Historically, much of the management decisions and activities related to salmon have been in response to identifiable threats to salmon health and population status. One common framework used to describe impacts to salmon are the Four H’s: Habitat, Hydropower, Harvest, and Hatcheries. Each management domain, as defined in this report, intentionally aligns with one of the four H’s. However, there are aspects of salmon management associated with governance and agreements rather than one of the other H’s, which was categorized as “Handshaking.” Because the management domains are centered around salmon/habitat impacts, this allows structurally for a clearer alignment with IUCN threat categories.
+Historically, much of the management decisions and activities related to salmon have been in response to identifiable threats to salmon health and population status. One common framework used to describe impacts to salmon are the Four H’s: Habitat, Hydropower, Harvest, and Hatcheries. Each management domain, as defined in this report, intentionally aligns with one of the four H’s. However, there are aspects of salmon management associated with governance and agreements rather than one of the other H’s, which we categorized as “Handshaking.” Because the management domains are centered around salmon/habitat impacts, this allows structurally for a clearer alignment with IUCN threat categories.
 
-```{r flowchart-image, echo=FALSE, fig.cap="Flowchart showing alignment of Pacific salmon threat factors (Four H's) with Management Domain in relation to legislation and jurisdiction."}
-library(knitr)
+```{r flowchart-image, echo=FALSE, results='asis'}
 library(here)
 
 # Define image path
-image_path <- here("MGMT-D Flowchart.png")
+image_path <- here("Management Domain Flowchart.png")
 
-# Include image or show fallback message
+# Check if image exists
 if (file.exists(image_path)) {
-  include_graphics(image_path)
+  # Manually create figure with caption below
+  cat('<div style="text-align: center;">')
+  cat('<img src="', image_path, '" alt="Flowchart" style="max-width: 100%; height: auto;"><br>', sep = "")
+  cat('<p><em>Figure 1. Flowchart showing alignment of Pacific salmon threat factors (Four H\'s) with Management Domain in relation to legislation and jurisdiction.</em></p>')
+  cat('</div>')
 } else {
   cat("<p style='color:red;'>❌ Image file not found: ", image_path, "</p>")
 }
 ```
-<br>
-## Process
 
-Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the sections within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable. Other researchers may repeat this process as future legislation and language changes. The process steps are:
+## Assignment Process
+
+Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the clauses within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable. Other researchers may repeat this process as future legislation and language changes. The process steps are:
 
 <div style="margin-left: 30px; padding-left: 10px">
 <ol>
-<li>Legislation Accumulation and Review (CanLii)</li>
-<li>Parsing Legislation by Section and Heading (R)</li>
-<li>Assigning Management Domain and IUCN Threats (R)</li>
-<ul>
-<li>Building a Keyword List</li>
-<li>Assigning to Sections/Subsections (R)</li>
-</ul>
-<li>Assigning Scope (R)</li>
-<li>Assigning Clause Type (R)</li>
+<li>Legislation accumulation and review (CanLii)</li>
+<li>Parse legislation by subclause, section, and heading (R)</li>
+<li>Match management domain and IUCN threat keywords to subclauses (R)</li>
+<li>Match clause type keywords to subclauses (R)</li>
+<li>Assign Scope (R)</li>
 </ol>
 </div>
 
 ### Legislation Accumulation and Review
 
-We focused our review on established Canadian federal and British Columbian provincial legislation (acts and regulations) for inclusion in the management domain process. We did not include specific departmental policy frameworks and processes throughout this exercise unless specifically referenced in the statutes, because these executive strategies are prone to changes in the political, administrative, and budgetary landscape. Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were not included explicitly. Although these laws are important for management of Pacific salmon, considering these regionally diverse rules was outside the scope of this legislative review.
+We focused our review on established Canadian federal and British Columbian provincial legislation (acts and regulations) for inclusion in the management domain process. We did not include specific departmental policy frameworks and processes throughout this exercise unless specifically referenced in the statutes because these executive strategies are prone to changes in the political, administrative, and budgetary landscape. Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were not included explicitly. Although this other legislation is pivotal in the management of Pacific salmon, considering this regionally diverse administration was outside the scope of this legislative review in terms of feasibility. However .
 
-The Canadian Legal Information Institute website, <a href="https://www.canlii.org/">CanLII</a>, provides an excellent resource for searching federal and provincial acts and regulations by keywords. We created a systematic process for querying legislation by:
+The <a href="https://www.canlii.org/" style="color:#668899">Canadian Legal Information Institute website, CanLII</a>, provides an excellent resource for searching federal and provincial acts and regulations by keywords. We created a systematic process for collecting legislation by:
 
 <div style="margin-left: 30px; padding-left: 10px">
 <ol>
@@ -198,28 +195,35 @@ The Canadian Legal Information Institute website, <a href="https://www.canlii.or
 </ol>
 </div>
 
-Through the CanLII website, the user may look up the keywords queried in each act and regulation chosen. This allows the user to quickly assess the context of the word in the legislation and determine if the section is relevant to Pacific salmon. The full list of legislation reviewed in this process is available in Appendix I.
+Through the CanLII website, the user may look up the keywords queried in each act and regulation chosen. This allows the user to quickly assess the context of the word in the legislation and determine if the section is relevant to Pacific salmon. The full list of legislation reviewed in this process is available in Appendix 5.2.
 
 ### Parsing Legislation from HTML Files
 
-The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular subject. For the purpose of the review, we used the individual clause as the sample unit for assignment into management domains and other corresponding attributes.
+The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular management domain. For the purpose of the review, we used the individual clause as the sample unit for assignment into management domains and other corresponding attributes.
 
-We parsed the HTML files using R and the <code>rvest</code> package to extract the text of each section and subsection grouped by heading. The text was then cleaned and standardized to remove any extraneous characters or formatting issues. Each section was assigned a unique identifier, and metadata such as the act name, jurisdiction, and legislation type (act or regulation) were recorded.
-
-```{r statute-parsing-image, echo=FALSE, fig.cap="Example of the parts of a statute used for parsing (Fisheries Act)"}
-library(knitr)
+```{r legistics-paragraphing, echo=FALSE, results='asis'}
 library(here)
 
-# Define the image path
-image_path <- here("Parts of a statute.png")
+# Define image path
+image_path <- here("Legistics Paragraphing.png")
 
-# Include the image or show fallback message in the rendered document
+# Check if image exists
 if (file.exists(image_path)) {
-  include_graphics(image_path)
+  # Manually create figure with caption below
+  cat('<div style="text-align: center;">')
+  cat('<img src="', image_path, '" alt="Diagram" style="max-width: 100%; height: auto;"><br>', sep = "")
+  cat('<p><em>Figure 2. Fisheries Act (federal) examples of paragraph parsing from HTML code.</em></p>')
+  cat('</div>')
 } else {
   cat("<p style='color:red;'>❌ Image file not found: ", image_path, "</p>")
 }
 ```
+
+We parsed the HTML files using R and the <code>rvest</code> package to extract the text of each subclause, then grouped by section and heading. Standard acro
+
+The text was then cleaned and standardized to remove any extraneous characters or formatting issues. 
+
+Each section was assigned a unique identifier, and metadata such as the act name, jurisdiction, and legislation type (act or regulation) were recorded.
 
 ### Assigning Management Domains and IUCN Threats from Keywords
 
@@ -230,16 +234,12 @@ The Management Domains and IUCN threats were assigned to each section based on a
 We developed a scope classification system to categorize the sections based on their relevance to Pacific salmon. The scope was determined by the specificity of the language used in the section. The Scope categories were defined as follows:
 <div style="margin-left: 30px; padding-left: 10px">
 <ol>
-
 <li>Salmon - refers to salmon specifically</li>
-
 <li>Fish - refers to fish that include salmon</li>
-
 <li>Habitat - refers to any habitat that includes salmon habitat</li>
-
 <li>Governance - refers to administrative processes and structure</li>
-
 </ol>
+</div>
 
 Scope 1 was assigned separately to sections with the specific salmon keywords. Scope 2-3 were assigned during the Management Domain and IUCN Threat assignment.
 
