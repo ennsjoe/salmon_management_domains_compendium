@@ -835,7 +835,7 @@ section_summary <- section_data[
   .(
     DomainFilter = paste(unique(na.omit(management_domain)), collapse = ", "),
     Paragraphs = paste(
-      paste(na.omit(Paragraph), collapse = "<br><br>"),
+      paste(unique(na.omit(Paragraph)), collapse = "<br><br>"),  # ✅ Only unique Paragraphs
       "<br><br>",
       "<div style='font-size: 0.9em; color: #333; background-color: #f9f9f9; padding: 8px; border-left: 4px solid #0074D9;'>",
       sprintf(
