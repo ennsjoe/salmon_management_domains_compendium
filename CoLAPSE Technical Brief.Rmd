@@ -744,35 +744,43 @@ library(htmltools)
 # Get unique management domains
 domains <- sort(unique(na.omit(provision_labels$management_domain)))
 
-# Create clickable filter list with a "Clear" option
+# Create clickable filter buttons with a "Clear" option
 tags$div(
   style = "margin-bottom: 20px;",
   tags$strong("Filter by Management Domain:"),
-  tags$ul(
-    style = "list-style-type: none; padding-left: 0;",
-    # Add "All" option to clear filter
-    tags$li(
-      style = "display: inline-block; margin-right: 10px;",
-      tags$a(
-        href = "#",
-        "All",
-        onclick = "Reactable.setFilter('act-legislation-summary-table', 'DomainFilter', ''); return false;",
-        style = "font-weight: bold; color: #0074D9;"
-      )
+  tags$div(
+    style = "margin-top: 10px;",
+    # "All" button to clear filter
+    tags$button(
+      "All",
+      onclick = "Reactable.setFilter('act-legislation-summary-table', 'DomainFilter', ''); return false;",
+      style = "
+        margin-right: 8px;
+        padding: 6px 12px;
+        background-color: #0074D9;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      "
     ),
-    # Add domain-specific filters
+    # Domain-specific buttons
     lapply(domains, function(domain) {
-      tags$li(
-        style = "display: inline-block; margin-right: 10px;",
-        tags$a(
-          href = "#",
-          htmlEscape(domain),
-          onclick = sprintf(
-            "Reactable.setFilter('act-legislation-summary-table', 'DomainFilter', '%s'); return false;",
-            htmlEscape(domain)
-          ),
-          style = "color: #333;"
-        )
+      tags$button(
+        htmlEscape(domain),
+        onclick = sprintf(
+          "Reactable.setFilter('act-legislation-summary-table', 'DomainFilter', '%s'); return false;",
+          htmlEscape(domain)
+        ),
+        style = "
+          margin-right: 8px;
+          padding: 6px 12px;
+          background-color: #f0f0f0;
+          color: #333;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          cursor: pointer;
+        "
       )
     })
   )
