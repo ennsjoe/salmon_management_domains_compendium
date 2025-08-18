@@ -231,25 +231,11 @@ Legislation presented on Canadian and British Columbian government websites--and
 The parsed legislation was stored in a SQLite database with datatables legislation 
 
 
-### Assigning Management Domains and IUCN Threats from Keywords
+### Assigning Management Domains and IUCN Threats
 
 The Management Domains and IUCN threats were assigned to each section based on a keyword list developed from the IUCN threat categories. The keywords were used to identify specific sections and subsections within the legislation. Each section was then assigned to one or more Management Domain and IUCN threat based on the presence of these keywords.Iteratively, we adjusted the keyword list to ensure that it accurately captured the scope of each Management Domain and IUCN threat. The keyword list is available in Appendix II.
 
-### Assigning Scope
-
-We developed a scope classification system to categorize the sections based on their relevance to Pacific salmon. The scope was determined by the specificity of the language used in the section. The Scope categories were defined as follows:
-<div style="margin-left: 30px; padding-left: 10px">
-<ol>
-<li>Salmon - refers to salmon specifically</li>
-<li>Fish - refers to fish that include salmon</li>
-<li>Habitat - refers to any habitat that includes salmon habitat</li>
-<li>Governance - refers to administrative processes and structure</li>
-</ol>
-</div>
-
-Scope 1 was assigned separately to sections with the specific salmon keywords. Scope 2-3 were assigned during the Management Domain and IUCN Threat assignment.
-
-### Assigning Clause Type from Keywords
+### Assigning Clause Types
 
 Similar the Management Domain assignment, we created a Clause Type keyword list to assess the nature or purposes of the clauses. Using language patterns within the legislation, we grouped Clause Type by:
 
@@ -287,6 +273,19 @@ if (length(clause_types) > 0) {
 }
 
 ```
+### Assigning Scope
+
+We developed a scope classification system to categorize the sections based on their relevance to Pacific salmon. The scope was determined by the specificity of the language used in the section. The Scope categories were defined as follows:
+<div style="margin-left: 30px; padding-left: 10px">
+<ol>
+<li>Salmon - refers to salmon specifically</li>
+<li>Fish - refers to fish that include salmon</li>
+<li>Habitat - refers to any habitat that includes salmon habitat</li>
+<li>Governance - refers to administrative processes and structure</li>
+</ol>
+</div>
+
+Scope 1 was assigned separately to sections with the specific salmon keywords. Scope 2-3 were assigned during the Management Domain and IUCN Threat assignment.
 
 # RESULTS
 
