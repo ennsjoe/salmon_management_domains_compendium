@@ -80,7 +80,7 @@ In this report, we present a framework to relate salmon threats with their legis
 
 # METHODS
 
-## Defining Management Domains
+## Defining Management Domain by IUCN Threat
 
 Management domains represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Since management domains are defined as a “separation of administrative concerns,” it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 13 specific management domains were delineated for the purpose of this exercise. The domains were developed to comprehensively encompass the legislative context, administrative functions, and anthropogenic threats related to Pacific salmon in British Columbia.
 
@@ -165,8 +165,6 @@ if (file.exists(image_path)) {
 }
 ```
 
-## Defining IUCN Threats
-
 ## Defining Clause Types
 
 ## Defining Scope
@@ -205,7 +203,7 @@ Through the CanLII website, the user may look up the keywords queried in each ac
 
 ### Parsing Legislation from HTML Files
 
-The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular management domain. Typological device structure and definitions were derived from the Government of Canada’s <a href=” https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html” style="color:#668899">“Legistics Paragraphing”</a> (Department of Justice Canada 2022). For the purpose of this review, we used the individual clause (Figure 2) as the sample unit for assignment into management domains and other attributes.  
+The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular management domain. Typological device structure and definitions were derived from the Government of Canada’s <a href="https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html" style="color:#668899">“Legistics Paragraphing”</a> (Department of Justice Canada 2022). For the purpose of this review, we used the individual clause (Figure 2) as the sample unit for assignment into management domains and other attributes.  
 
 ```{r legistics-paragraphing, echo=FALSE, results='asis'}
 library(here)
@@ -228,8 +226,34 @@ if (file.exists(image_path)) {
 Legislation presented on Canadian and British Columbian government websites--and corresponding HTML code--is structured such that each clause and subclause is separated individually as a paragraph element (<p>). HTML code for paragraph elements is generally consistent across legislation, but section, subsection, and heading elements are not. As shown in Figure 2, when we refer to a “clause” we are including subclauses, but also sections, subsections, and opening words (chapeau or umbrella) when they are stand-alone paragraph elements in the HTML. We parsed the HTML files using R and the <code>rvest</code> package to extract the text of each clause, then grouped by section and heading.
 
 ### Database Schema
-The parsed legislation was stored in a SQLite database with datatables legislation 
+The parsed legislation was stored in a SQLite database with datatables including:
+<div style="margin-left: 30px; padding-left: 10px">
+  <ul>
+  <li>Legislation Metadata Table
+  <ul>
+    <li> Jurisdiction</li>
+    <li> Act Name</li>
+    <li> Legislation Name</li>
+    <li> Legislation Type</li>
+    </ul></li>
+    <li>Paragraph Table
+<ul>
+<li>Section</li>
+<li>Heading</li>
+<li>Paragraph</li>
+</ul></li>
+    <li>Paragraph Label Table
+<ul>
+<li>Management Domain</li>
+<li>IUCN Level 2</li>
+<li>Clause Type</li>
+<li>Scope</li>
+</ul>
+</li>
+  </ul>
+</div>
 
+Storing the data as a database rather than one large spreadsheet allows for a more dynamic and versatile system for querying, while streamlining the parsing and collection process.
 
 ### Assigning Management Domains and IUCN Threats
 
