@@ -199,7 +199,7 @@ Through the CanLII website, the user may look up the keywords queried in each ac
 
 ### Parsing Legislation from HTML Files
 
-The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular management domain. For the purpose of the review, we used the individual clause as the sample unit for assignment into management domains and other corresponding attributes.
+The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular management domain. Typological device structure and definitions were derived from the Government of Canada’s <a href=” https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html” style="color:#668899">“Legistics Paragraphing”</a> (Department of Justice Canada 2022). For the purpose of this review, we used the individual clause (Figure 2) as the sample unit for assignment into management domains and other attributes.  
 
 ```{r legistics-paragraphing, echo=FALSE, results='asis'}
 library(here)
@@ -219,14 +219,11 @@ if (file.exists(image_path)) {
 }
 ```
 
-Legislation presented on federal and provincial websites, and corresponding HTML code, is stuctured 
+Legislation presented on Canadian and British Columbian government websites--and corresponding HTML code--is structured such that each clause and subclause is separated individually as a paragraph element (<p>). HTML code for paragraph elements is generally consistent across legislation, but section, subsection, and heading elements are not. As shown in Figure 2, when we refer to a “clause” we are including subclauses, but also sections, subsections, and opening words (chapeau or umbrella) when they are stand-alone paragraph elements in the HTML. We parsed the HTML files using R and the <code>rvest</code> package to extract the text of each clause, then grouped by section and heading.
 
+### Database Schema
+The parsed legislation was stored in a SQLite database with the following schema:
 
-We parsed the HTML files using R and the <code>rvest</code> package to extract the text of each subclause, then grouped by section and heading. Standard acro
-
-The text was then cleaned and standardized to remove any extraneous characters or formatting issues. 
-
-Each section was assigned a unique identifier, and metadata such as the act name, jurisdiction, and legislation type (act or regulation) were recorded.
 
 ### Assigning Management Domains and IUCN Threats from Keywords
 
@@ -591,6 +588,8 @@ Campbell ML, and Thomas VG. 2002. Constitutional impacts on conservation—effec
 
 Collins L, and Sossin L. 2019. Approach to constitutional principles and environmental discretion in Canada. UBC Law Review, 52(1): 293–343. [online]: Available from digitalcommons.osgoode.yorku.ca
 
+Department of Justice Canada. 2022. Legistics Paragraphing. Government of Canada. Accessed at: https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html in August 2025.
+
 Dufresne Y, and Ouellet C. 2019. Conceptualization, measurement and effects of positional issues in the Canadian electoral context. Heliyon, 5(4): e01453. <PMID:31025009>. <DOI:10.1016/j.heliyon>. 2019.e01453
 
 Kraus, D., Murphy, S., and Armitage, D. 2021. Ten bridges on the road to recovering Canada’s endangered species. <doi:10.1139/facets>.
@@ -609,7 +608,6 @@ Swerdfager, Trevor, and Andrea Olive. “Laws Matter: A Foundational Approach to
 
 Westwood AR, Otto SP, Mooers A, Darimont C, Hodges KE, Johnson C, et al. 2019. Protecting biodiversity in British Columbia: recommendations for developing species at risk legislation. FACETS, 4(1): 136–160. DOI: 10.1139/facets-2018-0042
 
-https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html
 :::
 
 <hr>
