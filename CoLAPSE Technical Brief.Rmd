@@ -835,14 +835,11 @@ section_summary <- section_data[
   .(
     DomainFilter = paste(unique(na.omit(management_domain)), collapse = ", "),
     Paragraphs = paste(
-      paste(unique(na.omit(Paragraph)), collapse = "<br><br>"),  # ✅ Only unique Paragraphs
+      paste(unique(na.omit(Paragraph)), collapse = "<br><br>"),
       "<br><br>",
-      "<div style='font-size: 0.9em; color: #333; background-color: #f9f9f9; padding: 8px; border-left: 4px solid #0074D9;'>",
+      "<div style='font-size: 0.85em; color: #333; background-color: #f9f9f9; padding: 8px; border-left: 4px solid #0074D9;'>",
       sprintf(
-        "<strong>management_domain:</strong> <span style='color: #0074D9;'>%s</span><br>
-         <strong>iucn_l2:</strong> <span style='color: #0074D9;'>%s</span><br>
-         <strong>clause_type:</strong> <span style='color: #0074D9;'>%s</span><br>
-         <strong>scope:</strong> <span style='color: #0074D9;'>%s</span>",
+        "<span style='color:#0074D9; font-weight:bold;'>Management Domain:</span> %s; <span style='color:#0074D9; font-weight:bold;'>IUCN Threat:</span> %s; <span style='color:#0074D9; font-weight:bold;'>Clause Type:</span> %s; <span style='color:#0074D9; font-weight:bold;'>Scope:</span> %s",
         htmlEscape(paste(unique(na.omit(management_domain)), collapse = ", ")),
         htmlEscape(paste(unique(na.omit(iucn_l2)), collapse = ", ")),
         htmlEscape(paste(unique(na.omit(clause_type)), collapse = ", ")),
@@ -855,7 +852,7 @@ section_summary <- section_data[
   by = .(Act, Legislation, HeadingSection)
 ]
 
-# Step 6: Render reactable with smaller font in Paragraphs column
+# Step 6: Render reactable with styled Paragraphs column
 reactable(
   section_summary,
   elementId = "act-legislation-summary-table",
@@ -882,11 +879,10 @@ reactable(
       html = TRUE,
       minWidth = 600,
       maxWidth = 1000,
-      style = list(fontSize = "0.85em")  # ✅ Smaller font for Paragraphs
+      style = list(fontSize = "0.85em")
     )
   )
 )
-
 ```
              
 <hr>
