@@ -20,12 +20,6 @@ body, h1, h2, h3, h4, h5, h6, p, li, td, th {
 }
 </style>
 
-<style>
-html, body {
-  background-color: #fffaf0 !important;
-}
-</style>
-
 ```{r read-legislation-db, message=FALSE, warning=FALSE, echo=FALSE}
 # Load required libraries
 library(DBI)
