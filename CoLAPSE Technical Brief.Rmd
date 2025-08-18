@@ -866,7 +866,7 @@ reactable(
     DomainFilter = colDef(
       name = "Management Domain",
       filterable = TRUE,
-      style = list(display = "none")  # Hide column but keep it filterable
+      show = FALSE  # ✅ Fully hides the column from display
     ),
     Paragraphs = colDef(name = "Paragraphs", html = TRUE, minWidth = 500)
   )
