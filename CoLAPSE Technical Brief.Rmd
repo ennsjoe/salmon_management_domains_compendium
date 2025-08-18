@@ -194,19 +194,15 @@ We focused our review on established Canadian federal and British Columbian prov
 
 The Canadian Legal Information Institute website, <a href="https://www.canlii.org/">CanLII</a>, provides an excellent resource for searching federal and provincial acts and regulations by keywords. We created a systematic process for querying legislation by:
 
+<div style="margin-left: 30px; padding-left: 10px">
 <ol>
-
 <li>querying Pacific salmon specific terms (salmon, chinook, sockeye, etc.), which we called "Type A Legislation,"</li>
-
 <li>extracting adjacent keywords from the Type A Legislation (word frequency analysis),</li>
-
 <li>querying new keywords and IUCN Threat keywords in CanLII to find "Type B Legislation" (doesn't mention salmon by name),</li>
-
 <li>filtering legislation regionally (excluding provinces other than BC), and</li>
-
 <li>downloading HTML files for relevant legislation directly from government websites.</li>
-
 </ol>
+</div>
 
 Through the CanLII website, the user may look up the keywords queried in each act and regulation chosen. This allows the user to quickly assess the context of the word in the legislation and determine if the section is relevant to Pacific salmon. The full list of legislation reviewed in this process is available in Appendix I.
 
@@ -238,7 +234,7 @@ The Management Domains and IUCN threats were assigned to each section based on a
 ### Assigning Scope
 
 We developed a scope classification system to categorize the sections based on their relevance to Pacific salmon. The scope was determined by the specificity of the language used in the section. The Scope categories were defined as follows:
-
+<div style="margin-left: 30px; padding-left: 10px">
 <ol>
 
 <li>Salmon - refers to salmon specifically</li>
