@@ -68,6 +68,8 @@ Resource conservation and stewardship in Canada is governed through a decentrali
 
 While legislation and programs may often operate on a sector-by-sector and individual resource basis, integrated stewardship relies on scale-appropriate planning and decision making (Ray et al 2021). The need for collaborative, transparent decision-making in salmon management is recognized throughout policies, plans, and initiatives, such as the Pacific Salmon Strategy Initiative and the Wild Salmon Policy. Successful conservation and rebuilding of Pacific salmon therefore requires coordination of activities across discrete administrative responsibilities and regulatory frameworks. However, such coordination requires adequate organizational capacity and systems for effective implementation to ensure that regulatory controls and mitigation activities address underlying threats and factors that limit capacity and reduce productivity.
 
+## Purpose and Objectives
+
 In this report, we present a framework to relate salmon threats with their legislative and regulatory context within British Columbia. We define discrete areas of administrative responsibility for Pacific salmon as “management domains” and conduct a review of legislation to assess the specificity or scope of each clause in relation to Pacific salmon. Our purpose for creating a management domains framework is to:
 
 <div style="margin-left: 30px; padding-left: 10px">
@@ -77,6 +79,16 @@ In this report, we present a framework to relate salmon threats with their legis
     <li>categorize discrete human activities by administrative concern to support conservation planning across jurisdictions.</li>
   </ul>
 </div>
+
+Objectives:
+<div style="margin-left: 30px; padding-left: 10px">
+<ol>
+<li>Create a process for linking Pacific salmon biology and ecology to legislation</li>
+<li>Assess legislation by categorization outputs</li>
+<li>Assess categorization outputs by current salmon management processes</li>
+</ol>
+</div>
+
 
 # METHODS
 
@@ -166,8 +178,56 @@ if (file.exists(image_path)) {
 ```
 
 ## Defining Clause Types
+Similar the Management Domain assignment, we created a Clause Type keyword list to assess the nature or purposes of the clauses. Using language patterns within the legislation, we grouped Clause Type by:
+
+```{r clause-type-list, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(DBI)
+library(RSQLite)
+library(here)
+
+# Define database path and confirm it exists
+db_path <- file.path(here("output"), "legislation.db")
+if (!file.exists(db_path)) stop("❌ Database file not found at: ", db_path)
+
+# Connect to the database
+conn <- dbConnect(SQLite(), dbname = db_path)
+
+# Retrieve unique clause_type values
+query <- "
+  SELECT DISTINCT clause_type
+  FROM provision_label_table
+  WHERE clause_type IS NOT NULL
+  ORDER BY clause_type
+"
+clause_types <- dbGetQuery(conn, query)$clause_type
+
+# Disconnect from the database
+dbDisconnect(conn)
+
+# Output as unordered HTML list
+if (length(clause_types) > 0) {
+  cat("<ul>")
+  cat(paste0("<li>", clause_types, "</li>", collapse = "\n"))
+  cat("</ul>")
+} else {
+  cat("<p>No clause types found in the database.</p>")
+}
+
+```
 
 ## Defining Scope
+
+We developed a scope classification system to categorize the sections based on their relevance to Pacific salmon. The scope was determined by the specificity of the language used in the section. The Scope categories were defined as follows:
+<div style="margin-left: 30px; padding-left: 10px">
+<ol>
+<li>Salmon - refers to salmon specifically</li>
+<li>Fish - refers to fish that include salmon</li>
+<li>Habitat - refers to any habitat that includes salmon habitat</li>
+<li>Governance - refers to administrative processes and structure</li>
+</ol>
+</div>
+
+Scope 1 was assigned separately to sections with the specific salmon keywords. Scope 2-3 were assigned during the Management Domain and IUCN Threat assignment.
 
 ## Categorization Process
 
@@ -261,55 +321,10 @@ The Management Domains and IUCN threats were assigned to each section based on a
 
 ### Assigning Clause Types
 
-Similar the Management Domain assignment, we created a Clause Type keyword list to assess the nature or purposes of the clauses. Using language patterns within the legislation, we grouped Clause Type by:
 
-```{r clause-type-list, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-library(DBI)
-library(RSQLite)
-library(here)
-
-# Define database path and confirm it exists
-db_path <- file.path(here("output"), "legislation.db")
-if (!file.exists(db_path)) stop("❌ Database file not found at: ", db_path)
-
-# Connect to the database
-conn <- dbConnect(SQLite(), dbname = db_path)
-
-# Retrieve unique clause_type values
-query <- "
-  SELECT DISTINCT clause_type
-  FROM provision_label_table
-  WHERE clause_type IS NOT NULL
-  ORDER BY clause_type
-"
-clause_types <- dbGetQuery(conn, query)$clause_type
-
-# Disconnect from the database
-dbDisconnect(conn)
-
-# Output as unordered HTML list
-if (length(clause_types) > 0) {
-  cat("<ul>")
-  cat(paste0("<li>", clause_types, "</li>", collapse = "\n"))
-  cat("</ul>")
-} else {
-  cat("<p>No clause types found in the database.</p>")
-}
-
-```
 ### Assigning Scope
 
-We developed a scope classification system to categorize the sections based on their relevance to Pacific salmon. The scope was determined by the specificity of the language used in the section. The Scope categories were defined as follows:
-<div style="margin-left: 30px; padding-left: 10px">
-<ol>
-<li>Salmon - refers to salmon specifically</li>
-<li>Fish - refers to fish that include salmon</li>
-<li>Habitat - refers to any habitat that includes salmon habitat</li>
-<li>Governance - refers to administrative processes and structure</li>
-</ol>
-</div>
 
-Scope 1 was assigned separately to sections with the specific salmon keywords. Scope 2-3 were assigned during the Management Domain and IUCN Threat assignment.
 
 # RESULTS
 
