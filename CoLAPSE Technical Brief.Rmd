@@ -74,19 +74,21 @@ This report outlines a framework and process to relate human activities that thr
 
 <div style="margin-left: 30px; padding-left: 10px">
 <ol>
-<li>Create a process to categorize specific legislation by threats to Pacific salmon</li>
-<li>Assess legislative factors by categorization outputs</li>
-<li>Assess current Pacific salmon management processes by categorization outputs</li>
+<li>create a process to categorize specific legislation by threats to Pacific salmon;</li>
+<li>assess legislative factors by categorization outputs; and</li>
+<li>assess current Pacific salmon management processes by categorization outputs.</li>
 </ol>
 </div>
+
+<br>
 
 # METHODS
 
 ## Categorizing Legislation by Threats to Salmon
 
-### Management Domains
-
 We define discrete areas of administrative responsibility for Pacific salmon as “management domains” and conduct a review of legislation to assess the specificity or scope of each clause in relation to Pacific salmon. 
+
+### Management Domains
 
 Management domains represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Since management domains are defined as a “separation of administrative concerns,” it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 12 specific management domains were delineated for the purpose of this exercise. The domains were developed to comprehensively encompass the legislative context, administrative functions, and anthropogenic threats related to Pacific salmon in British Columbia.
 
@@ -176,6 +178,7 @@ if (file.exists(image_path)) {
 ### Scope
 
 We developed a scope classification system to categorize the sections based on their relevance to Pacific salmon. The scope was determined by the specificity of the language used in the section. The Scope categories were defined as follows:
+
 <div style="margin-left: 30px; padding-left: 10px">
 <ol>
 <li>Salmon - refers to salmon specifically</li>
@@ -241,10 +244,11 @@ if (file.exists(image_path)) {
 }
 ```
 
-Legislation presented on Canadian and British Columbian government websites--and corresponding HTML code--is structured such that each clause and subclause is separated individually as a paragraph element (<p>). HTML code for paragraph elements is generally consistent across legislation, but section, subsection, and heading elements are not. As shown in Figure 2, when we refer to a “clause” we are including subclauses, but also sections, subsections, and opening words (chapeau or umbrella) when they are stand-alone paragraph elements in the HTML. We parsed the HTML files using R and the <code>rvest</code> package to extract the text of each clause, then grouped by section and heading.
+Legislation presented on Canadian and British Columbian government websites--and corresponding HTML code--is structured such that each clause and subclause is separated individually as a paragraph element. HTML code for paragraph elements is generally consistent across legislation, but section, subsection, and heading elements are not. As shown in Figure 2, when we refer to a “clause” we are including subclauses, but also sections, subsections, and opening words (chapeau or umbrella) when they are stand-alone paragraph elements in the HTML. We parsed the HTML files using R and the <code>rvest</code> package to extract the text of each clause, then grouped by section and heading.
 
 ### Database Schema
 The parsed legislation was stored in a SQLite database with datatables including:
+
 <div style="margin-left: 30px; padding-left: 10px">
   <ul>
   <li>Legislation Metadata Table
@@ -566,51 +570,77 @@ ggplot(domain_counts, aes(x = reorder(management_domain, Provision_Count), y = P
 
 ## Summary of IUCN Threats
 
-```{r label-count-by-iucn-l2, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
+```{r plot-provision-count-by-iucn, message=FALSE, warning=FALSE, echo=FALSE}
 # Load required libraries
 library(DBI)
 library(RSQLite)
+library(data.table)
 library(here)
-library(dplyr)
 library(ggplot2)
 
-# Define path to the SQLite database
-db_path <- file.path(here("output"), "legislation.db")
-
 # Connect to the database
+db_path <- here("output", "legislation.db")
 conn <- dbConnect(SQLite(), dbname = db_path)
 
-# Query relevant columns from provision_label_table and legislation_metadata
-iucn_data <- dbGetQuery(conn, "
-  SELECT p.label_id, p.iucn_l2, m.jurisdiction
-  FROM provision_label_table p
-  JOIN LegislationMetadata m ON p.provision_id = m.legislation_id
-  WHERE p.iucn_l2 IS NOT NULL
-")
+# Read tables
+legislation_metadata   <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
+legislation_paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
+provision_labels       <- as.data.table(dbReadTable(conn, "provision_label_table"))
 
 # Disconnect from the database
 dbDisconnect(conn)
 
-# Summarize label counts by iucn_l2 and jurisdiction
-iucn_counts <- iucn_data %>%
-  group_by(iucn_l2, jurisdiction) %>%
-  summarise(Label_Count = n(), .groups = "drop") %>%
-  arrange(desc(Label_Count))
+# Step 1: Join metadata with paragraphs to get jurisdiction per provision
+provision_with_jurisdiction <- merge(
+  legislation_paragraphs[, .(provision_id, legislation_id)],
+  legislation_metadata[, .(legislation_id, jurisdiction)],
+  by = "legislation_id",
+  all.x = TRUE
+)
 
-# Generate stacked horizontal bar chart
-ggplot(iucn_counts, aes(x = reorder(iucn_l2, Label_Count), y = Label_Count, fill = jurisdiction)) +
-  geom_bar(stat = "identity", color = "black", width = 0.9) +
-  coord_flip() +
-  scale_fill_manual(values = c("Federal" = "#996666", "Provincial" = "#668899")) +
+# Step 2: Join with provision labels to get iucn_l2
+labeled_provisions <- merge(
+  provision_labels[, .(provision_id, iucn_l2)],
+  provision_with_jurisdiction,
+  by = "provision_id",
+  all.x = TRUE
+)
+
+# Filter out missing IUCN categories
+labeled_provisions <- labeled_provisions[!is.na(iucn_l2) & iucn_l2 != ""]
+
+# Aggregate counts
+iucn_jurisdiction_counts <- labeled_provisions[
+  , .(provision_count = uniqueN(provision_id)), by = .(iucn_l2, jurisdiction)
+]
+
+# Define custom colors for jurisdictions
+jurisdiction_colors <- c(
+  "Federal" = "#996666",
+  "Provincial" = "#668899"
+)
+
+# Plot stacked bar chart with vertical x-axis labels
+ggplot(iucn_jurisdiction_counts, aes(x = reorder(iucn_l2, -provision_count), y = provision_count, fill = jurisdiction)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = jurisdiction_colors) +
   labs(
-    title = "Label Count by IUCN Threat (Split by Jurisdiction)",
-    x = "IUCN Level 2 Threat",
-    y = "Label Count",
+    title = "Stacked Count of Distinct Provisions by IUCN Level 2 and Jurisdiction",
+    x = "IUCN Level 2 Threat Category",
+    y = "Count of Clauses",
     fill = "Jurisdiction"
   ) +
   theme_minimal() +
-  theme(axis.text.y = element_text(size = 12))
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+    legend.position = c(0.85, 0.85),
+    legend.background = element_rect(fill = "white", color = "gray80"),
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 9)
+  )
+
 ```
+<p><em>Figure 1. Stacked bar chart showing alignment of Pacific salmon threat factors (IUCN Level 2) with jurisdictional distribution of legislative provisions.</em></p>
 
 ## Summary of Clause Types
 
@@ -1009,3 +1039,15 @@ ggplot(domain_counts, aes(x = reorder(management_domain, provision_count), y = p
 <hr>
 
 ## External Resources
+
+https://www.canlii.org/
+
+https://laws-lois.justice.gc.ca/eng/acts/
+
+https://www.bclaws.gov.bc.ca/civix/content/complete/statreg/?xsl=/templates/browse.xsl
+
+IUCN Direct Threats Classification 4.0
+
+https://docs.google.com/spreadsheets/d/1yfm7ua9hQJpjycx6FYQJ6Jy5LA4bP0XP61EW3-sX8ZY/edit?gid=179026760#gid=179026760
+
+
