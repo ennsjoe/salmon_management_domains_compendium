@@ -360,6 +360,66 @@ if (nrow(scope_count) > 0) {
 }
 
 ```
+
+```{r bubble-graph-legislation-scope, echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(data.table)
+
+# Step 1: Convert scope to numeric
+scope_map <- c("1 - Salmon" = 1, "2 - Fish" = 2, "3 - Habitat" = 3, "4 - Governance" = 4)
+provision_labels[, scope_numeric := scope_map[scope]]
+
+# Step 2: Join provision_labels with paragraphs to get legislation_id and Section
+label_paragraphs <- merge(
+  provision_labels[, .(provision_id, scope_numeric)],
+  legislation_paragraphs[, .(provision_id, Section, legislation_id)],
+  by = "provision_id"
+)
+
+# Step 3: Aggregate metrics per legislation_id
+bubble_data <- label_paragraphs[, .(
+  avg_scope = mean(scope_numeric, na.rm = TRUE),
+  provision_count = uniqueN(provision_id),
+  section_count = uniqueN(Section)
+), by = legislation_id]
+
+# Step 4: Join with metadata to get legislation_name and jurisdiction
+bubble_data <- merge(
+  bubble_data,
+  legislation_metadata[, .(legislation_id, legislation_name, jurisdiction)],
+  by = "legislation_id"
+)
+
+# Step 5: Define custom colors for jurisdictions
+jurisdiction_colors <- c(
+  "Federal" = "#996666",
+  "Provincial" = "#668899"
+)
+
+# Step 6: Plot bubble chart with flipped axes and custom colors
+ggplot(bubble_data, aes(
+  x = provision_count,
+  y = avg_scope,
+  size = section_count,
+  color = jurisdiction,
+  label = legislation_name
+)) +
+  geom_point(alpha = 0.7) +
+  geom_text(vjust = -0.8, hjust = 0.5, size = 3) +
+  scale_size_area(max_size = 20) +
+  scale_color_manual(values = jurisdiction_colors) +
+  labs(
+    title = "Provision Count vs Average Scope by Legislation",
+    x = "Count of Distinct Provisions",
+    y = "Average Scope (Numeric)",
+    size = "Distinct Sections"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+
+```
+
 Using the '1 - Salmon' scope for Provisions shows the Type A Legislation along with a comparison of the number of Provisions by Jurisdiction. The results are shown in the bar chart below, which displays the number of Provisions for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of Provisions across different legislative frameworks.
 
 ```{r unique-provision-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
@@ -888,6 +948,47 @@ reactable(
 <hr>
 
 ## Example: The Fisheries Act
+
+```{r fisheries-act-management-domain, echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(data.table)
+
+# Step 1: Get legislation_id for the Fisheries Act
+fisheries_id <- legislation_metadata[
+  legislation_name == "Fisheries Act (R.S.C., 1985, c. F-14)",
+  legislation_id
+]
+
+# Step 2: Get provision_ids linked to that legislation
+fisheries_provision_ids <- legislation_paragraphs[
+  legislation_id == fisheries_id,
+  provision_id
+]
+
+# Step 3: Filter provision_labels for those provision_ids
+fisheries_labels <- provision_labels[
+  provision_id %in% fisheries_provision_ids
+]
+
+# Step 4: Count provision_id by management_domain
+domain_counts <- fisheries_labels[
+  !is.na(management_domain),
+  .(provision_count = uniqueN(provision_id)),
+  by = management_domain
+][order(-provision_count)]
+
+# Step 5: Plot
+ggplot(domain_counts, aes(x = reorder(management_domain, provision_count), y = provision_count)) +
+  geom_bar(stat = "identity", fill = "#996666") +
+  coord_flip() +
+  labs(
+    title = "Provision Count by Management Domain",
+    subtitle = "Fisheries Act (R.S.C., 1985, c. F-14)",
+    x = "Management Domain",
+    y = "Count of Distinct Provisions"
+  ) +
+  theme_minimal()
+```
 
 <hr>
 
