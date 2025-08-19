@@ -73,8 +73,16 @@ format_act_name <- function(act_name) {
 }
 
 extract_legislation_name <- function(html_file) {
+  # Extract raw text from the title node
   legislation_name <- html_file %>% html_nodes("h1.HeadTitle, div#title h2") %>% html_text(trim = TRUE)
+  
+  # Clean and isolate the title portion before any parentheses
   legislation_name <- ifelse(length(legislation_name) > 0, clean_text(legislation_name[1]), "Unknown Legislation")
+  
+  # Remove anything in parentheses and trailing whitespace
+  legislation_name <- gsub("\\s*\\(.*?$", "", legislation_name)
+  legislation_name <- trimws(legislation_name)
+  
   return(legislation_name)
 }
 
