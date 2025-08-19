@@ -9,7 +9,7 @@ output:
     number_sections: true
     self_contained: true
     fig_caption: true
-    code_folding: hide
+    code_folding: none
     link_citations: true
 documentclass: article
 ---
@@ -94,7 +94,7 @@ We define discrete areas of administrative responsibility for Pacific salmon as 
 
 ### Management Domains
 
-Management domains represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Since management domains are defined as a “separation of administrative concerns,” it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 12 specific management domains were delineated for the purpose of this exercise. The domains were developed to comprehensively encompass the legislative context, administrative functions, and anthropogenic threats related to Pacific salmon in British Columbia.
+"Management Domains" represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Since management domains are defined as a “separation of administrative concerns,” it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 12 specific management domains were delineated for the purpose of this exercise. The domains were developed to comprehensively encompass the legislative context, administrative functions, and anthropogenic threats related to Pacific salmon in British Columbia.
 
 ```{r management-domain-grid, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 # Load required libraries
@@ -214,7 +214,7 @@ Assessment of legislative context is prone to subjective interpretation. The inc
 
 <br>
 
-### Legislation Accumulation and Review
+#### Legislation Accumulation and Review
 
 We focused our review on established Canadian federal and British Columbian provincial legislation (acts and regulations) for inclusion in the management domain process. We did not include specific departmental policy frameworks and processes throughout this exercise unless specifically referenced in the statutes because these executive strategies are prone to changes in the political, administrative, and budgetary landscape. Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were not included explicitly. Although this other legislation is pivotal in the management of Pacific salmon, considering this regionally diverse administration was outside the scope of this legislative review in terms of feasibility. However .
 
@@ -234,7 +234,7 @@ Through the CanLII website, the user may look up the keywords queried in each ac
 
 <br>
 
-### Parsing Legislation from HTML Files
+#### Parsing Legislation from HTML Files
 
 The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular management domain. Typological device structure and definitions were derived from the Government of Canada’s <a href="https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html" style="color:#668899">“Legistics Paragraphing”</a> (Department of Justice Canada 2022). For the purpose of this review, we used the individual clause (Figure 2) as the sample unit for assignment into management domains and other attributes.  
 
@@ -260,7 +260,7 @@ Legislation presented on Canadian and British Columbian government websites--and
 
 <br>
 
-### Database Schema
+#### Database Schema
 The parsed legislation was stored in a SQLite database with datatables including:
 
 <div style="margin-left: 30px; padding-left: 10px">
@@ -691,55 +691,71 @@ ggplot(iucn_jurisdiction_counts, aes(x = reorder(iucn_l2, -provision_count), y =
 
 ### Summary of Clause Types
 
-```{r label-count-by-clause-type, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
+```{r plot-clause-type-heatmap, message=FALSE, warning=FALSE, echo=FALSE}
 # Load required libraries
 library(DBI)
 library(RSQLite)
+library(data.table)
 library(here)
-library(dplyr)
 library(ggplot2)
 
-# Define path to the SQLite database
-db_path <- file.path(here("output"), "legislation.db")
-
 # Connect to the database
+db_path <- here("output", "legislation.db")
 conn <- dbConnect(SQLite(), dbname = db_path)
 
-# Query relevant columns from provision_label_table and legislation_metadata
-clause_data_raw <- dbGetQuery(conn, "
-  SELECT p.label_id, p.clause_type, m.legislation_name
-  FROM provision_label_table p
-  JOIN LegislationMetadata m ON p.provision_id = m.legislation_id
-  WHERE p.clause_type IS NOT NULL
-")
+# Read tables
+legislation_metadata   <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
+legislation_paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
+provision_labels       <- as.data.table(dbReadTable(conn, "provision_label_table"))
 
 # Disconnect from the database
 dbDisconnect(conn)
 
-# Summarize label counts and distinct legislation counts by clause_type
-clause_data <- clause_data_raw %>%
-  group_by(clause_type) %>%
-  summarise(
-    Label_Count = n(),
-    Legislation_Count = n_distinct(legislation_name),
-    .groups = "drop"
-  ) %>%
-  arrange(desc(Label_Count))
+# Step 1: Join metadata with paragraphs to get legislation context
+provision_context <- merge(
+  legislation_paragraphs[, .(provision_id, legislation_id)],
+  legislation_metadata[, .(legislation_id, jurisdiction)],
+  by = "legislation_id",
+  all.x = TRUE
+)
 
-# Generate dot plot
-ggplot(clause_data, aes(x = clause_type, y = Label_Count)) +
-  geom_point(aes(size = Legislation_Count), color = "#889966", alpha = 0.7) +
-  scale_size_continuous(range = c(3, 10)) +
+# Step 2: Join with provision labels to get clause_type and management_domain
+labeled_provisions <- merge(
+  provision_labels[, .(provision_id, clause_type, management_domain)],
+  provision_context,
+  by = "provision_id",
+  all.x = TRUE
+)
+
+# Filter out missing values
+labeled_provisions <- labeled_provisions[
+  !is.na(clause_type) & clause_type != "" &
+  !is.na(management_domain) & management_domain != ""
+]
+
+# Aggregate counts
+heatmap_data <- labeled_provisions[
+  , .(provision_count = uniqueN(provision_id)), by = .(clause_type, management_domain)
+]
+
+# Plot heat map
+ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = provision_count)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "#f0f0f0", high = "#003366") +
   labs(
-    title = "Label Count by Clause Type (Dot Size = Number of Legislation Names)",
+    title = "Heat Map of Clause Type vs. Management Domain",
     x = "Clause Type",
-    y = "Label Count",
-    size = "Legislation Count"
+    y = "Management Domain",
+    fill = "Provision Count"
   ) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank()
+  )
 
+
+```
 <p><em>Figure X. _______.</em></p>
 
 <br>
