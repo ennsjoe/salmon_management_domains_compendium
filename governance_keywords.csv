@@ -1,6 +1,5 @@
 ﻿management_domain,keyword,scope
 Species Status and Assessment,biodiversity,4 - Governance
-Spatial Designation,classified waters,4 - Governance
 Spatial Designation,conservation area,4 - Governance
 Spatial Designation,conservation areas,4 - Governance
 Spatial Designation,ecological,4 - Governance
@@ -10,7 +9,6 @@ Spatial Designation,environmental,4 - Governance
 Species Status and Assessment,extinct,4 - Governance
 Species Status and Assessment,extirpated,4 - Governance
 Species Status and Assessment,fish stock,4 - Governance
-Spatial Designation,fisheries waters,4 - Governance
 Spatial Designation,internal waters,4 - Governance
 Spatial Designation,land reserve,4 - Governance
 Spatial Designation,land use,4 - Governance
@@ -21,7 +19,6 @@ Spatial Designation,non tidal,4 - Governance
 Spatial Designation,park community,4 - Governance
 Spatial Designation,park reserve,4 - Governance
 Spatial Designation,park reserves,4 - Governance
-Spatial Designation,park waters,4 - Governance
 Spatial Designation,sensitive area,4 - Governance
 Spatial Designation,sensitive areas,4 - Governance
 Spatial Designation,significant area,4 - Governance
@@ -31,3 +28,4 @@ Species Status and Assessment,threatened,4 - Governance
 Spatial Designation,tidal ,4 - Governance
 Spatial Designation,wilderness area,4 - Governance
 Species Status and Assessment,wildlife,4 - Governance
+Spatial Designation,waters,4 - Governance

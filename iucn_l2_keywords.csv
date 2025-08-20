@@ -33,13 +33,15 @@
 7.2 Dams & Water Management / Use,channelization
 9.1 Water-Borne & Other Effluent Pollution ,chemical
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",chemical attractant
-11.1 Changes in Physical & Chemical Regimes,CO2
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",commercial fisheries
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",conservation stamp
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",control of fisheries
 4.2 Utility & Service Lines,crossing
 2.4 Marine & Freshwater Aquaculture,cultivated 
 7.2 Dams & Water Management / Use,culvert
 7.2 Dams & Water Management / Use,dam
 7.2 Dams & Water Management / Use,dams
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",death of fish
 9.1 Water-Borne & Other Effluent Pollution ,deleterious
 7.2 Dams & Water Management / Use,desalination
 7.2 Dams & Water Management / Use,dike
@@ -48,6 +50,7 @@
 8.4 Pathogens,disease
 9.1 Water-Borne & Other Effluent Pollution ,disposal
 7.2 Dams & Water Management / Use,diversion
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",drag seine
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",dressed
 7.2 Dams & Water Management / Use,drinking
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",drive fish
@@ -75,9 +78,11 @@
 7.2 Dams & Water Management / Use,fish passage
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fish under
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fisher
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",fisheries management
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fishery
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fishing
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fishway
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",fishwheel
 7.2 Dams & Water Management / Use,flood control
 11.3 Changes in Precipitation & Hydrological Regimes,flood hazard
 7.2 Dams & Water Management / Use,flood plain
@@ -98,6 +103,7 @@
 9.1 Water-Borne & Other Effluent Pollution ,herbicide
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",hooks
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",incidental catch
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",inshore fisheries
 8.1 Invasive Non-Native / Alien Species,introduced
 8.1 Invasive Non-Native / Alien Species,invasive
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",kinds of fish
@@ -108,16 +114,18 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",lead sinker
 9.1 Water-Borne & Other Effluent Pollution ,leakage
 7.2 Dams & Water Management / Use,levee
-"5.4 Fishing, Harvesting & Controlling Aquatic Species",limit
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",live fish
 "5.3 Logging, Harvesting & Controlling Trees",logging
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",lure
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",management of fisheries
 9.1 Water-Borne & Other Effluent Pollution ,manure
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",may fish
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",mesh size
 8.1 Invasive Non-Native / Alien Species,mussel
 2.4 Marine & Freshwater Aquaculture,net pen
 8.1 Invasive Non-Native / Alien Species,nonferal
 8.1 Invasive Non-Native / Alien Species,non-native
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",not angle
 2.4 Marine & Freshwater Aquaculture,nuisance fish
 9.1 Water-Borne & Other Effluent Pollution ,nutrient
 8.2 Problematic Native Species,outbreak
@@ -129,7 +137,6 @@
 2.2 Wood & Pulp Plantations,plantation
 2.4 Marine & Freshwater Aquaculture,pond
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",possess fish
-"5.4 Fishing, Harvesting & Controlling Aquatic Species",possession
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",protection of fish
 2.2 Wood & Pulp Plantations,pulpwood
 7.2 Dams & Water Management / Use,pumping
@@ -139,14 +146,16 @@
 "2.3 Terrestrial Animal Farming, Ranching & Herding",range stewardship
 "2.3 Terrestrial Animal Farming, Ranching & Herding",range use
 7.2 Dams & Water Management / Use,rearing area
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",relevant fisheries
 6.3 Other Human Disturbances,research
 7.2 Dams & Water Management / Use,reservoir
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",ring net
 7.2 Dams & Water Management / Use,riparian
 7.2 Dams & Water Management / Use,river
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",roe
 9.1 Water-Borne & Other Effluent Pollution ,salinity
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",salmon tag
-11.3 Changes in Precipitation & Hydrological Regimes,sea level]
+11.3 Changes in Precipitation & Hydrological Regimes,sea level
 9.1 Water-Borne & Other Effluent Pollution ,sedimentation
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",seine
 9.1 Water-Borne & Other Effluent Pollution ,septic
@@ -160,6 +169,8 @@
 7.2 Dams & Water Management / Use,storm water
 7.2 Dams & Water Management / Use,stream
 7.2 Dams & Water Management / Use,streamside
+9.1 Water-Borne & Other Effluent Pollution ,substances
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",sustainability of fisheries
 9.1 Water-Borne & Other Effluent Pollution ,tailings
 11.3 Changes in Precipitation & Hydrological Regimes,temperature sensitive
 9.1 Water-Borne & Other Effluent Pollution ,toxic
