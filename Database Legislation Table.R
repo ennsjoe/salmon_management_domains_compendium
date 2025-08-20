@@ -121,8 +121,7 @@ for (i in seq_along(html_files)) {
   tryCatch({
     raw_text <- readLines(file, warn = FALSE, encoding = "UTF-8")
     html_file <- read_html(paste(raw_text, collapse = "\n"))
-    
-    legislation_name <- extract_legislation_name(html_file)
+    legislation_name <- gsub("_", " ", tools::file_path_sans_ext(basename(file)))
     jurisdiction <- extract_jurisdiction(html_file)
     legislation_type <- extract_legislation_type(legislation_name)
     act_name <- extract_act_name(html_file, legislation_name, legislation_type)
