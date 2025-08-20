@@ -359,96 +359,298 @@ if (length(clause_types) > 0) {
 
 # RESULTS
 
-## Legislation by Salmon Threats
+A summary of results from the iterations of the automated compendium are shown below. The complete compendium can also be queried using the <code>legislation.db</code> SQLite database, which is available in the <code>output</code> folder of this repository. 
 
-### Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CoLAPSE)
+## Legislation by Threats to Salmon (Management Domains)
 
-A summary of results from the initial iterations of the automated compendium are shown below. The compendium is available as an R object, which can be used to query specific sections and subsections by Management Domain, IUCN Threat, Scope, and Clause Type. The full compendium is available in the <code>Full_legislation_compendium.rds</code> file and can be loaded into R using the <code>readRDS()</code> function. The compendium is also available as a CSV file for download from GitHub.
+The keyword matching categorization process was applied to 196 acts and regulations chosen as relevant to salmon and habitat management. Broken down to the clause level, the categorization process matched the following totals by scope:
 
 ```{r scope-provision-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+# 📦 Load libraries
 library(DBI)
 library(RSQLite)
 library(here)
-library(dplyr)
+library(data.table)
 
-# Define path to the SQLite database
+# 📁 Define path to the SQLite database
 db_path <- file.path(here("output"), "legislation.db")
 if (!file.exists(db_path)) stop("❌ Database file not found at: ", db_path)
 
-# Connect to the database
+# 🔌 Connect to the database
 conn <- dbConnect(SQLite(), dbname = db_path)
 
-# Query scope and provision_id from the provision_label_table
+# 📤 Query scope and provision_id from provision_label_table
 query <- "
   SELECT scope, provision_id
   FROM provision_label_table
   WHERE scope IS NOT NULL
 "
-scope_data <- dbGetQuery(conn, query)
+scope_data <- data.table(dbGetQuery(conn, query))
 
-# Disconnect from the database
+# 🔌 Disconnect from the database
 dbDisconnect(conn)
 
-# Tally unique provision_id counts by scope
-scope_count <- scope_data %>%
-  group_by(scope) %>%
-  summarise(count = n_distinct(provision_id), .groups = "drop") %>%
-  arrange(scope)
+# 📊 Tally unique provision_id counts by scope
+scope_count <- scope_data[, .(count = uniqueN(provision_id)), by = scope][order(scope)]
 
-# Print formatted output
-cat("<h3>Clause Count by Scope</h3>")
+# 📈 Calculate total clause count
+total_count <- sum(scope_count$count)
+
+# 🖨️ Print formatted HTML output
 if (nrow(scope_count) > 0) {
-  cat("<ul style='list-style-type: none; padding: 0; margin: 0;'>")
+  cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
   for (i in seq_len(nrow(scope_count))) {
-    cat(paste0("<li><strong>", scope_count$scope[i], ":</strong> ", scope_count$count[i], " Clauses</li>\n"))
+    cat(sprintf("<li><strong>%s:</strong> %d clauses</li>\n", scope_count$scope[i], scope_count$count[i]))
   }
-  cat("</ul>")
+  cat(sprintf("<li style='margin-top: 10px;'><strong>Total Clauses:</strong> %d</li>\n", total_count))
+  cat("</ul>\n")
 } else {
-  cat("<p>No scope provisions found in the database.</p>")
+  cat("<p>No scope provisions found in the database.</p>\n")
 }
 
 ```
 
 <br>
 
-### Scope
+All 12 management domains were identified within the 196 statutes. Figure X below shows a count of clauses by management domain split by jurisdiction. Pollution, Spatial Designation, and Water Use and Watercourse Modifications show the highest number of clauses specific to those categories. Climate Change and Natural Disasters received the fewest matches. 
 
-```{r bubble-graph-legislation-scope, echo=FALSE, message=FALSE, warning=FALSE}
-library(ggplot2)
+```{r provision-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
+# 📦 Load required libraries
+library(DBI)
+library(RSQLite)
+library(here)
 library(data.table)
+library(ggplot2)
 
-# Step 1: Convert scope to numeric
-scope_map <- c("1 - Salmon" = 1, "2 - Fish" = 2, "3 - Habitat" = 3, "4 - Governance" = 4)
+# 📁 Define path to the SQLite database
+db_path <- file.path(here("output"), "legislation.db")
+if (!file.exists(db_path)) stop("❌ Database file not found at: ", db_path)
+
+# 🔌 Connect to the database
+conn <- dbConnect(SQLite(), dbname = db_path)
+
+# 🗂️ Load relevant tables as data.tables
+provision_labels <- data.table(dbGetQuery(conn, "
+  SELECT provision_id, management_domain
+  FROM provision_label_table
+  WHERE management_domain IS NOT NULL
+"))
+
+provision_table <- data.table(dbGetQuery(conn, "
+  SELECT provision_id, legislation_id
+  FROM LegislationParagraphs
+"))
+
+legislation_metadata <- data.table(dbGetQuery(conn, "
+  SELECT legislation_id, jurisdiction
+  FROM LegislationMetadata
+"))
+
+# 🔌 Disconnect from the database
+dbDisconnect(conn)
+
+# 🔗 Join tables
+domain_data <- merge(provision_labels, provision_table, by = "provision_id", all.x = TRUE)
+domain_data <- merge(domain_data, legislation_metadata, by = "legislation_id", all.x = TRUE)
+
+# 📊 Summarize provision counts
+domain_counts <- domain_data[, .(
+  Provision_Count = uniqueN(provision_id)
+), by = .(management_domain, jurisdiction)][order(-Provision_Count)]
+
+# 🎨 Create stacked horizontal bar chart
+ggplot(domain_counts, aes(
+  x = reorder(management_domain, Provision_Count),
+  y = Provision_Count,
+  fill = jurisdiction
+)) +
+  geom_bar(stat = "identity", color = "black", width = 0.8) +
+  coord_flip() +
+  scale_fill_manual(
+    values = c("Federal" = "#996666", "Provincial" = "#668899", "Unknown" = "#999999"),
+    guide = guide_legend(reverse = TRUE)
+  ) +
+  labs(
+    title = "Provision Count by Management Domain",
+    x = "Management Domain",
+    y = "Clause Count",
+    fill = "Jurisdiction"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text.y = element_text(size = 12),
+    axis.text.x = element_text(size = 12),
+    plot.title = element_text(size = 16, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_text(size = 13),
+    legend.text = element_text(size = 12)
+  )
+
+```
+
+<p><em>Figure X. Count of clauses matched by management domains stacked by jurisdiction.</em></p>
+
+<br>
+
+IUCN Level 2 categories are more specific to salmon threats, and the categorization process matched to 18 categories. Figure X below shows a count of clauses matched to IUCN Level 2 categories broken down by jurisdiction. Pollution, water management, and fisheries management were the top three, and it should be noted that Spatial Designation as a management domain does not occur within the IUCN Level 2 threat categories. 
+
+```{r plot-provision-count-by-iucn, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=8}
+# 📦 Load required libraries
+library(DBI)
+library(RSQLite)
+library(data.table)
+library(here)
+library(ggplot2)
+
+# 🔌 Connect to the database
+db_path <- here("output", "legislation.db")
+conn <- dbConnect(SQLite(), dbname = db_path)
+
+# 🗂️ Read tables
+legislation_metadata   <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
+legislation_paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
+provision_labels       <- as.data.table(dbReadTable(conn, "provision_label_table"))
+
+# 🔌 Disconnect from the database
+dbDisconnect(conn)
+
+# 🔗 Step 1: Join metadata with paragraphs to get jurisdiction per provision
+provision_with_jurisdiction <- merge(
+  legislation_paragraphs[, .(provision_id, legislation_id)],
+  legislation_metadata[, .(legislation_id, jurisdiction)],
+  by = "legislation_id",
+  all.x = TRUE
+)
+
+# 🔗 Step 2: Join with provision labels to get iucn_l2
+labeled_provisions <- merge(
+  provision_labels[, .(provision_id, iucn_l2)],
+  provision_with_jurisdiction,
+  by = "provision_id",
+  all.x = TRUE
+)
+
+# 🧹 Filter out missing IUCN categories
+labeled_provisions <- labeled_provisions[!is.na(iucn_l2) & iucn_l2 != ""]
+
+# 📊 Aggregate counts
+iucn_jurisdiction_counts <- labeled_provisions[
+  , .(provision_count = uniqueN(provision_id)), by = .(iucn_l2, jurisdiction)
+]
+
+# 🎨 Define custom colors for jurisdictions
+jurisdiction_colors <- c(
+  "Federal" = "#996666",
+  "Provincial" = "#668899"
+)
+
+# 📈 Plot horizontal stacked bar chart
+ggplot(iucn_jurisdiction_counts, aes(
+  y = reorder(iucn_l2, provision_count),
+  x = provision_count,
+  fill = jurisdiction
+)) +
+  geom_bar(stat = "identity", color = "black", width = 0.8) +
+  scale_fill_manual(values = jurisdiction_colors) +
+  labs(
+    title = "Clause Count by IUCN Level 2 Threats",
+    x = "Clause Count",
+    y = "IUCN Level 2 Threat Category",
+    fill = "Jurisdiction"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    axis.text.y = element_text(size = 11),
+    axis.text.x = element_text(size = 11),
+    plot.title = element_text(size = 16, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_text(size = 11),
+    legend.text = element_text(size = 10)
+  )
+```
+
+<p><em>Figure X. Stacked bar chart showing alignment of Pacific salmon threat factors (IUCN Level 2) with jurisdictional distribution of legislative provisions.</em></p>
+
+<br>
+
+Scope as a numerical value allows for analysis of clause count by statute specific to salmon. Many of the collected legislation contain broad scope regulation (Figure X), while few statutes contain legislation specific to salmon with a high clause count. 
+
+```{r bubble-graph-legislation-scope, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8}
+# 📦 Load libraries
+library(DBI)
+library(RSQLite)
+library(here)
+library(data.table)
+library(ggplot2)
+
+# 📁 Define path to the SQLite database
+db_path <- file.path(here("output"), "legislation.db")
+if (!file.exists(db_path)) stop("❌ Database file not found at: ", db_path)
+
+# 🔌 Connect to the database
+conn <- dbConnect(SQLite(), dbname = db_path)
+
+# 🗂️ Load relevant tables as data.tables
+provision_labels <- data.table(dbGetQuery(conn, "
+  SELECT provision_id, scope, management_domain
+  FROM provision_label_table
+  WHERE scope IS NOT NULL
+"))
+
+legislation_paragraphs <- data.table(dbGetQuery(conn, "
+  SELECT provision_id, Section, legislation_id
+  FROM LegislationParagraphs
+"))
+
+legislation_metadata <- data.table(dbGetQuery(conn, "
+  SELECT legislation_id, legislation_name, jurisdiction
+  FROM LegislationMetadata
+"))
+
+# 🔌 Disconnect from the database
+dbDisconnect(conn)
+
+# 🧮 Step 1: Convert scope to numeric
+scope_map <- c(
+  "1 - Salmon" = 1,
+  "2 - Fish" = 2,
+  "3 - Habitat" = 3,
+  "4 - Governance" = 4
+)
+
 provision_labels[, scope_numeric := scope_map[scope]]
 
-# Step 2: Join provision_labels with paragraphs to get legislation_id and Section
+# 🔗 Step 2: Join with legislation_paragraphs to get Section and legislation_id
 label_paragraphs <- merge(
   provision_labels[, .(provision_id, scope_numeric)],
   legislation_paragraphs[, .(provision_id, Section, legislation_id)],
-  by = "provision_id"
+  by = "provision_id",
+  all.x = TRUE
 )
 
-# Step 3: Aggregate metrics per legislation_id
+# 📊 Step 3: Aggregate metrics per legislation
 bubble_data <- label_paragraphs[, .(
   avg_scope = mean(scope_numeric, na.rm = TRUE),
   provision_count = uniqueN(provision_id),
   section_count = uniqueN(Section)
 ), by = legislation_id]
 
-# Step 4: Join with metadata to get legislation_name and jurisdiction
+# 🧾 Step 4: Join with metadata
 bubble_data <- merge(
   bubble_data,
   legislation_metadata[, .(legislation_id, legislation_name, jurisdiction)],
-  by = "legislation_id"
+  by = "legislation_id",
+  all.x = TRUE
 )
 
-# Step 5: Define custom colors for jurisdictions
+# 🎨 Step 5: Define custom colors
 jurisdiction_colors <- c(
   "Federal" = "#996666",
-  "Provincial" = "#668899"
+  "Provincial" = "#668899",
+  "Unknown" = "#999999"
 )
 
-# Step 6: Plot bubble chart with flipped axes and custom colors
+# 📈 Step 6: Plot bubble chart
 ggplot(bubble_data, aes(
   x = provision_count,
   y = avg_scope,
@@ -457,24 +659,29 @@ ggplot(bubble_data, aes(
   label = legislation_name
 )) +
   geom_point(alpha = 0.7) +
-  geom_text(vjust = -0.8, hjust = 0.5, size = 3) +
-  scale_size_area(max_size = 20) +
-  scale_color_manual(values = jurisdiction_colors) +
+  geom_text(vjust = -0.8, hjust = 0.5, size = 3.5, check_overlap = TRUE) +
+  scale_size_area(max_size = 18) +
+  scale_color_manual(values = jurisdiction_colors, na.value = "#CCCCCC") +
   labs(
-    title = "Provision Count vs Average Scope by Legislation",
-    x = "Count of Distinct Provisions",
-    y = "Average Scope (Numeric)",
-    size = "Distinct Sections"
+    title = "Clause Count vs Average Scope by Legislation",
+    x = "Total Clauses",
+    y = "Average Scope",
+    color = "Jurisdiction"
   ) +
-  theme_minimal() +
-  theme(legend.position = "none")
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(face = "bold", size = 16),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12)
+  )
 
 
 ```
 
 <p><em>Figure X. ___________________.</em></p>
 
-Using the '1 - Salmon' scope for Provisions shows the Type A Legislation along with a comparison of the number of Provisions by Jurisdiction. The results are shown in the bar chart below, which displays the number of Provisions for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of Provisions across different legislative frameworks.
+Using the '1 - Salmon' scope for clauses shows the Type A Legislation along with a comparison of the number of Provisions by Jurisdiction. The results are shown in the bar chart below, which displays the number of Provisions for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of Provisions across different legislative frameworks.
 
 ```{r unique-provision-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
 library(DBI)
@@ -543,151 +750,92 @@ if (nrow(summary_data) > 0) {
 
 <br>
 
-## Summary of Management Domains
-Including all scopes, the number of Provisions by Management Domain is shown in the bar chart below. The chart displays the number of Provisions for each Management Domain, which represents the administrative areas of concern for Pacific salmon management. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of Provisions across different legislative frameworks.
-
-```{r provision-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
-# Load required libraries
+```{r unique-provision-count-habitat-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
 library(DBI)
 library(RSQLite)
 library(here)
 library(dplyr)
 library(ggplot2)
 
-# Define path to the SQLite database
-db_path <- file.path(here("output"), "legislation.db")
-
 # Connect to the database
-conn <- dbConnect(SQLite(), dbname = db_path)
+conn <- dbConnect(SQLite(), dbname = file.path(here("output"), "legislation.db"))
 
 # Load tables
 provision_labels <- dbGetQuery(conn, "
-  SELECT provision_id, management_domain
-  FROM provision_label_table
-  WHERE management_domain IS NOT NULL
+  SELECT provision_id, scope 
+  FROM provision_label_table 
+  WHERE scope = '3 - Habitat'
 ")
-
 provision_table <- dbGetQuery(conn, "
-  SELECT provision_id, legislation_id
+  SELECT provision_id, legislation_id 
   FROM LegislationParagraphs
 ")
-
 legislation_metadata <- dbGetQuery(conn, "
-  SELECT legislation_id, jurisdiction
+  SELECT legislation_id, legislation_name, jurisdiction 
   FROM LegislationMetadata
 ")
 
-# Disconnect from the database
+# Disconnect
 dbDisconnect(conn)
 
-# Join tables properly
-domain_data <- provision_labels %>%
+# Join and summarize
+salmon_data <- provision_labels %>%
   inner_join(provision_table, by = "provision_id") %>%
   inner_join(legislation_metadata, by = "legislation_id")
 
-# Summarize unique provision counts by management_domain and jurisdiction
-domain_counts <- domain_data %>%
-  group_by(management_domain, jurisdiction) %>%
-  summarise(Provision_Count = n_distinct(provision_id), .groups = "drop") %>%
-  arrange(desc(Provision_Count))
+summary_data <- salmon_data %>%
+  group_by(legislation_name, jurisdiction) %>%
+  summarise(Unique_Provisions = n_distinct(provision_id), .groups = "drop") %>%
+  arrange(desc(Unique_Provisions))
 
-# Generate stacked horizontal bar chart
-ggplot(domain_counts, aes(x = reorder(management_domain, Provision_Count), y = Provision_Count, fill = jurisdiction)) +
-  geom_bar(stat = "identity", color = "black", width = 0.9) +
-  coord_flip() +
-  scale_fill_manual(values = c("Federal" = "#996666", "Provincial" = "#668899")) +
-  labs(
-    title = "Provision Count by Management Domain",
-    x = "Management Domain",
-    y = "Provision Count",
-    fill = "Jurisdiction"
-  ) +
-  theme_minimal(base_size = 14 * font_scale) +
+# Font scaling for dashboard readability
+font_scale <- 1.2
+
+# Plot or fallback message
+if (nrow(summary_data) > 0) {
+  ggplot(summary_data, aes(x = Unique_Provisions, y = reorder(legislation_name, Unique_Provisions), fill = jurisdiction)) +
+    geom_bar(stat = "identity", color = "black") +
+    scale_fill_manual(values = c("Federal" = "#996666", "Provincial" = "#668899")) +
+    labs(
+      title = "Provision Count by Legislation (Scope: 3 - Habitat)",
+      x = "Number of Provisions",
+      y = "Legislation",
+      fill = "Jurisdiction"
+    ) +
+    theme_minimal(base_size = 14 * font_scale) +
     theme(
       axis.text.y = element_text(size = 14 * font_scale),
       axis.text.x = element_text(size = 14 * font_scale),
       plot.title = element_text(size = 14 * font_scale, face = "bold")
     )
+} else {
+  cat("<p style='color: red;'>⚠️ No provisions found for Scope '3 - Habitat'.</p>")
+}
 ```
 
 <p><em>Figure X. ___________________.</em></p>
 
+
+## Legislative Factors (Clause Types)
+
 <br>
 
-## Summary of IUCN Threats
+## Current Processes for Salmon Management (CUs and RAMs)
 
-```{r plot-provision-count-by-iucn, message=FALSE, warning=FALSE, echo=FALSE}
-# Load required libraries
-library(DBI)
-library(RSQLite)
-library(data.table)
-library(here)
-library(ggplot2)
+### Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CoLAPSE)
 
-# Connect to the database
-db_path <- here("output", "legislation.db")
-conn <- dbConnect(SQLite(), dbname = db_path)
 
-# Read tables
-legislation_metadata   <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
-legislation_paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
-provision_labels       <- as.data.table(dbReadTable(conn, "provision_label_table"))
 
-# Disconnect from the database
-dbDisconnect(conn)
 
-# Step 1: Join metadata with paragraphs to get jurisdiction per provision
-provision_with_jurisdiction <- merge(
-  legislation_paragraphs[, .(provision_id, legislation_id)],
-  legislation_metadata[, .(legislation_id, jurisdiction)],
-  by = "legislation_id",
-  all.x = TRUE
-)
 
-# Step 2: Join with provision labels to get iucn_l2
-labeled_provisions <- merge(
-  provision_labels[, .(provision_id, iucn_l2)],
-  provision_with_jurisdiction,
-  by = "provision_id",
-  all.x = TRUE
-)
+<br>
 
-# Filter out missing IUCN categories
-labeled_provisions <- labeled_provisions[!is.na(iucn_l2) & iucn_l2 != ""]
 
-# Aggregate counts
-iucn_jurisdiction_counts <- labeled_provisions[
-  , .(provision_count = uniqueN(provision_id)), by = .(iucn_l2, jurisdiction)
-]
 
-# Define custom colors for jurisdictions
-jurisdiction_colors <- c(
-  "Federal" = "#996666",
-  "Provincial" = "#668899"
-)
+## Summary of Management Domains
 
-# Plot stacked bar chart with vertical x-axis labels
-ggplot(iucn_jurisdiction_counts, aes(x = reorder(iucn_l2, -provision_count), y = provision_count, fill = jurisdiction)) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = jurisdiction_colors) +
-  labs(
-    title = "Stacked Count of Distinct Provisions by IUCN Level 2 and Jurisdiction",
-    x = "IUCN Level 2 Threat Category",
-    y = "Count of Clauses",
-    fill = "Jurisdiction"
-  ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-    legend.position = c(0.85, 0.85),
-    legend.background = element_rect(fill = "white", color = "gray80"),
-    legend.title = element_text(size = 10),
-    legend.text = element_text(size = 9)
-  )
+<br>
 
-```
-
-<p><em>Figure X. Stacked bar chart showing alignment of Pacific salmon threat factors (IUCN Level 2) with jurisdictional distribution of legislative provisions.</em></p>
 
 <br>
 
@@ -1131,4 +1279,4 @@ IUCN Direct Threats Classification 4.0
 
 https://docs.google.com/spreadsheets/d/1yfm7ua9hQJpjycx6FYQJ6Jy5LA4bP0XP61EW3-sX8ZY/edit?gid=179026760#gid=179026760
 
-
+ 
