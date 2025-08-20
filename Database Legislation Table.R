@@ -12,13 +12,6 @@
 # Outputs:
 #   A SQLite database file named "legislation.db" in the "output" directory,
 #   containing a table with metadata about the legislation.
-# Notes:
-#  - The script uses the `here` package to manage file paths dynamically.
-#  - It extracts information such as legislation ID, jurisdiction, type, act name,
-#    and legislation name from the HTML files.
-#  - The script handles both provincial and federal legislation based on metadata.
-#  - It normalizes text to remove special characters and formats act names.
-#  - The script uses `data.table` for efficient data manipulation and `RSQLite` for database operations.
 ################################################################################
 
 ## Set Working Directory ----
@@ -60,30 +53,29 @@ legislation_table <- data.table(
 
 ## Utility Functions ----
 clean_text <- function(text) {
+  text <- stri_enc_toutf8(text)  # Convert to UTF-8 safely
   text <- stri_trans_general(text, "Latin-ASCII")
   text <- gsub("[^[:print:]]", "", text)
   return(trimws(text))
 }
 
 format_act_name <- function(act_name) {
-  act_name <- gsub("\\s*\\(.*?\\)|\\s*\\[.*?\\]", "", act_name)
+  act_name <- gsub(r"(\s*\(.*?\))", "", act_name, perl = TRUE)
+  act_name <- gsub(r"(\s*
+
+\[.*?\]
+
+)", "", act_name, perl = TRUE)
   act_name <- tolower(act_name)
   act_name <- gsub("(^|\\s)([a-z])", "\\1\\U\\2", act_name, perl = TRUE)
   return(trimws(act_name))
 }
 
 extract_legislation_name <- function(html_file) {
-  # Extract raw text from the title node
   legislation_name <- html_file %>% html_nodes("h1.HeadTitle, div#title h2") %>% html_text(trim = TRUE)
-  
-  # Clean and isolate the title portion before any parentheses
   legislation_name <- ifelse(length(legislation_name) > 0, clean_text(legislation_name[1]), "Unknown Legislation")
-  
-  # Remove anything in parentheses and trailing whitespace
-  legislation_name <- gsub("\\s*\\(.*?$", "", legislation_name)
-  legislation_name <- trimws(legislation_name)
-  
-  return(legislation_name)
+  legislation_name <- gsub(r"(\s*\(.*?$)", "", legislation_name, perl = TRUE)
+  return(trimws(legislation_name))
 }
 
 extract_jurisdiction <- function(html_file) {
@@ -118,24 +110,35 @@ extract_act_name <- function(html_file, legislation_name, legislation_type) {
   return(act_name)
 }
 
+## Track problematic files ----
+bad_files <- character()
+
 ## Process Each HTML File ----
 for (i in seq_along(html_files)) {
   file <- html_files[i]
   legislation_id <- i
-  html_file <- read_html(file)
   
-  legislation_name <- extract_legislation_name(html_file)
-  jurisdiction <- extract_jurisdiction(html_file)
-  legislation_type <- extract_legislation_type(legislation_name)
-  act_name <- extract_act_name(html_file, legislation_name, legislation_type)
-  
-  legislation_table <- rbind(legislation_table, data.table(
-    legislation_id = legislation_id,
-    jurisdiction = jurisdiction,
-    legislation_type = legislation_type,
-    act_name = act_name,
-    legislation_name = legislation_name
-  ), fill = TRUE)
+  tryCatch({
+    raw_text <- readLines(file, warn = FALSE, encoding = "UTF-8")
+    html_file <- read_html(paste(raw_text, collapse = "\n"))
+    
+    legislation_name <- extract_legislation_name(html_file)
+    jurisdiction <- extract_jurisdiction(html_file)
+    legislation_type <- extract_legislation_type(legislation_name)
+    act_name <- extract_act_name(html_file, legislation_name, legislation_type)
+    
+    legislation_table <- rbind(legislation_table, data.table(
+      legislation_id = legislation_id,
+      jurisdiction = jurisdiction,
+      legislation_type = legislation_type,
+      act_name = act_name,
+      legislation_name = legislation_name
+    ), fill = TRUE)
+    
+  }, error = function(e) {
+    message(sprintf("Error processing file %s: %s", file, e$message))
+    bad_files <<- c(bad_files, file)
+  })
 }
 
 ## Save to SQLite Database ----
@@ -146,3 +149,11 @@ db_path <- file.path(output_dir, "legislation.db")
 conn <- dbConnect(SQLite(), dbname = db_path)
 dbWriteTable(conn, "LegislationMetadata", legislation_table, overwrite = TRUE)
 dbDisconnect(conn)
+
+## Save list of bad files ----
+if (length(bad_files) > 0) {
+  writeLines(bad_files, file.path(output_dir, "bad_html_files.txt"))
+  cat("Some files failed to process. See 'bad_html_files.txt' for details.\n")
+} else {
+  cat("All files processed successfully.\n")
+}

@@ -42,7 +42,7 @@ conn <- dbConnect(SQLite(), dbname = db_path)
 provision_table <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
 
 ## Load Keyword Tables ----
-management_domain_threat_table <- fread(here("managament_domain_threat_table.csv"))
+management_domain_threat_table <- fread(here("management_domain_threat_table.csv"))
 clause_type_keywords <- fread(here("clause_type_keywords.csv"), colClasses = c("keyword" = "character", "clause_type" = "character"))
 iucn_l2_keywords <- fread(here("iucn_l2_keywords.csv"), colClasses = c("keyword" = "character", "iucn_l2" = "character"))
 salmon_scope_keywords <- fread(here("salmon_scope_keywords.csv"), colClasses = c("keyword" = "character", "scope" = "character"))
