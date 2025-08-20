@@ -94,7 +94,13 @@ Legislation governs human activity, which in turn impacts Pacific salmon populat
 
 ### Management Domains
 
-"Management Domains" represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Since management domains are defined as a “separation of administrative concerns,” it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 12 specific management domains were delineated for the purpose of this exercise. The domains were developed to comprehensively encompass the legislative context, administrative functions, and anthropogenic threats related to Pacific salmon in British Columbia.
+**Start with 4 H's
+
+**Then explain IUCN Threats
+
+**Then define Management Domains
+
+Management domains represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Since management domains are defined as a “separation of administrative concerns,” it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 12 specific management domains were delineated for the purpose of this exercise. The domains were developed to comprehensively encompass the legislative context, administrative functions, and anthropogenic threats related to Pacific salmon in British Columbia.
 
 ```{r management-domain-grid, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 # Load required libraries
@@ -357,7 +363,7 @@ if (length(clause_types) > 0) {
 
 ### Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CoLAPSE)
 
-A summary of results from the initial iterations of the automated compendium are shown below. As the keywords become less specific to salmon, the number of Provisions increases. The compendium is available as an R object, which can be used to query specific sections and subsections by Management Domain, IUCN Threat, Scope, and Clause Type. The full compendium is available in the <code>Full_legislation_compendium.rds</code> file and can be loaded into R using the <code>readRDS()</code> function. The compendium is also available as a CSV file for download from GitHub.
+A summary of results from the initial iterations of the automated compendium are shown below. The compendium is available as an R object, which can be used to query specific sections and subsections by Management Domain, IUCN Threat, Scope, and Clause Type. The full compendium is available in the <code>Full_legislation_compendium.rds</code> file and can be loaded into R using the <code>readRDS()</code> function. The compendium is also available as a CSV file for download from GitHub.
 
 ```{r scope-provision-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -390,11 +396,11 @@ scope_count <- scope_data %>%
   arrange(scope)
 
 # Print formatted output
-cat("<h3>Provision Count by Scope</h3>")
+cat("<h3>Clause Count by Scope</h3>")
 if (nrow(scope_count) > 0) {
   cat("<ul style='list-style-type: none; padding: 0; margin: 0;'>")
   for (i in seq_len(nrow(scope_count))) {
-    cat(paste0("<li><strong>", scope_count$scope[i], ":</strong> ", scope_count$count[i], " Provisions</li>\n"))
+    cat(paste0("<li><strong>", scope_count$scope[i], ":</strong> ", scope_count$count[i], " Clauses</li>\n"))
   }
   cat("</ul>")
 } else {
@@ -402,8 +408,6 @@ if (nrow(scope_count) > 0) {
 }
 
 ```
-
-<p><em>Figure X. ___________________.</em></p>
 
 <br>
 
