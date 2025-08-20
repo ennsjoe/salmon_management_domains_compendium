@@ -88,7 +88,7 @@ This report outlines a framework and process to relate human activities that thr
 
 ## Categorizing Legislation by Threats to Salmon
 
-We define discrete areas of administrative responsibility for Pacific salmon as “management domains” and conduct a review of legislation to assess the specificity or scope of each clause in relation to Pacific salmon. 
+Legislation governs human activity, which in turn impacts Pacific salmon population and habitat. Federal and provincial acts and regulations in British Columbia might be designed to address one broad category of human activity; however, this activity can cover many aspects of salmon management. For example, the provincial Forest and Range Practices Act is specific to forestry practices and planning, along with cattle ranging practices, but in terms of salmon threats, these activities impact many aspects including stream hydrology, water temperature, effluent, riparian habitat destruction, watercourse changes from road infrastructure, and the spread of invasive species. To better categorize legislation aligned with salmon threats and create a “buffer” between biological management and the regulatory context, this study defines discrete areas of administrative responsibility for Pacific salmon as “management domains.”
 
 <br>
 
@@ -741,12 +741,12 @@ heatmap_data <- labeled_provisions[
 # Plot heat map
 ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = provision_count)) +
   geom_tile(color = "white") +
-  scale_fill_gradient(low = "#f0f0f0", high = "#003366") +
+  scale_fill_gradient(low = "#f0f0f0", high = "#668899") +
   labs(
-    title = "Heat Map of Clause Type vs. Management Domain",
+    title = "",
     x = "Clause Type",
     y = "Management Domain",
-    fill = "Provision Count"
+    fill = "Clause Count"
   ) +
   theme_minimal() +
   theme(
