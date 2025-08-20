@@ -5,6 +5,25 @@
 # Purpose / Description:
 #   This script processes legislative provisions stored in a SQLite database,
 #   matches keywords from various categories, and creates a labeled provision table.
+# Dependencies: DBI, RSQLite, data.table, here, stringr, quanteda
+# Execution: Run in RStudio or via Rscript; ensure working directory is project root
+# Inputs:
+#   - A SQLite database file named "legislation.db" in the "output" directory,
+#     containing a table "LegislationParagraphs" with legislative provisions.
+#   - CSV files containing keyword tables:
+#       - "management_domain_threat_table.csv"
+#       - "clause_type_keywords.csv"
+#       - "iucn_l2_keywords.csv"
+#       - "salmon_scope_keywords.csv"
+#       - "governance_keywords.csv"
+# Outputs:
+#   - A SQLite database file named "legislation.db" in the "output" directory,
+#     containing a new table "provision_label_table" with labeled provisions.
+# Notes:
+#  - The script uses the `here` package to manage file paths dynamically.
+#  - It cleans and preprocesses the text of legislative provisions.
+#  - The script uses the `quanteda` package for text tokenization and phrase compounding.
+#  - It matches keywords from various categories to label the provisions.
 ################################################################################
 
 ## Set Working Directory ----
@@ -19,25 +38,15 @@ library(quanteda)
 ## Connect to SQLite and load provision_table ----
 db_path <- file.path(here("output"), "legislation.db")
 conn <- dbConnect(SQLite(), dbname = db_path)
+
 provision_table <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
 
 ## Load Keyword Tables ----
 management_domain_threat_table <- fread(here("management_domain_threat_table.csv"))
-clause_type_keywords <- fread(here("clause_type_keywords.csv"))
-iucn_l2_keywords <- fread(here("iucn_l2_keywords.csv"))
-salmon_scope_keywords <- fread(here("salmon_scope_keywords.csv"))
-governance_keywords <- fread(here("governance_keywords.csv"))
-
-## Normalize Text Function ----
-normalize_text <- function(x) {
-  str_squish(tolower(str_replace_all(x, "[[:punct:]]", " ")))
-}
-
-## Normalize Keyword Columns ----
-clause_type_keywords[, keyword := normalize_text(keyword)]
-iucn_l2_keywords[, keyword := normalize_text(keyword)]
-salmon_scope_keywords[, keyword := normalize_text(keyword)]
-governance_keywords[, keyword := normalize_text(keyword)]
+clause_type_keywords <- fread(here("clause_type_keywords.csv"), colClasses = c("keyword" = "character", "clause_type" = "character"))
+iucn_l2_keywords <- fread(here("iucn_l2_keywords.csv"), colClasses = c("keyword" = "character", "iucn_l2" = "character"))
+salmon_scope_keywords <- fread(here("salmon_scope_keywords.csv"), colClasses = c("keyword" = "character", "scope" = "character"))
+governance_keywords <- fread(here("governance_keywords.csv"), colClasses = c("keyword" = "character", "management_domain" = "character", "scope" = "character"))
 
 ## Save Keyword Tables to Database ----
 dbWriteTable(conn, "management_domain_threat_table", management_domain_threat_table, overwrite = TRUE)
@@ -47,13 +56,13 @@ dbWriteTable(conn, "salmon_scope_keywords", salmon_scope_keywords, overwrite = T
 dbWriteTable(conn, "governance_keywords", governance_keywords, overwrite = TRUE)
 
 ## Clean and preprocess Paragraph text ----
-cleaned_paragraphs <- normalize_text(provision_table$Paragraph)
+cleaned_paragraphs <- str_squish(tolower(str_replace_all(provision_table$Paragraph, "[[:punct:]]", " ")))
 
 ## Tokenize and compound phrases ----
-ct_phrases <- phrase(clause_type_keywords$keyword)
-iucn_phrases <- phrase(iucn_l2_keywords$keyword)
-scope_phrases <- phrase(salmon_scope_keywords$keyword)
-gov_phrases <- phrase(governance_keywords$keyword)
+ct_phrases <- phrase(tolower(clause_type_keywords$keyword))
+iucn_phrases <- phrase(tolower(iucn_l2_keywords$keyword))
+scope_phrases <- phrase(tolower(salmon_scope_keywords$keyword))
+gov_phrases <- phrase(tolower(governance_keywords$keyword))
 
 corpus_obj <- corpus(data.frame(text = cleaned_paragraphs))
 tokens_obj <- tokens(corpus_obj, remove_punct = TRUE)
@@ -69,13 +78,13 @@ match_labels_iucn <- function(tokens, provision_id, cleaned_paragraph) {
   matches <- list()
   
   for (kw in iucn_l2_keywords$keyword) {
-    if (kw %in% tokens) {
+    if (tolower(kw) %in% gsub("_", " ", tokens)) {
       row_iucn <- iucn_l2_keywords[keyword == kw]
       
       clause_type <- NA_character_
       clause_type_keyword <- NA_character_
       for (ct_kw in clause_type_keywords$keyword) {
-        if (ct_kw %in% tokens) {
+        if (tolower(ct_kw) %in% gsub("_", " ", tokens)) {
           row_ct <- clause_type_keywords[keyword == ct_kw]
           clause_type <- row_ct$clause_type
           clause_type_keyword <- ct_kw
@@ -85,7 +94,7 @@ match_labels_iucn <- function(tokens, provision_id, cleaned_paragraph) {
       
       scope_val <- NA_character_
       for (sc_kw in salmon_scope_keywords$keyword) {
-        if (sc_kw %in% tokens) {
+        if (tolower(sc_kw) %in% gsub("_", " ", tokens)) {
           row_scope <- salmon_scope_keywords[keyword == sc_kw]
           scope_val <- row_scope$scope
           break
@@ -134,22 +143,18 @@ provision_label_table <- merge(
 provision_label_table[is.na(scope), scope := fallback_scope]
 provision_label_table[, fallback_scope := NULL]
 
-## Identify unmatched provision_ids ----
-matched_ids <- unique(provision_label_table$provision_id)
-unmatched_indices <- which(!(provision_table$provision_id %in% matched_ids))
-
-## Match governance keywords for unmatched rows ----
+## Match governance keywords for all rows ----
 match_labels_governance <- function(tokens, provision_id, cleaned_paragraph) {
   matches <- list()
   
   for (kw in governance_keywords$keyword) {
-    if (kw %in% tokens) {
+    if (tolower(kw) %in% gsub("_", " ", tokens)) {
       row_gov <- governance_keywords[keyword == kw]
       
       clause_type <- NA_character_
       clause_type_keyword <- NA_character_
       for (ct_kw in clause_type_keywords$keyword) {
-        if (ct_kw %in% tokens) {
+        if (tolower(ct_kw) %in% gsub("_", " ", tokens)) {
           row_ct <- clause_type_keywords[keyword == ct_kw]
           clause_type <- row_ct$clause_type
           clause_type_keyword <- ct_kw
@@ -173,12 +178,12 @@ match_labels_governance <- function(tokens, provision_id, cleaned_paragraph) {
   return(rbindlist(matches))
 }
 
-## Apply governance matching ----
+## Apply governance matching to all provisions ----
 governance_matches <- rbindlist(
   mapply(match_labels_governance,
-         token_list[unmatched_indices],
-         provision_table$provision_id[unmatched_indices],
-         cleaned_paragraphs[unmatched_indices],
+         token_list,
+         provision_table$provision_id,
+         cleaned_paragraphs,
          SIMPLIFY = FALSE)
 )
 
