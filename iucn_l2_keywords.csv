@@ -36,6 +36,7 @@
 11.1 Changes in Physical & Chemical Regimes,CO2
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",conservation stamp
 4.2 Utility & Service Lines,crossing
+2.4 Marine & Freshwater Aquaculture,cultivated 
 7.2 Dams & Water Management / Use,culvert
 7.2 Dams & Water Management / Use,dam
 7.2 Dams & Water Management / Use,dams
@@ -61,6 +62,7 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fin fish
 2.4 Marine & Freshwater Aquaculture,finfish
 7.2 Dams & Water Management / Use,fish barrier
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",fish caught
 2.4 Marine & Freshwater Aquaculture,fish feed
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fish finder
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fish for
@@ -71,11 +73,10 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fish lock
 2.4 Marine & Freshwater Aquaculture,fish meal
 7.2 Dams & Water Management / Use,fish passage
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",fish under
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fisher
-"5.4 Fishing, Harvesting & Controlling Aquatic Species",fisheries
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fishery
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fishing
-"5.4 Fishing, Harvesting & Controlling Aquatic Species",fishing guide
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fishway
 7.2 Dams & Water Management / Use,flood control
 11.3 Changes in Precipitation & Hydrological Regimes,flood hazard
@@ -97,10 +98,10 @@
 9.1 Water-Borne & Other Effluent Pollution ,herbicide
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",hooks
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",incidental catch
-"5.4 Fishing, Harvesting & Controlling Aquatic Species",incidental catch
 8.1 Invasive Non-Native / Alien Species,introduced
 8.1 Invasive Non-Native / Alien Species,invasive
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",kinds of fish
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",landing of fish
 10.1 Geological Events,landslide
 9.1 Water-Borne & Other Effluent Pollution ,leaching
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",lead jig
@@ -112,10 +113,12 @@
 "5.3 Logging, Harvesting & Controlling Trees",logging
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",lure
 9.1 Water-Borne & Other Effluent Pollution ,manure
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",may fish
 8.1 Invasive Non-Native / Alien Species,mussel
 2.4 Marine & Freshwater Aquaculture,net pen
 8.1 Invasive Non-Native / Alien Species,nonferal
 8.1 Invasive Non-Native / Alien Species,non-native
+2.4 Marine & Freshwater Aquaculture,nuisance fish
 9.1 Water-Borne & Other Effluent Pollution ,nutrient
 8.2 Problematic Native Species,outbreak
 7.2 Dams & Water Management / Use,passage of fish
@@ -130,6 +133,7 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",protection of fish
 2.2 Wood & Pulp Plantations,pulpwood
 7.2 Dams & Water Management / Use,pumping
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",quantities of fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",quota
 "2.3 Terrestrial Animal Farming, Ranching & Herding",range practice
 "2.3 Terrestrial Animal Farming, Ranching & Herding",range stewardship
@@ -142,7 +146,7 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",roe
 9.1 Water-Borne & Other Effluent Pollution ,salinity
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",salmon tag
-11.3 Changes in Precipitation & Hydrological Regimes,sea-level
+11.3 Changes in Precipitation & Hydrological Regimes,sea level]
 9.1 Water-Borne & Other Effluent Pollution ,sedimentation
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",seine
 9.1 Water-Borne & Other Effluent Pollution ,septic
@@ -163,9 +167,9 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",trolling
 8.4 Pathogens,virus
 9.1 Water-Borne & Other Effluent Pollution ,waste
+7.2 Dams & Water Management / Use,water manager
 9.1 Water-Borne & Other Effluent Pollution ,water quality
 7.2 Dams & Water Management / Use,water supply
 7.2 Dams & Water Management / Use,water use
 7.2 Dams & Water Management / Use,watershed
 7.2 Dams & Water Management / Use,wetland
-7.2 Dams & Water Management / Use,water manager
