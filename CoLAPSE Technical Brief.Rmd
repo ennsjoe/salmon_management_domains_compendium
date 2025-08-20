@@ -471,7 +471,7 @@ ggplot(domain_counts, aes(
     guide = guide_legend(reverse = TRUE)
   ) +
   labs(
-    title = "Provision Count by Management Domain",
+    title = "Clause Count by Management Domain",
     x = "Management Domain",
     y = "Clause Count",
     fill = "Jurisdiction"
@@ -730,7 +730,7 @@ if (nrow(summary_data) > 0) {
     geom_bar(stat = "identity", color = "black") +
     scale_fill_manual(values = c("Federal" = "#996666", "Provincial" = "#668899")) +
     labs(
-      title = "Provision Count by Legislation (Scope: 1 - Salmon)",
+      title = "Clause Count by Legislation (Scope: 1 - Salmon)",
       x = "Number of Provisions",
       y = "Legislation",
       fill = "Jurisdiction"
