@@ -51,6 +51,7 @@
 9.1 Water-Borne & Other Effluent Pollution ,disposal
 7.2 Dams & Water Management / Use,diversion
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",drag seine
+7.3 Earth & Sediment Management,dredge
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",dressed
 7.2 Dams & Water Management / Use,drinking
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",drive fish
@@ -113,7 +114,7 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",lead jig
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",lead sinker
 9.1 Water-Borne & Other Effluent Pollution ,leakage
-7.2 Dams & Water Management / Use,levee
+7.3 Earth & Sediment Management,levee
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",live fish
 "5.3 Logging, Harvesting & Controlling Trees",logging
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",lure
@@ -150,7 +151,7 @@
 6.3 Other Human Disturbances,research
 7.2 Dams & Water Management / Use,reservoir
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",ring net
-7.2 Dams & Water Management / Use,riparian
+7.5 Biological System Management,riparian
 7.2 Dams & Water Management / Use,river
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",roe
 9.1 Water-Borne & Other Effluent Pollution ,salinity
@@ -166,13 +167,13 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",sport fishing
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",sportfish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",stock
-7.2 Dams & Water Management / Use,storm water
+1.1 Residential Areas,storm water
 7.2 Dams & Water Management / Use,stream
 7.2 Dams & Water Management / Use,streamside
 9.1 Water-Borne & Other Effluent Pollution ,substances
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",sustainability of fisheries
 9.1 Water-Borne & Other Effluent Pollution ,tailings
-11.3 Changes in Precipitation & Hydrological Regimes,temperature sensitive
+11.2 Changes in Temperature Regimes,temperature sensitive
 9.1 Water-Borne & Other Effluent Pollution ,toxic
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",trawl
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",trolling
