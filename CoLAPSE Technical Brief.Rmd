@@ -6,7 +6,7 @@ output:
   scientific::html:
     toc: true
     toc_float: true
-    number_sections: true
+    number_sections: false
     self_contained: true
     fig_caption: true
     code_folding: none
@@ -76,9 +76,9 @@ This report outlines a framework and process to relate human activities that thr
 
 <div style="margin-left: 30px; padding-left: 10px">
 <ol>
-<li>create a process to categorize specific legislation by threats to Pacific salmon;</li>
-<li>assess legislative factors by categorization outputs; and</li>
-<li>assess current Pacific salmon management processes by categorization outputs.</li>
+<li>create a process to categorize specific legislation by anthropogenic threats to Pacific salmon;</li>
+<li>assess legislative factors by threat categorization; and</li>
+<li>connect studied biological and ecological concerns in a current salmon management context.</li>
 </ol>
 </div>
 
@@ -86,7 +86,7 @@ This report outlines a framework and process to relate human activities that thr
 
 # METHODS
 
-## Categorizing Legislation by Threats to Salmon
+## Categorizing Legislation by Anthrogogenic Threats to Salmon
 
 Legislation governs human activity, which in turn impacts Pacific salmon population and habitat. Federal and provincial acts and regulations in British Columbia might be designed to address one broad category of human activity; however, this activity can cover many aspects of salmon management. For example, the provincial Forest and Range Practices Act is specific to forestry practices and planning, along with cattle ranging practices, but in terms of salmon threats, these activities impact many aspects including stream hydrology, water temperature, effluent, riparian habitat destruction, watercourse changes from road infrastructure, and the spread of invasive species. To better categorize legislation aligned with salmon threats and create a “buffer” between biological management and the regulatory context, this study defines discrete areas of administrative responsibility for Pacific salmon as “management domains.”
 
@@ -305,7 +305,7 @@ The Management Domains and IUCN threats were assigned to each section based on a
 
 <br>
 
-## Assessing Legislative Factors
+## Assessing Legislative Factors by Threat Categorization
 
 ### Clause Types
 Similar the Management Domain assignment, we created a Clause Type keyword list to assess the nature or purposes of the clauses. Using language patterns within the legislation, we grouped Clause Type by:
@@ -347,7 +347,7 @@ if (length(clause_types) > 0) {
 
 <br>
 
-## Current Pacific Salmon Management Processes
+## Biological and Ecological Concerns in a Current Salmon Management Context
 
 ### Conservation Units and RPAs
 
@@ -488,7 +488,10 @@ ggplot(domain_counts, aes(
 
 ```
 
-<p><em>Figure X. Count of clauses matched by management domains stacked by jurisdiction.</em></p>
+<p style="text-align: center;">
+  <em>Figure X. Count of clauses matched by management domains stacked by jurisdiction.</em>
+</p>
+
 
 <br>
 
@@ -569,7 +572,7 @@ ggplot(iucn_jurisdiction_counts, aes(
   )
 ```
 
-<p><em>Figure X. Stacked bar chart showing alignment of Pacific salmon threat factors (IUCN Level 2) with jurisdictional distribution of legislative provisions.</em></p>
+<p style="text-align: center;"><em>Figure X. Stacked bar chart showing alignment of Pacific salmon threat factors (IUCN Level 2) with jurisdictional distribution of legislative provisions.</em></p>
 
 <br>
 
@@ -679,7 +682,7 @@ ggplot(bubble_data, aes(
 
 ```
 
-<p><em>Figure X. ___________________.</em></p>
+<p style="text-align: center;"><em>Figure X. ___________________.</em></p>
 
 Using the '1 - Salmon' scope for clauses shows the Type A Legislation along with a comparison of the number of Provisions by Jurisdiction. The results are shown in the bar chart below, which displays the number of Provisions for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of Provisions across different legislative frameworks.
 
@@ -746,7 +749,7 @@ if (nrow(summary_data) > 0) {
 }
 ```
 
-<p><em>Figure X. ___________________.</em></p>
+<p style="text-align: center;"><em>Figure X. ___________________.</em></p>
 
 <br>
 
@@ -813,7 +816,7 @@ if (nrow(summary_data) > 0) {
 }
 ```
 
-<p><em>Figure X. ___________________.</em></p>
+<p style="text-align: center;"><em>Figure X. ___________________.</em></p>
 
 
 ## Legislative Factors (Clause Types)
@@ -908,7 +911,7 @@ ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = provisio
 
 
 ```
-<p><em>Figure X. _______.</em></p>
+<p style="text-align: center;"><em>Figure X. _______.</em></p>
 
 <br>
 
@@ -1216,54 +1219,12 @@ reactable(
              
 <hr>
 
-## Example: The Fisheries Act
+## Case Study: 
 
-```{r fisheries-act-management-domain, echo=FALSE, message=FALSE, warning=FALSE}
-library(ggplot2)
-library(data.table)
-
-# Step 1: Get legislation_id for the Fisheries Act
-fisheries_id <- legislation_metadata[
-  legislation_name == "Fisheries Act",
-  legislation_id
-]
-
-# Step 2: Get provision_ids linked to that legislation
-fisheries_provision_ids <- legislation_paragraphs[
-  legislation_id == fisheries_id,
-  provision_id
-]
-
-# Step 3: Filter provision_labels for those provision_ids
-fisheries_labels <- provision_labels[
-  provision_id %in% fisheries_provision_ids
-]
-
-# Step 4: Count provision_id by management_domain
-domain_counts <- fisheries_labels[
-  !is.na(management_domain),
-  .(provision_count = uniqueN(provision_id)),
-  by = management_domain
-][order(-provision_count)]
-
-# Step 5: Plot
-ggplot(domain_counts, aes(x = reorder(management_domain, provision_count), y = provision_count)) +
-  geom_bar(stat = "identity", fill = "#996666") +
-  coord_flip() +
-  labs(
-    title = "Provision Count by Management Domain",
-    subtitle = "Fisheries Act (R.S.C., 1985, c. F-14)",
-    x = "Management Domain",
-    y = "Count of Distinct Provisions"
-  ) +
-  theme_minimal()
-```
-
-<p><em>Figure X. ___________________.</em></p>
 
 <hr>
 
-## Example: The Water Sustainability Act
+## Case Study:
 
 <hr>
 
