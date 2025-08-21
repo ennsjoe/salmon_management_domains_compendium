@@ -1,0 +1,697 @@
+﻿cu_index,cu_species,cu_name,cu_area,cu_type,du_number,du_name,du_acronym,smu_area,smu_name,smu_id,smu_species,management_domain,iucn_l1,iucn_l2,rpa_threat_ranking
+CK-3,Chinook,LOWER FRASER RIVER_FA_0.3,FRASER INTERIOR,Current,2,"Lower Fraser, Ocean, Fall (Harrison)",LFR+GStr/Ocean/Fall,FRASER INTERIOR,FRASER FALL RUN 41 CHINOOK SALMON,CK-FIA-02,Chinook,,1 Residential & commercial development,NA,Low
+CK-5,Chinook,LOWER FRASER RIVER-UPPER PITT_SU_1.3,FRASER INTERIOR,Current,4,"Lower Fraser, Stream. Summer  (Upper Pitt)",LFR+GStr/Stream/Summer (Upper Pitt),FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,1 Residential & commercial development,NA,Low
+CK-6,Chinook,LOWER FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,5,"Lower Fraser, Stream, Summer (Lillooet) ",LFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,1 Residential & commercial development,NA,Low
+CK-8,Chinook,MIDDLE FRASER-FRASER CANYON_SP_1.3,FRASER INTERIOR,Current,7,"Middle Fraser, Stream, Spring (FRCanyon)",FRCanyGStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,,1 Residential & commercial development,NA,Negligible
+CK-9,Chinook,MIDDLE FRASER RIVER-PORTAGE_FA_1.3,FRASER INTERIOR,Current,8,"Middle Fraser, Stream, Fall (Portage)",MFR+GStr/Stream/Fall,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,1 Residential & commercial development,NA,Negligible
+CK-10,Chinook,MIDDLE FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,9,"Middle Fraser, Stream, Spring ",MFR+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,,1 Residential & commercial development,NA,Negligible
+CK-11,Chinook,MIDDLE FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,10,"Middle Fraser,Stream, Summer",MFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,1 Residential & commercial development,NA,Negligible
+CK-12,Chinook,UPPER FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,11,"Upper Fraser, Stream, Spring",UFR/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,,1 Residential & commercial development,NA,Negligible
+CK-16,Chinook,SOUTH THOMPSON-BESSETTE CREEK_SU_1.2,FRASER INTERIOR,Current,14,"South Thompson, Stream, Summer (Bessette)",STh+GStr/Stream/Summer/(Bessette),FRASER INTERIOR,FRASER SPRING RUN 42 CHINOOK SALMON,CK-FIA-06,Chinook,,1 Residential & commercial development,NA,Negligible
+CK-18,Chinook,NORTH THOMPSON_SP_1.3,FRASER INTERIOR,Current,16,"North Thompson, Stream, Spring",NTh+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,,1 Residential & commercial development,NA,Negligible
+CK-19,Chinook,NORTH THOMPSON_SU_1.3,FRASER INTERIOR,Current,17,"North Thompson, Stream, Summer",NTh+Gstr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,1 Residential & commercial development,NA,Negligible
+SEL-03-04,Sockeye (Lake Type),HARRISON-UPSTREAM MIGRATING-LATE TIMING,FRASER INTERIOR,Current,10,Harrison (U/S)-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),,1 Residential & commercial development,NA,Negligible
+SEL-06-10,Sockeye (Lake Type),QUESNEL-SUMMER TIMING,FRASER INTERIOR,Current,16,Quesnel-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),,1 Residential & commercial development,NA,Negligible
+SEL-06-11,Sockeye (Lake Type),SETON-LATE TIMING,FRASER INTERIOR,Current,17,Seton-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),,1 Residential & commercial development,NA,Negligible
+SEL-06-13,Sockeye (Lake Type),TAKLA/TREMBLEUR/STUART-SUMMER TIMING,FRASER INTERIOR,Current,21,Takla-Trembleur-Stuart-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),,1 Residential & commercial development,NA,Negligible
+SEL-06-14,Sockeye (Lake Type),TAKLA/TREMBLEUR-EARLY STUART TIMING,FRASER INTERIOR,Current,20,Takla-Trembleur-EStu population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY STUART,SEL-FIA-14,Sockeye (Lake Type),,1 Residential & commercial development,NA,Negligible
+SEL-06-16,Sockeye (Lake Type),TASEKO-EARLY SUMMER TIMING,FRASER INTERIOR,Current,22,Taseko-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,1 Residential & commercial development,NA,Negligible
+SEL-07-01,Sockeye (Lake Type),BOWRON-EARLY SUMMER TIMING,FRASER INTERIOR,Current,2,Bowron-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,1 Residential & commercial development,NA,Negligible
+SEL-10-03,Sockeye (Lake Type),NORTH BARRIERE-EARLY SUMMER TIMING,FRASER INTERIOR,Current,14,North Barriere-ES population (original),,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,1 Residential & commercial development,NA,Negligible
+SER-02,Sockeye (River Type),WIDGEON,FRASER INTERIOR,Current,24,Widgeon (River-Type) population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),,1 Residential & commercial development,NA,Negligible
+SEL-07-01,Sockeye (Lake Type),BOWRON-EARLY SUMMER TIMING,FRASER INTERIOR,Current,2,Bowron-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Medium-High
+SEL-03-04,Sockeye (Lake Type),HARRISON-UPSTREAM MIGRATING-LATE TIMING,FRASER INTERIOR,Current,10,Harrison (U/S)-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Negligible
+SEL-10-03,Sockeye (Lake Type),NORTH BARRIERE-EARLY SUMMER TIMING,FRASER INTERIOR,Current,14,North Barriere-ES population (original),,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,NA
+SEL-06-10,Sockeye (Lake Type),QUESNEL-SUMMER TIMING,FRASER INTERIOR,Current,16,Quesnel-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Medium
+SEL-06-11,Sockeye (Lake Type),SETON-LATE TIMING,FRASER INTERIOR,Current,17,Seton-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,High
+SEL-06-14,Sockeye (Lake Type),TAKLA/TREMBLEUR-EARLY STUART TIMING,FRASER INTERIOR,Current,20,Takla-Trembleur-EStu population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY STUART,SEL-FIA-14,Sockeye (Lake Type),Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Extreme
+SEL-06-13,Sockeye (Lake Type),TAKLA/TREMBLEUR/STUART-SUMMER TIMING,FRASER INTERIOR,Current,21,Takla-Trembleur-Stuart-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Medium
+SEL-06-16,Sockeye (Lake Type),TASEKO-EARLY SUMMER TIMING,FRASER INTERIOR,Current,22,Taseko-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Medium-High
+SER-02,Sockeye (River Type),WIDGEON,FRASER INTERIOR,Current,24,Widgeon (River-Type) population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,NA
+CK-3,Chinook,LOWER FRASER RIVER_FA_0.3,FRASER INTERIOR,Current,2,"Lower Fraser, Ocean, Fall (Harrison)",LFR+GStr/Ocean/Fall,FRASER INTERIOR,FRASER FALL RUN 41 CHINOOK SALMON,CK-FIA-02,Chinook,Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Unknown
+CK-5,Chinook,LOWER FRASER RIVER-UPPER PITT_SU_1.3,FRASER INTERIOR,Current,4,"Lower Fraser, Stream. Summer  (Upper Pitt)",LFR+GStr/Stream/Summer (Upper Pitt),FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Unknown
+CK-6,Chinook,LOWER FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,5,"Lower Fraser, Stream, Summer (Lillooet) ",LFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Unknown
+CK-8,Chinook,MIDDLE FRASER-FRASER CANYON_SP_1.3,FRASER INTERIOR,Current,7,"Middle Fraser, Stream, Spring (FRCanyon)",FRCanyGStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Unknown
+CK-9,Chinook,MIDDLE FRASER RIVER-PORTAGE_FA_1.3,FRASER INTERIOR,Current,8,"Middle Fraser, Stream, Fall (Portage)",MFR+GStr/Stream/Fall,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,High
+CK-10,Chinook,MIDDLE FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,9,"Middle Fraser, Stream, Spring ",MFR+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Extreme
+CK-11,Chinook,MIDDLE FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,10,"Middle Fraser,Stream, Summer",MFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Extreme
+CK-12,Chinook,UPPER FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,11,"Upper Fraser, Stream, Spring",UFR/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Extreme
+CK-16,Chinook,SOUTH THOMPSON-BESSETTE CREEK_SU_1.2,FRASER INTERIOR,Current,14,"South Thompson, Stream, Summer (Bessette)",STh+GStr/Stream/Summer/(Bessette),FRASER INTERIOR,FRASER SPRING RUN 42 CHINOOK SALMON,CK-FIA-06,Chinook,Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Unknown
+CK-18,Chinook,NORTH THOMPSON_SP_1.3,FRASER INTERIOR,Current,16,"North Thompson, Stream, Spring",NTh+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Medium-Low
+CK-19,Chinook,NORTH THOMPSON_SU_1.3,FRASER INTERIOR,Current,17,"North Thompson, Stream, Summer",NTh+Gstr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Climate Change and Natural Disasters,10 Geological events,10.1 Geological Events,Medium-Low
+CK-3,Chinook,LOWER FRASER RIVER_FA_0.3,FRASER INTERIOR,Current,2,"Lower Fraser, Ocean, Fall (Harrison)",LFR+GStr/Ocean/Fall,FRASER INTERIOR,FRASER FALL RUN 41 CHINOOK SALMON,CK-FIA-02,Chinook,Climate Change and Natural Disasters,11 Climate change & severe weather,11.1 Habitat shifting & alteration,High-Low
+CK-5,Chinook,LOWER FRASER RIVER-UPPER PITT_SU_1.3,FRASER INTERIOR,Current,4,"Lower Fraser, Stream. Summer  (Upper Pitt)",LFR+GStr/Stream/Summer (Upper Pitt),FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Climate Change and Natural Disasters,11 Climate change & severe weather,11.1 Habitat shifting & alteration,High-Medium
+CK-6,Chinook,LOWER FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,5,"Lower Fraser, Stream, Summer (Lillooet) ",LFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Climate Change and Natural Disasters,11 Climate change & severe weather,11.1 Habitat shifting & alteration,High-Medium
+CK-8,Chinook,MIDDLE FRASER-FRASER CANYON_SP_1.3,FRASER INTERIOR,Current,7,"Middle Fraser, Stream, Spring (FRCanyon)",FRCanyGStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Climate Change and Natural Disasters,11 Climate change & severe weather,11.1 Habitat shifting & alteration,High-Medium
+CK-9,Chinook,MIDDLE FRASER RIVER-PORTAGE_FA_1.3,FRASER INTERIOR,Current,8,"Middle Fraser, Stream, Fall (Portage)",MFR+GStr/Stream/Fall,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Climate Change and Natural Disasters,11 Climate change & severe weather,11.1 Habitat shifting & alteration,High-Medium
+CK-10,Chinook,MIDDLE FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,9,"Middle Fraser, Stream, Spring ",MFR+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Climate Change and Natural Disasters,11 Climate change & severe weather,11.1 Habitat shifting & alteration,High-Medium
+CK-11,Chinook,MIDDLE FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,10,"Middle Fraser,Stream, Summer",MFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Climate Change and Natural Disasters,11 Climate change & severe weather,11.1 Habitat shifting & alteration,High-Medium
+CK-12,Chinook,UPPER FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,11,"Upper Fraser, Stream, Spring",UFR/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Climate Change and Natural Disasters,11 Climate change & severe weather,11.1 Habitat shifting & alteration,High-Medium
+CK-16,Chinook,SOUTH THOMPSON-BESSETTE CREEK_SU_1.2,FRASER INTERIOR,Current,14,"South Thompson, Stream, Summer (Bessette)",STh+GStr/Stream/Summer/(Bessette),FRASER INTERIOR,FRASER SPRING RUN 42 CHINOOK SALMON,CK-FIA-06,Chinook,Climate Change and Natural Disasters,11 Climate change & severe weather,11.1 Habitat shifting & alteration,High-Medium
+CK-18,Chinook,NORTH THOMPSON_SP_1.3,FRASER INTERIOR,Current,16,"North Thompson, Stream, Spring",NTh+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Climate Change and Natural Disasters,11 Climate change & severe weather,11.1 Habitat shifting & alteration,High-Medium
+CK-19,Chinook,NORTH THOMPSON_SU_1.3,FRASER INTERIOR,Current,17,"North Thompson, Stream, Summer",NTh+Gstr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Climate Change and Natural Disasters,11 Climate change & severe weather,11.1 Habitat shifting & alteration,High-Medium
+SEL-07-01,Sockeye (Lake Type),BOWRON-EARLY SUMMER TIMING,FRASER INTERIOR,Current,2,Bowron-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Climate Change and Natural Disasters,11 Climate change & severe weather,11.3 Changes in Precipitation & Hydrological Regimes,Medium-High
+SEL-03-04,Sockeye (Lake Type),HARRISON-UPSTREAM MIGRATING-LATE TIMING,FRASER INTERIOR,Current,10,Harrison (U/S)-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Climate Change and Natural Disasters,11 Climate change & severe weather,NA,Medium-High
+SEL-10-03,Sockeye (Lake Type),NORTH BARRIERE-EARLY SUMMER TIMING,FRASER INTERIOR,Current,14,North Barriere-ES population (original),,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Climate Change and Natural Disasters,11 Climate change & severe weather,NA,Medium-High
+SEL-06-10,Sockeye (Lake Type),QUESNEL-SUMMER TIMING,FRASER INTERIOR,Current,16,Quesnel-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Climate Change and Natural Disasters,11 Climate change & severe weather,NA,High
+SEL-06-11,Sockeye (Lake Type),SETON-LATE TIMING,FRASER INTERIOR,Current,17,Seton-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Climate Change and Natural Disasters,11 Climate change & severe weather,NA,Medium-High
+SEL-06-14,Sockeye (Lake Type),TAKLA/TREMBLEUR-EARLY STUART TIMING,FRASER INTERIOR,Current,20,Takla-Trembleur-EStu population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY STUART,SEL-FIA-14,Sockeye (Lake Type),Climate Change and Natural Disasters,11 Climate change & severe weather,NA,High
+SEL-06-13,Sockeye (Lake Type),TAKLA/TREMBLEUR/STUART-SUMMER TIMING,FRASER INTERIOR,Current,21,Takla-Trembleur-Stuart-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Climate Change and Natural Disasters,11 Climate change & severe weather,NA,High
+SEL-06-16,Sockeye (Lake Type),TASEKO-EARLY SUMMER TIMING,FRASER INTERIOR,Current,22,Taseko-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Climate Change and Natural Disasters,11 Climate change & severe weather,NA,Medium-High
+SER-02,Sockeye (River Type),WIDGEON,FRASER INTERIOR,Current,24,Widgeon (River-Type) population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Climate Change and Natural Disasters,11 Climate change & severe weather,NA,Medium-High
+SEL-07-01,Sockeye (Lake Type),BOWRON-EARLY SUMMER TIMING,FRASER INTERIOR,Current,2,Bowron-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low-Medium
+SEL-03-04,Sockeye (Lake Type),HARRISON-UPSTREAM MIGRATING-LATE TIMING,FRASER INTERIOR,Current,10,Harrison (U/S)-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low-Medium
+SEL-10-03,Sockeye (Lake Type),NORTH BARRIERE-EARLY SUMMER TIMING,FRASER INTERIOR,Current,14,North Barriere-ES population (original),,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low-Medium
+SEL-06-10,Sockeye (Lake Type),QUESNEL-SUMMER TIMING,FRASER INTERIOR,Current,16,Quesnel-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low-Medium
+SEL-06-11,Sockeye (Lake Type),SETON-LATE TIMING,FRASER INTERIOR,Current,17,Seton-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low-Medium
+SEL-06-14,Sockeye (Lake Type),TAKLA/TREMBLEUR-EARLY STUART TIMING,FRASER INTERIOR,Current,20,Takla-Trembleur-EStu population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY STUART,SEL-FIA-14,Sockeye (Lake Type),,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low-Medium
+SEL-06-13,Sockeye (Lake Type),TAKLA/TREMBLEUR/STUART-SUMMER TIMING,FRASER INTERIOR,Current,21,Takla-Trembleur-Stuart-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low-Medium
+SEL-06-16,Sockeye (Lake Type),TASEKO-EARLY SUMMER TIMING,FRASER INTERIOR,Current,22,Taseko-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low-Medium
+SER-02,Sockeye (River Type),WIDGEON,FRASER INTERIOR,Current,24,Widgeon (River-Type) population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low-Medium
+CK-3,Chinook,LOWER FRASER RIVER_FA_0.3,FRASER INTERIOR,Current,2,"Lower Fraser, Ocean, Fall (Harrison)",LFR+GStr/Ocean/Fall,FRASER INTERIOR,FRASER FALL RUN 41 CHINOOK SALMON,CK-FIA-02,Chinook,,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,High-Medium
+CK-5,Chinook,LOWER FRASER RIVER-UPPER PITT_SU_1.3,FRASER INTERIOR,Current,4,"Lower Fraser, Stream. Summer  (Upper Pitt)",LFR+GStr/Stream/Summer (Upper Pitt),FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low
+CK-6,Chinook,LOWER FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,5,"Lower Fraser, Stream, Summer (Lillooet) ",LFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low
+CK-8,Chinook,MIDDLE FRASER-FRASER CANYON_SP_1.3,FRASER INTERIOR,Current,7,"Middle Fraser, Stream, Spring (FRCanyon)",FRCanyGStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low
+CK-9,Chinook,MIDDLE FRASER RIVER-PORTAGE_FA_1.3,FRASER INTERIOR,Current,8,"Middle Fraser, Stream, Fall (Portage)",MFR+GStr/Stream/Fall,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low
+CK-10,Chinook,MIDDLE FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,9,"Middle Fraser, Stream, Spring ",MFR+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low
+CK-11,Chinook,MIDDLE FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,10,"Middle Fraser,Stream, Summer",MFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low
+CK-12,Chinook,UPPER FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,11,"Upper Fraser, Stream, Spring",UFR/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low
+CK-16,Chinook,SOUTH THOMPSON-BESSETTE CREEK_SU_1.2,FRASER INTERIOR,Current,14,"South Thompson, Stream, Summer (Bessette)",STh+GStr/Stream/Summer/(Bessette),FRASER INTERIOR,FRASER SPRING RUN 42 CHINOOK SALMON,CK-FIA-06,Chinook,,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Medium-Low
+CK-18,Chinook,NORTH THOMPSON_SP_1.3,FRASER INTERIOR,Current,16,"North Thompson, Stream, Spring",NTh+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low
+CK-19,Chinook,NORTH THOMPSON_SU_1.3,FRASER INTERIOR,Current,17,"North Thompson, Stream, Summer",NTh+Gstr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,2 Agriculture & aquaculture,2.4 Marine & freshwater aquaculture,Low
+SEL-07-01,Sockeye (Lake Type),BOWRON-EARLY SUMMER TIMING,FRASER INTERIOR,Current,2,Bowron-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,3 Energy production & mining,NA,NA
+SEL-03-04,Sockeye (Lake Type),HARRISON-UPSTREAM MIGRATING-LATE TIMING,FRASER INTERIOR,Current,10,Harrison (U/S)-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),,3 Energy production & mining,NA,NA
+SEL-10-03,Sockeye (Lake Type),NORTH BARRIERE-EARLY SUMMER TIMING,FRASER INTERIOR,Current,14,North Barriere-ES population (original),,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,3 Energy production & mining,NA,NA
+SEL-06-10,Sockeye (Lake Type),QUESNEL-SUMMER TIMING,FRASER INTERIOR,Current,16,Quesnel-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),,3 Energy production & mining,NA,Unknown
+SEL-06-11,Sockeye (Lake Type),SETON-LATE TIMING,FRASER INTERIOR,Current,17,Seton-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),,3 Energy production & mining,NA,NA
+SEL-06-14,Sockeye (Lake Type),TAKLA/TREMBLEUR-EARLY STUART TIMING,FRASER INTERIOR,Current,20,Takla-Trembleur-EStu population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY STUART,SEL-FIA-14,Sockeye (Lake Type),,3 Energy production & mining,NA,NA
+SEL-06-13,Sockeye (Lake Type),TAKLA/TREMBLEUR/STUART-SUMMER TIMING,FRASER INTERIOR,Current,21,Takla-Trembleur-Stuart-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),,3 Energy production & mining,NA,NA
+SEL-06-16,Sockeye (Lake Type),TASEKO-EARLY SUMMER TIMING,FRASER INTERIOR,Current,22,Taseko-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,3 Energy production & mining,NA,NA
+SER-02,Sockeye (River Type),WIDGEON,FRASER INTERIOR,Current,24,Widgeon (River-Type) population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),,3 Energy production & mining,NA,NA
+CK-3,Chinook,LOWER FRASER RIVER_FA_0.3,FRASER INTERIOR,Current,2,"Lower Fraser, Ocean, Fall (Harrison)",LFR+GStr/Ocean/Fall,FRASER INTERIOR,FRASER FALL RUN 41 CHINOOK SALMON,CK-FIA-02,Chinook,,3 Energy production & mining,NA,Medium-Low
+CK-5,Chinook,LOWER FRASER RIVER-UPPER PITT_SU_1.3,FRASER INTERIOR,Current,4,"Lower Fraser, Stream. Summer  (Upper Pitt)",LFR+GStr/Stream/Summer (Upper Pitt),FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,3 Energy production & mining,NA,NA
+CK-6,Chinook,LOWER FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,5,"Lower Fraser, Stream, Summer (Lillooet) ",LFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,3 Energy production & mining,NA,Low
+CK-8,Chinook,MIDDLE FRASER-FRASER CANYON_SP_1.3,FRASER INTERIOR,Current,7,"Middle Fraser, Stream, Spring (FRCanyon)",FRCanyGStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,,3 Energy production & mining,NA,Low
+CK-9,Chinook,MIDDLE FRASER RIVER-PORTAGE_FA_1.3,FRASER INTERIOR,Current,8,"Middle Fraser, Stream, Fall (Portage)",MFR+GStr/Stream/Fall,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,3 Energy production & mining,NA,Low
+CK-10,Chinook,MIDDLE FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,9,"Middle Fraser, Stream, Spring ",MFR+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,,3 Energy production & mining,NA,Medium
+CK-11,Chinook,MIDDLE FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,10,"Middle Fraser,Stream, Summer",MFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,3 Energy production & mining,NA,Low
+CK-12,Chinook,UPPER FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,11,"Upper Fraser, Stream, Spring",UFR/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,,3 Energy production & mining,NA,Low
+CK-16,Chinook,SOUTH THOMPSON-BESSETTE CREEK_SU_1.2,FRASER INTERIOR,Current,14,"South Thompson, Stream, Summer (Bessette)",STh+GStr/Stream/Summer/(Bessette),FRASER INTERIOR,FRASER SPRING RUN 42 CHINOOK SALMON,CK-FIA-06,Chinook,,3 Energy production & mining,NA,Low
+CK-18,Chinook,NORTH THOMPSON_SP_1.3,FRASER INTERIOR,Current,16,"North Thompson, Stream, Spring",NTh+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,,3 Energy production & mining,NA,Low
+CK-19,Chinook,NORTH THOMPSON_SU_1.3,FRASER INTERIOR,Current,17,"North Thompson, Stream, Summer",NTh+Gstr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,3 Energy production & mining,NA,Low
+SEL-07-01,Sockeye (Lake Type),BOWRON-EARLY SUMMER TIMING,FRASER INTERIOR,Current,2,Bowron-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Transportation Infrastructure,4 Transportation & service corridors,NA,Negligible
+SEL-03-04,Sockeye (Lake Type),HARRISON-UPSTREAM MIGRATING-LATE TIMING,FRASER INTERIOR,Current,10,Harrison (U/S)-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Transportation Infrastructure,4 Transportation & service corridors,"4.1 Roads, Trails & Railroads",Unknown
+SEL-10-03,Sockeye (Lake Type),NORTH BARRIERE-EARLY SUMMER TIMING,FRASER INTERIOR,Current,14,North Barriere-ES population (original),,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Transportation Infrastructure,4 Transportation & service corridors,NA,Negligible
+SEL-06-10,Sockeye (Lake Type),QUESNEL-SUMMER TIMING,FRASER INTERIOR,Current,16,Quesnel-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Transportation Infrastructure,4 Transportation & service corridors,NA,Unknown
+SEL-06-11,Sockeye (Lake Type),SETON-LATE TIMING,FRASER INTERIOR,Current,17,Seton-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Transportation Infrastructure,4 Transportation & service corridors,NA,Unknown
+SEL-06-14,Sockeye (Lake Type),TAKLA/TREMBLEUR-EARLY STUART TIMING,FRASER INTERIOR,Current,20,Takla-Trembleur-EStu population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY STUART,SEL-FIA-14,Sockeye (Lake Type),Transportation Infrastructure,4 Transportation & service corridors,NA,Negligible
+SEL-06-13,Sockeye (Lake Type),TAKLA/TREMBLEUR/STUART-SUMMER TIMING,FRASER INTERIOR,Current,21,Takla-Trembleur-Stuart-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Transportation Infrastructure,4 Transportation & service corridors,NA,Negligible
+SEL-06-16,Sockeye (Lake Type),TASEKO-EARLY SUMMER TIMING,FRASER INTERIOR,Current,22,Taseko-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Transportation Infrastructure,4 Transportation & service corridors,NA,Negligible
+SER-02,Sockeye (River Type),WIDGEON,FRASER INTERIOR,Current,24,Widgeon (River-Type) population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Transportation Infrastructure,4 Transportation & service corridors,NA,Unknown
+CK-3,Chinook,LOWER FRASER RIVER_FA_0.3,FRASER INTERIOR,Current,2,"Lower Fraser, Ocean, Fall (Harrison)",LFR+GStr/Ocean/Fall,FRASER INTERIOR,FRASER FALL RUN 41 CHINOOK SALMON,CK-FIA-02,Chinook,Transportation Infrastructure,4 Transportation & service corridors,NA,Unknown
+CK-5,Chinook,LOWER FRASER RIVER-UPPER PITT_SU_1.3,FRASER INTERIOR,Current,4,"Lower Fraser, Stream. Summer  (Upper Pitt)",LFR+GStr/Stream/Summer (Upper Pitt),FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Transportation Infrastructure,4 Transportation & service corridors,NA,Unknown
+CK-6,Chinook,LOWER FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,5,"Lower Fraser, Stream, Summer (Lillooet) ",LFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Transportation Infrastructure,4 Transportation & service corridors,NA,Unknown
+CK-8,Chinook,MIDDLE FRASER-FRASER CANYON_SP_1.3,FRASER INTERIOR,Current,7,"Middle Fraser, Stream, Spring (FRCanyon)",FRCanyGStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Transportation Infrastructure,4 Transportation & service corridors,NA,Unknown
+CK-9,Chinook,MIDDLE FRASER RIVER-PORTAGE_FA_1.3,FRASER INTERIOR,Current,8,"Middle Fraser, Stream, Fall (Portage)",MFR+GStr/Stream/Fall,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Transportation Infrastructure,4 Transportation & service corridors,NA,Unknown
+CK-10,Chinook,MIDDLE FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,9,"Middle Fraser, Stream, Spring ",MFR+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Transportation Infrastructure,4 Transportation & service corridors,NA,Negligible
+CK-11,Chinook,MIDDLE FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,10,"Middle Fraser,Stream, Summer",MFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Transportation Infrastructure,4 Transportation & service corridors,NA,Negligible
+CK-12,Chinook,UPPER FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,11,"Upper Fraser, Stream, Spring",UFR/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Transportation Infrastructure,4 Transportation & service corridors,NA,Negligible
+CK-16,Chinook,SOUTH THOMPSON-BESSETTE CREEK_SU_1.2,FRASER INTERIOR,Current,14,"South Thompson, Stream, Summer (Bessette)",STh+GStr/Stream/Summer/(Bessette),FRASER INTERIOR,FRASER SPRING RUN 42 CHINOOK SALMON,CK-FIA-06,Chinook,Transportation Infrastructure,4 Transportation & service corridors,NA,Unknown
+CK-18,Chinook,NORTH THOMPSON_SP_1.3,FRASER INTERIOR,Current,16,"North Thompson, Stream, Spring",NTh+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Transportation Infrastructure,4 Transportation & service corridors,NA,Low
+CK-19,Chinook,NORTH THOMPSON_SU_1.3,FRASER INTERIOR,Current,17,"North Thompson, Stream, Summer",NTh+Gstr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Transportation Infrastructure,4 Transportation & service corridors,NA,Low
+SEL-07-01,Sockeye (Lake Type),BOWRON-EARLY SUMMER TIMING,FRASER INTERIOR,Current,2,Bowron-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,Medium
+SEL-03-04,Sockeye (Lake Type),HARRISON-UPSTREAM MIGRATING-LATE TIMING,FRASER INTERIOR,Current,10,Harrison (U/S)-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,Medium-High
+SEL-10-03,Sockeye (Lake Type),NORTH BARRIERE-EARLY SUMMER TIMING,FRASER INTERIOR,Current,14,North Barriere-ES population (original),,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,Medium-High
+SEL-06-10,Sockeye (Lake Type),QUESNEL-SUMMER TIMING,FRASER INTERIOR,Current,16,Quesnel-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,Medium-High
+SEL-06-11,Sockeye (Lake Type),SETON-LATE TIMING,FRASER INTERIOR,Current,17,Seton-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,Medium-High
+SEL-06-14,Sockeye (Lake Type),TAKLA/TREMBLEUR-EARLY STUART TIMING,FRASER INTERIOR,Current,20,Takla-Trembleur-EStu population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY STUART,SEL-FIA-14,Sockeye (Lake Type),Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,Low-Medium
+SEL-06-13,Sockeye (Lake Type),TAKLA/TREMBLEUR/STUART-SUMMER TIMING,FRASER INTERIOR,Current,21,Takla-Trembleur-Stuart-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,Medium-High
+SEL-06-16,Sockeye (Lake Type),TASEKO-EARLY SUMMER TIMING,FRASER INTERIOR,Current,22,Taseko-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,Medium-High
+SER-02,Sockeye (River Type),WIDGEON,FRASER INTERIOR,Current,24,Widgeon (River-Type) population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,Medium-High
+CK-3,Chinook,LOWER FRASER RIVER_FA_0.3,FRASER INTERIOR,Current,2,"Lower Fraser, Ocean, Fall (Harrison)",LFR+GStr/Ocean/Fall,FRASER INTERIOR,FRASER FALL RUN 41 CHINOOK SALMON,CK-FIA-02,Chinook,Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,High-Low
+CK-5,Chinook,LOWER FRASER RIVER-UPPER PITT_SU_1.3,FRASER INTERIOR,Current,4,"Lower Fraser, Stream. Summer  (Upper Pitt)",LFR+GStr/Stream/Summer (Upper Pitt),FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,High-Low
+CK-6,Chinook,LOWER FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,5,"Lower Fraser, Stream, Summer (Lillooet) ",LFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,High-Low
+CK-8,Chinook,MIDDLE FRASER-FRASER CANYON_SP_1.3,FRASER INTERIOR,Current,7,"Middle Fraser, Stream, Spring (FRCanyon)",FRCanyGStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,High-Low
+CK-9,Chinook,MIDDLE FRASER RIVER-PORTAGE_FA_1.3,FRASER INTERIOR,Current,8,"Middle Fraser, Stream, Fall (Portage)",MFR+GStr/Stream/Fall,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,High-Low
+CK-10,Chinook,MIDDLE FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,9,"Middle Fraser, Stream, Spring ",MFR+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,High-Low
+CK-11,Chinook,MIDDLE FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,10,"Middle Fraser,Stream, Summer",MFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,High-Low
+CK-12,Chinook,UPPER FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,11,"Upper Fraser, Stream, Spring",UFR/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,High-Low
+CK-16,Chinook,SOUTH THOMPSON-BESSETTE CREEK_SU_1.2,FRASER INTERIOR,Current,14,"South Thompson, Stream, Summer (Bessette)",STh+GStr/Stream/Summer/(Bessette),FRASER INTERIOR,FRASER SPRING RUN 42 CHINOOK SALMON,CK-FIA-06,Chinook,Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,High-Low
+CK-18,Chinook,NORTH THOMPSON_SP_1.3,FRASER INTERIOR,Current,16,"North Thompson, Stream, Spring",NTh+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,High-Low
+CK-19,Chinook,NORTH THOMPSON_SU_1.3,FRASER INTERIOR,Current,17,"North Thompson, Stream, Summer",NTh+Gstr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Fisheries,5 Biological resource use,5.4 Fishing & harvesting aquatic resources,High-Low
+SEL-07-01,Sockeye (Lake Type),BOWRON-EARLY SUMMER TIMING,FRASER INTERIOR,Current,2,Bowron-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Low
+SEL-03-04,Sockeye (Lake Type),HARRISON-UPSTREAM MIGRATING-LATE TIMING,FRASER INTERIOR,Current,10,Harrison (U/S)-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Negligible
+SEL-10-03,Sockeye (Lake Type),NORTH BARRIERE-EARLY SUMMER TIMING,FRASER INTERIOR,Current,14,North Barriere-ES population (original),,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Negligible
+SEL-06-10,Sockeye (Lake Type),QUESNEL-SUMMER TIMING,FRASER INTERIOR,Current,16,Quesnel-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Low
+SEL-06-11,Sockeye (Lake Type),SETON-LATE TIMING,FRASER INTERIOR,Current,17,Seton-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Low
+SEL-06-14,Sockeye (Lake Type),TAKLA/TREMBLEUR-EARLY STUART TIMING,FRASER INTERIOR,Current,20,Takla-Trembleur-EStu population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY STUART,SEL-FIA-14,Sockeye (Lake Type),Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Low
+SEL-06-13,Sockeye (Lake Type),TAKLA/TREMBLEUR/STUART-SUMMER TIMING,FRASER INTERIOR,Current,21,Takla-Trembleur-Stuart-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Low
+SEL-06-16,Sockeye (Lake Type),TASEKO-EARLY SUMMER TIMING,FRASER INTERIOR,Current,22,Taseko-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Low
+SER-02,Sockeye (River Type),WIDGEON,FRASER INTERIOR,Current,24,Widgeon (River-Type) population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Unknown
+CK-3,Chinook,LOWER FRASER RIVER_FA_0.3,FRASER INTERIOR,Current,2,"Lower Fraser, Ocean, Fall (Harrison)",LFR+GStr/Ocean/Fall,FRASER INTERIOR,FRASER FALL RUN 41 CHINOOK SALMON,CK-FIA-02,Chinook,Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Negligible
+CK-5,Chinook,LOWER FRASER RIVER-UPPER PITT_SU_1.3,FRASER INTERIOR,Current,4,"Lower Fraser, Stream. Summer  (Upper Pitt)",LFR+GStr/Stream/Summer (Upper Pitt),FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Medium-Low
+CK-6,Chinook,LOWER FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,5,"Lower Fraser, Stream, Summer (Lillooet) ",LFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Negligible
+CK-8,Chinook,MIDDLE FRASER-FRASER CANYON_SP_1.3,FRASER INTERIOR,Current,7,"Middle Fraser, Stream, Spring (FRCanyon)",FRCanyGStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Negligible
+CK-9,Chinook,MIDDLE FRASER RIVER-PORTAGE_FA_1.3,FRASER INTERIOR,Current,8,"Middle Fraser, Stream, Fall (Portage)",MFR+GStr/Stream/Fall,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Negligible
+CK-10,Chinook,MIDDLE FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,9,"Middle Fraser, Stream, Spring ",MFR+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Low
+CK-11,Chinook,MIDDLE FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,10,"Middle Fraser,Stream, Summer",MFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Negligible
+CK-12,Chinook,UPPER FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,11,"Upper Fraser, Stream, Spring",UFR/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Low
+CK-16,Chinook,SOUTH THOMPSON-BESSETTE CREEK_SU_1.2,FRASER INTERIOR,Current,14,"South Thompson, Stream, Summer (Bessette)",STh+GStr/Stream/Summer/(Bessette),FRASER INTERIOR,FRASER SPRING RUN 42 CHINOOK SALMON,CK-FIA-06,Chinook,Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Low
+CK-18,Chinook,NORTH THOMPSON_SP_1.3,FRASER INTERIOR,Current,16,"North Thompson, Stream, Spring",NTh+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Low
+CK-19,Chinook,NORTH THOMPSON_SU_1.3,FRASER INTERIOR,Current,17,"North Thompson, Stream, Summer",NTh+Gstr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Human Disturbance,6 Human intrusions & disturbance,6.3 Other Human Disturbances,Low
+SEL-07-01,Sockeye (Lake Type),BOWRON-EARLY SUMMER TIMING,FRASER INTERIOR,Current,2,Bowron-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium-High
+SEL-03-04,Sockeye (Lake Type),HARRISON-UPSTREAM MIGRATING-LATE TIMING,FRASER INTERIOR,Current,10,Harrison (U/S)-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Low-Medium
+SEL-10-03,Sockeye (Lake Type),NORTH BARRIERE-EARLY SUMMER TIMING,FRASER INTERIOR,Current,14,North Barriere-ES population (original),,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium
+SEL-06-10,Sockeye (Lake Type),QUESNEL-SUMMER TIMING,FRASER INTERIOR,Current,16,Quesnel-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium
+SEL-06-11,Sockeye (Lake Type),SETON-LATE TIMING,FRASER INTERIOR,Current,17,Seton-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium
+SEL-06-14,Sockeye (Lake Type),TAKLA/TREMBLEUR-EARLY STUART TIMING,FRASER INTERIOR,Current,20,Takla-Trembleur-EStu population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY STUART,SEL-FIA-14,Sockeye (Lake Type),Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium-High
+SEL-06-13,Sockeye (Lake Type),TAKLA/TREMBLEUR/STUART-SUMMER TIMING,FRASER INTERIOR,Current,21,Takla-Trembleur-Stuart-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium
+SEL-06-16,Sockeye (Lake Type),TASEKO-EARLY SUMMER TIMING,FRASER INTERIOR,Current,22,Taseko-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium-High
+SER-02,Sockeye (River Type),WIDGEON,FRASER INTERIOR,Current,24,Widgeon (River-Type) population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Low-Medium
+CK-3,Chinook,LOWER FRASER RIVER_FA_0.3,FRASER INTERIOR,Current,2,"Lower Fraser, Ocean, Fall (Harrison)",LFR+GStr/Ocean/Fall,FRASER INTERIOR,FRASER FALL RUN 41 CHINOOK SALMON,CK-FIA-02,Chinook,Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium-Low
+CK-5,Chinook,LOWER FRASER RIVER-UPPER PITT_SU_1.3,FRASER INTERIOR,Current,4,"Lower Fraser, Stream. Summer  (Upper Pitt)",LFR+GStr/Stream/Summer (Upper Pitt),FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium-Low
+CK-6,Chinook,LOWER FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,5,"Lower Fraser, Stream, Summer (Lillooet) ",LFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium-Low
+CK-8,Chinook,MIDDLE FRASER-FRASER CANYON_SP_1.3,FRASER INTERIOR,Current,7,"Middle Fraser, Stream, Spring (FRCanyon)",FRCanyGStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium-Low
+CK-9,Chinook,MIDDLE FRASER RIVER-PORTAGE_FA_1.3,FRASER INTERIOR,Current,8,"Middle Fraser, Stream, Fall (Portage)",MFR+GStr/Stream/Fall,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium
+CK-10,Chinook,MIDDLE FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,9,"Middle Fraser, Stream, Spring ",MFR+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,High-Medium
+CK-11,Chinook,MIDDLE FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,10,"Middle Fraser,Stream, Summer",MFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium-Low
+CK-12,Chinook,UPPER FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,11,"Upper Fraser, Stream, Spring",UFR/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium-Low
+CK-16,Chinook,SOUTH THOMPSON-BESSETTE CREEK_SU_1.2,FRASER INTERIOR,Current,14,"South Thompson, Stream, Summer (Bessette)",STh+GStr/Stream/Summer/(Bessette),FRASER INTERIOR,FRASER SPRING RUN 42 CHINOOK SALMON,CK-FIA-06,Chinook,Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Extreme-High
+CK-18,Chinook,NORTH THOMPSON_SP_1.3,FRASER INTERIOR,Current,16,"North Thompson, Stream, Spring",NTh+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium-Low
+CK-19,Chinook,NORTH THOMPSON_SU_1.3,FRASER INTERIOR,Current,17,"North Thompson, Stream, Summer",NTh+Gstr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Water Use and Watercourse Modifications,7 Natural system modifications,7.2 Dams & Water Management / Use,Medium-Low
+SEL-07-01,Sockeye (Lake Type),BOWRON-EARLY SUMMER TIMING,FRASER INTERIOR,Current,2,Bowron-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low-Medium
+SEL-03-04,Sockeye (Lake Type),HARRISON-UPSTREAM MIGRATING-LATE TIMING,FRASER INTERIOR,Current,10,Harrison (U/S)-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",8.1 Invasive Non-Native / Alien Species,Low-Medium
+SEL-10-03,Sockeye (Lake Type),NORTH BARRIERE-EARLY SUMMER TIMING,FRASER INTERIOR,Current,14,North Barriere-ES population (original),,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low-Medium
+SEL-06-10,Sockeye (Lake Type),QUESNEL-SUMMER TIMING,FRASER INTERIOR,Current,16,Quesnel-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low-Medium
+SEL-06-11,Sockeye (Lake Type),SETON-LATE TIMING,FRASER INTERIOR,Current,17,Seton-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low-Medium
+SEL-06-14,Sockeye (Lake Type),TAKLA/TREMBLEUR-EARLY STUART TIMING,FRASER INTERIOR,Current,20,Takla-Trembleur-EStu population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY STUART,SEL-FIA-14,Sockeye (Lake Type),Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low-Medium
+SEL-06-13,Sockeye (Lake Type),TAKLA/TREMBLEUR/STUART-SUMMER TIMING,FRASER INTERIOR,Current,21,Takla-Trembleur-Stuart-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low-Medium
+SEL-06-16,Sockeye (Lake Type),TASEKO-EARLY SUMMER TIMING,FRASER INTERIOR,Current,22,Taseko-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low-Medium
+SER-02,Sockeye (River Type),WIDGEON,FRASER INTERIOR,Current,24,Widgeon (River-Type) population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low-Medium
+CK-3,Chinook,LOWER FRASER RIVER_FA_0.3,FRASER INTERIOR,Current,2,"Lower Fraser, Ocean, Fall (Harrison)",LFR+GStr/Ocean/Fall,FRASER INTERIOR,FRASER FALL RUN 41 CHINOOK SALMON,CK-FIA-02,Chinook,Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Medium-Low
+CK-5,Chinook,LOWER FRASER RIVER-UPPER PITT_SU_1.3,FRASER INTERIOR,Current,4,"Lower Fraser, Stream. Summer  (Upper Pitt)",LFR+GStr/Stream/Summer (Upper Pitt),FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Medium-Low
+CK-6,Chinook,LOWER FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,5,"Lower Fraser, Stream, Summer (Lillooet) ",LFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Medium-Low
+CK-8,Chinook,MIDDLE FRASER-FRASER CANYON_SP_1.3,FRASER INTERIOR,Current,7,"Middle Fraser, Stream, Spring (FRCanyon)",FRCanyGStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low
+CK-9,Chinook,MIDDLE FRASER RIVER-PORTAGE_FA_1.3,FRASER INTERIOR,Current,8,"Middle Fraser, Stream, Fall (Portage)",MFR+GStr/Stream/Fall,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low
+CK-10,Chinook,MIDDLE FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,9,"Middle Fraser, Stream, Spring ",MFR+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low
+CK-11,Chinook,MIDDLE FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,10,"Middle Fraser,Stream, Summer",MFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low
+CK-12,Chinook,UPPER FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,11,"Upper Fraser, Stream, Spring",UFR/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low
+CK-16,Chinook,SOUTH THOMPSON-BESSETTE CREEK_SU_1.2,FRASER INTERIOR,Current,14,"South Thompson, Stream, Summer (Bessette)",STh+GStr/Stream/Summer/(Bessette),FRASER INTERIOR,FRASER SPRING RUN 42 CHINOOK SALMON,CK-FIA-06,Chinook,Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Medium-Low
+CK-18,Chinook,NORTH THOMPSON_SP_1.3,FRASER INTERIOR,Current,16,"North Thompson, Stream, Spring",NTh+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low
+CK-19,Chinook,NORTH THOMPSON_SU_1.3,FRASER INTERIOR,Current,17,"North Thompson, Stream, Summer",NTh+Gstr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Invasive Species and Disease,"8 Invasive & other problematic species, genes & diseases",NA,Low
+SEL-07-01,Sockeye (Lake Type),BOWRON-EARLY SUMMER TIMING,FRASER INTERIOR,Current,2,Bowron-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Low-Medium
+SEL-03-04,Sockeye (Lake Type),HARRISON-UPSTREAM MIGRATING-LATE TIMING,FRASER INTERIOR,Current,10,Harrison (U/S)-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Low-Medium
+SEL-10-03,Sockeye (Lake Type),NORTH BARRIERE-EARLY SUMMER TIMING,FRASER INTERIOR,Current,14,North Barriere-ES population (original),,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Low-Medium
+SEL-06-10,Sockeye (Lake Type),QUESNEL-SUMMER TIMING,FRASER INTERIOR,Current,16,Quesnel-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Low-Medium
+SEL-06-11,Sockeye (Lake Type),SETON-LATE TIMING,FRASER INTERIOR,Current,17,Seton-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Low-Medium
+SEL-06-14,Sockeye (Lake Type),TAKLA/TREMBLEUR-EARLY STUART TIMING,FRASER INTERIOR,Current,20,Takla-Trembleur-EStu population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY STUART,SEL-FIA-14,Sockeye (Lake Type),Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Low-Medium
+SEL-06-13,Sockeye (Lake Type),TAKLA/TREMBLEUR/STUART-SUMMER TIMING,FRASER INTERIOR,Current,21,Takla-Trembleur-Stuart-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Low-Medium
+SEL-06-16,Sockeye (Lake Type),TASEKO-EARLY SUMMER TIMING,FRASER INTERIOR,Current,22,Taseko-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Low-Medium
+SER-02,Sockeye (River Type),WIDGEON,FRASER INTERIOR,Current,24,Widgeon (River-Type) population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Low-Medium
+CK-3,Chinook,LOWER FRASER RIVER_FA_0.3,FRASER INTERIOR,Current,2,"Lower Fraser, Ocean, Fall (Harrison)",LFR+GStr/Ocean/Fall,FRASER INTERIOR,FRASER FALL RUN 41 CHINOOK SALMON,CK-FIA-02,Chinook,Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Medium
+CK-5,Chinook,LOWER FRASER RIVER-UPPER PITT_SU_1.3,FRASER INTERIOR,Current,4,"Lower Fraser, Stream. Summer  (Upper Pitt)",LFR+GStr/Stream/Summer (Upper Pitt),FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Medium-Low
+CK-6,Chinook,LOWER FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,5,"Lower Fraser, Stream, Summer (Lillooet) ",LFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Medium-Low
+CK-8,Chinook,MIDDLE FRASER-FRASER CANYON_SP_1.3,FRASER INTERIOR,Current,7,"Middle Fraser, Stream, Spring (FRCanyon)",FRCanyGStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Medium-Low
+CK-9,Chinook,MIDDLE FRASER RIVER-PORTAGE_FA_1.3,FRASER INTERIOR,Current,8,"Middle Fraser, Stream, Fall (Portage)",MFR+GStr/Stream/Fall,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Medium-Low
+CK-10,Chinook,MIDDLE FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,9,"Middle Fraser, Stream, Spring ",MFR+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Medium
+CK-11,Chinook,MIDDLE FRASER RIVER_SU_1.3,FRASER INTERIOR,Current,10,"Middle Fraser,Stream, Summer",MFR+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Medium-Low
+CK-12,Chinook,UPPER FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,11,"Upper Fraser, Stream, Spring",UFR/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Medium-Low
+CK-16,Chinook,SOUTH THOMPSON-BESSETTE CREEK_SU_1.2,FRASER INTERIOR,Current,14,"South Thompson, Stream, Summer (Bessette)",STh+GStr/Stream/Summer/(Bessette),FRASER INTERIOR,FRASER SPRING RUN 42 CHINOOK SALMON,CK-FIA-06,Chinook,Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Medium
+CK-18,Chinook,NORTH THOMPSON_SP_1.3,FRASER INTERIOR,Current,16,"North Thompson, Stream, Spring",NTh+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Medium
+CK-19,Chinook,NORTH THOMPSON_SU_1.3,FRASER INTERIOR,Current,17,"North Thompson, Stream, Summer",NTh+Gstr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,Pollution,9 Pollution,9.1 Water-Borne & Other Effluent Pollution ,Medium
+CK-1,Chinook,OKANAGAN_0.X,FRASER INTERIOR,Current,69,"Okanagan River,Ocean, Summer",OK+ORWA/Ocean/Fall,FRASER INTERIOR,OKANAGAN CHINOOK SALMON,CK-FIA-01,Chinook,,,,
+CK-13,Chinook,SOUTH THOMPSON_SU_0.3,FRASER INTERIOR,Current,12,"South Thompson, Ocean, Summer",STh+GStr/Ocean/Summer,FRASER INTERIOR,FRASER SUMMER RUN 41 CHINOOK SALMON,CK-FIA-07,Chinook,,,,
+CK-14,Chinook,SOUTH THOMPSON_SU_1.3,FRASER INTERIOR,Current,13,"South Thompson, Stream, Summer ",STh+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 52 CHINOOK SALMON,CK-FIA-05,Chinook,,,,
+CK-15,Chinook,SHUSWAP RIVER_SU_0.3,FRASER INTERIOR,Current,12,"South Thompson, Ocean, Summer",STh+GStr/Ocean/Summer,FRASER INTERIOR,FRASER SUMMER RUN 41 CHINOOK SALMON,CK-FIA-07,Chinook,,,,
+CK-17,Chinook,LOWER THOMPSON_SP_1.2,FRASER INTERIOR,Current,15,"Lower Thompson, Stream, Spring",LTh+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 42 CHINOOK SALMON,CK-FIA-06,Chinook,,,,
+CK-2,Chinook,BOUNDARY BAY_FA_0.3,FRASER INTERIOR,Current,1,"Southern Mainland Boundary Bay, Ocean, Fall population",BB+GStr/Ocean/Fall,,NO DESIGNATED SMU,,,,,,
+CK-20,Chinook,SOUTHERN MAINLAND-GEORGIA STRAIT_FA_0.X,SOUTH COAST,Current,18,"South Coast - Georgia Strait, Ocean, Fall ",SC+GStr/Ocean/Fall,SOUTH COAST,MIDDLE GEORGIA STRAIT CHINOOK SALMON,CK-SC-02,Chinook,,,,
+CK-21,Chinook,EAST VANCOUVER ISLAND-GOLDSTREAM_FA_0.X,SOUTH COAST,Current,21,"East Vancouver Island, Ocean, Fall",EVI+GStr/Ocean/Fall,SOUTH COAST,LOWER GEORGIA STRAIT CHINOOK SALMON,CK-SC-01,Chinook,,,,
+CK-22,Chinook,EAST VANCOUVER ISLAND-COWICHAN AND KOKSILAH_FA_0.X,SOUTH COAST,Current,21,"East Vancouver Island, Ocean, Fall",EVI+GStr/Ocean/Fall,SOUTH COAST,LOWER GEORGIA STRAIT CHINOOK SALMON,CK-SC-01,Chinook,,,,
+CK-23,Chinook,EAST VANCOUVER ISLAND-NANAIMO_SP_1.X,SOUTH COAST,Deprecated,19,"East Vancouver Island, Stream, Spring",EVI+GStr/Stream/Spring,SOUTH COAST,MIDDLE GEORGIA STRAIT CHINOOK SALMON,CK-SC-02,Chinook,,,,
+CK-24,Chinook,EAST VANCOUVER ISLAND-NANAIMO AND CHEMAINUS SUMMER TIMING,SOUTH COAST,Deprecated,,,,,NO DESIGNATED SMU,,,,,,
+CK-25,Chinook,EAST VANCOUVER ISLAND-NANAIMO AND CHEMAINUS_FA_0.X,SOUTH COAST,Current,21,"East Vancouver Island, Ocean, Fall",EVI+GStr/Ocean/Fall,SOUTH COAST,LOWER GEORGIA STRAIT CHINOOK SALMON,CK-SC-01,Chinook,,,,
+CK-26,Chinook,EAST VANCOUVER ISLAND-PUNTLEDGE-SUMMER TIMING,SOUTH COAST,Deprecated,,,,,NO DESIGNATED SMU,,,,,,
+CK-27,Chinook,EAST VANCOUVER ISLAND-QUALICUM AND PUNTLEDGE_FA_0.X,SOUTH COAST,Current,21,"East Vancouver Island, Ocean, Fall",EVI+GStr/Ocean/Fall,SOUTH COAST,MIDDLE GEORGIA STRAIT CHINOOK SALMON,CK-SC-02,Chinook,,,,
+CK-28,Chinook,SOUTHERN MAINLAND-SOUTHERN FJORDS_FA_0.X,SOUTH COAST,Current,22,"South Coast - Southern Fjords, Ocean, Fall",SC+SFj/Ocean/Fall,SOUTH COAST,MAINLAND INLET CHINOOK SALMON,CK-SC-04,Chinook,,,,
+CK-29,Chinook,EAST VANCOUVER ISLAND-NORTH_FA_0.X,SOUTH COAST,Current,23,"East Vancouver Island-North, Ocean, Fall",EVI+SFj/Ocean/Fall,SOUTH COAST,UPPER GEORGIA STRAIT CHINOOK SALMON,CK-SC-29,Chinook,,,,
+CK-30,Chinook,PORT SAN JUAN,SOUTH COAST,Deprecated,,,,,NO DESIGNATED SMU,,,,,,
+CK-31,Chinook,WEST VANCOUVER ISLAND-SOUTH_FA_0.X,SOUTH COAST,Current,24,"West Vancouver Island-South, Ocean, Fall",WVI/Ocean/Fall (South),SOUTH COAST,WCVI CHINOOK SALMON,CK-SC-05,Chinook,,,,
+CK-32,Chinook,WEST VANCOUVER ISLAND-NOOTKA AND KYUQUOT_FA_0.X,SOUTH COAST,Current,25,"West Vancouver Island-Nootka and Kyuquot, Ocean, Fall",WVI/Ocean/Fall (Nootka & Kyuquot),SOUTH COAST,WCVI CHINOOK SALMON,CK-SC-05,Chinook,,,,
+CK-33,Chinook,WEST VANCOUVER ISLAND-NORTH_FA_0.X,SOUTH COAST,Current,26,"West Vancouver Island-North, Ocean, Fall",WVI+WHG/Ocean/Fall,SOUTH COAST,WCVI CHINOOK SALMON,CK-SC-05,Chinook,,,,
+CK-34,Chinook,HOMATHKO_SU_X.X,SOUTH COAST,Current,27,"Southern Mainland, Ocean, Summer population",HK+SFj/Ocean/Summer,SOUTH COAST,MAINLAND INLET CHINOOK SALMON,CK-SC-04,Chinook,,,,
+CK-35,Chinook,KLINAKLINI_SU_1.3,SOUTH COAST,Current,28,"Southern Mainland, Stream, Summer population",HK+SFj/Stream/Summer,SOUTH COAST,MAINLAND INLET CHINOOK SALMON,CK-SC-04,Chinook,,,,
+CK-36,Chinook,DOCEE,NORTH COAST,Current,32,"Smith Inlet, Ocean, Summer",SMITH,NORTH COAST,CENTRAL COAST CHINOOK SALMON,CK-NC-02,Chinook,,,,
+CK-37,Chinook,RIVERS INLET,NORTH COAST,Current,33,"Rivers Inlet, Stream, Summer",RIVERS,NORTH COAST,CENTRAL COAST CHINOOK SALMON,CK-NC-02,Chinook,,,,
+CK-38,Chinook,WANNOCK,NORTH COAST,Current,34,"Wannock River, Ocean, Fall",WANN,NORTH COAST,CENTRAL COAST CHINOOK SALMON,CK-NC-02,Chinook,,,,
+CK-39,Chinook,BELLA COOLA-BENTINCK,NORTH COAST,Current,35,"Bella Coola-Bentinck, Ocean, Summer ",BCR-BENT,NORTH COAST,CENTRAL COAST CHINOOK SALMON,CK-NC-02,Chinook,,,,
+CK-4,Chinook,LOWER FRASER RIVER_SP_1.3,FRASER INTERIOR,Current,3,"Lower Fraser, Stream, Spring (Birkenhead)",LFR+GStr/Stream/Spring,FRASER INTERIOR,FRASER SPRING RUN 52 CHINOOK SALMON,CK-FIA-08,Chinook,,,,
+CK-40,Chinook,DEAN RIVER,NORTH COAST,Current,36,"Dean River, Stream, Summer",DEAN,NORTH COAST,CENTRAL COAST CHINOOK SALMON,CK-NC-02,Chinook,,,,
+CK-41,Chinook,NORTH AND CENTRAL COAST-LATE TIMING,NORTH COAST,Current,"37, 39","North & Central Coast Late, Ocean/Stream, Summer; HecLow, Ocean/Stream, Summer","NCC Late, HecLow",NORTH COAST,CENTRAL COAST CHINOOK SALMON,CK-NC-02,Chinook,,,,
+CK-42,Chinook,NORTH AND CENTRAL COAST-EARLY TIMING,NORTH COAST,Current,38,"North & Central Coast Early, Ocean, Spring",NCC early,NORTH COAST,CENTRAL COAST CHINOOK SALMON,CK-NC-02,Chinook,,,,
+CK-43,Chinook,HAIDA GWAII-NORTH,NORTH COAST,Current,30,"Haida Gwaii-North Ocean/Stream, Summer",HGN,NORTH COAST,HAIDA GWAII CHINOOK SALMON,CK-NC-04,Chinook,,,,
+CK-44,Chinook,HAIDA GWAII-EAST,NORTH COAST,Current,31,"Haida Gwaii-East Ocean, Fall",HGE,NORTH COAST,HAIDA GWAII CHINOOK SALMON,CK-NC-04,Chinook,,,,
+CK-45,Chinook,SKEENA ESTUARY,NORTH COAST,Current,40,"Skeena Estuary, Stream, Summer",SKEst,NORTH COAST,SKEENA CHINOOK SALMON,CK-NC-03,Chinook,,,,
+CK-46,Chinook,ECSTALL,NORTH COAST,Current,41,"Ecstall, Ocean, Summer",ECST,NORTH COAST,SKEENA CHINOOK SALMON,CK-NC-03,Chinook,,,,
+CK-47,Chinook,chinook [CK] Gitnadoix,NORTH COAST,Deprecated,,,,,NO DESIGNATED SMU,,,,,,
+CK-48,Chinook,LOWER SKEENA,NORTH COAST,Current,42,"Lower Skeena, Stream, Summer",LSK,NORTH COAST,SKEENA CHINOOK SALMON,CK-NC-03,Chinook,,,,
+CK-49,Chinook,KALUM-EARLY TIMING,NORTH COAST,Current,43,"Kalum - Early Timing, Stream, Spring",KALUM-E,NORTH COAST,SKEENA CHINOOK SALMON,CK-NC-03,Chinook,,,,
+CK-50,Chinook,KALUM-LATE TIMING,NORTH COAST,Current,44,"Kalum - Late Timing, Stream, Summer",KALUM-L,NORTH COAST,SKEENA CHINOOK SALMON,CK-NC-03,Chinook,,,,
+CK-51,Chinook,LAKELSE,NORTH COAST,Current,42,"Lower Skeena, Stream, Summer",LSK,NORTH COAST,SKEENA CHINOOK SALMON,CK-NC-03,Chinook,,,,
+CK-52,Chinook,chinook [CK] Middle Skeena,NORTH COAST,Deprecated,,,,,NO DESIGNATED SMU,,,,,,
+CK-53,Chinook,MIDDLE SKEENA-LARGE LAKES,NORTH COAST,Current,46,"Middle Skeena - Lakes, Stream, Summer",MSK-LKS,NORTH COAST,SKEENA CHINOOK SALMON,CK-NC-03,Chinook,,,,
+CK-54,Chinook,MIDDLE SKEENA-MAINSTEM TRIBUTARIES,NORTH COAST,Current,47,"Middle Skeena-M/S Tributary, Stream, Summer",MSK-M/S,NORTH COAST,SKEENA CHINOOK SALMON,CK-NC-03,Chinook,,,,
+CK-55,Chinook,UPPER BULKLEY RIVER,NORTH COAST,Current,45,"Bulkley River, Stream, Spring",MSK-M/S,NORTH COAST,SKEENA CHINOOK SALMON,CK-NC-03,Chinook,,,,
+CK-56,Chinook,UPPER SKEENA,NORTH COAST,Current,48,"Upper Skeena River, Stream, Spring",USK,NORTH COAST,SKEENA CHINOOK SALMON,CK-NC-03,Chinook,,,,
+CK-57,Chinook,PORTLAND SOUND-OBSERVATORY INLET-LOWER NASS,NORTH COAST,Current,49,"Lower Nass River, Stream, Summer",LNR-P,NORTH COAST,CENTRAL COAST CHINOOK SALMON,CK-NC-02,Chinook,,,,
+CK-58,Chinook,UPPER NASS,NORTH COAST,Current,50,"Upper Nass River, Stream, Summer",UNR,NORTH COAST,NASS CHINOOK SALMON,CK-NC-58,Chinook,,,,
+CK-59,Chinook,UNUK,YUKON TRANSBOUNDARY,Current,,,,,NO DESIGNATED SMU,,,,,,
+CK-60,Chinook,STIKINE-EARLY TIMING,YUKON TRANSBOUNDARY,Current,52,"Stikine - early timing, Stream, Spring",LSTK-E,YUKON TRANSBOUNDARY,STIKINE CHINOOK SALMON,CK-YTRA-04,Chinook,,,,
+CK-61,Chinook,STIKINE-LATE TIMING,YUKON TRANSBOUNDARY,Current,53,"Stikine - late timing, Stream, Summer",LSTK-L,YUKON TRANSBOUNDARY,STIKINE CHINOOK SALMON,CK-YTRA-04,Chinook,,,,
+CK-62,Chinook,WHITING,YUKON TRANSBOUNDARY,Current,,,,,NO DESIGNATED SMU,,,,,,
+CK-63,Chinook,TAKU-EARLY TIMING,YUKON TRANSBOUNDARY,Current,55,"Taku - early, Stream, Spring",TAKU-E,YUKON TRANSBOUNDARY,TAKU CHINOOK SALMON,CK-YTRA-05,Chinook,,,,
+CK-64,Chinook,TAKU-MID TIMING,YUKON TRANSBOUNDARY,Current,56,"Taku - mid, Stream, Summer",TAKU-M,YUKON TRANSBOUNDARY,TAKU CHINOOK SALMON,CK-YTRA-05,Chinook,,,,
+CK-65,Chinook,TAKU-LATE TIMING,YUKON TRANSBOUNDARY,Current,57,"Taku - late, Stream, Summer",TAKU-L,YUKON TRANSBOUNDARY,TAKU CHINOOK SALMON,CK-YTRA-05,Chinook,,,,
+CK-66,Chinook,LYNN CANAL,YUKON TRANSBOUNDARY,Current,,,,,NO DESIGNATED SMU,,,,,,
+CK-67,Chinook,ALSEK,YUKON TRANSBOUNDARY,Current,59,"Alsek, Stream, Summer",ALSEK,YUKON TRANSBOUNDARY,ALSEK CHINOOK SALMON,CK-YTRA-67,Chinook,,,,
+CK-68,Chinook,YUKON RIVER-TESLIN HEADWATERS,YUKON TRANSBOUNDARY,Current,60,"Yukon - Teslin Headwaters, Stream, Summer",YK-TESLIN,YUKON TRANSBOUNDARY,YUKON CHINOOK SALMON,CK-YTRA-02,Chinook,,,,
+CK-69,Chinook,UPPER YUKON RIVER,YUKON TRANSBOUNDARY,Current,60,"Yukon - Teslin Headwaters, Stream, Summer",YK-TESLIN,YUKON TRANSBOUNDARY,YUKON CHINOOK SALMON,CK-YTRA-02,Chinook,,,,
+CK-7,Chinook,MARIA SLOUGH_SU_0.3,FRASER INTERIOR,Current,6,"Lower Fraser, Ocean, Summer (Maria Slough)",LFR+GStr/Ocean/Summer,FRASER INTERIOR,FRASER SUMMER RUN 41 CHINOOK SALMON,CK-FIA-07,Chinook,,,,
+CK-70,Chinook,BIG SALMON,YUKON TRANSBOUNDARY,Current,61,"Big Salmon River, Stream, Summer",BSAL,YUKON TRANSBOUNDARY,YUKON CHINOOK SALMON,CK-YTRA-02,Chinook,,,,
+CK-71,Chinook,NORDENSKIOLD,YUKON TRANSBOUNDARY,Current,62,"Nordenskiold, Stream, Summer",NORDEN,YUKON TRANSBOUNDARY,YUKON CHINOOK SALMON,CK-YTRA-02,Chinook,,,,
+CK-72,Chinook,PELLY,YUKON TRANSBOUNDARY,Current,64,"Pelly-Stewart, Stream, Summer",PELLY,YUKON TRANSBOUNDARY,YUKON CHINOOK SALMON,CK-YTRA-02,Chinook,,,,
+CK-73,Chinook,MIDDLE YUKON RIVER AND TRIBUTARIES,YUKON TRANSBOUNDARY,Current,63,"Mid-Yukon River and Trib, Stream, Summer",MidYR,YUKON TRANSBOUNDARY,YUKON CHINOOK SALMON,CK-YTRA-02,Chinook,,,,
+CK-74,Chinook,STEWART,YUKON TRANSBOUNDARY,Current,64,"Pelly-Stewart, Stream, Summer",PELLY,YUKON TRANSBOUNDARY,YUKON CHINOOK SALMON,CK-YTRA-02,Chinook,,,,
+CK-75,Chinook,WHITE AND TRIBUTARIES,YUKON TRANSBOUNDARY,Current,65,"White River and Trib, Stream, Summer",WHITE,YUKON TRANSBOUNDARY,YUKON CHINOOK SALMON,CK-YTRA-02,Chinook,,,,
+CK-76,Chinook,NORTHERN YUKON RIVER AND TRIBUTARIES,YUKON TRANSBOUNDARY,Current,66,"N Yukon River and Trib, Stream, Summer",NYR,YUKON TRANSBOUNDARY,YUKON CHINOOK SALMON,CK-YTRA-02,Chinook,,,,
+CK-77,Chinook,SALMON FORK,YUKON TRANSBOUNDARY,Current,,,,YUKON TRANSBOUNDARY,PORCUPINE CHINOOK SALMON,CK-YTRA-03,Chinook,,,,
+CK-78,Chinook,PORCUPINE,YUKON TRANSBOUNDARY,Current,67,"Porcupine River, Stream, Summer",PORCR,YUKON TRANSBOUNDARY,PORCUPINE CHINOOK SALMON,CK-YTRA-03,Chinook,,,,
+CK-79,Chinook,OLD CROW,YUKON TRANSBOUNDARY,Current,68,"Old Crow River, Stream, Summer",OCROW,YUKON TRANSBOUNDARY,PORCUPINE CHINOOK SALMON,CK-YTRA-03,Chinook,,,,
+CK-80,Chinook,ZYMOETZ,NORTH COAST,Current,42,"Lower Skeena, Stream, Summer",LSK,NORTH COAST,SKEENA CHINOOK SALMON,CK-NC-03,Chinook,,,,
+CK-81,Chinook,SICINTINE,NORTH COAST,Current,48,"Upper Skeena River, Stream, Spring",USK,NORTH COAST,SKEENA CHINOOK SALMON,CK-NC-03,Chinook,,,,
+CK-82,Chinook,UPPER ADAMS RIVER_SU_1.X,FRASER INTERIOR,Current,29,"Upper Adams, Stream, Summer",STh+GStr/Stream/Summer,FRASER INTERIOR,FRASER SUMMER RUN 41 CHINOOK SALMON,CK-FIA-07,Chinook,,,,
+CK-83,Chinook,EAST VANCOUVER ISLAND-GEORGIA STRAIT_SU_0.3,SOUTH COAST,Current,20,"East Vancouver Island, Ocean, Summer",EVI+GStr/Ocean/Summer,SOUTH COAST,MIDDLE GEORGIA STRAIT CHINOOK SALMON,CK-SC-02,Chinook,,,,
+CK-9000,Chinook,(P)HATCHERY EXCLUSION-LOWER FRASER RIVER,FRASER INTERIOR,Deprecated(Bin),,,,FRASER INTERIOR,FRASER FALL RUN 41 CHINOOK SALMON,CK-FIA-02,Chinook,,,,
+CK-9001,Chinook,(P)HATCHERY EXCLUSION-BARKLEY SOUND,SOUTH COAST,Deprecated(Bin),,,,,NO DESIGNATED SMU,,,,,,
+CK-9002,Chinook,(P)HATCHERY EXCLUSION-PALLANT CREEK,NORTH COAST,Bin,,,,,NO DESIGNATED SMU,,,,,,
+CK-9004,Chinook,FRASER-MISCELLANEOUS<<BIN>>,FRASER INTERIOR,Bin,,,,,NO DESIGNATED SMU,,,,,,
+CK-9005,Chinook,SOUTH-MISCELLANEOUS<<BIN>>,SOUTH COAST,Bin,,,,,NO DESIGNATED SMU,,,,,,
+CK-9006,Chinook,FRASER-CROSS-CU SUPPLEMENTATION EXCLUSION<<BIN>>,FRASER INTERIOR,Bin,,,,,NO DESIGNATED SMU,,,,,,
+CK-9007,Chinook,SOUTHERN BC-CROSS-CU SUPPLEMENTATION EXCLUSION<<BIN>>,SOUTH COAST,Bin,,,,,NO DESIGNATED SMU,,,,,,
+CK-9008,Chinook,FRASER-HARRISON FALL TRANSPLANT_FA_0.3<<BIN>>,FRASER INTERIOR,Bin,,,,,NO DESIGNATED SMU,,,,,,
+CM-1,Chum,FRASER CANYON,FRASER INTERIOR,VREQ[Current],,,,FRASER INTERIOR,FRASER CHUM SALMON,CM-FIA-01,Chum,,,,
+CM-10,Chum,SOUTHWEST VANCOUVER ISLAND,SOUTH COAST,Current,10,West Vancouver Island,,SOUTH COAST,WCVI CHUM SALMON,CM-SC-02,Chum,,,,
+CM-11,Chum,NORTHWEST VANCOUVER ISLAND,SOUTH COAST,Current,11,NORTHWEST VANCOUVER ISLAND,,SOUTH COAST,WCVI CHUM SALMON,CM-SC-02,Chum,,,,
+CM-12,Chum,SMITH INLET,NORTH COAST,Current,16,Smith Inlet,,NORTH COAST,CENTRAL COAST CHUM SALMON,CM-NC-01,Chum,,,,
+CM-13,Chum,RIVERS INLET,NORTH COAST,Current,,,,NORTH COAST,CENTRAL COAST CHUM SALMON,CM-NC-01,Chum,,,,
+CM-14,Chum,WANNOCK,NORTH COAST,Current,17,Wannock River,,NORTH COAST,CENTRAL COAST CHUM SALMON,CM-NC-01,Chum,,,,
+CM-15,Chum,SPILLER-FITZ HUGH-BURKE,NORTH COAST,Current,18,BELLA COOLA-DEAN RIVERS,,NORTH COAST,CENTRAL COAST CHUM SALMON,CM-NC-01,Chum,,,,
+CM-16,Chum,BELLA COOLA-DEAN RIVERS,NORTH COAST,Current,18,BELLA COOLA-DEAN RIVERS,,NORTH COAST,CENTRAL COAST CHUM SALMON,CM-NC-01,Chum,,,,
+CM-17,Chum,BELLA COOLA RIVER-LATE,NORTH COAST,Current,19,BELLA COOLA RIVER-LATE,,NORTH COAST,CENTRAL COAST CHUM SALMON,CM-NC-01,Chum,,,,
+CM-18,Chum,HECATE LOWLANDS,NORTH COAST,Current,20,Hecate Strait Lowlands- Skeena Estuary,,NORTH COAST,CENTRAL COAST CHUM SALMON,CM-NC-01,Chum,,,,
+CM-19,Chum,MUSSEL-KYNOCH,NORTH COAST,Current,21,DOUGLAS-GARDNER,,NORTH COAST,CENTRAL COAST CHUM SALMON,CM-NC-01,Chum,,,,
+CM-2,Chum,LOWER FRASER,FRASER INTERIOR,Current,1,Lower Fraser,,FRASER INTERIOR,FRASER CHUM SALMON,CM-FIA-01,Chum,,,,
+CM-20,Chum,DOUGLAS-GARDNER,NORTH COAST,Current,21,DOUGLAS-GARDNER,,NORTH COAST,CENTRAL COAST CHUM SALMON,CM-NC-01,Chum,,,,
+CM-21,Chum,EAST HG,NORTH COAST,Current,15,Haida Gwaii - East,,NORTH COAST,HAIDA GWAII CHUM SALMON,CM-NC-02,Chum,,,,
+CM-22,Chum,SKIDEGATE,NORTH COAST,Current,"12, 15","Haida Gwaii- West, Haida Gwaii - East",,NORTH COAST,HAIDA GWAII CHUM SALMON,CM-NC-02,Chum,,,,
+CM-23,Chum,WEST HAIDA GWAII,NORTH COAST,Current,12,Haida Gwai- West,,NORTH COAST,HAIDA GWAII CHUM SALMON,CM-NC-02,Chum,,,,
+CM-24,Chum,NORTH HAIDA GWAII,NORTH COAST,Current,13,Haida Gwaii - North,,NORTH COAST,HAIDA GWAII CHUM SALMON,CM-NC-02,Chum,,,,
+CM-25,Chum,NORTH HAIDA GWAII-STANLEY CREEK,NORTH COAST,Current,14,Stanley Creek,,NORTH COAST,HAIDA GWAII CHUM SALMON,CM-NC-02,Chum,,,,
+CM-26,Chum,SKEENA ESTUARY,NORTH COAST,Current,20,Hecate Strait Lowlands- Skeena Estuary,,NORTH COAST,SKEENA - NASS CHUM COASTAL,CM-NC-05,Chum,,,,
+CM-27,Chum,LOWER SKEENA,NORTH COAST,Current,22,Lower & Middle Skeena,,NORTH COAST,SKEENA CHUM SALMON,CM-NC-04,Chum,,,,
+CM-28,Chum,MIDDLE SKEENA,NORTH COAST,Current,22,Lower & Middle Skeena,,NORTH COAST,SKEENA CHUM SALMON,CM-NC-04,Chum,,,,
+CM-29,Chum,chum [CM] Upper Skeena ,NORTH COAST,Deleted,,,,,NO DESIGNATED SMU,,,,,,
+CM-3,Chum,HOWE SOUND-BURRARD INLET,SOUTH COAST,Current,3,HOWE SOUND-BURRARD INLET,,SOUTH COAST,INNER SOUTH COAST CHUM SALMON,CM-SC-01,Chum,,,,
+CM-30,Chum,PORTLAND INLET,NORTH COAST,Current,23,Portland Observatory Inlet,,NORTH COAST,SKEENA - NASS CHUM COASTAL,CM-NC-05,Chum,,,,
+CM-31,Chum,LOWER NASS,NORTH COAST,Current,24,Lower Nass River,,NORTH COAST,NASS CHUM SALMON,CM-NC-31,Chum,,,,
+CM-32,Chum,PORTLAND CANAL-OBSERVATORY,NORTH COAST,Current,23,Portland Observatory Inlet,,NORTH COAST,SKEENA - NASS CHUM COASTAL,CM-NC-05,Chum,,,,
+CM-33,Chum,UNUK,YUKON TRANSBOUNDARY,Current,27,Transboundary Fjords,,YUKON TRANSBOUNDARY,CU IS EXTANT AND IS EITHER ACCEPTED OR HAS BEEN PROPOSED.,,Chum,,,,
+CM-34,Chum,LOWER STIKINE,NORTH COAST,Current,27,Transboundary Fjords,,,NO DESIGNATED SMU,,,,,,
+CM-35,Chum,WHITING,YUKON TRANSBOUNDARY,Current,27,Transboundary Fjords,,,NO DESIGNATED SMU,,,,,,
+CM-36,Chum,TAKU,YUKON TRANSBOUNDARY,Current,25,Taku,,YUKON TRANSBOUNDARY,TRANSBOUNDARY CHUM SALMON,CM-YTRA-36,Chum,,,,
+CM-37,Chum,LYNN CANAL,YUKON TRANSBOUNDARY,Current,26,Chilkat,,,NO DESIGNATED SMU,,,,,,
+CM-38,Chum,TESLIN,YUKON TRANSBOUNDARY,Current,28,Yukon Plateau & Headwaters,,YUKON TRANSBOUNDARY,YUKON CHUM SALMON,CM-YTRA-01,Chum,,,,
+CM-39,Chum,LOWER LIARD,YUKON TRANSBOUNDARY,VREQ[Current],,,,,NO DESIGNATED SMU,,,,,,
+CM-4,Chum,GEORGIA STRAIT,SOUTH COAST,Current,"2, 4, 10","Georgia Strait Mainland, East Vancouver Island, West Vancouver Island",,SOUTH COAST,INNER SOUTH COAST CHUM SALMON,CM-SC-01,Chum,,,,
+CM-40,Chum,PEEL RIVER,YUKON TRANSBOUNDARY,Current,,,,,NO DESIGNATED SMU,,,,,,
+CM-42,Chum,MIDDLE YUKON RIVER,YUKON TRANSBOUNDARY,Current,28,Yukon Plateau & Headwaters,,YUKON TRANSBOUNDARY,YUKON CHUM SALMON,CM-YTRA-01,Chum,,,,
+CM-43,Chum,NORTH YUKON RIVER,YUKON TRANSBOUNDARY,Current,30,North Yukon-Klondike Plateau,,YUKON TRANSBOUNDARY,YUKON CHUM SALMON,CM-YTRA-01,Chum,,,,
+CM-44,Chum,WHITE RIVER,YUKON TRANSBOUNDARY,Current,29,White River and Tributaries,,YUKON TRANSBOUNDARY,YUKON CHUM SALMON,CM-YTRA-01,Chum,,,,
+CM-45,Chum,DONJEK-KLUANE,YUKON TRANSBOUNDARY,Current,29,White River and Tributaries,,YUKON TRANSBOUNDARY,YUKON CHUM SALMON,CM-YTRA-01,Chum,,,,
+CM-46,Chum,PORCUPINE RIVER,YUKON TRANSBOUNDARY,Current,31,Porcupine,,YUKON TRANSBOUNDARY,PORCUPINE CHUM SALMON,CM-YTRA-02,Chum,,,,
+CM-48,Chum,STEWART<<VREQ[CURRENT]>>,YUKON TRANSBOUNDARY,VREQ[Current],28,Yukon Plateau & Headwaters,,YUKON TRANSBOUNDARY,YUKON CHUM SALMON,CM-YTRA-01,Chum,,,,
+CM-5,Chum,NORTHEAST VANCOUVER ISLAND,SOUTH COAST,Current,9,NORTHEAST VANCOUVER ISLAND,,SOUTH COAST,INNER SOUTH COAST CHUM SALMON,CM-SC-01,Chum,,,,
+CM-6,Chum,LOUGHBOROUGH,SOUTH COAST,Current,6,LOUGHBOROUGH INLET,,SOUTH COAST,INNER SOUTH COAST CHUM SALMON,CM-SC-01,Chum,,,,
+CM-7,Chum,BUTE INLET,SOUTH COAST,Current,7,BUTE INLET,,SOUTH COAST,INNER SOUTH COAST CHUM SALMON,CM-SC-01,Chum,,,,
+CM-8,Chum,SOUTHERN COASTAL STREAMS,SOUTH COAST,Current,5,SOUTHERN COASTAL STREAMS,,SOUTH COAST,INNER SOUTH COAST CHUM SALMON,CM-SC-01,Chum,,,,
+CM-9,Chum,UPPER KNIGHT,SOUTH COAST,Current,8,UPPER KNIGHT INLET,,SOUTH COAST,INNER SOUTH COAST CHUM SALMON,CM-SC-01,Chum,,,,
+CM-9004,Chum,INTERIOR FRASER<<BIN>>,FRASER INTERIOR,Bin,,,,,NO DESIGNATED SMU,,,,,,
+CO-1,Coho,BOUNDARY BAY,SOUTH COAST,VREQ[Current],1,Boundary Bay,BB,SOUTH COAST,STRAIT OF GEORGIA COHO SALMON,CO-SC-01,Coho,,,,
+CO-10,Coho,HOWE SOUND-BURRARD INLET,SOUTH COAST,Current,10,Howe Sound-Burrard Inlet,Howe-Burrard,SOUTH COAST,STRAIT OF GEORGIA COHO SALMON,CO-SC-01,Coho,,,,
+CO-11,Coho,GEORGIA STRAIT MAINLAND,SOUTH COAST,Current,9,Georgia Strait Mainland,SC+GStr,SOUTH COAST,STRAIT OF GEORGIA COHO SALMON,CO-SC-01,Coho,,,,
+CO-12,Coho,SOUTHERN COASTAL STREAMS-QUEEN CHARLOTTE STRAIT-JOHNSTONE STRAIT-SOUTHERN FJORDS,SOUTH COAST,Current,12,South Coastal Streams-QCStr-JStr-SFjords,SC+SFj,SOUTH COAST,JOHNSTONE STRAIT/MAINLAND INLET COHO SALMON,CO-SC-03,Coho,,,,
+CO-13,Coho,EAST VANCOUVER ISLAND-GEORGIA STRAIT,SOUTH COAST,Current,11,East Vancouver Island- Georgia Strait-,EVI+GStr,SOUTH COAST,STRAIT OF GEORGIA COHO SALMON,CO-SC-01,Coho,,,,
+CO-14,Coho,EAST VANCOUVER ISLAND-JOHNSTONE STRAIT-SOUTHERN FJORDS,SOUTH COAST,Current,14,E Vancouver Is - Johnstone Strait-SFjords,EVI+SFj,SOUTH COAST,JOHNSTONE STRAIT/MAINLAND INLET COHO SALMON,CO-SC-03,Coho,,,,
+CO-15,Coho,NAHWITTI LOWLAND,SOUTH COAST,Current,17,Northwest Vancouver Island,NWVI,SOUTH COAST,JOHNSTONE STRAIT/MAINLAND INLET COHO SALMON,CO-SC-03,Coho,,,,
+CO-16,Coho,JUAN DE FUCA-PACHENA,SOUTH COAST,Current,16,Juan de Fuca - Pachena,JdF,SOUTH COAST,WCVI COHO SALMON,CO-SC-02,Coho,,,,
+CO-17,Coho,WEST VANCOUVER ISLAND,SOUTH COAST,Current,15,West Vancouver Island,WVI,SOUTH COAST,WCVI COHO SALMON,CO-SC-02,Coho,,,,
+CO-18,Coho,CLAYOQUOT,SOUTH COAST,Current,15,West Vancouver Island,WVI,SOUTH COAST,WCVI COHO SALMON,CO-SC-02,Coho,,,,
+CO-19,Coho,HOMATHKO-KLINAKLINI RIVERS,SOUTH COAST,Current,13,Homathko-Klinaklini,HK+SFj,SOUTH COAST,JOHNSTONE STRAIT/MAINLAND INLET COHO SALMON,CO-SC-03,Coho,,,,
+CO-2,Coho,LOWER FRASER-A,FRASER INTERIOR,Deprecated,,,,,NO DESIGNATED SMU,,,,,,
+CO-20,Coho,SMITH INLET,NORTH COAST,Current,21,Rivers-Smith Inlet,RSI,NORTH COAST,CENTRAL COAST COHO SALMON,CO-NC-01,Coho,,,,
+CO-21,Coho,RIVERS INLET,NORTH COAST,Current,21,Rivers-Smith Inlet,RSI,NORTH COAST,CENTRAL COAST COHO SALMON,CO-NC-01,Coho,,,,
+CO-22,Coho,BELLA COOLA-DEAN RIVERS,NORTH COAST,Current,22,Bella Coola - Dean Rivers,BCD,NORTH COAST,CENTRAL COAST COHO SALMON,CO-NC-01,Coho,,,,
+CO-23,Coho,HG-EAST,NORTH COAST,Current,20,Haida Gwaii2 - East,EHG,NORTH COAST,HAIDA GWAII COHO SALMON,CO-NC-02,Coho,,,,
+CO-24,Coho,HG-WEST,NORTH COAST,Current,18,Haida Gwaii2 - West,WHG,NORTH COAST,HAIDA GWAII COHO SALMON,CO-NC-02,Coho,,,,
+CO-25,Coho,HG-GRAHAM ISLAND LOWLANDS,NORTH COAST,Current,19,Haida Gwaii2 - North,NHG,NORTH COAST,HAIDA GWAII COHO SALMON,CO-NC-02,Coho,,,,
+CO-26,Coho,MUSSEL-KYNOCH,NORTH COAST,Current,24,Northern Coastal Streams,NCS,NORTH COAST,CENTRAL COAST COHO SALMON,CO-NC-01,Coho,,,,
+CO-27,Coho,HECATE STRAIT MAINLAND,NORTH COAST,Current,23,Hecate Strait Mainland,HecLow,NORTH COAST,CENTRAL COAST COHO SALMON,CO-NC-01,Coho,,,,
+CO-28,Coho,BRIM-WAHOO,NORTH COAST,Deprecated,24,Northern Coastal Streams,NCS,NORTH COAST,CENTRAL COAST COHO SALMON,CO-NC-01,Coho,,,,
+CO-29,Coho,DOUGLAS CHANNEL-KITIMAT ARM,NORTH COAST,Current,24,Northern Coastal Streams,NCS,NORTH COAST,CENTRAL COAST COHO SALMON,CO-NC-01,Coho,,,,
+CO-3,Coho,LOWER FRASER-B,FRASER INTERIOR,Deprecated,,,,,NO DESIGNATED SMU,,,,,,
+CO-30,Coho,NORTHERN COASTAL STREAMS,NORTH COAST,Current,24,Northern Coastal Streams,NCS,NORTH COAST,CENTRAL COAST COHO SALMON,CO-NC-01,Coho,,,,
+CO-31,Coho,SKEENA ESTUARY,NORTH COAST,Current,25,Skeena Estuary,NSKEst,NORTH COAST,SKEENA COHO SALMON,CO-NC-04,Coho,,,,
+CO-32,Coho,LOWER SKEENA,NORTH COAST,Current,26,Lower Skeena,LSK,NORTH COAST,SKEENA COHO SALMON,CO-NC-04,Coho,,,,
+CO-33,Coho,MIDDLE SKEENA,NORTH COAST,Current,27,Middle Skeena,MSK,NORTH COAST,SKEENA COHO SALMON,CO-NC-04,Coho,,,,
+CO-34,Coho,UPPER SKEENA,NORTH COAST,Current,28,Upper Skeena,USK,NORTH COAST,SKEENA COHO SALMON,CO-NC-04,Coho,,,,
+CO-35,Coho,LOWER NASS,NORTH COAST,Current,29,Lower Nass-Portland Canal,LNR-P,NORTH COAST,NASS COHO SALMON,CO-NC-03,Coho,,,,
+CO-36,Coho,UPPER NASS,NORTH COAST,Current,30,Upper Nass,UNR,NORTH COAST,NASS COHO SALMON,CO-NC-03,Coho,,,,
+CO-37,Coho,PORTLAND SOUND-OBSERVATORY INLET-PORTLAND CANAL,NORTH COAST,Current,29,Lower Nass-Portland Canal,LNR-P,NORTH COAST,NASS COHO SALMON,CO-NC-03,Coho,,,,
+CO-38,Coho,UNUK RIVER,YUKON TRANSBOUNDARY,Current,,,,,NO DESIGNATED SMU,,,,,,
+CO-39,Coho,LOWER STIKINE,YUKON TRANSBOUNDARY,Current,32,Lower Stikine,LStk,YUKON TRANSBOUNDARY,STIKINE COHO SALMON,CO-YTRA-39,Coho,,,,
+CO-4,Coho,LILLOOET,FRASER INTERIOR,Current,3,Lillooet,LILL,FRASER INTERIOR,LOWER FRASER COHO SALMON,CO-FIA-02,Coho,,,,
+CO-40,Coho,WHITING RIVER,YUKON TRANSBOUNDARY,Current,,,,,NO DESIGNATED SMU,,,,,,
+CO-41,Coho,TAKU-LATE TIMING,YUKON TRANSBOUNDARY,Current,34,Taku,Taku,YUKON TRANSBOUNDARY,TAKU COHO SALMON,CO-YTRA-04,Coho,,,,
+CO-42,Coho,TAKU-MID TIMING,YUKON TRANSBOUNDARY,Current,34,Taku,Taku,YUKON TRANSBOUNDARY,TAKU COHO SALMON,CO-YTRA-04,Coho,,,,
+CO-43,Coho,TAKU-EARLY TIMING,YUKON TRANSBOUNDARY,Current,34,Taku,Taku,YUKON TRANSBOUNDARY,TAKU COHO SALMON,CO-YTRA-04,Coho,,,,
+CO-44,Coho,LYNN CANAL,YUKON TRANSBOUNDARY,Current,,,,,NO DESIGNATED SMU,,,,,,
+CO-45,Coho,ALSEK RIVER,YUKON TRANSBOUNDARY,Current,36,Alsek,Alsek,YUKON TRANSBOUNDARY,ALSEK COHO SALMON,CO-YTRA-45,Coho,,,,
+CO-46,Coho,PORCUPINE,YUKON TRANSBOUNDARY,Current,37,Porcupine,Yukon,YUKON TRANSBOUNDARY,PORCUPINE COHO SALMON,CO-YTRA-46,Coho,,,,
+CO-47,Coho,LOWER FRASER,FRASER INTERIOR,Current,2,Lower Fraser1,LFR,FRASER INTERIOR,LOWER FRASER COHO SALMON,CO-FIA-02,Coho,,,,
+CO-48,Coho,INTERIOR FRASER,FRASER INTERIOR,Current,5,Middle Fraser,MFR,FRASER INTERIOR,INTERIOR FRASER COHO SALMON,CO-FIA-01,Coho,,,,
+CO-5,Coho,FRASER CANYON,FRASER INTERIOR,Current,4,Fraser Canyon,FRCany,FRASER INTERIOR,INTERIOR FRASER COHO SALMON,CO-FIA-01,Coho,,,,
+CO-6,Coho,MIDDLE FRASER,FRASER INTERIOR,Deprecated,,,,,NO DESIGNATED SMU,,,,,,
+CO-7,Coho,LOWER THOMPSON,FRASER INTERIOR,Current,6,Lower Thompson,LTHOM,FRASER INTERIOR,INTERIOR FRASER COHO SALMON,CO-FIA-01,Coho,,,,
+CO-8,Coho,SOUTH THOMPSON,FRASER INTERIOR,Current,7,South Thompson,STHOM,FRASER INTERIOR,INTERIOR FRASER COHO SALMON,CO-FIA-01,Coho,,,,
+CO-9,Coho,NORTH THOMPSON,FRASER INTERIOR,Current,8,North Thompson,NTHOM,FRASER INTERIOR,INTERIOR FRASER COHO SALMON,CO-FIA-01,Coho,,,,
+PKE-1,Pink-Even,GEORGIA STRAIT,SOUTH COAST,Current,1,Coastal and Transboundary Fjords,,SOUTH COAST,ECVI/MAINLAND PINK SALMON - EVEN,PKE-SC-01,Pink-Even,,,,
+PKE-10,Pink-Even,EAST HAIDA GWAII,NORTH COAST,Current,2,Haida Gwaii North,,NORTH COAST,HAIDA GWAII PINK SALMON,PK-NC-01,Pink,,,,
+PKE-11,Pink-Even,WEST HAIDA GWAII,NORTH COAST,Current,3,Haida Gwaii,,NORTH COAST,HAIDA GWAII PINK SALMON,PK-NC-01,Pink,,,,
+PKE-12,Pink-Even,UPPER NASS,NORTH COAST,Current,1,Coastal and Transboundary Fjords,,NORTH COAST,NASS PINK SALMON,PK-NC-04,Pink,,,,
+PKE-13,Pink-Even,TRANSBOUNDARY FJORDS,YUKON TRANSBOUNDARY,Current,1,Coastal and Transboundary Fjords,,YUKON TRANSBOUNDARY,TRANSBOUNDARY PINK SALMON,PK-YTRA-01,Pink,,,,
+PKE-2,Pink-Even,WEST VANCOUVER ISLAND,SOUTH COAST,Current,1,Coastal and Transboundary Fjords,,SOUTH COAST,WCVI PINK SALMON,PK-SC-02,Pink,,,,
+PKE-3,Pink-Even,NORTHWEST VANCOUVER ISLAND,SOUTH COAST,Current,1,Coastal and Transboundary Fjords,,SOUTH COAST,WCVI PINK SALMON,PK-SC-02,Pink,,,,
+PKE-4,Pink-Even,SOUTHERN FJORDS,SOUTH COAST,Current,1,Coastal and Transboundary Fjords,,SOUTH COAST,ECVI/MAINLAND PINK SALMON - EVEN,PKE-SC-01,Pink-Even,,,,
+PKE-5,Pink-Even,HECATE LOWLANDS,NORTH COAST,Current,1,Coastal and Transboundary Fjords,,NORTH COAST,CENTRAL COAST PINK SALMON,PK-NC-02,Pink,,,,
+PKE-6,Pink-Even,HECATE STRAIT-FJORDS,NORTH COAST,Current,1,Coastal and Transboundary Fjords,,NORTH COAST,CENTRAL COAST PINK SALMON,PK-NC-02,Pink,,,,
+PKE-7,Pink-Even,NASS-SKEENA ESTUARY,NORTH COAST,Current,4,Skeena River,,NORTH COAST,NASS PINK SALMON,PK-NC-04,Pink,,,,
+PKE-8,Pink-Even,MIDDLE-UPPER SKEENA,NORTH COAST,Current,4,Skeena River,,NORTH COAST,SKEENA PINK SALMON,PK-NC-03,Pink,,,,
+PKE-9,Pink-Even,NORTH HAIDA GWAII,NORTH COAST,Current,3,Haida Gwaii,,NORTH COAST,HAIDA GWAII PINK SALMON,PK-NC-01,Pink,,,,
+PKE-9005,Pink-Even,FRASER RIVER<<BIN>>,FRASER INTERIOR,Bin,,,,,NO DESIGNATED SMU,,,,,,
+PKO-1,Pink-Odd,FRASER RIVER,FRASER INTERIOR,Current,"1, 2","Lower Fraser River, Middle Fraser Thompson River",,FRASER INTERIOR,FRASER PINK SALMON - ODD,PKO-FIA-1,Pink-Odd,,,,
+PKO-10,Pink-Odd,NORTH HAIDA GWAII,NORTH COAST,Current,5,Haida Gwaii,,NORTH COAST,HAIDA GWAII PINK SALMON,PK-NC-01,Pink,,,,
+PKO-11,Pink-Odd,WEST HAIDA GWAII,NORTH COAST,Current,5,Haida Gwaii,,NORTH COAST,HAIDA GWAII PINK SALMON,PK-NC-01,Pink,,,,
+PKO-12,Pink-Odd,HECATE STRAIT-LOWLANDS,NORTH COAST,Current,6,Coastal and Transboundary Fjords,,NORTH COAST,CENTRAL COAST PINK SALMON,PK-NC-02,Pink,,,,
+PKO-13,Pink-Odd,HECATE STRAIT-FJORDS,NORTH COAST,Current,6,Coastal and Transboundary Fjords,,NORTH COAST,CENTRAL COAST PINK SALMON,PK-NC-02,Pink,,,,
+PKO-14,Pink-Odd,NASS-SKEENA ESTUARY,NORTH COAST,Current,6,Coastal and Transboundary Fjords,,NORTH COAST,NASS PINK SALMON,PK-NC-04,Pink,,,,
+PKO-15,Pink-Odd,LOWER SKEENA,NORTH COAST,Current,7,Skeena River,,NORTH COAST,SKEENA PINK SALMON,PK-NC-03,Pink,,,,
+PKO-16,Pink-Odd,MIDDLE AND UPPER SKEENA,NORTH COAST,Current,7,Skeena River,,NORTH COAST,SKEENA PINK SALMON,PK-NC-03,Pink,,,,
+PKO-17,Pink-Odd,NASS-PORTLAND-OBSERVATORY,NORTH COAST,Current,6,Coastal and Transboundary Fjords,,NORTH COAST,NASS PINK SALMON,PK-NC-04,Pink,,,,
+PKO-18,Pink-Odd,UPPER NASS,NORTH COAST,Current,6,Coastal and Transboundary Fjords,,NORTH COAST,NASS PINK SALMON,PK-NC-04,Pink,,,,
+PKO-19,Pink-Odd,TRANSBOUNDARY FJORDS,YUKON TRANSBOUNDARY,Current,6,Coastal and Transboundary Fjords,,YUKON TRANSBOUNDARY,TRANSBOUNDARY PINK SALMON,PK-YTRA-01,Pink,,,,
+PKO-2,Pink-Odd,EAST HOWE SOUND-BURRARD INLET,SOUTH COAST,Current,4,Southern Fjords,,,NO DESIGNATED SMU,,,,,,
+PKO-3,Pink-Odd,GEORGIA STRAIT,SOUTH COAST,Current,4,Southern Fjords,,SOUTH COAST,ECVI/MAINLAND PINK SALMON - ODD,PKO-SC-01,Pink-Odd,,,,
+PKO-4,Pink-Odd,EAST VANCOUVER ISLAND-JOHNSTONE STRAIT,SOUTH COAST,Current,3,East Vancouver Is,,SOUTH COAST,ECVI/MAINLAND PINK SALMON - ODD,PKO-SC-01,Pink-Odd,,,,
+PKO-5,Pink-Odd,NAHWITTI,SOUTH COAST,Current,6,Coastal and Transboundary Fjords,,SOUTH COAST,ECVI/MAINLAND PINK SALMON - ODD,PKO-SC-01,Pink-Odd,,,,
+PKO-6,Pink-Odd,WEST VANCOUVER ISLAND,SOUTH COAST,Current,6,Coastal and Transboundary Fjords,,SOUTH COAST,WCVI PINK SALMON,PK-SC-02,Pink,,,,
+PKO-7,Pink-Odd,SOUTHERN FJORDS,SOUTH COAST,Current,4,Southern Fjords,,SOUTH COAST,ECVI/MAINLAND PINK SALMON - ODD,PKO-SC-01,Pink-Odd,,,,
+PKO-8,Pink-Odd,HOMATHKO-KLINAKLINI-SMITH-RIVERS-BELLA COOLA-DEAN,NORTH COAST,Current,6,Coastal and Transboundary Fjords,,NORTH COAST,CENTRAL COAST PINK SALMON,PK-NC-02,Pink,,,,
+PKO-9,Pink-Odd,EAST HAIDA GWAII,NORTH COAST,Current,5,Haida Gwaii,,NORTH COAST,HAIDA GWAII PINK SALMON,PK-NC-01,Pink,,,,
+SEL-01-01,Sockeye (Lake Type),OSOYOOS-SKAHA-OKANAGAN,FRASER INTERIOR,Current,,,,FRASER INTERIOR,OKANAGAN SOCKEYE SALMON,SEL-FIA-01,Sockeye (Lake Type),,,,
+SEL-03-01,Sockeye (Lake Type),CHILLIWACK-EARLY SUMMER TIMING,FRASER INTERIOR,Current,5,Chilliwack-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,,,
+SEL-03-02,Sockeye (Lake Type),CULTUS-LATE TIMING,FRASER INTERIOR,Current,6,Cultus-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),,,,
+SEL-03-03,Sockeye (Lake Type),HARRISON-DOWNSTREAM MIGRATING-LATE TIMING,FRASER INTERIOR,Current,9,Harrison (D/S)-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),,,,
+SEL-03-05,Sockeye (Lake Type),PITT-EARLY SUMMER TIMING,FRASER INTERIOR,Current,15,Pitt-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,,,
+SEL-03-06,Sockeye (Lake Type),HAYWARD-LATE TIMING,N/A,Deleted,,,,,NO DESIGNATED SMU,,,,,,
+SEL-03-07,Sockeye (Lake Type),ALOUETTE_EARLY SUMMER<<EXTIRPATED>>,FRASER INTERIOR,Extirpated,"196, 197",Alouette_ES population (original)/ Coquitlam-ES population (original),,,NO DESIGNATED SMU,,,,,,
+SEL-03-XX,Sockeye (Lake Type),FRASER RIVER MIGRATORY COUNTS<<BIN>>,FRASER INTERIOR,Bin,,,,,NO DESIGNATED SMU,,,,,,
+SEL-04-01,Sockeye (Lake Type),LILLOOET/HARRISON-LATE TIMING,FRASER INTERIOR,Current,12,Lillooet-Harrison-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),,,,
+SEL-05-01,Sockeye (Lake Type),KAWKAWA-LATE TIMING,N/A,Deleted,,,,,NO DESIGNATED SMU,,,,,,
+SEL-05-02,Sockeye (Lake Type),NAHATLATCH-EARLY SUMMER TIMING,FRASER INTERIOR,Current,13,Nahatlatch-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,,,
+SEL-06-01,Sockeye (Lake Type),ANDERSON/SETON-EARLY SUMMER TIMING,FRASER INTERIOR,Current,1,Anderson-Seton-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,,,
+SEL-06-02,Sockeye (Lake Type),CHILKO-EARLY SUMMER TIMING,FRASER INTERIOR,Current,3,Chilko-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,,,
+SEL-06-03,Sockeye (Lake Type),CHILKO-SUMMER TIMING,FRASER INTERIOR,Current,4,Chilko-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),,,,
+SEL-06-04,Sockeye (Lake Type),FRANCOIS-EARLY SUMMER TIMING,FRASER INTERIOR,VREQ[Extirpated],,,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,,,
+SEL-06-05,Sockeye (Lake Type),FRANCOIS-LATE TIMING,FRASER INTERIOR,VREQ[Extirpated],,,,,NO DESIGNATED SMU,,,,,,
+SEL-06-06,Sockeye (Lake Type),FRASER-EARLY SUMMER TIMING,FRASER INTERIOR,Extirpated,200,Fraser -ES population (original),,,NO DESIGNATED SMU,,,,,,
+SEL-06-07,Sockeye (Lake Type),FRANCOIS/FRASER-SUMMER TIMING,FRASER INTERIOR,Current,7,Francois-Fraser-S population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),,,,
+SEL-06-08,Sockeye (Lake Type),MCKINLEY-SUMMER TIMING,FRASER INTERIOR,Deprecated,,,,,NO DESIGNATED SMU,,,,,,
+SEL-06-09,Sockeye (Lake Type),NADINA-EARLY SUMMER TIMING,FRASER INTERIOR,Deprecated,,,,,NO DESIGNATED SMU,,,,,,
+SEL-06-12,Sockeye (Lake Type),STUART-EARLY STUART TIMING,N/A,Deleted,,,,,NO DESIGNATED SMU,,,,,,
+SEL-06-15,Sockeye (Lake Type),TAKLA/TREMBLEUR-SUMMER TIMING,FRASER INTERIOR,Deprecated,,,,,NO DESIGNATED SMU,,,,,,
+SEL-06-18,Sockeye (Lake Type),CARIBOO-SUMMER TIMING,FRASER INTERIOR,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-06-19,Sockeye (Lake Type),(X)SETON-SUMMER TIMING,N/A,Deleted,,,,,NO DESIGNATED SMU,,,,,,
+SEL-06-20,Sockeye (Lake Type),NADINA/FRANCOIS-EARLY SUMMER TIMING,FRASER INTERIOR,Current,8,Nadina-Francois-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,,,
+SEL-06-21,Sockeye (Lake Type),UPPER WHITE ROAD COMPLEX<<VREQ[BIN]>>,FRASER INTERIOR,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-06-22,Sockeye (Lake Type),TUMUCH/SLIM<<VREQ[BIN]>>,FRASER INTERIOR,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-06-23,Sockeye (Lake Type),SALMON<<VREQ[BIN]>>,FRASER INTERIOR,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-06-24,Sockeye (Lake Type),AHBAU<<VREQ[BIN]>>,FRASER INTERIOR,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-06-25,Sockeye (Lake Type),EAGLET<<VREQ[BIN]>>,FRASER INTERIOR,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-06-26,Sockeye (Lake Type),NARROW<<VREQ[BIN]>>,FRASER INTERIOR,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-06-27,Sockeye (Lake Type),STONY/ROND<<VREQ[BIN]>>,FRASER INTERIOR,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-07-02,Sockeye (Lake Type),INDIAN/KRUGER-EARLY SUMMER TIMING,FRASER INTERIOR,VREQ[Bin],,,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,,,
+SEL-07-03,Sockeye (Lake Type),HANSARD<<VREQ[BIN]>>,FRASER INTERIOR,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-08-01,Sockeye (Lake Type),NICOLA<<VREQ[BIN]>>,FRASER INTERIOR,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-09-01,Sockeye (Lake Type),KAMLOOPS-LATE TIMING,FRASER INTERIOR,Deprecated,,,,,NO DESIGNATED SMU,,,,,,
+SEL-09-02,Sockeye (Lake Type),SHUSWAP COMPLEX-EARLY SUMMER TIMING,FRASER INTERIOR,Current,19,Shuswap-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - EARLY SUMMER,SEL-FIA-02,Sockeye (Lake Type),,,,
+SEL-09-03,Sockeye (Lake Type),SHUSWAP COMPLEX-LATE TIMING,FRASER INTERIOR,Current,18,Shuswap Complex-L population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - LATE,SEL-FIA-03,Sockeye (Lake Type),,,,
+SEL-09-04,Sockeye (Lake Type),(X)ADAMS-EARLY SUMMER TIMING,FRASER INTERIOR,Extirpated,,,,,NO DESIGNATED SMU,,,,,,
+SEL-09-05,Sockeye (Lake Type),(X)MOMICH-EARLY SUMMER TIMING,FRASER INTERIOR,Extirpated,,,,,NO DESIGNATED SMU,,,,,,
+SEL-09-xx,Sockeye (Lake Type),(P)ADAMS AND MOMICH LAKES-EARLY SUMMER TIMING,FRASER INTERIOR,Bin,"198, 199",Adams-ES population (original); Momich-ES population (original),,,NO DESIGNATED SMU,,,,,,
+SEL-10-01,Sockeye (Lake Type),KAMLOOPS-EARLY SUMMER TIMING,FRASER INTERIOR,Current,11,Kamloops-ES population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),,,,
+SEL-10-02,Sockeye (Lake Type),(X)NORTH BARRIERE-EARLY SUMMER TIMING,FRASER INTERIOR,Extirpated,,,,,NO DESIGNATED SMU,,,,,,
+SEL-11-01,Sockeye (Lake Type),FULMORE,SOUTH COAST,Current,53,Fulmore,FULMORE,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-11-02,Sockeye (Lake Type),HEYDON,SOUTH COAST,Current,54,Heydon,HEYDON,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-11-03,Sockeye (Lake Type),KAKWEIKEN,SOUTH COAST,Current,55,Kakweiken,KAKWEIKEN,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-11-04,Sockeye (Lake Type),LOOSE,SOUTH COAST,Current,56,Loose,LOOSE,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-11-05,Sockeye (Lake Type),MACKENZIE,SOUTH COAST,Current,57,Mackenzie,MACKENZIE,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-11-06,Sockeye (Lake Type),PHILLIPS,SOUTH COAST,Current,58,Phillips,PHILLIPS,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-11-07,Sockeye (Lake Type),SAKINAW,SOUTH COAST,Current,51,Sakinaw,SAKINAW,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-11-08,Sockeye (Lake Type),TOM BROWNE,N/A,Deleted,,,,,NO DESIGNATED SMU,,,,,,
+SEL-11-09,Sockeye (Lake Type),TZOONIE,SOUTH COAST,Current,52,Tzoonie,TZOONIE,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-11-10,Sockeye (Lake Type),VILLAGE BAY,SOUTH COAST,VREQ[Extirpated],,,,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-11-11,Sockeye (Lake Type),PACK,SOUTH COAST,VREQ[Bin],,,,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-11-12,Sockeye (Lake Type),(N)GLENDALE,SOUTH COAST,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-11-13,Sockeye (Lake Type),(N)LOIS,SOUTH COAST,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-12-01,Sockeye (Lake Type),IDA/BONANZA,SOUTH COAST,Current,59,Ida/Bonanza,IDA/BONANZA,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-12-02,Sockeye (Lake Type),NAHWITTI,SOUTH COAST,Current,60,Nahwitti,NAHWITTI,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-12-03,Sockeye (Lake Type),NIMPKISH,SOUTH COAST,Current,61,Nimpkish,NIMPKISH,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-12-04,Sockeye (Lake Type),GEORGIE/SONGHEES,N/A,Deleted,,,,,NO DESIGNATED SMU,,,,,,
+SEL-12-05,Sockeye (Lake Type),QUATSE,SOUTH COAST,Current,62,Quatse,QUATSE,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-12-06,Sockeye (Lake Type),SCHOEN,SOUTH COAST,Current,63,Schoen,SCHOEN,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-12-07,Sockeye (Lake Type),SHUSHARTIE,SOUTH COAST,Current,64,Shushartie,SHUSHARTIE,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-12-08,Sockeye (Lake Type),WOSS,SOUTH COAST,Current,65,Woss,WOSS,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-12-09,Sockeye (Lake Type),VERNON,SOUTH COAST,Current,66,Vernon,VERNON,SOUTH COAST,ECVI/MAINLAND SOCKEYE SALMON ,SEL-SC-02,Sockeye (Lake Type),,,,
+SEL-13-01,Sockeye (Lake Type),ALICE,SOUTH COAST,Current,87,Alice,ALICE,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-02,Sockeye (Lake Type),CANOE CREEK,SOUTH COAST,Current,88,Canoe Creek,CANOE,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-03,Sockeye (Lake Type),CECILIA,SOUTH COAST,Current,67,Cecilia,CECILIA,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-04,Sockeye (Lake Type),CHEEWAT,SOUTH COAST,Current,68,Cheewat,CHEEWAT,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-05,Sockeye (Lake Type),CLAYOQUOT,SOUTH COAST,Current,69,Clayoquot,CLAYOQUOT,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-06,Sockeye (Lake Type),DESERTED,SOUTH COAST,Current,70,Deserted,DESERTED,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-07,Sockeye (Lake Type),FAIRY,SOUTH COAST,Current,71,Fairy,FAIRY,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-08,Sockeye (Lake Type),GREAT CENTRAL,SOUTH COAST,Current,72,Great Central,GCL,SOUTH COAST,WCVI - BARKLEY SOCKEYE SALMON,SEL-SC-03,Sockeye (Lake Type),,,,
+SEL-13-09,Sockeye (Lake Type),HENDERSON,SOUTH COAST,Current,73,Henderson,HENDERSON,SOUTH COAST,WCVI - BARKLEY SOCKEYE SALMON,SEL-SC-03,Sockeye (Lake Type),,,,
+SEL-13-10,Sockeye (Lake Type),HESQUIAT,SOUTH COAST,Current,74,Hesquiat,HESQUIAT,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-11,Sockeye (Lake Type),HOBITON,SOUTH COAST,Current,75,Hobiton,HOBITON,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-12,Sockeye (Lake Type),JANSEN,SOUTH COAST,Current,76,Jansen,JANSEN,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-13,Sockeye (Lake Type),KANIM,SOUTH COAST,Current,77,Kanim,KANIM,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-14,Sockeye (Lake Type),KENNEDY,SOUTH COAST,Current,78,Kennedy,KENNEDY,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-15,Sockeye (Lake Type),MAGGIE,SOUTH COAST,Current,79,Maggie,MAGGIE,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-16,Sockeye (Lake Type),MEGIN,SOUTH COAST,Current,80,Megin,MEGIN,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-17,Sockeye (Lake Type),MUCHALAT,SOUTH COAST,Current,81,Muchalat,MUCHALAT,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-18,Sockeye (Lake Type),MURIEL,SOUTH COAST,Current,82,Muriel,MURIEL,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-19,Sockeye (Lake Type),NITINAT,SOUTH COAST,Current,83,Nitinat,NITINAT,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-20,Sockeye (Lake Type),O'CONNELL,SOUTH COAST,Current,89,O'Connell,O'CONNELL,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-21,Sockeye (Lake Type),OWOSSITSA,SOUTH COAST,VREQ[Bin],,,,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-22,Sockeye (Lake Type),PARK RIVER,SOUTH COAST,Current,84,Park River,PARK,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-23,Sockeye (Lake Type),POWER,SOUTH COAST,Current,85,Power,POWER,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-24,Sockeye (Lake Type),SOOKE,N/A,Deleted,,,,,NO DESIGNATED SMU,,,,,,
+SEL-13-25,Sockeye (Lake Type),SPROAT,SOUTH COAST,Current,86,Sproat,SPROAT,SOUTH COAST,WCVI - BARKLEY SOCKEYE SALMON,SEL-SC-03,Sockeye (Lake Type),,,,
+SEL-13-26,Sockeye (Lake Type),WILLIAM/BRINK,SOUTH COAST,Current,90,,WILLIAM/BRINK,SOUTH COAST,WCVI - OTHER SOCKEYE SALMON,SEL-SC-01,Sockeye (Lake Type),,,,
+SEL-13-XX,Sockeye (Lake Type),GREAT CENTRAL/SPROAT<<BIN>>,SOUTH COAST,Bin,,,,,NO DESIGNATED SMU,,,,,,
+SEL-15-01,Sockeye (Lake Type),LONG,NORTH COAST,Current,100,Long,LONG,NORTH COAST,RIVERS/SMITH SOCKEYE SALMON,SEL-NC-05,Sockeye (Lake Type),,,,
+SEL-15-02,Sockeye (Lake Type),OWIKENO,NORTH COAST,Current,101,Owikeno,OWIKENO,NORTH COAST,RIVERS/SMITH SOCKEYE SALMON,SEL-NC-05,Sockeye (Lake Type),,,,
+SEL-15-03,Sockeye (Lake Type),OWIKENO-LATE TIMING,NORTH COAST,VREQ[Bin],,,,NORTH COAST,RIVERS/SMITH SOCKEYE SALMON,SEL-NC-05,Sockeye (Lake Type),,,,
+SEL-15-04,Sockeye (Lake Type),WANNOCK[OWIKENO],NORTH COAST,Current,102,Wannock,WANNOCK,NORTH COAST,RIVERS/SMITH SOCKEYE SALMON,SEL-NC-05,Sockeye (Lake Type),,,,
+SEL-16-01,Sockeye (Lake Type),SOUTH ATNARKO LAKES,NORTH COAST,Current,103,S Atnarko,S_ATNARKO,NORTH COAST,RIVERS/SMITH SOCKEYE SALMON,SEL-NC-05,Sockeye (Lake Type),,,,
+SEL-17-01,Sockeye (Lake Type),AIN/SKUNDALE/IAN,NORTH COAST,Current,93,Ain/Skundale/Ian,SKUNDALE,NORTH COAST,HAIDA GWAII SOCKEYE SALMON,SEL-NC-01,Sockeye (Lake Type),,,,
+SEL-17-02,Sockeye (Lake Type),AWUN,NORTH COAST,Current,94,Awun,AWUN,NORTH COAST,HAIDA GWAII SOCKEYE SALMON,SEL-NC-01,Sockeye (Lake Type),,,,
+SEL-17-03,Sockeye (Lake Type),FAIRFAX,NORTH COAST,Current,92,Fairfax,FAIRFAX,NORTH COAST,HAIDA GWAII SOCKEYE SALMON,SEL-NC-01,Sockeye (Lake Type),,,,
+SEL-17-04,Sockeye (Lake Type),JALUN,NORTH COAST,Current,95,Jalun,JALUN,NORTH COAST,HAIDA GWAII SOCKEYE SALMON,SEL-NC-01,Sockeye (Lake Type),,,,
+SEL-17-05,Sockeye (Lake Type),MARIAN,NORTH COAST,VREQ[Bin],,,,NORTH COAST,HAIDA GWAII SOCKEYE SALMON,SEL-NC-01,Sockeye (Lake Type),,,,
+SEL-17-06,Sockeye (Lake Type),MATHERS,NORTH COAST,Current,98,Mathers,MATHERS,NORTH COAST,HAIDA GWAII SOCKEYE SALMON,SEL-NC-01,Sockeye (Lake Type),,,,
+SEL-17-07,Sockeye (Lake Type),MERCER,NORTH COAST,Current,91,Mercer,MERCER,NORTH COAST,HAIDA GWAII SOCKEYE SALMON,SEL-NC-01,Sockeye (Lake Type),,,,
+SEL-17-08,Sockeye (Lake Type),SKIDEGATE,NORTH COAST,Current,99,Skidegate,SKIDEGATE,NORTH COAST,HAIDA GWAII SOCKEYE SALMON,SEL-NC-01,Sockeye (Lake Type),,,,
+SEL-17-09,Sockeye (Lake Type),YAKOUN,NORTH COAST,Current,96,Yakoun,YAKOUN,NORTH COAST,HAIDA GWAII SOCKEYE SALMON,SEL-NC-01,Sockeye (Lake Type),,,,
+SEL-17-10,Sockeye (Lake Type),MARIE,NORTH COAST,Current,97,Marie,MARIE,NORTH COAST,HAIDA GWAII SOCKEYE SALMON,SEL-NC-01,Sockeye (Lake Type),,,,
+SEL-17-11,Sockeye (Lake Type),(N)MAYER,NORTH COAST,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-17-12,Sockeye (Lake Type),(N)GUDAL,NORTH COAST,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-18-01,Sockeye (Lake Type),BACKLAND,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-18-02,Sockeye (Lake Type),CANOONA,NORTH COAST,Current,104,Canoona,CANOONA,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-18-03,Sockeye (Lake Type),DOME,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-18-04,Sockeye (Lake Type),EVELYN,NORTH COAST,Current,105,Evelyn,EVELYN,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-18-05,Sockeye (Lake Type),KAINET CREEK,NORTH COAST,Current,106,Kainet,KAINET,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-18-06,Sockeye (Lake Type),KIMSQUIT,NORTH COAST,Current,107,Kimsquit,KIMSQUIT,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-18-07,Sockeye (Lake Type),KITKIATA,NORTH COAST,Current,108,Kitkatla,KITKATLA,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-18-08,Sockeye (Lake Type),KITLOPE,NORTH COAST,Current,109,Kitlope,KITLOPE,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-18-09,Sockeye (Lake Type),PINE RIVER,NORTH COAST,Current,110,Pine,PINE,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-18-10,Sockeye (Lake Type),SODA CREEK,N/A,Deleted,,,,,NO DESIGNATED SMU,,,,,,
+SEL-18-11,Sockeye (Lake Type),WHALEN,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-01,Sockeye (Lake Type),BANKS,NORTH COAST,Current,111,Banks,BANKS,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-02,Sockeye (Lake Type),BLOOMFIELD,NORTH COAST,Current,112,Bloomfield,BLOOMFIELD,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-03,Sockeye (Lake Type),BOLTON CREEK,NORTH COAST,Current,113,Bolton,BOLTON,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-04,Sockeye (Lake Type),BONILLA,NORTH COAST,Current,114,Bonilla,BONILLA,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-05,Sockeye (Lake Type),BORROWMAN CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-06,Sockeye (Lake Type),BUSEY CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-07,Sockeye (Lake Type),CARTWRIGHT CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-08,Sockeye (Lake Type),CHIC CHIC,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-09,Sockeye (Lake Type),TUWARTZ,NORTH COAST,Current,115,Tuwartz,TUWARTZ,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-10,Sockeye (Lake Type),FANNIE COVE,NORTH COAST,Current,116,Fannie,FANNIE,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-11,Sockeye (Lake Type),CURTIS INLET,NORTH COAST,Current,117,Curtis,CURTIS,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-12,Sockeye (Lake Type),DALLAIN CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-13,Sockeye (Lake Type),DEER,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-14,Sockeye (Lake Type),DEVON,NORTH COAST,Current,118,Devon,DEVON,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-15,Sockeye (Lake Type),DOUGLAS CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-16,Sockeye (Lake Type),ELIZABETH,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-17,Sockeye (Lake Type),ELSIE/HOY,NORTH COAST,Current,119,Elsie/Hoy,ELSIE/HOY,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-18,Sockeye (Lake Type),END HILL CREEK,NORTH COAST,Current,120,End Hill,END HILL,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-19,Sockeye (Lake Type),EVINRUDE INLET,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-20,Sockeye (Lake Type),FREEDA/BRODIE,NORTH COAST,Current,121,Freeda/ Brodie,FREEDA/ BRODIE,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-21,Sockeye (Lake Type),HARTLEY BAY,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-22,Sockeye (Lake Type),HEVENOR INLET,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-23,Sockeye (Lake Type),HIGGINS LAGOON,NORTH COAST,Current,122,Higgins Lagoon,HIGGINS,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-24,Sockeye (Lake Type),KADJUSDIS RIVER,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-25,Sockeye (Lake Type),KDELMASHAN CREEK,NORTH COAST,Current,123,Kdelmashan,KDELMASHAN,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-26,Sockeye (Lake Type),KEECHA,NORTH COAST,Current,124,Keesha,KEESHA,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-27,Sockeye (Lake Type),KENT INLET LAGOON CREEK,NORTH COAST,Current,125,Kent Inlet,KENT,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-28,Sockeye (Lake Type),KENZUWASH CREEKS,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-29,Sockeye (Lake Type),KESWAR CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-30,Sockeye (Lake Type),KILDIDT CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-31,Sockeye (Lake Type),KILDIDT LAGOON CREEK,NORTH COAST,Current,126,Kildidt Lagoon,KILDIDT LAGOON,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-32,Sockeye (Lake Type),KISAMEET,NORTH COAST,Current,127,Kisameet,KISAMEET,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-33,Sockeye (Lake Type),KOEYE,NORTH COAST,Current,128,Koeye,KOEYE,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-34,Sockeye (Lake Type),KOORYET,NORTH COAST,Current,129,Kooryet,KOORYET,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-35,Sockeye (Lake Type),KUNSOOT RIVER,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-36,Sockeye (Lake Type),KWAKWA CREEK,NORTH COAST,Current,130,Kwakwa,KWAKWA,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-37,Sockeye (Lake Type),LEWIS CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-38,Sockeye (Lake Type),LIMESTONE CREEK,NORTH COAST,Current,131,Limestone,LIMESTONE,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-39,Sockeye (Lake Type),LOWE/SIMPSON/WEARE,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-40,Sockeye (Lake Type),MARY COVE CREEK,NORTH COAST,Current,132,Mary Cove,MARY COVE,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-41,Sockeye (Lake Type),MCDONALD CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-42,Sockeye (Lake Type),MCLOUGHLIN,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-43,Sockeye (Lake Type),MIKADO,NORTH COAST,Current,133,Mikado,MIKADO,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-44,Sockeye (Lake Type),MONCKTON INLET CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-45,Sockeye (Lake Type),NAMU,NORTH COAST,Current,134,Namu,NAMU,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-46,Sockeye (Lake Type),PORT JOHN,NORTH COAST,Current,135,Port John,PORT JOHN,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-47,Sockeye (Lake Type),POWLES CREEK,NORTH COAST,Current,136,Powles,POWLES,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-48,Sockeye (Lake Type),PRICE CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-49,Sockeye (Lake Type),PRUDHOMME,NORTH COAST,Current,137,Prudhomme,PRUDHOMME,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-19-50,Sockeye (Lake Type),RODERICK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-51,Sockeye (Lake Type),RYAN CREEK,NORTH COAST,Current,138,Ryan,RYAN,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-52,Sockeye (Lake Type),SALTER,NORTH COAST,Current,139,Salter,SALTER,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-53,Sockeye (Lake Type),SCOULAR/KILPATRICK,NORTH COAST,Current,140,Scoular/Kilpatrick,SCOULAR/KILPATRICK,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-54,Sockeye (Lake Type),SHAWATLAN,NORTH COAST,Current,141,Shawatlan,SHAWATLAN,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-19-55,Sockeye (Lake Type),SHENEEZA INLET,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-56,Sockeye (Lake Type),SHIP POINT CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-57,Sockeye (Lake Type),SPENCER CREEK,NORTH COAST,Current,142,Spencer,SPENCER,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-58,Sockeye (Lake Type),STANNARD CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-59,Sockeye (Lake Type),TALAMOOSA CREEK,NORTH COAST,Current,143,Talamoosa,TALAMOOSA,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-60,Sockeye (Lake Type),TANKEEAH RIVER,NORTH COAST,Current,144,Tankeeah,TANKEEAH,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-61,Sockeye (Lake Type),TRENEMAN CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-62,Sockeye (Lake Type),TSIMTACK/LAKES,NORTH COAST,Current,145,Tsimtack,TSIMTACK,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-63,Sockeye (Lake Type),TUNO CREEK EAST,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-64,Sockeye (Lake Type),TUNO CREEK WEST,NORTH COAST,Current,146,Tuno West,TUNO_WEST,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-65,Sockeye (Lake Type),TYLER CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-66,Sockeye (Lake Type),WALE CREEK,NORTH COAST,Current,147,Wale,WALE,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-67,Sockeye (Lake Type),WATT BAY,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-68,Sockeye (Lake Type),WEST CREEK,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-69,Sockeye (Lake Type),YAAKLELE LAGOON,NORTH COAST,VREQ[Bin],,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-70,Sockeye (Lake Type),YEO,NORTH COAST,Current,148,Yeo,YEO,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-71,Sockeye (Lake Type),SOCKEYE CREEK,NORTH COAST,Deleted,,,,NORTH COAST,CENTRAL COAST SOCKEYE SALMON ,SEL-NC-03,Sockeye (Lake Type),,,,
+SEL-19-72,Sockeye (Lake Type),(N)SYLVIA CREEK,NORTH COAST,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-19-73,Sockeye (Lake Type),(N)SOUTH BONNILA,NORTH COAST,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-20-01,Sockeye (Lake Type),ALASTAIR,NORTH COAST,Current,149,Alastair,ALASTAIR,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-20-02,Sockeye (Lake Type),ALDRICH,NORTH COAST,Current,150,Aldrich,ALDRICH,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-20-03,Sockeye (Lake Type),DENNIS,NORTH COAST,Current,151,Dennis,DENNIS,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-20-04,Sockeye (Lake Type),ECSTALL/LOWER,NORTH COAST,Current,152,Ecstall/Lower,ECSTALL/ LOWER,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-20-05,Sockeye (Lake Type),JOHNSTON,NORTH COAST,Current,153,Johnston,JOHNSTON,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-20-06,Sockeye (Lake Type),KITSUMKALUM,NORTH COAST,Current,154,Kitsumkalum,KALUM,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-20-07,Sockeye (Lake Type),LAKELSE,NORTH COAST,Current,155,Lakelse,LAKELSE,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-20-08,Sockeye (Lake Type),MCDONELL,NORTH COAST,Current,156,Mcdonell,MCDONELL,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-21-01,Sockeye (Lake Type),ATNA,NORTH COAST,Current,157,Atna,ATNA,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-21-02,Sockeye (Lake Type),BABINE,NORTH COAST,Current,158,Babine,BABINE,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-21-03,Sockeye (Lake Type),BULKLEY,NORTH COAST,Current,159,Bulkley,BULKLEY,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-21-05,Sockeye (Lake Type),KITWANCOOL,NORTH COAST,Current,160,Kitwancool,KITWANCOOL,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-21-06,Sockeye (Lake Type),MAXAN,NORTH COAST,Current,161,Maxan,MAXAN,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-21-07,Sockeye (Lake Type),MORICE,NORTH COAST,Current,162,Morice,MORICE,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-21-08,Sockeye (Lake Type),NILKITKWA,NORTH COAST,Deprecated,,,,,NO DESIGNATED SMU,,,,,,
+SEL-21-09,Sockeye (Lake Type),STEPHENS,NORTH COAST,Current,163,Stephens,STEPHENS,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-21-10,Sockeye (Lake Type),SWAN,NORTH COAST,Deprecated,,,,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-21-11,Sockeye (Lake Type),TAHLO/MORRISON,NORTH COAST,Current,164,Tahlo/ Morrison,TAHLO/ MORRISON,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-21-12,Sockeye (Lake Type),FOOTSORE/HODDER,NORTH COAST,Current,165,Footsore/ Hodder,FOOTSORE/ HODDER,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-21-13,Sockeye (Lake Type),(N)ONERKA,NORTH COAST,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SEL-22-01,Sockeye (Lake Type),ASITIKA,NORTH COAST,Current,166,Asitika,ASITIKA,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-22-02,Sockeye (Lake Type),AZUKLOTZ,NORTH COAST,Current,167,Azuklotz,AZUKLOTZ,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-22-03,Sockeye (Lake Type),BEAR,NORTH COAST,Current,168,Bear,BEAR,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-22-04,Sockeye (Lake Type),DAMSHILGWIT,NORTH COAST,Current,169,Damshilgwit,DAMSHILGWIT,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-22-05,Sockeye (Lake Type),JOHANSON,NORTH COAST,Current,170,Johanson,JOHANSON,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-22-06,Sockeye (Lake Type),KLUATANTAN,NORTH COAST,Current,171,Kluatantan,KLUATANTAN,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-22-07,Sockeye (Lake Type),KLUAYAZ,NORTH COAST,Current,172,Kluayaz,KLUAYAZ,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-22-08,Sockeye (Lake Type),MOTASE,NORTH COAST,Current,173,Motase,MOTASE,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-22-09,Sockeye (Lake Type),SICINTINE,NORTH COAST,Current,174,Sicintine,SICINTINE,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-22-10,Sockeye (Lake Type),SLAMGEESH,NORTH COAST,Current,175,Slamgeesh,SLAMGEESH,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-22-11,Sockeye (Lake Type),SPAWNING,NORTH COAST,Current,176,Spawning,SPAWNING,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-22-12,Sockeye (Lake Type),SUSTUT,NORTH COAST,Current,177,Sustut,SUSTUT,NORTH COAST,SKEENA SOCKEYE SALMON,SEL-NC-02,Sockeye (Lake Type),,,,
+SEL-23-01,Sockeye (Lake Type),CLEMENTS,NORTH COAST,VREQ[Bin],,,,NORTH COAST,NASS SOCKEYE SALMON,SEL-NC-04,Sockeye (Lake Type),,,,
+SEL-23-02,Sockeye (Lake Type),SPLIT MOUNTAIN/LEVERSON,NORTH COAST,VREQ[Bin],,,,NORTH COAST,NASS SOCKEYE SALMON,SEL-NC-04,Sockeye (Lake Type),,,,
+SEL-24-01,Sockeye (Lake Type),BOWSER,NORTH COAST,Current,178,Bowser,BOWSER,NORTH COAST,NASS SOCKEYE SALMON,SEL-NC-04,Sockeye (Lake Type),,,,
+SEL-24-02,Sockeye (Lake Type),DAMDOCHAX/WIMINASIK,NORTH COAST,Current,179,Damdochax/ Wiminasik,DAMDOCHAX,NORTH COAST,NASS SOCKEYE SALMON,SEL-NC-04,Sockeye (Lake Type),,,,
+SEL-24-03,Sockeye (Lake Type),FRED WRIGHT,NORTH COAST,Current,180,Fred Wright,FWRIGHT,NORTH COAST,NASS SOCKEYE SALMON,SEL-NC-04,Sockeye (Lake Type),,,,
+SEL-24-04,Sockeye (Lake Type),KWINAGEESE,NORTH COAST,Current,181,Kwinageese,KWINAGEESE,NORTH COAST,NASS SOCKEYE SALMON,SEL-NC-04,Sockeye (Lake Type),,,,
+SEL-24-05,Sockeye (Lake Type),MEZIADIN,NORTH COAST,Current,182,Meziadin,MEZIADIN,NORTH COAST,NASS SOCKEYE SALMON,SEL-NC-04,Sockeye (Lake Type),,,,
+SEL-24-06,Sockeye (Lake Type),OWEEGEE,NORTH COAST,Current,183,Oweegee,OWEEGEE,NORTH COAST,NASS SOCKEYE SALMON,SEL-NC-04,Sockeye (Lake Type),,,,
+SEL-25-01,Sockeye (Lake Type),BORDER,YUKON TRANSBOUNDARY,Current,,,,,NO DESIGNATED SMU,,,,,,
+SEL-26-01,Sockeye (Lake Type),CHRISTINA,YUKON TRANSBOUNDARY,Current,185,Christina,CHRISTINA,YUKON TRANSBOUNDARY,STIKINE SOCKEYE SALMON,SEL-YTRA-02,Sockeye (Lake Type),,,,
+SEL-26-02,Sockeye (Lake Type),TAHLTAN,YUKON TRANSBOUNDARY,Current,186,Tahltan,TAHLTAN,YUKON TRANSBOUNDARY,STIKINE SOCKEYE SALMON,SEL-YTRA-02,Sockeye (Lake Type),,,,
+SEL-26-03,Sockeye (Lake Type),CHUTINE,YUKON TRANSBOUNDARY,Current,187,Chutine,CHUTINE,YUKON TRANSBOUNDARY,STIKINE SOCKEYE SALMON,SEL-YTRA-02,Sockeye (Lake Type),,,,
+SEL-27-01,Sockeye (Lake Type),WHITING,YUKON TRANSBOUNDARY,Current,,,,,NO DESIGNATED SMU,,,,,,
+SEL-28-01,Sockeye (Lake Type),KUTHAI,YUKON TRANSBOUNDARY,Current,189,Kuthai,KUTHAI,YUKON TRANSBOUNDARY,TAKU SOCKEYE SALMON,SEL-YTRA-03,Sockeye (Lake Type),,,,
+SEL-28-02,Sockeye (Lake Type),LITTLE TRAPPER,YUKON TRANSBOUNDARY,Current,190,Little Trapper,LTRAPPER,YUKON TRANSBOUNDARY,TAKU SOCKEYE SALMON,SEL-YTRA-03,Sockeye (Lake Type),,,,
+SEL-28-03,Sockeye (Lake Type),TATSAMENIE,YUKON TRANSBOUNDARY,Current,191,Tatsamenie,TATSAMENIE,YUKON TRANSBOUNDARY,TAKU SOCKEYE SALMON,SEL-YTRA-03,Sockeye (Lake Type),,,,
+SEL-28-05,Sockeye (Lake Type),KING SALMON,YUKON TRANSBOUNDARY,Current,192,King Salmon,KING SALMON,YUKON TRANSBOUNDARY,TAKU SOCKEYE SALMON,SEL-YTRA-03,Sockeye (Lake Type),,,,
+SEL-30-01,Sockeye (Lake Type),BLANCHARD,YUKON TRANSBOUNDARY,Current,193,Blanchard -BC,BLANCHARD,YUKON TRANSBOUNDARY,ALSEK SOCKEYE SALMON,SEL-YTRA-01,Sockeye (Lake Type),,,,
+SEL-30-02,Sockeye (Lake Type),KLUKSHU,YUKON TRANSBOUNDARY,Current,194,Klukshu-Yukon,KLUKSHU,YUKON TRANSBOUNDARY,ALSEK SOCKEYE SALMON,SEL-YTRA-01,Sockeye (Lake Type),,,,
+SEL-30-03,Sockeye (Lake Type),NESKATAHIN,YUKON TRANSBOUNDARY,Current,195,Neskatahin -Yukon,NESKATAHIN,YUKON TRANSBOUNDARY,ALSEK SOCKEYE SALMON,SEL-YTRA-01,Sockeye (Lake Type),,,,
+SER-01,Sockeye (River Type),BOUNDARY BAY,N/A,Deleted,,,,,NO DESIGNATED SMU,,,,,,
+SER-03,Sockeye (River Type),HARRISON RIVER,FRASER INTERIOR,Current,23,Harrison River (River-Type) population,,FRASER INTERIOR,FRASER SOCKEYE SALMON - SUMMER,SEL/SER-FIA-01,Sockeye (River & Lake Type),,,,
+SER-04,Sockeye (River Type),FRASER CANYON,FRASER INTERIOR,Deleted,,,,,NO DESIGNATED SMU,,,,,,
+SER-05,Sockeye (River Type),MIDDLE FRASER,FRASER INTERIOR,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SER-06,Sockeye (River Type),UPPER FRASER,FRASER INTERIOR,VREQ[Bin],,,,,NO DESIGNATED SMU,,,,,,
+SER-07,Sockeye (River Type),THOMPSON,N/A,Deleted,,,,,NO DESIGNATED SMU,,,,,,
+SER-08,Sockeye (River Type),EAST VANCOUVER ISLAND AND GEORGIA STRAIT,SOUTH COAST,Current,26; 27; 28,East Vancouver Island-Georgia Strait;South Coast - Southern Fjords;East Vancouver Island-Southern Fjords,EVI-GStr; SC-SFj;  EVI-SFj,,NO DESIGNATED SMU,,,,,,
+SER-09,Sockeye (River Type),SOUTHERN FJORDS,SOUTH COAST,Current,27; 29,South Coast - Southern Fjords; Homathko-Klinaklini-Southern Fjords,SC-SFj; HK,,NO DESIGNATED SMU,,,,,,
+SER-10,Sockeye (River Type),WEST VANCOUVER ISLAND,SOUTH COAST,Current,30,West Vancouver Is,WVI,,NO DESIGNATED SMU,,,,,,
+SER-11,Sockeye (River Type),NW VANCOUVER ISLAND,SOUTH COAST,Current,31,Northwest Vancouver Is,NWVI,,NO DESIGNATED SMU,,,,,,
+SER-12,Sockeye (River Type),RIVERS-SMITH INLETS,NORTH COAST,Current,35,Rivers-Smith Inlets,RSI,,NO DESIGNATED SMU,,,,,,
+SER-13,Sockeye (River Type),EAST HAIDA GWAII,NORTH COAST,Current,34,East Haida Gwaii,EHG,,NO DESIGNATED SMU,,,,,,
+SER-14,Sockeye (River Type),WEST HAIDA GWAII,NORTH COAST,Current,32,West Haida Gwaii,WHG,,NO DESIGNATED SMU,,,,,,
+SER-15,Sockeye (River Type),NORTH HAIDA GWAII,NORTH COAST,Current,33,North Haida Gwaii,NHG,,NO DESIGNATED SMU,,,,,,
+SER-16,Sockeye (River Type),NORTHERN COASTAL FJORDS,NORTH COAST,Current,36; 37,Bella Coola-Dean Rivers; Northern Coastal Streams,BCD; NC,,NO DESIGNATED SMU,,,,,,
+SER-17,Sockeye (River Type),NORTHERN COASTAL STREAMS,NORTH COAST,Current,38,Hecate Lowlands,HecLow,,NO DESIGNATED SMU,,,,,,
+SER-18,Sockeye (River Type),SKEENA RIVER,NORTH COAST,Current,39; 40,Lower Skeena River; Middle Skeena River,LSK; MSK,,NO DESIGNATED SMU,,,,,,
+SER-19,Sockeye (River Type),SKEENA RIVER-HIGH INTERIOR,NORTH COAST,Current,41,Upper Skeena River,USK,,NO DESIGNATED SMU,,,,,,
+SER-20,Sockeye (River Type),LOWER NASS-PORTLAND,NORTH COAST,Current,42,Lower Nass-Portland,LNR-P,,NO DESIGNATED SMU,,,,,,
+SER-21,Sockeye (River Type),UPPER NASS RIVER,NORTH COAST,Current,43,Upper Nass River,UNR,,NO DESIGNATED SMU,,,,,,
+SER-22,Sockeye (River Type),NORTHERN TRANSBOUNDARY FJORDS,NORTH COAST,Current,44; 45; 46; 47,Stikine River; Taku River; Whiting River; Unuk River,LStk; TAKU; Whiting; UNUK,,NO DESIGNATED SMU,,,,,,
+SER-23,Sockeye (River Type),CHILKAT RIVER,YUKON TRANSBOUNDARY,Current,,,,,NO DESIGNATED SMU,,,,,,
+SER-24,Sockeye (River Type),ALSEK RIVER,YUKON TRANSBOUNDARY,Current,49,Alsek River,ALSEK,,NO DESIGNATED SMU,,,,,,
