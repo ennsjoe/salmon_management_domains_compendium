@@ -27,6 +27,7 @@
 7.2 Dams & Water Management / Use,catch basin
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",catch registry
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",catches
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",catching fish
 7.2 Dams & Water Management / Use,catchment
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",caught fish
 "4.1 Roads, Trails & Railroads",causeway
@@ -37,7 +38,7 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",conservation stamp
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",control of fisheries
 4.2 Utility & Service Lines,crossing
-2.4 Marine & Freshwater Aquaculture,cultivated 
+2.4 Marine & Freshwater Aquaculture,cultivated
 7.2 Dams & Water Management / Use,culvert
 7.2 Dams & Water Management / Use,dam
 7.2 Dams & Water Management / Use,dams
@@ -94,7 +95,7 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",foul hook
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",foul hooks
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",frozen fish
-8.3 Introduced Genetic Material,genetically-modified
+8.3 Introduced Genetic Material,genetically modified
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",gill net
 7.2 Dams & Water Management / Use,groundwater
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",guiding for fish
@@ -123,6 +124,7 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",may fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",mesh size
 8.1 Invasive Non-Native / Alien Species,mussel
+10.1 Geological Events,natural barrier
 2.4 Marine & Freshwater Aquaculture,net pen
 8.1 Invasive Non-Native / Alien Species,nonferal
 8.1 Invasive Non-Native / Alien Species,non-native
@@ -169,7 +171,7 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",stock
 1.1 Residential Areas,storm water
 7.2 Dams & Water Management / Use,stream
-7.2 Dams & Water Management / Use,streamside
+7.3 Earth & Sediment Management,streamside
 9.1 Water-Borne & Other Effluent Pollution ,substances
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",sustainability of fisheries
 9.1 Water-Borne & Other Effluent Pollution ,tailings
