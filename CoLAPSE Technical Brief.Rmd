@@ -361,7 +361,7 @@ if (length(clause_types) > 0) {
 
 A summary of results from the iterations of the automated compendium are shown below. The complete compendium can also be queried using the <code>legislation.db</code> SQLite database, which is available in the <code>output</code> folder of this repository. 
 
-## Legislation by Threats to Salmon (Management Domains)
+## Legislation by Threats to Salmon
 
 The keyword matching categorization process was applied to 196 acts and regulations chosen as relevant to salmon and habitat management. Broken down to the clause level, the categorization process matched the following totals by scope:
 
@@ -411,6 +411,8 @@ if (nrow(scope_count) > 0) {
 ```
 
 <br>
+
+### Management Domains
 
 All 12 management domains were identified within the 196 statutes. Figure X below shows a count of clauses by management domain split by jurisdiction. Pollution, Spatial Designation, and Water Use and Watercourse Modifications show the highest number of clauses specific to those categories. Climate Change and Natural Disasters received the fewest matches. 
 
@@ -575,6 +577,8 @@ ggplot(iucn_jurisdiction_counts, aes(
 <p style="text-align: center;"><em>Figure X. Stacked bar chart showing alignment of Pacific salmon threat factors (IUCN Level 2) with jurisdictional distribution of legislative provisions.</em></p>
 
 <br>
+
+### Scope
 
 Scope as a numerical value allows for analysis of clause count by statute specific to salmon. Many of the collected legislation contain broad scope regulation (Figure X), while few statutes contain legislation specific to salmon with a high clause count. 
 
@@ -753,98 +757,78 @@ if (nrow(summary_data) > 0) {
 
 <br>
 
-```{r unique-provision-count-habitat-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
+```{r plot-habitat-domain-heatmap-greygrid, message=FALSE, warning=FALSE, echo=FALSE}
+# Load required libraries
 library(DBI)
 library(RSQLite)
+library(data.table)
 library(here)
-library(dplyr)
 library(ggplot2)
 
 # Connect to the database
-conn <- dbConnect(SQLite(), dbname = file.path(here("output"), "legislation.db"))
+db_path <- here("output", "legislation.db")
+conn <- dbConnect(SQLite(), dbname = db_path)
 
-# Load tables
-provision_labels <- dbGetQuery(conn, "
-  SELECT provision_id, scope 
-  FROM provision_label_table 
-  WHERE scope = '3 - Habitat'
-")
-provision_table <- dbGetQuery(conn, "
-  SELECT provision_id, legislation_id 
-  FROM LegislationParagraphs
-")
-legislation_metadata <- dbGetQuery(conn, "
-  SELECT legislation_id, legislation_name, jurisdiction 
-  FROM LegislationMetadata
-")
+# Read tables
+legislation_metadata   <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
+legislation_paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
+provision_labels       <- as.data.table(dbReadTable(conn, "provision_label_table"))
 
-# Disconnect
+# Disconnect from the database
 dbDisconnect(conn)
 
-# Join and summarize
-salmon_data <- provision_labels %>%
-  inner_join(provision_table, by = "provision_id") %>%
-  inner_join(legislation_metadata, by = "legislation_id")
+# Join metadata with provision labels
+provision_context <- merge(
+  legislation_paragraphs[, .(provision_id, legislation_id)],
+  legislation_metadata[, .(legislation_id, jurisdiction)],
+  by = "legislation_id",
+  all.x = TRUE
+)
 
-summary_data <- salmon_data %>%
-  group_by(legislation_name, jurisdiction) %>%
-  summarise(Unique_Provisions = n_distinct(provision_id), .groups = "drop") %>%
-  arrange(desc(Unique_Provisions))
+labeled_provisions <- merge(
+  provision_labels[, .(provision_id, scope, iucn_l2, management_domain)],
+  provision_context,
+  by = "provision_id",
+  all.x = TRUE
+)
 
-# Font scaling for dashboard readability
-font_scale <- 1.2
+# Filter for scope = "3 - Habitat"
+habitat_provisions <- labeled_provisions[
+  scope == "3 - Habitat" &
+  !is.na(iucn_l2) & iucn_l2 != "" &
+  !is.na(management_domain) & management_domain != ""
+]
 
-# Plot or fallback message
-if (nrow(summary_data) > 0) {
-  ggplot(summary_data, aes(x = Unique_Provisions, y = reorder(legislation_name, Unique_Provisions), fill = jurisdiction)) +
-    geom_bar(stat = "identity", color = "black") +
-    scale_fill_manual(values = c("Federal" = "#996666", "Provincial" = "#668899")) +
-    labs(
-      title = "Provision Count by Legislation (Scope: 3 - Habitat)",
-      x = "Number of Provisions",
-      y = "Legislation",
-      fill = "Jurisdiction"
-    ) +
-    theme_minimal(base_size = 14 * font_scale) +
-    theme(
-      axis.text.y = element_text(size = 14 * font_scale),
-      axis.text.x = element_text(size = 14 * font_scale),
-      plot.title = element_text(size = 14 * font_scale, face = "bold")
-    )
-} else {
-  cat("<p style='color: red;'>⚠️ No provisions found for Scope '3 - Habitat'.</p>")
-}
+# Aggregate counts
+heatmap_data <- habitat_provisions[
+  , .(provision_count = uniqueN(provision_id)), by = .(management_domain, iucn_l2)
+]
+
+# Plot heat map with grey grid background
+ggplot(heatmap_data, aes(x = iucn_l2, y = management_domain, fill = provision_count)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "#f0f0f0", high = "#996666") +
+  labs(
+    title = "Clause Density by Management Domain (Scope: 3-Habitat)",
+    x = "IUCN Level 2",
+    y = "Management Domain",
+    fill = "Clause Count"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.major = element_line(color = "grey80", size = 0.3),
+    panel.grid.minor = element_line(color = "grey90", size = 0.2),
+    panel.background = element_rect(fill = "white", color = NA),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
 ```
-
-<p style="text-align: center;"><em>Figure X. ___________________.</em></p>
-
-
-## Legislative Factors (Clause Types)
-
-<br>
-
-## Current Processes for Salmon Management (CUs and RAMs)
-
-### Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CoLAPSE)
-
-
-
-
-
-<br>
-
-
-
-## Summary of Management Domains
-
-<br>
-
 
 <br>
 
 ## Legislative Factors
 
-### Summary of Clause Types
+**Clause type intro
 
 ```{r plot-clause-type-heatmap, message=FALSE, warning=FALSE, echo=FALSE}
 # Load required libraries
@@ -915,13 +899,7 @@ ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = provisio
 
 <br>
 
-## Pacific Salmon Management Processes
-
-### Conservation Units and RPAs
-
-<br>
-
-### RAMs
+## Biological and Ecological Concerns in a Current Salmon Management Context
 
 <br>
 
@@ -937,6 +915,8 @@ ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = provisio
 ```
 
 ::: references
+Arbeider, M., Ritchie, L., Braun, D., Jenewein, B., Rickards, K., Dionne, K., Holt, C., Labelle, M., Nicklin, P., Mozin, P., Grant, P., Parken, C., and Bailey, R. 2020. Interior Fraser Coho Salmon Recovery Potential Assessment. DFO Can. Sci. Advis. Sec. Res. Doc. 2020/025. xi + 211 p.
+
 Armitage, D., de Loë, R., Plummer, R., 2012. Environmental governance and its implications for conservation practice. Conserv. Lett. 5, 245–255.
 
 Beazley, K.F., and Olive, A. 2021. Transforming conservation in Canada: shifting policies and paradigms. FACETS, 6: 1714–1727. <doi:10.1139/> facets-2021-0144.
@@ -951,11 +931,17 @@ Collins L, and Sossin L. 2019. Approach to constitutional principles and environ
 
 Department of Justice Canada. 2022. Legistics Paragraphing. Government of Canada. Accessed at: https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html in August 2025.
 
+DFO. 2020. Recovery Potential Assessment for 11 Designatable Units of Fraser River Chinook Salmon, Oncorhynchus tshawytscha, Part 1: Elements 1 to 11. DFO Can. Sci. Advis. Sec. Sci. Advis. Rep. 2020/023.
+
+DFO. 2022. Recovery Potential Assessment for Fraser River Sockeye Salmon (Oncorhynchus nerka) – Nine Designatable Units – Part 2: Habitat, Threats Assessment, Mitigation, And Allowable Harm. DFO Can. Sci. Advis. Sec. Sci. Advis. Rep. 2022/003.
+
 Dufresne Y, and Ouellet C. 2019. Conceptualization, measurement and effects of positional issues in the Canadian electoral context. Heliyon, 5(4): e01453. <PMID:31025009>. <DOI:10.1016/j.heliyon>. 2019.e01453
 
 Kraus, D., Murphy, S., and Armitage, D. 2021. Ten bridges on the road to recovering Canada’s endangered species. <doi:10.1139/facets>.
 
 Hutchings JA, Côté IM, Dodson JJ, Fleming IA, Jennings S, Mantua NJ, et al. 2012. Is Canada fulfilling its obligations to sustain marine biodiversity? A summary review, conclusions, and recommendations. Environmental Reviews 20: 353–361. DOI: 10.1139/er-2012-0049
+
+Mahony, A., Challenger, W., Robichaud, D., Wright, H., Bussanich, R., Sharma, R., and Enns, J. 2021. Recovery Potential Assessment for the Okanagan Chinook Salmon (Oncorhynchus tshawytscha) (2019). DFO Can. Sci. Advis. Sec. Res. Doc. 2021/009. ix + 106 p.
 
 Marentette, J.R. and Kronlund, A.R. 2020. A Cross-Jurisdictional Review of International Fisheries Policies, Standards and Guidelines: Considerations for a Canadian Science Sector Approach. Can. Tech. Rep. Fish. Aquat. Sci. 3342: xiii + 169 p.
 
@@ -977,7 +963,7 @@ Westwood AR, Otto SP, Mooers A, Darimont C, Hodges KE, Johnson C, et al. 2019. P
 
 <hr>
 
-## Legislation Accumulation and Review
+## Appendix I - Legislation Accumulation and Review
 
 ```{r legislation-count-by-type, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 # Load required libraries
@@ -1067,7 +1053,7 @@ if (!file.exists(db_path)) {
 
 <hr>
 
-## CoLAPSE Viewer
+## Appendix II - CoLAPSE Viewer
 The following interactive table contains the full compendium of legislation by Management Domain and IUCN Threat category. Search topics by domain and salmon threats to view applicable legislation.
 
 ```{r domain-filter-list, echo=FALSE}
@@ -1219,16 +1205,16 @@ reactable(
              
 <hr>
 
-## Case Study: 
+## Appendix III - Case Study: 
 
 
 <hr>
 
-## Case Study:
+## Appendix IV - Case Study:
 
 <hr>
 
-## External Resources
+## Appendix V - External Resources
 
 https://www.canlii.org/
 
@@ -1240,4 +1226,4 @@ IUCN Direct Threats Classification 4.0
 
 https://docs.google.com/spreadsheets/d/1yfm7ua9hQJpjycx6FYQJ6Jy5LA4bP0XP61EW3-sX8ZY/edit?gid=179026760#gid=179026760
 
- 
+
