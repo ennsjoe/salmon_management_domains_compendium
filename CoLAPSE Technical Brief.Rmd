@@ -72,7 +72,7 @@ While legislation and programs may often operate on a sector-by-sector and indiv
 
 ## Purpose and Objectives
 
-This report outlines a framework and process to relate human activities that threaten Pacific salmon populations to their regulatory statutes. The overall goal of this effort is to better understand the legislative context that governs Pacific salmon in British Columbia related to human activities by administrative concern in order to support conservation planning across jurisdictions. To achieve this, the more specific objectives are to:
+This report outlines a framework and process to relate human activities that threaten Pacific salmon stocks, biology, and ecology to their regulatory statutes. The overall goal of this effort is to better understand the legislative context that governs Pacific salmon in British Columbia related to human activities by administrative concern in order to support conservation planning across jurisdictions. To achieve this, the more specific objectives are to:
 
 <div style="margin-left: 30px; padding-left: 10px">
 <ol>
@@ -86,21 +86,51 @@ This report outlines a framework and process to relate human activities that thr
 
 # METHODS
 
-## Categorizing Legislation by Anthrogogenic Threats to Salmon
+## Legislation by Anthrogogenic Threats to Salmon
 
 Legislation governs human activity, which in turn impacts Pacific salmon population and habitat. Federal and provincial acts and regulations in British Columbia might be designed to address one broad category of human activity; however, this activity can cover many aspects of salmon management. For example, the provincial Forest and Range Practices Act is specific to forestry practices and planning, along with cattle ranging practices, but in terms of salmon threats, these activities impact many aspects including stream hydrology, water temperature, effluent, riparian habitat destruction, watercourse changes from road infrastructure, and the spread of invasive species. To better categorize legislation aligned with salmon threats and create a “buffer” between biological management and the regulatory context, this study defines discrete areas of administrative responsibility for Pacific salmon as “management domains.”
 
 <br>
 
-### Management Domains
+### Defining Management Domains
 
-**Start with 4 H's
+<strong>The Four Hs</strong>
 
-**Then explain IUCN Threats
+Management decisions and activities related to salmon have often been in response to identifiable threats to salmon health and population status. One common framework used to describe impacts to salmon are the “Four Hs”: Habitat, Hydropower, Harvest, and Hatcheries. Many aspects of salmon management are associated with governance and agreements rather than one of the other H’s, which also could be categorized by a fifth H as “Handshaking.” While this categorization structure of salmon concerns presents a good starting point, it is too broad and oversimplified considering the range of legislation involved.
 
-**Then define Management Domains
+<br>
 
-Management domains represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Since management domains are defined as a “separation of administrative concerns,” it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 12 specific management domains were delineated for the purpose of this exercise. The domains were developed to comprehensively encompass the legislative context, administrative functions, and anthropogenic threats related to Pacific salmon in British Columbia.
+<strong>International Union for Conservation of Nature (IUCN) Threat Categories</strong>
+
+Human systems can be categorized as direct threats to biodiversity more specifically for conservation strategies (Salafsky et al 2024). The International Union for Conservation of Nature (IUCN) and Conservation Measures Partnership (CMP) has developed a hierarchical grouping of threats used globally by conservation practitioners. IUCN direct threat categories are widely used to assess threats as part of IUCN red list assessments, as well as, in status assessments for Pacific salmon populations conducted by the Committee for the Status of Endangered Wildlife in Canada (COSEWIC). 
+
+For this study, the <a href=" https://docs.google.com/spreadsheets/d/1yfm7ua9hQJpjycx6FYQJ6Jy5LA4bP0XP61EW3-sX8ZY/edit?gid=179026760#gid=179026760" style="color:#668899">IUCN - CMP Direct Threats Classification 4.0</a> was used to categorize legislation by direct threats to salmon conservation. Level 2 threat classification was used as the finest resolution that could be applied legislative clause consistently. 
+
+<br>
+
+<strong>Management Domains</strong>
+
+Legislative clauses that influence Pacific salmon governance in British Columbia are not always associated with conservation threats. As well, some clauses may involve all threats. For example, statutes that outline species status or determine ecological reserves have relevance to how the salmon is managed, but can’t be attributed to any one IUCN threat category. Pacific salmon life history also ranges over a broad geography of marine and freshwater habitat (including terrestrial watershed aspects), touching on almost every conservation threat available. “Management Domains” were identified through this study as a clearer and more comprehensive alignment between regulatory administrative concern and conservation threat categories (Figure 1).
+
+```{r flowchart-image, echo=FALSE, results='asis'}
+library(here)
+
+# Define image path
+image_path <- here("Management Domain Flowchart.png")
+
+# Check if image exists
+if (file.exists(image_path)) {
+  # Manually create figure with caption below
+  cat('<div style="text-align: center;">')
+  cat('<img src="', image_path, '" alt="Flowchart" style="max-width: 100%; height: auto;"><br>', sep = "")
+  cat('<p><em>Figure 1. Flowchart showing alignment of Pacific salmon threat factors (Four H\'s) with Management Domain in relation to legislation and jurisdiction.</em></p>')
+  cat('</div>')
+} else {
+  cat("<p style='color:red;'>❌ Image file not found: ", image_path, "</p>")
+}
+```
+
+Management domains represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Management domains can be defined as a “separation of administrative concerns,” and it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 12 specific management domains were delineated for the purpose of this exercise.
 
 ```{r management-domain-grid, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 # Load required libraries
@@ -163,48 +193,24 @@ cat("</div>")  # ✅ Properly closed the outer div
 
 <br>
 
-We used the International Union for Conservation of Nature (IUCN) threat categories (Salafsky et al 2008) to classify legislation into anthropogenic activities that affect salmon. IUCN threat categories are widely used to assess threats as part of IUCN red list assessments, as well as in status assessments for Pacific salmon populations conducted by the Committee for the Status of Endangered Wildlife in Canada (COSEWIC). We assigned Level 1 and Level 2 threat classification hierarchies from the IUCN categories into management domains to separate anthropogenic activities into different areas of administrative concern.
+<strong>Scope</strong>
 
-Historically, much of the management decisions and activities related to salmon have been in response to identifiable threats to salmon health and population status. One common framework used to describe impacts to salmon are the Four H’s: Habitat, Hydropower, Harvest, and Hatcheries. Each management domain, as defined in this report, intentionally aligns with one of the four H’s. However, there are aspects of salmon management associated with governance and agreements rather than one of the other H’s, which we categorized as “Handshaking.” Because the management domains are centered around salmon/habitat impacts, this allows structurally for a clearer alignment with IUCN threat categories.
-
-```{r flowchart-image, echo=FALSE, results='asis'}
-library(here)
-
-# Define image path
-image_path <- here("Management Domain Flowchart.png")
-
-# Check if image exists
-if (file.exists(image_path)) {
-  # Manually create figure with caption below
-  cat('<div style="text-align: center;">')
-  cat('<img src="', image_path, '" alt="Flowchart" style="max-width: 100%; height: auto;"><br>', sep = "")
-  cat('<p><em>Figure 1. Flowchart showing alignment of Pacific salmon threat factors (Four H\'s) with Management Domain in relation to legislation and jurisdiction.</em></p>')
-  cat('</div>')
-} else {
-  cat("<p style='color:red;'>❌ Image file not found: ", image_path, "</p>")
-}
-```
-
-<br>
-
-### Scope
-
-We developed a scope classification system to categorize the sections based on their relevance to Pacific salmon. The scope was determined by the specificity of the language used in the section. The Scope categories were defined as follows:
+The process of matching management domains and IUCN threat categories to legislative clauses lacks a measure of relevance to Pacific salmon management. For example, a clause that states catch limits for Chinook salmon would be much more specific to salmon management than a clause that states that a minister shall include ecological integrity objectives in a park management plan. Both clauses influence salmon governance and management, but one clause is more direct. A “Scope” classification was developed as part of this study to parallel management domains and categorize clauses based on their direct application to Pacific salmon. The scope was determined by the specificity of the language used in the section. The scope categories were defined as follows:
 
 <div style="margin-left: 30px; padding-left: 10px">
-<ol>
-<li>Salmon - refers to salmon specifically</li>
-<li>Fish - refers to fish that include salmon</li>
-<li>Habitat - refers to any habitat that includes salmon habitat</li>
-<li>Governance - refers to administrative processes and structure</li>
-</ol>
+<ul style='list-style-type: none'>
+<li>1 – Salmon: refers to salmon specifically</li>
+<li>2 – Fish: refers to fish that include salmon</li>
+<li>3 – Habitat: refers to any habitat that includes salmon habitat</li>
+<li>4 – Governance: refers to administrative processes and structure</li>
+</ul>
 </div>
 
-Scope 1 was assigned separately to sections with the specific salmon keywords. Scope 2-3 were assigned during the Management Domain and IUCN Threat assignment.
+The scope assignment process is linked but occurs independent of the management domain and IUCN threat assignment process. All management domains align with scope, but not the IUCN threats. The “1 – Salmon” scope was assigned based solely on salmon keywords (salmon, Chinook, sockeye, etc.), regardless of management domain or IUCN threat. The “2 – Fish” and “3 – Habitat” scopes align directly to IUCN threats (unless already classified as “1 – Salmon”). The “4 – Governance” scope was applied lastly in a separate matching process.
 
 <br>
 
-### Categorization Process
+### Assigning Management Domains
 
 Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the clauses within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable. Other researchers may repeat this process as future legislation and language changes. The process steps are:
 
@@ -220,7 +226,7 @@ Assessment of legislative context is prone to subjective interpretation. The inc
 
 <br>
 
-#### Legislation Accumulation and Review
+<strong>1) Legislation Accumulation and Review</strong>
 
 We focused our review on established Canadian federal and British Columbian provincial legislation (acts and regulations) for inclusion in the management domain process. We did not include specific departmental policy frameworks and processes throughout this exercise unless specifically referenced in the statutes because these executive strategies are prone to changes in the political, administrative, and budgetary landscape. Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were not included explicitly. Although this other legislation is pivotal in the management of Pacific salmon, considering this regionally diverse administration was outside the scope of this legislative review in terms of feasibility. However .
 
@@ -240,7 +246,7 @@ Through the CanLII website, the user may look up the keywords queried in each ac
 
 <br>
 
-#### Parsing Legislation from HTML Files
+<strong>2) Parsing Legislation from HTML Files</strong>
 
 The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular management domain. Typological device structure and definitions were derived from the Government of Canada’s <a href="https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html" style="color:#668899">“Legistics Paragraphing”</a> (Department of Justice Canada 2022). For the purpose of this review, we used the individual clause (Figure 2) as the sample unit for assignment into management domains and other attributes.  
 
@@ -266,7 +272,8 @@ Legislation presented on Canadian and British Columbian government websites--and
 
 <br>
 
-#### Database Schema
+<strong>3) Building a Database Compendium</strong>
+
 The parsed legislation was stored in a SQLite database with datatables including:
 
 <div style="margin-left: 30px; padding-left: 10px">
@@ -299,13 +306,13 @@ Storing the data as a database rather than one large spreadsheet allows for a mo
 
 <br>
 
-### Assigning Management Domains and IUCN Threats
+<strong>4) Assigning Management Domains and IUCN Threats</strong>
 
 The Management Domains and IUCN threats were assigned to each section based on a keyword list developed from the IUCN threat categories. The keywords were used to identify specific sections and subsections within the legislation. Each section was then assigned to one or more Management Domain and IUCN threat based on the presence of these keywords.Iteratively, we adjusted the keyword list to ensure that it accurately captured the scope of each Management Domain and IUCN threat. The keyword list is available in Appendix II.
 
 <br>
 
-## Assessing Legislative Factors by Threat Categorization
+## Legislative Factors by Threat Categorization
 
 ### Clause Types
 Similar the Management Domain assignment, we created a Clause Type keyword list to assess the nature or purposes of the clauses. Using language patterns within the legislation, we grouped Clause Type by:
@@ -349,11 +356,18 @@ if (length(clause_types) > 0) {
 
 ## Biological and Ecological Concerns in a Current Salmon Management Context
 
+**Description of Wild Salmon Policy and Conservation Units
+
 ### Conservation Units and RPAs
+
+**Summary of RPAs and connection of IUCN threats to CUs and DUs
 
 <br>
 
-### RAMs
+### NOAA Ecological Concerns and RAMs
+
+*RAMs background and NOAA Ecological Concerns
+**Why also use ecological concerns? - life history stages
 
 <br>
 
@@ -948,6 +962,8 @@ Marentette, J.R. and Kronlund, A.R. 2020. A Cross-Jurisdictional Review of Inter
 McCune JL, Harrower WL, Avery-Gomm S, Brogan JM, Csergő A-M, Davidson LNK, et al. 2013. Threats to Canadian species at risk: an analysis of finalized recovery strategies. Biological Conservation, 166: 254–265. DOI: 10.1016/j.biocon.2013.07.006
 
 Ray, J.C., Grimm, J., and Olive, A. 2021. The biodiversity crisis in Canada: failures and challenges of federal and sub-national strategic and legal frameworks. FACETS. 6: 1044–1068. <doi:10.1139/facets>.
+
+Salafsky, Nick, Claire Relton, Bruce E. Young, et al. 2025. Classification of Direct Threats to the Conservation of Ecosystems and Species 4.0. Conservation Biology 39 (3): e14434. https://doi.org/10.1111/cobi.14434.
 
 Salafsky, N., Salzer, D., Stattersfield, A.J., Hilton-Taylor, C., Nuegarten, R., Butchart, S.H.M., Collen, B., Cox, N., Master, L.L., O’Connor, S., Wilkie, D., 2008. A standard lexicon for biodiversity conservation: unified classifications of threats and actions. Conserv. Biol. 22, 897–911.
 
