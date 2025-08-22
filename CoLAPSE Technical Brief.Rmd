@@ -6,6 +6,7 @@ output:
   scientific::html:
     toc: true
     toc_float: true
+    css: "custom.css"
     number_sections: false
     self_contained: true
     fig_caption: true
@@ -13,6 +14,7 @@ output:
     link_citations: true
 documentclass: article
 ---
+
 <!-- Typography and Background -->
 <style>
 body, h1, h2, h3, h4, h5, h6, p, li, td, th {
