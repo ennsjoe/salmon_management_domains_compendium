@@ -858,7 +858,7 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = management_domain, fill = provision_co
 
 <br>
 
-## Legislative Factors
+## Clause Types
 
 **Clause type intro
 
