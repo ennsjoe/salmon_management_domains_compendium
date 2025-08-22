@@ -373,11 +373,7 @@ if (length(clause_types) > 0) {
 
 # RESULTS
 
-A summary of results from the iterations of the automated compendium are shown below. The complete compendium can also be queried using the <code>legislation.db</code> SQLite database, which is available in the <code>output</code> folder of this repository. 
-
-## Legislation by Threats to Salmon
-
-The keyword matching categorization process was applied to 196 acts and regulations chosen as relevant to salmon and habitat management. Broken down to the clause level, the categorization process matched the following totals by scope:
+A summary of results from the iterations of the automated compendium are shown below. The complete compendium can also be queried using the <code>legislation.db</code> SQLite database, which is available in the <code>output</code> folder of this repository. The keyword matching categorization process was applied to 196 acts and regulations chosen as relevant to salmon and habitat management. Broken down to the clause level, the categorization process matched the following totals by scope:
 
 ```{r scope-provision-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 # 📦 Load libraries
@@ -393,30 +389,52 @@ if (!file.exists(db_path)) stop("❌ Database file not found at: ", db_path)
 # 🔌 Connect to the database
 conn <- dbConnect(SQLite(), dbname = db_path)
 
-# 📤 Query scope and provision_id from provision_label_table
-query <- "
+# 📤 Load provision_label_table with scope and provision_id
+scope_query <- "
   SELECT scope, provision_id
   FROM provision_label_table
   WHERE scope IS NOT NULL
 "
-scope_data <- data.table(dbGetQuery(conn, query))
+scope_data <- data.table(dbGetQuery(conn, scope_query))
+
+# 📤 Load LegislationParagraphs with provision_id, Section, and legislation_id
+section_query <- "
+  SELECT provision_id, Section, legislation_id
+  FROM LegislationParagraphs
+  WHERE Section IS NOT NULL
+"
+section_data <- data.table(dbGetQuery(conn, section_query))
 
 # 🔌 Disconnect from the database
 dbDisconnect(conn)
 
-# 📊 Tally unique provision_id counts by scope
-scope_count <- scope_data[, .(count = uniqueN(provision_id)), by = scope][order(scope)]
+# 🔗 Merge scope and section data
+merged_data <- merge(scope_data, section_data, by = "provision_id", all.x = TRUE)
 
-# 📈 Calculate total clause count
-total_count <- sum(scope_count$count)
+# 📊 Tally clause, section, and legislation counts by scope
+scope_tally <- merged_data[, .(
+  clauses = uniqueN(provision_id),
+  sections = uniqueN(paste(legislation_id, Section, sep = "_")),
+  legislation_sources = uniqueN(legislation_id)
+), by = scope][order(scope)]
+
+# 📈 Calculate total counts
+total_clauses <- sum(scope_tally$clauses)
+total_sections <- sum(scope_tally$sections)
+total_legislation <- uniqueN(merged_data$legislation_id)
 
 # 🖨️ Print formatted HTML output
-if (nrow(scope_count) > 0) {
+if (nrow(scope_tally) > 0) {
   cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
-  for (i in seq_len(nrow(scope_count))) {
-    cat(sprintf("<li><strong>%s:</strong> %d clauses</li>\n", scope_count$scope[i], scope_count$count[i]))
+  for (i in seq_len(nrow(scope_tally))) {
+    cat(sprintf("<li><strong>%s:</strong> %d clauses | %d sections | %d statutes</li>\n",
+                scope_tally$scope[i],
+                scope_tally$clauses[i],
+                scope_tally$sections[i],
+                scope_tally$legislation_sources[i]))
   }
-  cat(sprintf("<li style='margin-top: 10px;'><strong>Total Clauses:</strong> %d</li>\n", total_count))
+  cat(sprintf("<li style='margin-top: 10px;'><strong>Total:</strong> %d clauses | %d sections | %d statutes</li>\n",
+              total_clauses, total_sections, total_legislation))
   cat("</ul>\n")
 } else {
   cat("<p>No scope provisions found in the database.</p>\n")
