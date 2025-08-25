@@ -1,9 +1,9 @@
 ################################################################################
-# Title: Database Provision Table
+# Title: Database Paragraph Table
 # Authors: Joe Enns, Cory Lagasse, Max Elinson
 # Date Created: 2025-08-07
 # Purpose / Description: 
-#   This script processes HTML files containing legislative provisions,
+#   This script processes HTML files containing legislative paragraphs,
 #   extracts relevant information, and saves it into a structured SQLite database.
 # Dependencies: DBI, RSQLite, data.table, here, xml2, rvest, stringi, stringr
 # Execution: Run in RStudio or via Rscript; ensure working directory is project root
@@ -11,7 +11,7 @@
 #   HTML files located in the "legislation_html" directory.
 # Outputs:
 #   A SQLite database file named "legislation.db" in the "output" directory,
-#   containing a table with metadata about the legislative provisions.
+#   containing a table with metadata about the legislative paragraphs.
 ################################################################################
 
 ## Set Working Directory ----
@@ -42,8 +42,8 @@ cat("Total HTML files detected:", length(html_files), "\n")
 ## Stop if no files are found
 if (length(html_files) == 0) stop("No HTML files found in the specified directories.")
 
-## Initialize provision_table ----
-provision_table <- data.table(
+## Initialize paragraph_table ----
+paragraph_table <- data.table(
   legislation_id = integer(),
   Section = character(),
   Heading = character(),
@@ -120,7 +120,7 @@ for (i in seq_along(html_files)) {
       paragraph_text <- stri_enc_toutf8(paragraph_text)  # Normalize here too
       
       if (nzchar(paragraph_text)) {
-        provision_table <- rbind(provision_table, data.table(
+        paragraph_table <- rbind(paragraph_table, data.table(
           legislation_id = legislation_id,
           Section = last_section,
           Heading = last_heading,
@@ -137,18 +137,18 @@ for (i in seq_along(html_files)) {
 }
 
 ## Filter and Clean ----
-provision_table <- provision_table[!is.na(Section)]
+paragraph_table <- paragraph_table[!is.na(Section)]
 
 # Escape filter words safely
 filter_words <- c("repeal", "repealed", "revoked", "Marginal note", "Not in force")
 escaped_words <- sapply(filter_words, function(w) paste0("\\b", stringr::str_replace_all(w, "([\\W])", "\\\\\\1"), "\\b"))
-provision_table <- provision_table[!grepl(paste(escaped_words, collapse = "|"), Paragraph, ignore.case = TRUE)]
+paragraph_table <- paragraph_table[!grepl(paste(escaped_words, collapse = "|"), Paragraph, ignore.case = TRUE)]
 
-## Add Unique provision_id ----
-provision_table[, provision_id := .I]
+## Add Unique paragraph_id ----
+paragraph_table[, paragraph_id := .I]
 
 ## Remove XPath column ----
-provision_table[, XPath := NULL]
+paragraph_table[, XPath := NULL]
 
 ## Save to SQLite Database ----
 output_dir <- here("output")
@@ -156,7 +156,7 @@ if (!dir.exists(output_dir)) dir.create(output_dir, recursive = TRUE)
 
 db_path <- file.path(output_dir, "legislation.db")
 conn <- dbConnect(SQLite(), dbname = db_path)
-dbWriteTable(conn, "LegislationParagraphs", provision_table, overwrite = TRUE)
+dbWriteTable(conn, "LegislationParagraphs", paragraph_table, overwrite = TRUE)
 dbDisconnect(conn)
 
 ## Save list of bad files ----
