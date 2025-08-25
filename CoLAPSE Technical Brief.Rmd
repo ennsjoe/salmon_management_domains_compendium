@@ -3,24 +3,17 @@ title: "Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (C
 author: "Joe Enns, Cory Lagasse"
 date: "`r Sys.Date()`"
 output:
-  scientific::html:
+  html_document:
     toc: true
     toc_float: true
-    css: "custom.css"
     number_sections: false
     self_contained: true
     fig_caption: true
     code_folding: none
-    link_citations: true
-documentclass: article
+    css: "style.css"
+    theme: flatly
+    highlight: tango
 ---
-
-<!-- Typography and Background -->
-<style>
-body, h1, h2, h3, h4, h5, h6, p, li, td, th {
-  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-}
-</style>
 
 ```{r read-legislation-db, message=FALSE, warning=FALSE, echo=FALSE}
 # Load required libraries
