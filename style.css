@@ -44,3 +44,10 @@ table, pre, code {
   overflow-x: auto;
   display: block;
 }
+
+.active-domain {
+  background-color: #668899 !important;
+  color: white !important;
+  border-color: #black !important;
+}
+

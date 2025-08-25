@@ -11,7 +11,7 @@ output:
     fig_caption: true
     code_folding: none
     css: "style.css"
-    theme: flatly
+    theme: sandstone
     highlight: tango
 ---
 
@@ -1095,34 +1095,51 @@ domains <- sort(unique(na.omit(provision_labels$management_domain)))
 tags$div(
   style = "margin-bottom: 20px;",
   tags$strong("Filter by Management Domain:"),
+  tags$span(
+    "ℹ️ Click a domain to filter the table. Click 'All' to reset.",
+    style = "margin-left: 10px; font-size: 0.9em; color: #555;"
+  ),
   tags$div(
-    style = "margin-top: 10px;",
+    style = "margin-top: 10px; display: flex; flex-wrap: wrap;",
+    
     # "All" button to clear filter
     tags$button(
       "All",
-      onclick = "Reactable.setFilter('act-legislation-summary-table', 'DomainFilter', ''); return false;",
+      onclick = "
+        Reactable.setFilter('act-legislation-summary-table', 'DomainFilter', '');
+        document.querySelectorAll('[data-domain-button]').forEach(b => b.classList.remove('active-domain'));
+        return false;
+      ",
+      `data-domain-button` = NA,
       style = "
         margin-right: 8px;
+        margin-bottom: 8px;
         padding: 6px 12px;
-        background-color: #0074D9;
+        background-color: #996666;
         color: white;
         border: none;
         border-radius: 4px;
         cursor: pointer;
       "
     ),
+    
     # Domain-specific buttons
     lapply(domains, function(domain) {
       tags$button(
         htmlEscape(domain),
         onclick = sprintf(
-          "Reactable.setFilter('act-legislation-summary-table', 'DomainFilter', '%s'); return false;",
+          "Reactable.setFilter('act-legislation-summary-table', 'DomainFilter', '%s');
+           document.querySelectorAll('[data-domain-button]').forEach(b => b.classList.remove('active-domain'));
+           this.classList.add('active-domain');
+           return false;",
           htmlEscape(domain)
         ),
+        `data-domain-button` = NA,
         style = "
           margin-right: 8px;
+          margin-bottom: 8px;
           padding: 6px 12px;
-          background-color: #f0f0f0;
+          background-color: f9f9f9;
           color: #333;
           border: 1px solid #ccc;
           border-radius: 4px;
@@ -1130,8 +1147,18 @@ tags$div(
         "
       )
     })
-  )
+  ),
+  
+  # Add style for active button
+  tags$style(HTML("
+    .active-domain {
+      background-color: #0074D9 !important;
+      color: white !important;
+      border-color: #0074D9 !important;
+    }
+  "))
 )
+
 ```
 
 ```{r act-legislation-summary-table, results='asis', message=FALSE, warning=FALSE, echo=FALSE}
@@ -1199,37 +1226,35 @@ section_summary <- section_data[
   by = .(Act, Legislation, HeadingSection)
 ]
 
-# Step 6: Render reactable with styled Paragraphs column
-reactable(
-  section_summary,
-  elementId = "act-legislation-summary-table",
-  groupBy = c("Act", "Legislation"),
-  searchable = TRUE,
-  pagination = TRUE,
-  striped = TRUE,
-  bordered = TRUE,
-  resizable = TRUE,
-  defaultPageSize = 10,
-  defaultColDef = colDef(filterable = TRUE),
-  width = "100%",
-  columns = list(
-    Act = colDef(name = "Act", filterable = TRUE, minWidth = 150),
-    Legislation = colDef(name = "Legislation", filterable = TRUE, minWidth = 200),
-    HeadingSection = colDef(name = "Heading & Section", filterable = TRUE, minWidth = 150),
-    DomainFilter = colDef(
-      name = "Management Domain",
-      filterable = TRUE,
-      show = FALSE
-    ),
-    Paragraphs = colDef(
-      name = "Paragraphs",
-      html = TRUE,
-      minWidth = 600,
-      maxWidth = 1000,
-      style = list(fontSize = "0.85em")
+# Step 6: Render reactable inside a responsive container
+htmltools::div(
+  style = "width: 100%; overflow-x: auto;",
+  reactable(
+    section_summary,
+    elementId = "act-legislation-summary-table",
+    groupBy = c("Act", "Legislation"),
+    searchable = TRUE,
+    pagination = TRUE,
+    striped = TRUE,
+    bordered = TRUE,
+    resizable = TRUE,
+    defaultPageSize = 10,
+    defaultColDef = colDef(filterable = TRUE),
+    columns = list(
+      Act = colDef(name = "Act", filterable = TRUE, minWidth = 150),
+      Legislation = colDef(name = "Legislation", filterable = TRUE, minWidth = 200),
+      HeadingSection = colDef(name = "Heading & Section", filterable = TRUE, minWidth = 150),
+      DomainFilter = colDef(name = "Management Domain", filterable = TRUE, show = FALSE),
+      Paragraphs = colDef(
+        name = "Paragraphs",
+        html = TRUE,
+        minWidth = 400,
+        style = list(fontSize = "0.85em", whiteSpace = "normal")
+      )
     )
   )
 )
+
 ```
              
 <hr>
