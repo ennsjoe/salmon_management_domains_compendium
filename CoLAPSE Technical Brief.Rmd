@@ -1259,16 +1259,73 @@ htmltools::div(
              
 <hr>
 
-## Appendix III - Case Study: 
+## Appendix III - Keywords: 
+
+```{r keyword-frequency-by-domain-corrected, echo=FALSE, message=FALSE, warning=FALSE}
+library(DBI)
+library(RSQLite)
+library(data.table)
+library(here)
+library(reactable)
+
+# Connect to database
+db_path <- here::here("output", "legislation.db")
+conn <- dbConnect(SQLite(), dbname = db_path)
+
+# Load labeled provision table
+provision_label_table <- as.data.table(dbReadTable(conn, "provision_label_table"))
+dbDisconnect(conn)
+
+# Step 1: Extract keyword sets
+iucn_keywords <- provision_label_table[
+  !is.na(iucn_keyword),
+  .(management_domain, keyword = iucn_keyword)
+]
+
+governance_keywords <- provision_label_table[
+  !is.na(keyword) & is.na(iucn_l2),
+  .(management_domain, keyword)
+]
+
+# Step 2: Combine and count
+combined_keywords <- rbindlist(list(iucn_keywords, governance_keywords), use.names = TRUE)
+
+keyword_summary <- combined_keywords[
+  , .(Frequency = .N),
+  by = .(management_domain, keyword)
+][order(-Frequency)]
+
+# Step 3: Render reactable
+reactable(
+  keyword_summary,
+  groupBy = "management_domain",
+  searchable = TRUE,
+  pagination = TRUE,
+  striped = TRUE,
+  bordered = TRUE,
+  highlight = TRUE,
+  defaultPageSize = 15,
+  columns = list(
+    management_domain = colDef(name = "Management Domain", minWidth = 150),
+    keyword = colDef(name = "Keyword", minWidth = 200),
+    Frequency = colDef(name = "Frequency", align = "center")
+  )
+)
+
+```
+
+<hr>
+
+## Appendix IV - Case Study: 
 
 
 <hr>
 
-## Appendix IV - Case Study:
+## Appendix V - Case Study:
 
 <hr>
 
-## Appendix V - External Resources
+## Appendix VI - External Resources
 
 https://www.canlii.org/
 
