@@ -27,14 +27,14 @@ clause_type_keywords <- fread(here("clause_type_keywords.csv"), colClasses = "ch
 iucn_l2_keywords <- fread(here("iucn_l2_keywords.csv"), colClasses = "character")
 salmon_scope_keywords <- fread(here("salmon_scope_keywords.csv"), colClasses = "character")
 governance_keywords <- fread(here("governance_keywords.csv"), colClasses = "character")
-mgmt_d_iucn <- fread(here("management_domain_threat_table.csv"), colClasses = "character")
+management_domain_threat_table <- fread(here("management_domain_threat_table.csv"), colClasses = "character")
 
 ## Save Keyword Tables to SQLite ----
 dbWriteTable(conn, "clause_type_keywords", clause_type_keywords, overwrite = TRUE)
 dbWriteTable(conn, "iucn_l2_keywords", iucn_l2_keywords, overwrite = TRUE)
 dbWriteTable(conn, "salmon_scope_keywords", salmon_scope_keywords, overwrite = TRUE)
 dbWriteTable(conn, "governance_keywords", governance_keywords, overwrite = TRUE)
-dbWriteTable(conn, "management_domain_threat_table", mgmt_d_iucn, overwrite = TRUE)
+dbWriteTable(conn, "management_domain_threat_table", management_domain_threat_table, overwrite = TRUE)
 
 ## Clean and Preprocess Paragraph Text ----
 cleaned_paragraphs <- str_squish(tolower(str_replace_all(paragraph_table$Paragraph, "[[:punct:]]", " ")))
@@ -91,7 +91,7 @@ paragraph_label_table[, label_id := .I]
 # IUCN scope from management_domain_threat_table via iucn_l2
 iucn_scope_lookup <- merge(
   iucn_l2_keywords[, .(keyword, iucn_l2)],
-  mgmt_d_iucn[, .(iucn_l2, scope)],
+  management_domain_threat_table[, .(iucn_l2, scope)],
   by = "iucn_l2",
   all.x = TRUE
 )
