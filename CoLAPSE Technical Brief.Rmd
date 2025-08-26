@@ -11,49 +11,9 @@ output:
     fig_caption: true
     code_folding: none
     css: "style.css"
-    theme: sandstone
+    theme: flatly
     highlight: tango
 ---
-
-```{r read-legislation-db, message=FALSE, warning=FALSE, echo=FALSE}
-# Load required libraries
-library(DBI)
-library(RSQLite)
-library(data.table)
-library(here)
-
-# Define path to the SQLite database
-db_path <- here::here("output", "legislation.db")
-
-# Check if the database file exists
-if (!file.exists(db_path)) {
-  stop("Database file not found at: ", db_path)
-}
-
-# Connect to the database
-conn <- dbConnect(SQLite(), dbname = db_path)
-
-# List of expected tables
-expected_tables <- c("LegislationMetadata", "LegislationParagraphs", "provision_label_table")
-available_tables <- dbListTables(conn)
-
-# Verify all expected tables are present
-missing_tables <- setdiff(expected_tables, available_tables)
-if (length(missing_tables) > 0) {
-  dbDisconnect(conn)
-  stop("Missing tables in database: ", paste(missing_tables, collapse = ", "))
-}
-
-# Read tables into R as data.table objects
-legislation_metadata   <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
-legislation_paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
-provision_labels       <- as.data.table(dbReadTable(conn, "provision_label_table"))
-
-# Disconnect from the database
-dbDisconnect(conn)
-```
-
-<hr>
 
 # INTRODUCTION
 
@@ -107,25 +67,30 @@ For this study, the <a href=" https://docs.google.com/spreadsheets/d/1yfm7ua9hQJ
 
 Legislative clauses that influence Pacific salmon governance in British Columbia are not always associated with conservation threats. As well, some clauses may involve all threats. For example, statutes that outline species status or determine ecological reserves have relevance to how the salmon is managed, but can’t be attributed to any one IUCN threat category. Pacific salmon life history also ranges over a broad geography of marine and freshwater habitat (including terrestrial watershed aspects), touching on almost every conservation threat available. “Management Domains” were identified through this study as a clearer and more comprehensive alignment between regulatory administrative concern and conservation threat categories (Figure 1).
 
-```{r flowchart-image, echo=FALSE, results='asis'}
-library(here)
+```{r flowchart-image, echo=FALSE, results='asis', message=FALSE}
+# Load library quietly
+suppressPackageStartupMessages(library(here))
 
 # Define image path
 image_path <- here("Management Domain Flowchart.png")
 
-# Check if image exists
+# Render image only if it exists
 if (file.exists(image_path)) {
-  # Manually create figure with caption below
-  cat('<div style="text-align: center;">')
-  cat('<img src="', image_path, '" alt="Flowchart" style="max-width: 100%; height: auto;"><br>', sep = "")
-  cat('<p><em>Figure 1. Flowchart showing alignment of Pacific salmon threat factors (Four H\'s) with Management Domain in relation to legislation and jurisdiction.</em></p>')
-  cat('</div>')
+  cat(paste0(
+    '<div style="text-align: center;">',
+    '<img src="', image_path, '" alt="Flowchart" style="max-width: 100%; height: auto;"><br>',
+    '<p><em>Figure 1. Flowchart showing alignment of Pacific salmon threat factors (Four H\'s) with Management Domain in relation to legislation and jurisdiction.</em></p>',
+    '</div>'
+  ))
 } else {
-  cat("<p style='color:red;'>❌ Image file not found: ", image_path, "</p>")
+  cat(paste0("<p style='color:red;'>❌ Image file not found: ", image_path, "</p>"))
 }
+
+
 ```
 
 Management domains represent a reframing of multi-jurisdictional issues by administrative concern rather than specific agency, which can mainstream conservation strategies focused on threats to salmon life history. Management domains can be defined as a “separation of administrative concerns,” and it is important that each domain is categorized distinctly to minimize grey areas and blurring between individual domains or the exercise would fail to be useful. Aside from aspects of governance and organizational structure, 12 specific management domains were delineated for the purpose of this exercise.
+
 
 ```{r management-domain-grid, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 # Load required libraries
@@ -140,14 +105,14 @@ if (!file.exists(db_path)) stop("Database not found at: ", db_path)
 # Connect to the database
 conn <- dbConnect(SQLite(), dbname = db_path)
 
-# Query unique management domains
+# Query unique label_value entries from paragraph_label_table where label_type is 'Management Domain'
 query <- "
-  SELECT DISTINCT management_domain
-  FROM provision_label_table
-  WHERE management_domain IS NOT NULL
-  ORDER BY management_domain
+  SELECT DISTINCT label_value 
+  FROM paragraph_label_table 
+  WHERE label_type = 'Management Domain' AND label_value IS NOT NULL
+  ORDER BY label_value
 "
-management_domains <- dbGetQuery(conn, query)$management_domain
+domains <- dbGetQuery(conn, query)$label_value
 
 # Disconnect from the database
 dbDisconnect(conn)
@@ -163,7 +128,7 @@ cat("
 }
 .domain-button {
   background-color: #668899;
-  color: white; /* ✅ Font color changed to white */
+  color: white;
   border: 1px solid #ccc;
   padding: 10px;
   text-align: center;
@@ -180,10 +145,10 @@ cat("
 
 # Render buttons in grid
 cat("<div class='domain-grid'>")
-for (domain in management_domains) {
+for (domain in domains) {
   cat(sprintf("<div class='domain-button'>%s</div>", domain))
 }
-cat("</div>")  # ✅ Properly closed the outer div
+cat("</div>")
 ```
 
 <br>
@@ -319,30 +284,35 @@ library(here)
 
 # Define database path and confirm it exists
 db_path <- file.path(here("output"), "legislation.db")
-if (!file.exists(db_path)) stop("❌ Database file not found at: ", db_path)
-
-# Connect to the database
-conn <- dbConnect(SQLite(), dbname = db_path)
-
-# Retrieve unique clause_type values
-query <- "
-  SELECT DISTINCT clause_type
-  FROM provision_label_table
-  WHERE clause_type IS NOT NULL
-  ORDER BY clause_type
-"
-clause_types <- dbGetQuery(conn, query)$clause_type
-
-# Disconnect from the database
-dbDisconnect(conn)
-
-# Output as unordered HTML list
-if (length(clause_types) > 0) {
-  cat("<ul>")
-  cat(paste0("<li>", clause_types, "</li>", collapse = "\n"))
-  cat("</ul>")
+if (!file.exists(db_path)) {
+  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
 } else {
-  cat("<p>No clause types found in the database.</p>")
+  # Connect to the database
+  conn <- dbConnect(SQLite(), dbname = db_path)
+  
+  # Retrieve unique Clause Type label_values
+  query <- "
+    SELECT DISTINCT label_value
+    FROM paragraph_label_table
+    WHERE label_type = 'Clause Type' AND label_value IS NOT NULL
+    ORDER BY label_value
+  "
+  clause_values <- dbGetQuery(conn, query)$label_value
+  
+  # Disconnect from the database
+  dbDisconnect(conn)
+  
+  # Output as unordered HTML list
+  if (length(clause_values) > 0) {
+    cat("<div style='margin-top: 20px;'>")
+    cat("<h4>Clause Type Categories Identified:</h4>")
+    cat("<ul style='padding-left: 20px;'>")
+    cat(paste0("<li>", clause_values, "</li>", collapse = "\n"))
+    cat("</ul>")
+    cat("</div>")
+  } else {
+    cat("<p>No Clause Type values found in the database.</p>")
+  }
 }
 
 ```
@@ -370,69 +340,65 @@ if (length(clause_types) > 0) {
 
 A summary of results from the iterations of the automated compendium are shown below. The complete compendium can also be queried using the <code>legislation.db</code> SQLite database, which is available in the <code>output</code> folder of this repository. The keyword matching categorization process was applied to 196 acts and regulations chosen as relevant to salmon and habitat management. Broken down to the clause level, the categorization process matched the following totals by scope:
 
-```{r scope-provision-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-# 📦 Load libraries
+```{r management-domain-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
 library(RSQLite)
 library(here)
 library(data.table)
 
-# 📁 Define path to the SQLite database
 db_path <- file.path(here("output"), "legislation.db")
-if (!file.exists(db_path)) stop("❌ Database file not found at: ", db_path)
-
-# 🔌 Connect to the database
-conn <- dbConnect(SQLite(), dbname = db_path)
-
-# 📤 Load provision_label_table with scope and provision_id
-scope_query <- "
-  SELECT scope, provision_id
-  FROM provision_label_table
-  WHERE scope IS NOT NULL
-"
-scope_data <- data.table(dbGetQuery(conn, scope_query))
-
-# 📤 Load LegislationParagraphs with provision_id, Section, and legislation_id
-section_query <- "
-  SELECT provision_id, Section, legislation_id
-  FROM LegislationParagraphs
-  WHERE Section IS NOT NULL
-"
-section_data <- data.table(dbGetQuery(conn, section_query))
-
-# 🔌 Disconnect from the database
-dbDisconnect(conn)
-
-# 🔗 Merge scope and section data
-merged_data <- merge(scope_data, section_data, by = "provision_id", all.x = TRUE)
-
-# 📊 Tally clause, section, and legislation counts by scope
-scope_tally <- merged_data[, .(
-  clauses = uniqueN(provision_id),
-  sections = uniqueN(paste(legislation_id, Section, sep = "_")),
-  legislation_sources = uniqueN(legislation_id)
-), by = scope][order(scope)]
-
-# 📈 Calculate total counts
-total_clauses <- sum(scope_tally$clauses)
-total_sections <- sum(scope_tally$sections)
-total_legislation <- uniqueN(merged_data$legislation_id)
-
-# 🖨️ Print formatted HTML output
-if (nrow(scope_tally) > 0) {
-  cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
-  for (i in seq_len(nrow(scope_tally))) {
-    cat(sprintf("<li><strong>%s:</strong> %d clauses | %d sections | %d statutes</li>\n",
-                scope_tally$scope[i],
-                scope_tally$clauses[i],
-                scope_tally$sections[i],
-                scope_tally$legislation_sources[i]))
-  }
-  cat(sprintf("<li style='margin-top: 10px;'><strong>Total:</strong> %d clauses | %d sections | %d statutes</li>\n",
-              total_clauses, total_sections, total_legislation))
-  cat("</ul>\n")
+if (!file.exists(db_path)) {
+  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
 } else {
-  cat("<p>No scope provisions found in the database.</p>\n")
+  conn <- dbConnect(SQLite(), dbname = db_path)
+  
+  # Step 1: Get Management Domain-labeled paragraphs
+  domain_labels <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, label_value AS management_domain
+    FROM paragraph_label_table
+    WHERE label_type = 'Management Domain' AND label_value IS NOT NULL
+  "))
+  
+  # Step 2: Load paragraph metadata
+  paragraph_meta <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, Section, legislation_id
+    FROM LegislationParagraphs
+    WHERE Section IS NOT NULL
+  "))
+  
+  dbDisconnect(conn)
+  
+  # Step 3: Merge with metadata
+  merged <- merge(domain_labels, paragraph_meta, by = "paragraph_id", all.x = TRUE)
+  
+  # Step 4: Tally by management_domain
+  domain_tally <- merged[, .(
+    clauses = uniqueN(paragraph_id),
+    sections = uniqueN(paste(legislation_id, Section, sep = "_")),
+    statutes = uniqueN(legislation_id)
+  ), by = management_domain][order(management_domain)]
+  
+  # Totals
+  total_clauses <- sum(domain_tally$clauses)
+  total_sections <- sum(domain_tally$sections)
+  total_statutes <- uniqueN(merged$legislation_id)
+  
+  # Output
+  if (nrow(domain_tally) > 0) {
+    cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
+    for (i in seq_len(nrow(domain_tally))) {
+      cat(sprintf("<li><strong>%s:</strong> %d clauses | %d sections | %d statutes</li>\n",
+                  domain_tally$management_domain[i],
+                  domain_tally$clauses[i],
+                  domain_tally$sections[i],
+                  domain_tally$statutes[i]))
+    }
+    cat(sprintf("<li style='margin-top: 10px;'><strong>Total:</strong> %d clauses | %d sections | %d statutes</li>\n",
+                total_clauses, total_sections, total_statutes))
+    cat("</ul>\n")
+  } else {
+    cat("<p>No Management Domain labels found.</p>\n")
+  }
 }
 
 ```
@@ -443,7 +409,7 @@ if (nrow(scope_tally) > 0) {
 
 All 12 management domains were identified within the 196 statutes. Figure X below shows a count of clauses by management domain split by jurisdiction. Pollution, Spatial Designation, and Water Use and Watercourse Modifications show the highest number of clauses specific to those categories. Climate Change and Natural Disasters received the fewest matches. 
 
-```{r provision-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
+```{r paragraph-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
@@ -453,67 +419,71 @@ library(ggplot2)
 
 # 📁 Define path to the SQLite database
 db_path <- file.path(here("output"), "legislation.db")
-if (!file.exists(db_path)) stop("❌ Database file not found at: ", db_path)
+if (!file.exists(db_path)) {
+  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
+} else {
+  # 🔌 Connect to the database
+  conn <- dbConnect(SQLite(), dbname = db_path)
+  
+  # 🗂️ Load paragraph labels filtered by Management Domain
+  paragraph_labels <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, label_value AS management_domain
+    FROM paragraph_label_table
+    WHERE label_type = 'Management Domain' AND label_value IS NOT NULL
+  "))
+  
+  # 🗂️ Load paragraph and legislation metadata
+  paragraph_table <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, legislation_id
+    FROM LegislationParagraphs
+  "))
+  
+  legislation_metadata <- data.table(dbGetQuery(conn, "
+    SELECT legislation_id, jurisdiction
+    FROM LegislationMetadata
+  "))
+  
+  # 🔌 Disconnect from the database
+  dbDisconnect(conn)
+  
+  # 🔗 Join labels with paragraph and legislation metadata
+  domain_data <- merge(paragraph_labels, paragraph_table, by = "paragraph_id", all.x = TRUE)
+  domain_data <- merge(domain_data, legislation_metadata, by = "legislation_id", all.x = TRUE)
+  
+  # 📊 Summarize paragraph counts by management_domain and jurisdiction
+  domain_counts <- domain_data[, .(
+    paragraph_Count = uniqueN(paragraph_id)
+  ), by = .(management_domain, jurisdiction)][order(-paragraph_Count)]
+  
+  # 🎨 Create stacked horizontal bar chart
+  ggplot(domain_counts, aes(
+    x = reorder(management_domain, paragraph_Count),
+    y = paragraph_Count,
+    fill = jurisdiction
+  )) +
+    geom_bar(stat = "identity", color = "black", width = 0.8) +
+    coord_flip() +
+    scale_fill_manual(
+      values = c("Federal" = "#996666", "Provincial" = "#668899", "Unknown" = "#999999"),
+      guide = guide_legend(reverse = TRUE)
+    ) +
+    labs(
+      title = "Paragraph Count by Management Domain and Jurisdiction",
+      x = "Management Domain",
+      y = "Paragraph Count",
+      fill = "Jurisdiction"
+    ) +
+    theme_minimal(base_size = 14) +
+    theme(
+      axis.text.y = element_text(size = 12),
+      axis.text.x = element_text(size = 12),
+      plot.title = element_text(size = 16, face = "bold"),
+      legend.position = "bottom",
+      legend.title = element_text(size = 13),
+      legend.text = element_text(size = 12)
+    )
+}
 
-# 🔌 Connect to the database
-conn <- dbConnect(SQLite(), dbname = db_path)
-
-# 🗂️ Load relevant tables as data.tables
-provision_labels <- data.table(dbGetQuery(conn, "
-  SELECT provision_id, management_domain
-  FROM provision_label_table
-  WHERE management_domain IS NOT NULL
-"))
-
-provision_table <- data.table(dbGetQuery(conn, "
-  SELECT provision_id, legislation_id
-  FROM LegislationParagraphs
-"))
-
-legislation_metadata <- data.table(dbGetQuery(conn, "
-  SELECT legislation_id, jurisdiction
-  FROM LegislationMetadata
-"))
-
-# 🔌 Disconnect from the database
-dbDisconnect(conn)
-
-# 🔗 Join tables
-domain_data <- merge(provision_labels, provision_table, by = "provision_id", all.x = TRUE)
-domain_data <- merge(domain_data, legislation_metadata, by = "legislation_id", all.x = TRUE)
-
-# 📊 Summarize provision counts
-domain_counts <- domain_data[, .(
-  Provision_Count = uniqueN(provision_id)
-), by = .(management_domain, jurisdiction)][order(-Provision_Count)]
-
-# 🎨 Create stacked horizontal bar chart
-ggplot(domain_counts, aes(
-  x = reorder(management_domain, Provision_Count),
-  y = Provision_Count,
-  fill = jurisdiction
-)) +
-  geom_bar(stat = "identity", color = "black", width = 0.8) +
-  coord_flip() +
-  scale_fill_manual(
-    values = c("Federal" = "#996666", "Provincial" = "#668899", "Unknown" = "#999999"),
-    guide = guide_legend(reverse = TRUE)
-  ) +
-  labs(
-    title = "Clause Count by Management Domain",
-    x = "Management Domain",
-    y = "Clause Count",
-    fill = "Jurisdiction"
-  ) +
-  theme_minimal(base_size = 14) +
-  theme(
-    axis.text.y = element_text(size = 12),
-    axis.text.x = element_text(size = 12),
-    plot.title = element_text(size = 16, face = "bold"),
-    legend.position = "bottom",
-    legend.title = element_text(size = 13),
-    legend.text = element_text(size = 12)
-  )
 
 ```
 
@@ -526,7 +496,7 @@ ggplot(domain_counts, aes(
 
 IUCN Level 2 categories are more specific to salmon threats, and the categorization process matched to 18 categories. Figure X below shows a count of clauses matched to IUCN Level 2 categories broken down by jurisdiction. Pollution, water management, and fisheries management were the top three, and it should be noted that Spatial Designation as a management domain does not occur within the IUCN Level 2 threat categories. 
 
-```{r plot-provision-count-by-iucn, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=8}
+```{r plot-paragraph-count-by-iucn, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=8}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
@@ -541,53 +511,55 @@ conn <- dbConnect(SQLite(), dbname = db_path)
 # 🗂️ Read tables
 legislation_metadata   <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
 legislation_paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
-provision_labels       <- as.data.table(dbReadTable(conn, "provision_label_table"))
+paragraph_labels       <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
+iucn_l2_keywords          <- as.data.table(dbReadTable(conn, "iucn_l2_keywords"))
+management_domain_threat_table           <- as.data.table(dbReadTable(conn, "management_domain_threat_table"))
 
 # 🔌 Disconnect from the database
 dbDisconnect(conn)
 
-# 🔗 Step 1: Join metadata with paragraphs to get jurisdiction per provision
-provision_with_jurisdiction <- merge(
-  legislation_paragraphs[, .(provision_id, legislation_id)],
-  legislation_metadata[, .(legislation_id, jurisdiction)],
-  by = "legislation_id",
-  all.x = TRUE
-)
+# 🔗 Step 1: Filter IUCN-related labels
+iucn_labels <- paragraph_labels[label_type == "IUCN", .(paragraph_id, keyword)]
 
-# 🔗 Step 2: Join with provision labels to get iucn_l2
-labeled_provisions <- merge(
-  provision_labels[, .(provision_id, iucn_l2)],
-  provision_with_jurisdiction,
-  by = "provision_id",
-  all.x = TRUE
-)
+# 🔗 Step 2: Join with iucn_l2_keywords to get iucn_l2
+iucn_labels <- merge(iucn_labels, iucn_l2_keywords[, .(keyword, iucn_l2)], by = "keyword", all.x = TRUE)
 
-# 🧹 Filter out missing IUCN categories
-labeled_provisions <- labeled_provisions[!is.na(iucn_l2) & iucn_l2 != ""]
+# 🔗 Step 3: Join with threat table to get scope (used here as threat category)
+iucn_labels <- merge(iucn_labels, management_domain_threat_table[, .(iucn_l2, scope)], by = "iucn_l2", all.x = TRUE)
 
-# 📊 Aggregate counts
-iucn_jurisdiction_counts <- labeled_provisions[
-  , .(provision_count = uniqueN(provision_id)), by = .(iucn_l2, jurisdiction)
+# 🔗 Step 4: Join with paragraph metadata to get legislation_id
+iucn_labels <- merge(iucn_labels, legislation_paragraphs[, .(paragraph_id, legislation_id)], by = "paragraph_id", all.x = TRUE)
+
+# 🔗 Step 5: Join with legislation metadata to get jurisdiction
+iucn_labels <- merge(iucn_labels, legislation_metadata[, .(legislation_id, jurisdiction)], by = "legislation_id", all.x = TRUE)
+
+# 🧹 Clean and filter
+iucn_labels <- iucn_labels[!is.na(scope)]
+
+# 📊 Aggregate counts by scope and jurisdiction
+iucn_scope_counts <- iucn_labels[
+  , .(paragraph_count = uniqueN(paragraph_id)), by = .(scope, jurisdiction)
 ]
 
 # 🎨 Define custom colors for jurisdictions
 jurisdiction_colors <- c(
   "Federal" = "#996666",
-  "Provincial" = "#668899"
+  "Provincial" = "#668899",
+  "Unknown" = "#999999"
 )
 
 # 📈 Plot horizontal stacked bar chart
-ggplot(iucn_jurisdiction_counts, aes(
-  y = reorder(iucn_l2, provision_count),
-  x = provision_count,
+ggplot(iucn_scope_counts, aes(
+  y = reorder(scope, paragraph_count),
+  x = paragraph_count,
   fill = jurisdiction
 )) +
   geom_bar(stat = "identity", color = "black", width = 0.8) +
   scale_fill_manual(values = jurisdiction_colors) +
   labs(
-    title = "Clause Count by IUCN Level 2 Threats",
+    title = "Clause Count by IUCN Level 2 Threat Categories",
     x = "Clause Count",
-    y = "IUCN Level 2 Threat Category",
+    y = "IUCN Threat Category",
     fill = "Jurisdiction"
   ) +
   theme_minimal(base_size = 13) +
@@ -601,7 +573,7 @@ ggplot(iucn_jurisdiction_counts, aes(
   )
 ```
 
-<p style="text-align: center;"><em>Figure X. Stacked bar chart showing alignment of Pacific salmon threat factors (IUCN Level 2) with jurisdictional distribution of legislative provisions.</em></p>
+<p style="text-align: center;"><em>Figure X. Stacked bar chart showing alignment of Pacific salmon threat factors (IUCN Level 2) with jurisdictional distribution of legislative paragraphs.</em></p>
 
 <br>
 
@@ -609,163 +581,71 @@ ggplot(iucn_jurisdiction_counts, aes(
 
 Scope as a numerical value allows for analysis of clause count by statute specific to salmon. Many of the collected legislation contain broad scope regulation (Figure X), while few statutes contain legislation specific to salmon with a high clause count. 
 
-```{r bubble-graph-legislation-scope, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8}
+
+
+Using the '1 - Salmon' scope for clauses shows the Type A Legislation along with a comparison of the number of paragraphs by Jurisdiction. The results are shown in the bar chart below, which displays the number of paragraphs for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of paragraphs across different legislative frameworks.
+
+```{r unique-paragraph-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
 # 📦 Load libraries
-library(DBI)
-library(RSQLite)
-library(here)
-library(data.table)
-library(ggplot2)
-
-# 📁 Define path to the SQLite database
-db_path <- file.path(here("output"), "legislation.db")
-if (!file.exists(db_path)) stop("❌ Database file not found at: ", db_path)
-
-# 🔌 Connect to the database
-conn <- dbConnect(SQLite(), dbname = db_path)
-
-# 🗂️ Load relevant tables as data.tables
-provision_labels <- data.table(dbGetQuery(conn, "
-  SELECT provision_id, scope, management_domain
-  FROM provision_label_table
-  WHERE scope IS NOT NULL
-"))
-
-legislation_paragraphs <- data.table(dbGetQuery(conn, "
-  SELECT provision_id, Section, legislation_id
-  FROM LegislationParagraphs
-"))
-
-legislation_metadata <- data.table(dbGetQuery(conn, "
-  SELECT legislation_id, legislation_name, jurisdiction
-  FROM LegislationMetadata
-"))
-
-# 🔌 Disconnect from the database
-dbDisconnect(conn)
-
-# 🧮 Step 1: Convert scope to numeric
-scope_map <- c(
-  "1 - Salmon" = 1,
-  "2 - Fish" = 2,
-  "3 - Habitat" = 3,
-  "4 - Governance" = 4
-)
-
-provision_labels[, scope_numeric := scope_map[scope]]
-
-# 🔗 Step 2: Join with legislation_paragraphs to get Section and legislation_id
-label_paragraphs <- merge(
-  provision_labels[, .(provision_id, scope_numeric)],
-  legislation_paragraphs[, .(provision_id, Section, legislation_id)],
-  by = "provision_id",
-  all.x = TRUE
-)
-
-# 📊 Step 3: Aggregate metrics per legislation
-bubble_data <- label_paragraphs[, .(
-  avg_scope = mean(scope_numeric, na.rm = TRUE),
-  provision_count = uniqueN(provision_id),
-  section_count = uniqueN(Section)
-), by = legislation_id]
-
-# 🧾 Step 4: Join with metadata
-bubble_data <- merge(
-  bubble_data,
-  legislation_metadata[, .(legislation_id, legislation_name, jurisdiction)],
-  by = "legislation_id",
-  all.x = TRUE
-)
-
-# 🎨 Step 5: Define custom colors
-jurisdiction_colors <- c(
-  "Federal" = "#996666",
-  "Provincial" = "#668899",
-  "Unknown" = "#999999"
-)
-
-# 📈 Step 6: Plot bubble chart
-ggplot(bubble_data, aes(
-  x = provision_count,
-  y = avg_scope,
-  size = section_count,
-  color = jurisdiction,
-  label = legislation_name
-)) +
-  geom_point(alpha = 0.7) +
-  geom_text(vjust = -0.8, hjust = 0.5, size = 3.5, check_overlap = TRUE) +
-  scale_size_area(max_size = 18) +
-  scale_color_manual(values = jurisdiction_colors, na.value = "#CCCCCC") +
-  labs(
-    title = "Clause Count vs Average Scope by Legislation",
-    x = "Total Clauses",
-    y = "Average Scope",
-    color = "Jurisdiction"
-  ) +
-  theme_minimal(base_size = 14) +
-  theme(
-    legend.position = "bottom",
-    plot.title = element_text(face = "bold", size = 16),
-    axis.title = element_text(size = 14),
-    axis.text = element_text(size = 12)
-  )
-
-
-```
-
-<p style="text-align: center;"><em>Figure X. ___________________.</em></p>
-
-Using the '1 - Salmon' scope for clauses shows the Type A Legislation along with a comparison of the number of Provisions by Jurisdiction. The results are shown in the bar chart below, which displays the number of Provisions for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of Provisions across different legislative frameworks.
-
-```{r unique-provision-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
 library(DBI)
 library(RSQLite)
 library(here)
 library(dplyr)
 library(ggplot2)
 
-# Connect to the database
+# 🔌 Connect to the database
 conn <- dbConnect(SQLite(), dbname = file.path(here("output"), "legislation.db"))
 
-# Load tables
-provision_labels <- dbGetQuery(conn, "
-  SELECT provision_id, scope 
-  FROM provision_label_table 
-  WHERE scope = '1 - Salmon'
+# 🗂️ Load relevant tables
+paragraph_labels <- dbGetQuery(conn, "
+  SELECT paragraph_id, keyword
+  FROM paragraph_label_table
+  WHERE label_type = 'Salmon Scope' AND keyword = '1 - Salmon'
 ")
-provision_table <- dbGetQuery(conn, "
-  SELECT provision_id, legislation_id 
+
+paragraph_table <- dbGetQuery(conn, "
+  SELECT paragraph_id, legislation_id
   FROM LegislationParagraphs
 ")
+
 legislation_metadata <- dbGetQuery(conn, "
-  SELECT legislation_id, legislation_name, jurisdiction 
+  SELECT legislation_id, legislation_name, jurisdiction
   FROM LegislationMetadata
 ")
 
-# Disconnect
+# 🔌 Disconnect from the database
 dbDisconnect(conn)
 
-# Join and summarize
-salmon_data <- provision_labels %>%
-  inner_join(provision_table, by = "provision_id") %>%
+# 🔗 Join tables according to schema
+salmon_data <- paragraph_labels %>%
+  inner_join(paragraph_table, by = "paragraph_id") %>%
   inner_join(legislation_metadata, by = "legislation_id")
 
+# 📊 Summarize unique paragraph counts by legislation and jurisdiction
 summary_data <- salmon_data %>%
   group_by(legislation_name, jurisdiction) %>%
-  summarise(Unique_Provisions = n_distinct(provision_id), .groups = "drop") %>%
-  arrange(desc(Unique_Provisions))
+  summarise(Unique_paragraphs = n_distinct(paragraph_id), .groups = "drop") %>%
+  arrange(desc(Unique_paragraphs))
 
-# Font scaling for dashboard readability
+# 🎨 Font scaling for dashboard readability
 font_scale <- 1.2
 
-# Plot or fallback message
+# 📈 Plot or fallback message
 if (nrow(summary_data) > 0) {
-  ggplot(summary_data, aes(x = Unique_Provisions, y = reorder(legislation_name, Unique_Provisions), fill = jurisdiction)) +
+  ggplot(summary_data, aes(
+    x = Unique_paragraphs,
+    y = reorder(legislation_name, Unique_paragraphs),
+    fill = jurisdiction
+  )) +
     geom_bar(stat = "identity", color = "black") +
-    scale_fill_manual(values = c("Federal" = "#996666", "Provincial" = "#668899")) +
+    scale_fill_manual(values = c(
+      "Federal" = "#996666",
+      "Provincial" = "#668899",
+      "Unknown" = "#999999"
+    )) +
     labs(
       title = "Clause Count by Legislation (Scope: 1 - Salmon)",
-      x = "Number of Provisions",
+      x = "Number of Paragraphs",
       y = "Legislation",
       fill = "Jurisdiction"
     ) +
@@ -773,11 +653,14 @@ if (nrow(summary_data) > 0) {
     theme(
       axis.text.y = element_text(size = 14 * font_scale),
       axis.text.x = element_text(size = 14 * font_scale),
-      plot.title = element_text(size = 14 * font_scale, face = "bold")
+      plot.title = element_text(size = 14 * font_scale, face = "bold"),
+      legend.position = "bottom"
     )
 } else {
-  cat("<p style='color: red;'>⚠️ No provisions found for Scope '1 - Salmon'.</p>")
+  cat("<p style='color: red;'>⚠️ No paragraphs found for Salmon Scope keyword '1 - Salmon'.</p>")
 }
+
+
 ```
 
 <p style="text-align: center;"><em>Figure X. ___________________.</em></p>
@@ -785,60 +668,71 @@ if (nrow(summary_data) > 0) {
 <br>
 
 ```{r plot-habitat-domain-heatmap-greygrid, message=FALSE, warning=FALSE, echo=FALSE}
-# Load required libraries
+# 📦 Load required libraries
 library(DBI)
 library(RSQLite)
 library(data.table)
 library(here)
 library(ggplot2)
 
-# Connect to the database
+# 🔌 Connect to the database
 db_path <- here("output", "legislation.db")
 conn <- dbConnect(SQLite(), dbname = db_path)
 
-# Read tables
-legislation_metadata   <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
+# 🗂️ Load tables
+paragraph_labels       <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
 legislation_paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
-provision_labels       <- as.data.table(dbReadTable(conn, "provision_label_table"))
+legislation_metadata   <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
+iucn_l2_keywords          <- as.data.table(dbReadTable(conn, "iucn_l2_keywords"))
+governance_keywords    <- as.data.table(dbReadTable(conn, "governance_keywords"))
+management_domain_threat_table           <- as.data.table(dbReadTable(conn, "management_domain_threat_table"))
 
-# Disconnect from the database
+# 🔌 Disconnect from the database
 dbDisconnect(conn)
 
-# Join metadata with provision labels
-provision_context <- merge(
-  legislation_paragraphs[, .(provision_id, legislation_id)],
+# 🎯 Filter for Salmon Scope: "3 - Habitat"
+habitat_scope <- paragraph_labels[
+  label_type == "Salmon Scope" & keyword == "3 - Habitat",
+  .(paragraph_id)
+]
+
+# 🔗 Join IUCN labels to resolve iucn_l2 and scope
+iucn_labels <- paragraph_labels[label_type == "IUCN", .(paragraph_id, keyword)]
+iucn_labels <- merge(iucn_labels, iucn_l2_keywords, by = "keyword", all.x = TRUE)
+iucn_labels <- merge(iucn_labels, management_domain_threat_table[, .(iucn_l2, scope)], by = "iucn_l2", all.x = TRUE)
+
+# 🔗 Join Governance labels to resolve management_domain
+gov_labels <- paragraph_labels[label_type == "Governance", .(paragraph_id, keyword)]
+gov_labels <- merge(gov_labels, governance_keywords[, .(keyword, management_domain)], by = "keyword", all.x = TRUE)
+
+# 🔗 Merge all labels with habitat scope
+habitat_paragraphs <- merge(habitat_scope, iucn_labels[, .(paragraph_id, iucn_scope = scope)], by = "paragraph_id")
+habitat_paragraphs <- merge(habitat_paragraphs, gov_labels[, .(paragraph_id, governance_domain = management_domain)], by = "paragraph_id")
+
+# 🧭 Add jurisdiction context
+paragraph_context <- merge(
+  legislation_paragraphs[, .(paragraph_id, legislation_id)],
   legislation_metadata[, .(legislation_id, jurisdiction)],
   by = "legislation_id",
   all.x = TRUE
 )
+habitat_paragraphs <- merge(habitat_paragraphs, paragraph_context, by = "paragraph_id", all.x = TRUE)
 
-labeled_provisions <- merge(
-  provision_labels[, .(provision_id, scope, iucn_l2, management_domain)],
-  provision_context,
-  by = "provision_id",
-  all.x = TRUE
-)
-
-# Filter for scope = "3 - Habitat"
-habitat_provisions <- labeled_provisions[
-  scope == "3 - Habitat" &
-  !is.na(iucn_l2) & iucn_l2 != "" &
-  !is.na(management_domain) & management_domain != ""
+# 📊 Aggregate counts
+heatmap_data <- habitat_paragraphs[
+  !is.na(iucn_scope) & !is.na(governance_domain),
+  .(paragraph_count = uniqueN(paragraph_id)),
+  by = .(governance_domain, iucn_scope)
 ]
 
-# Aggregate counts
-heatmap_data <- habitat_provisions[
-  , .(provision_count = uniqueN(provision_id)), by = .(management_domain, iucn_l2)
-]
-
-# Plot heat map with grey grid background
-ggplot(heatmap_data, aes(x = iucn_l2, y = management_domain, fill = provision_count)) +
+# 🎨 Plot heat map with grey grid background
+ggplot(heatmap_data, aes(x = iucn_scope, y = governance_domain, fill = paragraph_count)) +
   geom_tile(color = "white") +
   scale_fill_gradient(low = "#f0f0f0", high = "#996666") +
   labs(
-    title = "Clause Density by Management Domain (Scope: 3-Habitat)",
-    x = "IUCN Level 2",
-    y = "Management Domain",
+    title = "Clause Density by Management Domain (Scope: 3 - Habitat)",
+    x = "IUCN Level 2 Threat Category",
+    y = "Governance Domain",
     fill = "Clause Count"
   ) +
   theme_minimal(base_size = 12) +
@@ -849,6 +743,7 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = management_domain, fill = provision_co
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
 
+
 ```
 
 <br>
@@ -858,58 +753,60 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = management_domain, fill = provision_co
 **Clause type intro
 
 ```{r plot-clause-type-heatmap, message=FALSE, warning=FALSE, echo=FALSE}
-# Load required libraries
+# 📦 Load required libraries
 library(DBI)
 library(RSQLite)
 library(data.table)
 library(here)
 library(ggplot2)
 
-# Connect to the database
+# 🔌 Connect to the database
 db_path <- here("output", "legislation.db")
 conn <- dbConnect(SQLite(), dbname = db_path)
 
-# Read tables
-legislation_metadata   <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
+# 🗂️ Load tables
+paragraph_labels       <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
+clause_type_keywords   <- as.data.table(dbReadTable(conn, "clause_type_keywords"))
+governance_keywords    <- as.data.table(dbReadTable(conn, "governance_keywords"))
 legislation_paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
-provision_labels       <- as.data.table(dbReadTable(conn, "provision_label_table"))
+legislation_metadata   <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
 
-# Disconnect from the database
+# 🔌 Disconnect from the database
 dbDisconnect(conn)
 
-# Step 1: Join metadata with paragraphs to get legislation context
-provision_context <- merge(
-  legislation_paragraphs[, .(provision_id, legislation_id)],
+# 🎯 Filter and resolve Clause Type labels
+clause_labels <- paragraph_labels[label_type == "Clause Type", .(paragraph_id, keyword)]
+clause_labels <- merge(clause_labels, clause_type_keywords[, .(keyword, clause_type)], by = "keyword", all.x = TRUE)
+
+# 🎯 Filter and resolve Governance labels
+domain_labels <- paragraph_labels[label_type == "Governance", .(paragraph_id, keyword)]
+domain_labels <- merge(domain_labels, governance_keywords[, .(keyword, management_domain)], by = "keyword", all.x = TRUE)
+
+# 🔗 Merge clause and domain labels
+labeled_paragraphs <- merge(clause_labels[, .(paragraph_id, clause_type)], domain_labels[, .(paragraph_id, management_domain)], by = "paragraph_id")
+
+# 🔗 Add jurisdiction context
+paragraph_context <- merge(
+  legislation_paragraphs[, .(paragraph_id, legislation_id)],
   legislation_metadata[, .(legislation_id, jurisdiction)],
   by = "legislation_id",
   all.x = TRUE
 )
+labeled_paragraphs <- merge(labeled_paragraphs, paragraph_context, by = "paragraph_id", all.x = TRUE)
 
-# Step 2: Join with provision labels to get clause_type and management_domain
-labeled_provisions <- merge(
-  provision_labels[, .(provision_id, clause_type, management_domain)],
-  provision_context,
-  by = "provision_id",
-  all.x = TRUE
-)
-
-# Filter out missing values
-labeled_provisions <- labeled_provisions[
-  !is.na(clause_type) & clause_type != "" &
-  !is.na(management_domain) & management_domain != ""
+# 📊 Aggregate counts
+heatmap_data <- labeled_paragraphs[
+  !is.na(clause_type) & !is.na(management_domain),
+  .(paragraph_count = uniqueN(paragraph_id)),
+  by = .(clause_type, management_domain)
 ]
 
-# Aggregate counts
-heatmap_data <- labeled_provisions[
-  , .(provision_count = uniqueN(provision_id)), by = .(clause_type, management_domain)
-]
-
-# Plot heat map
-ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = provision_count)) +
+# 🎨 Plot heat map
+ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = paragraph_count)) +
   geom_tile(color = "white") +
   scale_fill_gradient(low = "#f0f0f0", high = "#668899") +
   labs(
-    title = "",
+    title = "Clause Type vs. Management Domain",
     x = "Clause Type",
     y = "Management Domain",
     fill = "Clause Count"
@@ -995,89 +892,90 @@ Westwood AR, Otto SP, Mooers A, Darimont C, Hodges KE, Johnson C, et al. 2019. P
 ## Appendix I - Legislation Accumulation and Review
 
 ```{r legislation-count-by-type, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-# Load required libraries
+# 📦 Load required libraries
 library(DBI)
 library(RSQLite)
 library(here)
 library(dplyr)
 
-# Define path to the SQLite database
+# 📁 Define path to the SQLite database
 db_path <- file.path(here("output"), "legislation.db")
 
-# Check if database file exists
+# 🔍 Check if database file exists
 if (!file.exists(db_path)) {
   cat("<p style='color:red;'>❌ Database file not found at:", db_path, "</p>")
 } else {
   
-  # Connect to the database
+  # 🔌 Connect to the database
   conn <- dbConnect(SQLite(), dbname = db_path)
   
-  # Check if table exists
+  # 📋 Check if required table exists
   available_tables <- dbListTables(conn)
   
   if (!"LegislationMetadata" %in% available_tables) {
-    cat("<p style='color:red;'>❌ Table 'LegislationMetadata' not found. Available tables:", 
+    cat("<p style='color:red;'>❌ Table 'LegislationMetadata' not found. Available tables: ",
         paste(available_tables, collapse = ", "), "</p>")
     dbDisconnect(conn)
   } else {
     
-    # Query relevant columns from LegislationMetadata
+    # 📊 Query Acts and Regulations from metadata
     metadata <- dbGetQuery(conn, "
       SELECT jurisdiction, legislation_name, legislation_type
       FROM LegislationMetadata
       WHERE legislation_type IN ('Act', 'Regulations')
     ")
     
-    # Disconnect from the database
+    # 🔌 Disconnect from the database
     dbDisconnect(conn)
     
-    # Check if data was retrieved
+    # ⚠️ Handle empty result
     if (nrow(metadata) == 0) {
       cat("<p style='color:orange;'>⚠️ No data found for Acts or Regulations</p>")
     } else {
       
-      # Count Acts by Jurisdiction
+      # 📈 Count Acts by jurisdiction
       acts_count <- metadata %>%
         filter(legislation_type == "Act") %>%
         group_by(jurisdiction) %>%
-        summarise(count = n_distinct(legislation_name), .groups = "drop") %>%
-        arrange(desc(count))
+        summarise(act_count = n_distinct(legislation_name), .groups = "drop") %>%
+        arrange(desc(act_count))
       
-      # Count Regulations by Jurisdiction
+      # 📈 Count Regulations by jurisdiction
       regs_count <- metadata %>%
         filter(legislation_type == "Regulations") %>%
         group_by(jurisdiction) %>%
-        summarise(count = n_distinct(legislation_name), .groups = "drop") %>%
-        arrange(desc(count))
+        summarise(reg_count = n_distinct(legislation_name), .groups = "drop") %>%
+        arrange(desc(reg_count))
       
-      # Print formatted output for Acts
+      # 📝 Display Acts
+      cat("<h3>Acts per Jurisdiction</h3>\n<ul>\n")
       if (nrow(acts_count) > 0) {
-        cat("<h3>Acts per Jurisdiction</h3>\n<ul>\n")
         for (i in seq_len(nrow(acts_count))) {
           cat(sprintf("<li><strong>%s:</strong> %d Acts</li>\n", 
-              acts_count$jurisdiction[i], 
-              acts_count$count[i]))
+                      acts_count$jurisdiction[i], 
+                      acts_count$act_count[i]))
         }
-        cat("</ul>\n\n")
       } else {
-        cat("<h3>Acts per Jurisdiction</h3>\n<p>No Acts found in the database.</p>\n\n")
+        cat("<li>No Acts found in the database.</li>\n")
       }
+      cat("</ul>\n\n")
       
-      # Print formatted output for Regulations
+      # 📝 Display Regulations
+      cat("<h3>Regulations per Jurisdiction</h3>\n<ul>\n")
       if (nrow(regs_count) > 0) {
-        cat("<h3>Regulations per Jurisdiction</h3>\n<ul>\n")
         for (i in seq_len(nrow(regs_count))) {
           cat(sprintf("<li><strong>%s:</strong> %d Regulations</li>\n", 
-              regs_count$jurisdiction[i], 
-              regs_count$count[i]))
+                      regs_count$jurisdiction[i], 
+                      regs_count$reg_count[i]))
         }
-        cat("</ul>\n")
       } else {
-        cat("<h3>Regulations per Jurisdiction</h3>\n<p>No Regulations found in the database.</p>\n")
+        cat("<li>No Regulations found in the database.</li>\n")
       }
+      cat("</ul>\n")
     }
   }
 }
+
 ```
 
 <hr>
@@ -1087,82 +985,103 @@ The following interactive table contains the full compendium of legislation by M
 
 ```{r domain-filter-list, echo=FALSE}
 library(htmltools)
+library(data.table)
 
-# Get unique management domains
-domains <- sort(unique(na.omit(provision_labels$management_domain)))
+# 🗂️ Resolve management domains using schema
+domain_labels <- paragraph_labels[label_type == "Governance", .(paragraph_id, keyword)]
+domain_labels <- merge(
+  domain_labels,
+  governance_keywords[, .(keyword, management_domain)],
+  by = "keyword",
+  all.x = TRUE
+)
 
-# Create clickable filter buttons with a "Clear" option
-tags$div(
-  style = "margin-bottom: 20px;",
-  tags$strong("Filter by Management Domain:"),
-  tags$span(
-    "ℹ️ Click a domain to filter the table. Click 'All' to reset.",
-    style = "margin-left: 10px; font-size: 0.9em; color: #555;"
-  ),
+# 🧹 Extract and sort unique domains
+domains <- sort(unique(na.omit(domain_labels$management_domain)))
+
+# 🎛️ Render filter UI
+if (length(domains) == 0) {
+  tags$p(style = "color: orange; font-style: italic;", "⚠️ No management domains available to filter.")
+} else {
   tags$div(
-    style = "margin-top: 10px; display: flex; flex-wrap: wrap;",
+    style = "margin-bottom: 20px;",
     
-    # "All" button to clear filter
-    tags$button(
-      "All",
-      onclick = "
-        Reactable.setFilter('act-legislation-summary-table', 'DomainFilter', '');
-        document.querySelectorAll('[data-domain-button]').forEach(b => b.classList.remove('active-domain'));
-        return false;
-      ",
-      `data-domain-button` = NA,
-      style = "
-        margin-right: 8px;
-        margin-bottom: 8px;
-        padding: 6px 12px;
-        background-color: #996666;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      "
+    # 🧭 Header and instructions
+    tags$strong("Filter by Management Domain:"),
+    tags$span(
+      "ℹ️ Click a domain to filter the table. Click 'All' to reset.",
+      style = "margin-left: 10px; font-size: 0.9em; color: #555;"
     ),
     
-    # Domain-specific buttons
-    lapply(domains, function(domain) {
+    # 🧵 Button container
+    tags$div(
+      style = "margin-top: 10px; display: flex; flex-wrap: wrap;",
+      
+      # 🔄 "All" button to clear filter
       tags$button(
-        htmlEscape(domain),
-        onclick = sprintf(
-          "Reactable.setFilter('act-legislation-summary-table', 'DomainFilter', '%s');
-           document.querySelectorAll('[data-domain-button]').forEach(b => b.classList.remove('active-domain'));
-           this.classList.add('active-domain');
-           return false;",
-          htmlEscape(domain)
-        ),
+        "All",
+        onclick = "
+          Reactable.setFilter('act-legislation-summary-table', 'DomainFilter', '');
+          document.querySelectorAll('[data-domain-button]').forEach(b => b.classList.remove('active-domain'));
+          this.classList.add('active-domain');
+          return false;
+        ",
         `data-domain-button` = NA,
         style = "
           margin-right: 8px;
           margin-bottom: 8px;
           padding: 6px 12px;
-          background-color: f9f9f9;
-          color: #333;
-          border: 1px solid #ccc;
+          background-color: #996666;
+          color: white;
+          border: none;
           border-radius: 4px;
           cursor: pointer;
         "
-      )
-    })
-  ),
-  
-  # Add style for active button
-  tags$style(HTML("
-    .active-domain {
-      background-color: #0074D9 !important;
-      color: white !important;
-      border-color: #0074D9 !important;
-    }
-  "))
-)
+      ),
+      
+      # 🎯 Domain-specific buttons
+      lapply(domains, function(domain) {
+        tags$button(
+          htmlEscape(domain),
+          onclick = sprintf(
+            "Reactable.setFilter('act-legislation-summary-table', 'DomainFilter', '%s');
+             document.querySelectorAll('[data-domain-button]').forEach(b => b.classList.remove('active-domain'));
+             this.classList.add('active-domain');
+             return false;",
+            htmlEscape(domain)
+          ),
+          `data-domain-button` = NA,
+          style = "
+            margin-right: 8px;
+            margin-bottom: 8px;
+            padding: 6px 12px;
+            background-color: #f9f9f9;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+          "
+        )
+      })
+    ),
+    
+    # 🎨 Style for active button
+    tags$style(HTML("
+      .active-domain {
+        background-color: #0074D9 !important;
+        color: white !important;
+        border-color: #0074D9 !important;
+      }
+    "))
+  )
+}
+
+
 
 ```
 
 ```{r act-legislation-summary-table, results='asis', message=FALSE, warning=FALSE, echo=FALSE}
-# Load required libraries
+# 📦 Load required libraries
 library(DBI)
 library(RSQLite)
 library(data.table)
@@ -1170,40 +1089,59 @@ library(here)
 library(reactable)
 library(htmltools)
 
-# Step 1: Resolve database path safely
+# 🗂️ Step 1: Resolve database path safely
 db_path <- here::here("output", "legislation.db")
 if (!file.exists(db_path)) stop("Database not found at: ", db_path)
 
-# Step 2: Connect and load tables
+# 🔌 Step 2: Connect and load tables
 conn <- dbConnect(SQLite(), dbname = db_path)
 
 legislation_paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
 legislation_metadata   <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
-provision_labels       <- as.data.table(dbReadTable(conn, "provision_label_table"))
+paragraph_labels       <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
+clause_type_keywords   <- as.data.table(dbReadTable(conn, "clause_type_keywords"))
+governance_keywords    <- as.data.table(dbReadTable(conn, "governance_keywords"))
+iucn_l2_keywords          <- as.data.table(dbReadTable(conn, "iucn_l2_keywords"))
+salmon_scope_keywords         <- as.data.table(dbReadTable(conn, "salmon_scope_keywords"))
 
 dbDisconnect(conn)
 
-# Step 3: Merge tables
+# 🧩 Step 3: Resolve labels via keyword tables
+clause_labels <- paragraph_labels[label_type == "Clause Type", .(paragraph_id, keyword)]
+clause_labels <- merge(clause_labels, clause_type_keywords[, .(keyword, clause_type)], by = "keyword", all.x = TRUE)
+
+domain_labels <- paragraph_labels[label_type == "Governance", .(paragraph_id, keyword)]
+domain_labels <- merge(domain_labels, governance_keywords[, .(keyword, management_domain)], by = "keyword", all.x = TRUE)
+
+iucn_labels <- paragraph_labels[label_type == "IUCN Threat", .(paragraph_id, keyword)]
+iucn_labels <- merge(iucn_labels, iucn_l2_keywords[, .(keyword, iucn_l2)], by = "keyword", all.x = TRUE)
+
+scope_labels <- paragraph_labels[label_type == "Scope", .(paragraph_id, keyword)]
+scope_labels <- merge(scope_labels, salmon_scope_keywords[, .(keyword, scope)], by = "keyword", all.x = TRUE)
+
+# 🔗 Step 4: Merge all labels
+label_data <- Reduce(function(x, y) merge(x, y, by = "paragraph_id", all = TRUE),
+                     list(clause_labels[, .(paragraph_id, clause_type)],
+                          domain_labels[, .(paragraph_id, management_domain)],
+                          iucn_labels[, .(paragraph_id, iucn_l2)],
+                          scope_labels[, .(paragraph_id, scope)]))
+
+# 🔗 Step 5: Merge with paragraph and metadata
 section_data <- merge(
-  legislation_paragraphs[, .(provision_id, legislation_id, Heading, Section, Paragraph)],
+  legislation_paragraphs[, .(paragraph_id, legislation_id, Heading, Section, Paragraph)],
   legislation_metadata[, .(legislation_id, legislation_name, act_name, jurisdiction, legislation_type)],
   by = "legislation_id",
   all.x = TRUE
 )
 
-section_data <- merge(
-  section_data,
-  provision_labels[, .(provision_id, management_domain, iucn_l2, clause_type, scope)],
-  by = "provision_id",
-  all.x = TRUE
-)
+section_data <- merge(section_data, label_data, by = "paragraph_id", all.x = TRUE)
 
-# Step 4: Create combined columns
+# 🧠 Step 6: Create combined columns
 section_data[, Act := paste(jurisdiction, act_name, sep = " | ")]
 section_data[, Legislation := paste(legislation_type, legislation_name, sep = " | ")]
 section_data[, HeadingSection := paste(Heading, paste0("Section ", Section), sep = " | ")]
 
-# Step 5: Aggregate by Act + Legislation + HeadingSection
+# 📊 Step 7: Aggregate by Act + Legislation + HeadingSection
 section_summary <- section_data[
   !is.na(Section),
   .(
@@ -1226,7 +1164,7 @@ section_summary <- section_data[
   by = .(Act, Legislation, HeadingSection)
 ]
 
-# Step 6: Render reactable inside a responsive container
+# 🖥️ Step 8: Render reactable inside a responsive container
 htmltools::div(
   style = "width: 100%; overflow-x: auto;",
   reactable(
@@ -1255,6 +1193,7 @@ htmltools::div(
   )
 )
 
+
 ```
              
 <hr>
@@ -1262,40 +1201,61 @@ htmltools::div(
 ## Appendix III - Keywords: 
 
 ```{r keyword-frequency-by-domain-corrected, echo=FALSE, message=FALSE, warning=FALSE}
+# 📦 Load required libraries
 library(DBI)
 library(RSQLite)
 library(data.table)
 library(here)
 library(reactable)
 
-# Connect to database
+# 🔌 Connect to database
 db_path <- here::here("output", "legislation.db")
 conn <- dbConnect(SQLite(), dbname = db_path)
 
-# Load labeled provision table
-provision_label_table <- as.data.table(dbReadTable(conn, "provision_label_table"))
+# 🗂️ Load tables
+paragraph_labels    <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
+governance_keywords <- as.data.table(dbReadTable(conn, "governance_keywords"))
+iucn_l2_keywords       <- as.data.table(dbReadTable(conn, "iucn_l2_keywords"))
 dbDisconnect(conn)
 
-# Step 1: Extract keyword sets
-iucn_keywords <- provision_label_table[
-  !is.na(iucn_keyword),
-  .(management_domain, keyword = iucn_keyword)
-]
+# 🎯 Step 1: Resolve governance keywords with domains
+governance_labels <- paragraph_labels[label_type == "Governance", .(paragraph_id, keyword)]
+governance_labels <- merge(
+  governance_labels,
+  governance_keywords[, .(keyword, management_domain)],
+  by = "keyword",
+  all.x = TRUE
+)
 
-governance_keywords <- provision_label_table[
-  !is.na(keyword) & is.na(iucn_l2),
+# 🎯 Step 2: Resolve IUCN keywords with domains (if applicable)
+iucn_labels <- paragraph_labels[label_type == "IUCN Threat", .(paragraph_id, keyword)]
+iucn_labels <- merge(
+  iucn_labels,
+  iucn_l2_keywords[, .(keyword, iucn_l2)],
+  by = "keyword",
+  all.x = TRUE
+)
+
+# 🧮 Step 3: Prepare keyword-domain pairs
+governance_summary <- governance_labels[
+  !is.na(management_domain),
   .(management_domain, keyword)
 ]
 
-# Step 2: Combine and count
-combined_keywords <- rbindlist(list(iucn_keywords, governance_keywords), use.names = TRUE)
+iucn_summary <- iucn_labels[
+  !is.na(iucn_l2),
+  .(management_domain = "IUCN Threat", keyword = iucn_l2)
+]
+
+# 🔗 Step 4: Combine and count
+combined_keywords <- rbindlist(list(governance_summary, iucn_summary), use.names = TRUE)
 
 keyword_summary <- combined_keywords[
   , .(Frequency = .N),
   by = .(management_domain, keyword)
 ][order(-Frequency)]
 
-# Step 3: Render reactable
+# 📊 Step 5: Render reactable
 reactable(
   keyword_summary,
   groupBy = "management_domain",
@@ -1311,6 +1271,7 @@ reactable(
     Frequency = colDef(name = "Frequency", align = "center")
   )
 )
+
 
 ```
 
