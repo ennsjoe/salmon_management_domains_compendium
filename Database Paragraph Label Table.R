@@ -76,7 +76,7 @@ paragraph_label_table <- rbindlist(
   mapply(function(tokens, pid) {
     rbindlist(list(
       match_keywords(tokens, pid, iucn_l2_keywords, "IUCN", "iucn_l2"),
-      match_keywords(tokens, pid, governance_keywords, "Governance", "management_domain"),
+      match_keywords(tokens, pid, governance_keywords, "Management Domain", "management_domain"),
       match_keywords(tokens, pid, salmon_scope_keywords, "Salmon Scope", NULL),
       match_keywords(tokens, pid, clause_type_keywords, "Clause Type", "clause_type")
     ), fill = TRUE)
@@ -104,9 +104,39 @@ salmon_scope_lookup <- salmon_scope_keywords[, .(keyword, scope)]
 paragraph_label_table[, scope := NA_character_]
 
 paragraph_label_table[label_type == "IUCN", scope := iucn_scope_lookup[.SD, on = "keyword"]$scope]
-paragraph_label_table[label_type == "Governance", scope := gov_scope_lookup[.SD, on = "keyword"]$scope]
+paragraph_label_table[label_type == "Management Domain", scope := gov_scope_lookup[.SD, on = "keyword"]$scope]
 paragraph_label_table[label_type == "Salmon Scope", scope := salmon_scope_lookup[.SD, on = "keyword"]$scope]
 # Clause Type remains NA
+
+## Duplicate IUCN rows with Management Domain label ----
+
+# Step 1: Filter IUCN-labeled rows with valid label_value
+iucn_rows <- paragraph_label_table[label_type == "IUCN" & !is.na(label_value)]
+
+# Step 2: Join with management_domain_threat_table to get management_domain
+iucn_with_domain <- merge(
+  iucn_rows,
+  management_domain_threat_table[, .(iucn_l2, management_domain)],
+  by.x = "label_value", by.y = "iucn_l2",
+  all.x = TRUE
+)
+
+# Step 3: Filter out rows where no management_domain was found
+iucn_with_domain <- iucn_with_domain[!is.na(management_domain)]
+
+# Step 4: Create duplicated rows with updated label_type and label_value
+duplicated_rows <- iucn_with_domain[, .(
+  paragraph_id,
+  label_type = "Management Domain",
+  keyword,
+  label_value = management_domain,
+  scope,
+  label_id = NA_integer_
+)]
+
+# Step 5: Append to original label table and reassign label_id
+paragraph_label_table <- rbind(paragraph_label_table, duplicated_rows, fill = TRUE)
+paragraph_label_table[, label_id := .I]
 
 ## Reorder Columns ----
 setcolorder(paragraph_label_table, c("paragraph_id", "label_type", "keyword", "label_value", "scope", "label_id"))
