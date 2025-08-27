@@ -78,7 +78,7 @@ image_path <- here("Management Domain Flowchart.png")
 if (file.exists(image_path)) {
   cat(paste0(
     '<div style="text-align: center;">',
-    '<img src="', image_path, '" alt="Flowchart" style="max-width: 100%; height: auto;"><br>',
+    '<img src="', image_path, '" alt="Flowchart" style="max-width: 85%; height: auto;"><br>',
     '<p><em>Figure 1. Flowchart showing alignment of Pacific salmon threat factors (Four H\'s) with Management Domain in relation to legislation and jurisdiction.</em></p>',
     '</div>'
   ))
@@ -220,7 +220,7 @@ image_path <- here("Legistics Paragraphing.png")
 if (file.exists(image_path)) {
   # Manually create figure with caption below
   cat('<div style="text-align: center;">')
-  cat('<img src="', image_path, '" alt="Diagram" style="max-width: 100%; height: auto;"><br>', sep = "")
+  cat('<img src="', image_path, '" alt="Diagram" style="max-width: 85%; height: auto;"><br>', sep = "")
   cat('<p><em>Figure 2. Fisheries Act (federal) examples of paragraph parsing from HTML code.</em></p>')
   cat('</div>')
 } else {
@@ -718,7 +718,7 @@ heatmap_data <- habitat_paragraphs[
 # 🎨 Plot heat map with grey grid background
 ggplot(heatmap_data, aes(x = iucn_l2, y = management_domain, fill = paragraph_count)) +
   geom_tile(color = "white") +
-  scale_fill_gradient(low = "#f0f0f0", high = "#000000") +
+  scale_fill_gradient(low = "#f0f0f0", high = "#996666") +
   labs(
     title = "Clause Density by Management Domain (Scope: 3 - Habitat)",
     x = "IUCN Level 2 Threat Category",
@@ -1086,7 +1086,10 @@ dbDisconnect(conn)
 # 🧩 Step 3: Extract and collapse labels
 clause_labels <- paragraph_labels[label_type == "Clause Type", .(paragraph_id, keyword)]
 clause_labels <- merge(clause_labels, clause_type_keywords[, .(keyword, clause_type)], by = "keyword", all.x = TRUE)
-clause_labels <- clause_labels[, .(clause_type = paste(unique(clause_type), collapse = ", ")), by = paragraph_id]
+clause_labels <- clause_labels[
+  , .(clause_type = unique(clause_type)[1]),  # Select only one unique clause type per paragraph
+  by = paragraph_id
+]
 
 domain_labels <- paragraph_labels[label_type == "Management Domain", .(paragraph_id, management_domain = label_value)]
 domain_labels <- domain_labels[, .(management_domain = paste(unique(management_domain), collapse = ", ")), by = paragraph_id]
