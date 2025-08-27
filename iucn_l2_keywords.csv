@@ -15,6 +15,7 @@
 "2.3 Terrestrial Animal Farming, Ranching & Herding",range practice
 "2.3 Terrestrial Animal Farming, Ranching & Herding",range stewardship
 "2.3 Terrestrial Animal Farming, Ranching & Herding",range use
+"2.3 Terrestrial Animal Farming, Ranching & Herding",range development
 2.4 Marine & Freshwater Aquaculture,animal biproduct
 2.4 Marine & Freshwater Aquaculture,aquaculture
 2.4 Marine & Freshwater Aquaculture,artificial breeding
@@ -26,6 +27,7 @@
 2.4 Marine & Freshwater Aquaculture,net pen
 2.4 Marine & Freshwater Aquaculture,nuisance fish
 2.4 Marine & Freshwater Aquaculture,rearing pond
+3.1 Oil & Gas Exploration & Extraction,energy resource activity
 "4.1 Roads, Trails & Railroads",bridge
 "4.1 Roads, Trails & Railroads",causeway
 4.2 Utility & Service Lines,aqueduct
@@ -34,6 +36,17 @@
 4.3 Shipping Lanes,shipping lane
 "5.3 Logging, Harvesting & Controlling Trees",fan destabilization
 "5.3 Logging, Harvesting & Controlling Trees",forest landscape
+"5.3 Logging, Harvesting & Controlling Trees",forest operations
+"5.3 Logging, Harvesting & Controlling Trees",forest practice
+"5.3 Logging, Harvesting & Controlling Trees",forest practices
+"5.3 Logging, Harvesting & Controlling Trees",forest ecosystem
+"5.3 Logging, Harvesting & Controlling Trees",forest ecosystems
+"5.3 Logging, Harvesting & Controlling Trees",forest health
+"5.3 Logging, Harvesting & Controlling Trees",silviculture
+"5.3 Logging, Harvesting & Controlling Trees",silvicultural
+"5.3 Logging, Harvesting & Controlling Trees",harvest timber
+"5.3 Logging, Harvesting & Controlling Trees",harvesting timber
+"5.3 Logging, Harvesting & Controlling Trees",harvests timber
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",allowable catch
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",angle from a vessel
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",angler
@@ -147,6 +160,7 @@
 7.5 Biological System Management,fisheries sensitive feature
 7.5 Biological System Management,riparian
 7.5 Biological System Management,streamside trees
+7.5 Biological System Management,ecological community
 8.1 Invasive Non-Native / Alien Species,biocontrol
 8.1 Invasive Non-Native / Alien Species,exotic
 8.1 Invasive Non-Native / Alien Species,feral
@@ -196,4 +210,6 @@
 9.1 Water-Borne & Other Effluent Pollution ,wastes
 9.1 Water-Borne & Other Effluent Pollution ,wastewater
 9.1 Water-Borne & Other Effluent Pollution ,water quality
-3.1 Oil & Gas Exploration & Extraction,energy resource activity
+"4.1 Roads, Trails & Railroads",constructs roads
+"4.1 Roads, Trails & Railroads",construct a road
+"4.1 Roads, Trails & Railroads",proposed road
