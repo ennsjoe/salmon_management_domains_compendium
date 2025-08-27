@@ -581,6 +581,70 @@ if (!file.exists(db_path)) {
 
 ### Scope
 
+```{r scope-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(DBI)
+library(RSQLite)
+library(here)
+library(data.table)
+
+db_path <- file.path(here("output"), "legislation.db")
+if (!file.exists(db_path)) {
+  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
+} else {
+  conn <- dbConnect(SQLite(), dbname = db_path)
+  
+  # ✅ Step 1: Get scope-labeled paragraphs from Management Domain and Salmon Scope
+  scope_labels <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, scope
+    FROM paragraph_label_table
+    WHERE label_type IN ('Management Domain', 'Salmon Scope') AND scope IS NOT NULL
+  "))
+  
+  # 📄 Step 2: Load paragraph metadata
+  paragraph_meta <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, Section, legislation_id
+    FROM LegislationParagraphs
+    WHERE Section IS NOT NULL
+  "))
+  
+  dbDisconnect(conn)
+  
+  # 🔗 Step 3: Merge with metadata
+  merged <- merge(scope_labels, paragraph_meta, by = "paragraph_id", all.x = TRUE)
+  
+  # 📊 Step 4: Tally by scope
+  scope_tally <- merged[, .(
+    clauses = uniqueN(paragraph_id),
+    sections = uniqueN(paste(legislation_id, Section, sep = "_")),
+    statutes = uniqueN(legislation_id)
+  ), by = scope][order(scope)]
+  
+  # 📦 Totals
+  total_clauses <- sum(scope_tally$clauses)
+  total_sections <- sum(scope_tally$sections)
+  total_statutes <- uniqueN(merged$legislation_id)
+  
+  # 🖥️ Output
+  if (nrow(scope_tally) > 0) {
+    cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
+    for (i in seq_len(nrow(scope_tally))) {
+      cat(sprintf("<li><strong>%s:</strong> %d clauses | %d sections | %d statutes</li>\n",
+                  scope_tally$scope[i],
+                  scope_tally$clauses[i],
+                  scope_tally$sections[i],
+                  scope_tally$statutes[i]))
+    }
+    cat(sprintf("<li style='margin-top: 10px;'><strong>Total:</strong> %d clauses | %d sections | %d statutes</li>\n",
+                total_clauses, total_sections, total_statutes))
+    cat("</ul>\n")
+  } else {
+    cat("<p>No scope labels found for Management Domain or Salmon Scope.</p>\n")
+  }
+}
+```
+
+<br>
+
 Using the '1 - Salmon' scope for clauses shows the Type A Legislation along with a comparison of the number of paragraphs by Jurisdiction. The results are shown in the bar chart below, which displays the number of paragraphs for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of paragraphs across different legislative frameworks.
 
 ```{r unique-paragraph-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=12}
@@ -744,6 +808,80 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = management_domain, fill = paragraph_co
 ## Clause Types
 
 **Clause type intro
+
+```{r clause-type-with-domain-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(DBI)
+library(RSQLite)
+library(here)
+library(data.table)
+
+db_path <- file.path(here("output"), "legislation.db")
+if (!file.exists(db_path)) {
+  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
+} else {
+  conn <- dbConnect(SQLite(), dbname = db_path)
+  
+  # ✅ Step 1: Get paragraph_ids with Management Domain assigned
+  domain_paragraphs <- data.table(dbGetQuery(conn, "
+    SELECT DISTINCT paragraph_id
+    FROM paragraph_label_table
+    WHERE label_type = 'Management Domain' AND label_value IS NOT NULL
+  "))
+  
+  # ✅ Step 2: Get Clause Type-labeled paragraphs
+  clause_labels <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, label_value AS clause_type
+    FROM paragraph_label_table
+    WHERE label_type = 'Clause Type' AND label_value IS NOT NULL
+  "))
+  
+  # 🔍 Step 3: Filter clause labels to only those with a Management Domain
+  clause_labels <- clause_labels[paragraph_id %in% domain_paragraphs$paragraph_id]
+  
+  # 📄 Step 4: Load paragraph metadata
+  paragraph_meta <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, Section, legislation_id
+    FROM LegislationParagraphs
+    WHERE Section IS NOT NULL
+  "))
+  
+  dbDisconnect(conn)
+  
+  # 🔗 Step 5: Merge with metadata
+  merged <- merge(clause_labels, paragraph_meta, by = "paragraph_id", all.x = TRUE)
+  
+  # 📊 Step 6: Tally by clause_type
+  clause_tally <- merged[, .(
+    clauses = uniqueN(paragraph_id),
+    sections = uniqueN(paste(legislation_id, Section, sep = "_")),
+    statutes = uniqueN(legislation_id)
+  ), by = clause_type][order(clause_type)]
+  
+  # 📦 Totals
+  total_clauses <- sum(clause_tally$clauses)
+  total_sections <- sum(clause_tally$sections)
+  total_statutes <- uniqueN(merged$legislation_id)
+  
+  # 🖥️ Output
+  if (nrow(clause_tally) > 0) {
+    cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
+    for (i in seq_len(nrow(clause_tally))) {
+      cat(sprintf("<li><strong>%s:</strong> %d clauses | %d sections | %d statutes</li>\n",
+                  clause_tally$clause_type[i],
+                  clause_tally$clauses[i],
+                  clause_tally$sections[i],
+                  clause_tally$statutes[i]))
+    }
+    cat(sprintf("<li style='margin-top: 10px;'><strong>Total:</strong> %d clauses | %d sections | %d statutes</li>\n",
+                total_clauses, total_sections, total_statutes))
+    cat("</ul>\n")
+  } else {
+    cat("<p>No Clause Type labels found with Management Domain assigned.</p>\n")
+  }
+}
+```
+
+<br>
 
 ```{r plot-clause-type-heatmap, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=12}
 # 📦 Load required libraries
