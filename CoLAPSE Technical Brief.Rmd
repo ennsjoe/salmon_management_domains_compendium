@@ -987,14 +987,8 @@ The following interactive table contains the full compendium of legislation by M
 library(htmltools)
 library(data.table)
 
-# 🗂️ Resolve management domains using schema
-domain_labels <- paragraph_labels[label_type == "Governance", .(paragraph_id, keyword)]
-domain_labels <- merge(
-  domain_labels,
-  governance_keywords[, .(keyword, management_domain)],
-  by = "keyword",
-  all.x = TRUE
-)
+# 🗂️ Extract Management Domain values directly from label_value
+domain_labels <- paragraph_labels[label_type == "Management Domain", .(paragraph_id, management_domain = label_value)]
 
 # 🧹 Extract and sort unique domains
 domains <- sort(unique(na.omit(domain_labels$management_domain)))
@@ -1075,9 +1069,6 @@ if (length(domains) == 0) {
     "))
   )
 }
-
-
-
 ```
 
 ```{r act-legislation-summary-table, results='asis', message=FALSE, warning=FALSE, echo=FALSE}
@@ -1100,31 +1091,26 @@ legislation_paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs
 legislation_metadata   <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
 paragraph_labels       <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
 clause_type_keywords   <- as.data.table(dbReadTable(conn, "clause_type_keywords"))
-governance_keywords    <- as.data.table(dbReadTable(conn, "governance_keywords"))
-iucn_l2_keywords          <- as.data.table(dbReadTable(conn, "iucn_l2_keywords"))
-salmon_scope_keywords         <- as.data.table(dbReadTable(conn, "salmon_scope_keywords"))
 
 dbDisconnect(conn)
 
-# 🧩 Step 3: Resolve labels via keyword tables
+# 🧩 Step 3: Extract and collapse labels
 clause_labels <- paragraph_labels[label_type == "Clause Type", .(paragraph_id, keyword)]
 clause_labels <- merge(clause_labels, clause_type_keywords[, .(keyword, clause_type)], by = "keyword", all.x = TRUE)
+clause_labels <- clause_labels[, .(clause_type = paste(unique(clause_type), collapse = ", ")), by = paragraph_id]
 
-domain_labels <- paragraph_labels[label_type == "Governance", .(paragraph_id, keyword)]
-domain_labels <- merge(domain_labels, governance_keywords[, .(keyword, management_domain)], by = "keyword", all.x = TRUE)
+domain_labels <- paragraph_labels[label_type == "Management Domain", .(paragraph_id, management_domain = label_value)]
+domain_labels <- domain_labels[, .(management_domain = paste(unique(management_domain), collapse = ", ")), by = paragraph_id]
 
-iucn_labels <- paragraph_labels[label_type == "IUCN Threat", .(paragraph_id, keyword)]
-iucn_labels <- merge(iucn_labels, iucn_l2_keywords[, .(keyword, iucn_l2)], by = "keyword", all.x = TRUE)
+iucn_labels <- paragraph_labels[label_type == "IUCN", .(paragraph_id, iucn_l2 = label_value)]
+iucn_labels <- iucn_labels[, .(iucn_l2 = paste(unique(iucn_l2), collapse = ", ")), by = paragraph_id]
 
-scope_labels <- paragraph_labels[label_type == "Scope", .(paragraph_id, keyword)]
-scope_labels <- merge(scope_labels, salmon_scope_keywords[, .(keyword, scope)], by = "keyword", all.x = TRUE)
+scope_labels <- paragraph_labels[label_type %in% c("Management Domain", "Salmon Scope"), .(paragraph_id, scope)]
+scope_labels <- scope_labels[, .(scope = paste(unique(scope), collapse = ", ")), by = paragraph_id]
 
 # 🔗 Step 4: Merge all labels
-label_data <- Reduce(function(x, y) merge(x, y, by = "paragraph_id", all = TRUE),
-                     list(clause_labels[, .(paragraph_id, clause_type)],
-                          domain_labels[, .(paragraph_id, management_domain)],
-                          iucn_labels[, .(paragraph_id, iucn_l2)],
-                          scope_labels[, .(paragraph_id, scope)]))
+label_data <- Reduce(function(x, y) merge(x, y, by = "paragraph_id", all = TRUE, allow.cartesian = TRUE),
+                     list(clause_labels, domain_labels, iucn_labels, scope_labels))
 
 # 🔗 Step 5: Merge with paragraph and metadata
 section_data <- merge(
@@ -1146,29 +1132,36 @@ section_summary <- section_data[
   !is.na(Section),
   .(
     DomainFilter = paste(unique(na.omit(management_domain)), collapse = ", "),
-    Paragraphs = paste(
-      paste(unique(na.omit(Paragraph)), collapse = "<br><br>"),
-      "<br><br>",
-      "<div style='font-size: 0.85em; color: #333; background-color: #f9f9f9; padding: 8px; border-left: 4px solid #0074D9;'>",
-      sprintf(
-        "<span style='color:#0074D9; font-weight:bold;'>Management Domain:</span> %s; <span style='color:#0074D9; font-weight:bold;'>IUCN Threat:</span> %s; <span style='color:#0074D9; font-weight:bold;'>Clause Type:</span> %s; <span style='color:#0074D9; font-weight:bold;'>Scope:</span> %s",
-        htmlEscape(paste(unique(na.omit(management_domain)), collapse = ", ")),
-        htmlEscape(paste(unique(na.omit(iucn_l2)), collapse = ", ")),
-        htmlEscape(paste(unique(na.omit(clause_type)), collapse = ", ")),
-        htmlEscape(paste(unique(na.omit(scope)), collapse = ", "))
-      ),
-      "</div>",
-      sep = ""
-    )
+    Paragraphs = paste(unique(na.omit(Paragraph)), collapse = "<br><br>"),
+    ManagementDomain = paste(unique(na.omit(management_domain)), collapse = ", "),
+    IUCNThreat = paste(unique(na.omit(iucn_l2)), collapse = ", "),
+    ClauseType = paste(unique(na.omit(clause_type)), collapse = ", "),
+    Scope = paste(unique(na.omit(scope)), collapse = ", ")
   ),
   by = .(Act, Legislation, HeadingSection)
 ]
 
-# 🖥️ Step 8: Render reactable inside a responsive container
+# 🧠 Step 8: Format Paragraphs with metadata block
+section_summary[, Paragraphs := paste(
+  Paragraphs,
+  "<br><br>",
+  "<div style='font-size: 0.85em; color: #333; background-color: #f9f9f9; padding: 8px; border-left: 4px solid #0074D9;'>",
+  sprintf(
+    "<span style='color:#0074D9; font-weight:bold;'>Management Domain:</span> %s; <span style='color:#0074D9; font-weight:bold;'>IUCN Threat:</span> %s; <span style='color:#0074D9; font-weight:bold;'>Clause Type:</span> %s; <span style='color:#0074D9; font-weight:bold;'>Scope:</span> %s",
+    htmlEscape(ManagementDomain),
+    htmlEscape(IUCNThreat),
+    htmlEscape(ClauseType),
+    htmlEscape(Scope)
+  ),
+  "</div>",
+  sep = ""
+)]
+
+# 🖥️ Step 9: Render reactable inside a responsive container
 htmltools::div(
   style = "width: 100%; overflow-x: auto;",
   reactable(
-    section_summary,
+    section_summary[, .(Act, Legislation, HeadingSection, DomainFilter, Paragraphs)],
     elementId = "act-legislation-summary-table",
     groupBy = c("Act", "Legislation"),
     searchable = TRUE,
@@ -1212,50 +1205,23 @@ library(reactable)
 db_path <- here::here("output", "legislation.db")
 conn <- dbConnect(SQLite(), dbname = db_path)
 
-# 🗂️ Load tables
-paragraph_labels    <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
-governance_keywords <- as.data.table(dbReadTable(conn, "governance_keywords"))
-iucn_l2_keywords       <- as.data.table(dbReadTable(conn, "iucn_l2_keywords"))
+# 🗂️ Load paragraph labels
+paragraph_labels <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
 dbDisconnect(conn)
 
-# 🎯 Step 1: Resolve governance keywords with domains
-governance_labels <- paragraph_labels[label_type == "Governance", .(paragraph_id, keyword)]
-governance_labels <- merge(
-  governance_labels,
-  governance_keywords[, .(keyword, management_domain)],
-  by = "keyword",
-  all.x = TRUE
-)
+# 🎯 Step 1: Extract Management Domain keywords
+management_labels <- paragraph_labels[label_type == "Management Domain", .(
+  management_domain = label_value,
+  keyword
+)]
 
-# 🎯 Step 2: Resolve IUCN keywords with domains (if applicable)
-iucn_labels <- paragraph_labels[label_type == "IUCN Threat", .(paragraph_id, keyword)]
-iucn_labels <- merge(
-  iucn_labels,
-  iucn_l2_keywords[, .(keyword, iucn_l2)],
-  by = "keyword",
-  all.x = TRUE
-)
-
-# 🧮 Step 3: Prepare keyword-domain pairs
-governance_summary <- governance_labels[
-  !is.na(management_domain),
-  .(management_domain, keyword)
-]
-
-iucn_summary <- iucn_labels[
-  !is.na(iucn_l2),
-  .(management_domain = "IUCN Threat", keyword = iucn_l2)
-]
-
-# 🔗 Step 4: Combine and count
-combined_keywords <- rbindlist(list(governance_summary, iucn_summary), use.names = TRUE)
-
-keyword_summary <- combined_keywords[
-  , .(Frequency = .N),
+keyword_summary <- management_labels[
+  !is.na(management_domain) & !is.na(keyword),
+  .(Frequency = .N),
   by = .(management_domain, keyword)
 ][order(-Frequency)]
 
-# 📊 Step 5: Render reactable
+# 📊 Step 4: Render reactable
 reactable(
   keyword_summary,
   groupBy = "management_domain",
