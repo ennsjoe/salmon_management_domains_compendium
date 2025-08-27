@@ -1,0 +1,192 @@
+---
+title: "Federal Regulations - Label Breakdown"
+author: "Joe Enns"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    toc_depth: 4
+    number_sections: false
+    df_print: paged
+    self_contained: true
+---
+
+```{r setup, include=FALSE}
+library(DBI)
+library(RSQLite)
+library(data.table)
+library(here)
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  results = 'asis',
+  cache = FALSE
+)
+
+db_path <- file.path(here("output"), "legislation.db")
+conn <- dbConnect(SQLite(), dbname = db_path)
+
+# Load tables
+legislation_table <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
+paragraph_table <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
+paragraph_label_table <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
+
+dbDisconnect(conn)
+
+# Filter for Federal Regulations only
+legislation_table <- legislation_table[jurisdiction == "Federal" & legislation_type == "Regulations"]
+
+invisible(gc())
+```
+
+```{r label-tally-by-scope}
+federal_reg_paragraph_ids <- merge(
+  paragraph_table[, .(paragraph_id, legislation_id)],
+  legislation_table[, .(legislation_id)],
+  by = "legislation_id"
+)$paragraph_id
+
+scope_tally <- paragraph_label_table[
+  paragraph_id %in% federal_reg_paragraph_ids & label_type == "Management Domain" & !is.na(scope) & scope != "", 
+  .N, 
+  by = scope
+]
+setorder(scope_tally, scope)
+
+cat("# Labels by Scope - Federal Regulations\n\n")
+
+if (nrow(scope_tally) > 0) {
+  cat("| Scope | Count |\n")
+  cat("|-------|-------|\n")
+  
+  for (i in seq_len(nrow(scope_tally))) {
+    cat(sprintf("| %s | %d |\n", scope_tally[i]$scope, scope_tally[i]$N))
+  }
+  
+  cat(sprintf("\n**Total Labels:** %d\n\n", sum(scope_tally$N)))
+} else {
+  cat("No scope labels found in the data.\n\n")
+}
+
+rm(scope_tally, federal_reg_paragraph_ids)
+invisible(gc())
+
+```
+
+```{r display-hierarchy-with-labels}
+paragraph_with_metadata <- merge(
+  paragraph_table[, .(paragraph_id, legislation_id, Paragraph, Section, Heading)],
+  legislation_table[, .(legislation_id, jurisdiction, legislation_type, act_name, legislation_name)],
+  by = "legislation_id",
+  all.x = TRUE
+)
+
+rm(paragraph_table, legislation_table)
+invisible(gc())
+
+cat("# Federal Regulations\n\n")
+
+acts <- unique(paragraph_with_metadata$act_name)
+acts <- acts[!is.na(acts)]
+
+for (act in acts) {
+  cat(sprintf("## %s\n\n", act))
+  
+  names <- unique(paragraph_with_metadata[act_name == act]$legislation_name)
+  names <- names[!is.na(names)]
+  
+  for (name in names) {
+    anchor_id <- gsub("[^A-Za-z0-9-]", "-", name)
+    anchor_id <- gsub("-+", "-", anchor_id)
+    anchor_id <- gsub("^-|-$", "", anchor_id)
+    anchor_id <- tolower(anchor_id)
+    
+    cat(sprintf("### %s {#%s}\n\n", name, anchor_id))
+    
+    all_paragraphs <- paragraph_with_metadata[act_name == act & legislation_name == name]
+    
+    if (nrow(all_paragraphs) > 0) {
+      all_paragraphs[, Section_numeric := suppressWarnings(as.numeric(Section))]
+      setorder(all_paragraphs, Section_numeric, paragraph_id)
+      
+      current_heading <- ""
+      batch_size <- 50
+      n_paragraphs <- nrow(all_paragraphs)
+      
+      for (batch_start in seq(1, n_paragraphs, by = batch_size)) {
+        batch_end <- min(batch_start + batch_size - 1, n_paragraphs)
+        
+        for (i in batch_start:batch_end) {
+          prov <- all_paragraphs[i]
+          
+          heading_text <- ""
+          if (!is.na(prov$Heading) && prov$Heading != "") {
+            heading_text <- prov$Heading
+          }
+          if (!is.na(prov$Section) && prov$Section != "") {
+            heading_text <- if (heading_text != "") {
+              sprintf("%s | Section %s", heading_text, prov$Section)
+            } else {
+              sprintf("Section %s", prov$Section)
+            }
+          }
+          
+          if (heading_text != "" && heading_text != current_heading) {
+            current_heading <- heading_text
+            cat(sprintf("**%s**\n\n", heading_text))
+          }
+          
+          paragraph_text <- prov$Paragraph
+          if (nchar(paragraph_text) > 5000) {
+            paragraph_text <- paste0(substr(paragraph_text, 1, 4900), "... [truncated]")
+          }
+          cat(sprintf("%s", paragraph_text))
+          
+          labels <- paragraph_label_table[
+            paragraph_id == prov$paragraph_id & label_type %in% c("Management Domain", "IUCN", "Clause Type"),
+            .(label_type, label_value, scope)
+          ]
+          
+          if (nrow(labels) > 0) {
+            label_parts <- list()
+            for (j in seq_len(nrow(labels))) {
+              row <- labels[j]
+              if (row$label_type == "Management Domain" && !is.na(row$label_value)) {
+                label_parts <- c(label_parts, paste("Management Domain:", row$label_value))
+                if (!is.na(row$scope) && row$scope != "") {
+                  label_parts <- c(label_parts, paste("Scope:", row$scope))
+                }
+              } else if (row$label_type == "IUCN" && !is.na(row$label_value)) {
+                label_parts <- c(label_parts, paste("IUCN Threat:", row$label_value))
+              } else if (row$label_type == "Clause Type" && !is.na(row$label_value)) {
+                label_parts <- c(label_parts, paste("Clause Type:", row$label_value))
+              }
+            }
+            if (length(label_parts) > 0) {
+              cat(sprintf("\n\n<span style='color: blue; font-style: italic;'>%s</span>", 
+                          paste(label_parts, collapse=" | ")))
+            }
+          }
+          
+          cat("\n\n")
+        }
+        
+        if (batch_start %% (batch_size * 5) == 1) {
+          invisible(gc())
+        }
+      }
+      
+      rm(all_paragraphs)
+    }
+  }
+}
+
+rm(paragraph_with_metadata, paragraph_label_table)
+invisible(gc())
+
+```
