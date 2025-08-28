@@ -411,7 +411,7 @@ if (!file.exists(db_path)) {
 
 Management domains were identified within the 177 of the 196 collected statutes. Figure X below shows a count of clauses by management domain split by jurisdiction. Pollution, Spatial Designation, and Water Use and Watercourse Modifications show the highest number of clauses specific to those categories. Climate Change and Natural Disasters received the fewest matches. 
 
-```{r paragraph-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=8}
+```{r paragraph-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
@@ -498,7 +498,7 @@ if (!file.exists(db_path)) {
 
 IUCN Level 2 categories are more specific to salmon threats, and the categorization process matched to 18 categories. Figure X below shows a count of clauses matched to IUCN Level 2 categories broken down by jurisdiction. Pollution, water management, and fisheries management were the top three, and it should be noted that Spatial Designation as a management domain does not occur within the IUCN Level 2 threat categories. 
 
-```{r paragraph-count-by-iucn, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=12}
+```{r paragraph-count-by-iucn, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
@@ -647,7 +647,7 @@ if (!file.exists(db_path)) {
 
 Using the '1 - Salmon' scope for clauses shows the Type A Legislation along with a comparison of the number of paragraphs by Jurisdiction. The results are shown in the bar chart below, which displays the number of paragraphs for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of paragraphs across different legislative frameworks.
 
-```{r unique-paragraph-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=12}
+```{r unique-paragraph-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
 # 📦 Load libraries
 library(DBI)
 library(RSQLite)
@@ -730,7 +730,7 @@ theme(
 
 <br>
 
-```{r plot-habitat-domain-heatmap-greygrid, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=12}
+```{r plot-habitat-domain-heatmap-greygrid, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=9}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
@@ -883,7 +883,7 @@ if (!file.exists(db_path)) {
 
 <br>
 
-```{r plot-clause-type-heatmap, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=12}
+```{r plot-clause-type-heatmap, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=9}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
@@ -951,6 +951,132 @@ ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = paragrap
 <br>
 
 ## Biological and Ecological Concerns in a Current Salmon Management Context
+
+<br>
+
+### Recovery Potential Assessments (RPAs) and Conservation Units (CUs)
+
+```{r cu-index-tally, include=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=9}
+# Load libraries
+library(here)
+library(data.table)
+library(RSQLite)
+library(ggplot2)
+
+# Connect to SQLite database
+db_path <- file.path(here("output"), "legislation.db")
+conn <- dbConnect(SQLite(), dbname = db_path)
+
+# Read cu_ranking table
+cu_ranking <- as.data.table(dbReadTable(conn, "cu_ranking"))
+
+# Disconnect
+dbDisconnect(conn)
+
+# Filter out NA or empty values
+cu_ranking <- cu_ranking[
+  !is.na(cu_index) & cu_index != "" &
+  !is.na(cu_species) & cu_species != "" &
+  !is.na(rpa_threat_ranking) & rpa_threat_ranking != "" &
+  !is.na(ranking_id)
+]
+
+# Convert ranking_id to numeric (if needed)
+cu_ranking[, ranking_id := as.numeric(ranking_id)]
+
+# Order rpa_threat_ranking by ranking_id
+ordered_levels <- cu_ranking[order(ranking_id), unique(rpa_threat_ranking)]
+cu_ranking[, rpa_threat_ranking := factor(rpa_threat_ranking, levels = ordered_levels)]
+
+# Tally unique cu_index values per rpa_threat_ranking and cu_species
+cu_tally <- cu_ranking[, .(unique_cu_count = uniqueN(cu_index)), by = .(rpa_threat_ranking, cu_species)]
+
+# Define custom colors for each CU species
+custom_colors <- c(
+  "Chinook" = "grey",
+  "Coho"    = "#9acce4",
+  "Sockeye (Lake Type)" = "#996666",
+  "Sockeye (River Type)" = "#EBA0A0"
+)
+
+# Plot stacked bar chart with custom colors
+ggplot(cu_tally, aes(x = rpa_threat_ranking, y = unique_cu_count, fill = cu_species)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = custom_colors) +
+  labs(
+    title = "Unique CU Index Count per RPA Threat Ranking",
+    x = "RPA Threat Ranking",
+    y = "Number of Unique CU Indexes",
+    fill = "CU Species"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  theme(legend.position = "bottom")
+
+```
+
+<br>
+
+*Shows all salmon species lumped
+
+```{r cu-ranking-heatmap, include=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=9}
+# Load libraries
+library(here)
+library(data.table)
+library(RSQLite)
+library(ggplot2)
+
+# Connect to SQLite database
+db_path <- file.path(here("output"), "legislation.db")
+conn <- dbConnect(SQLite(), dbname = db_path)
+
+# Read cu_ranking table
+cu_ranking <- as.data.table(dbReadTable(conn, "cu_ranking"))
+
+# Disconnect
+dbDisconnect(conn)
+
+# Filter out NA and empty values
+cu_ranking <- cu_ranking[
+  !is.na(rpa_threat_ranking) & rpa_threat_ranking != "" &
+  !is.na(iucn_l2) & iucn_l2 != "" &
+  !is.na(cu_index) & cu_index != "" &
+  !is.na(ranking_id)
+]
+
+# Convert ranking_id to numeric (if not already)
+cu_ranking[, ranking_id := as.numeric(ranking_id)]
+
+# Order rpa_threat_ranking by numeric ranking_id
+ordered_levels <- cu_ranking[order(ranking_id), unique(rpa_threat_ranking)]
+cu_ranking[, rpa_threat_ranking := factor(rpa_threat_ranking, levels = ordered_levels)]
+
+# Aggregate unique cu_index count by combination
+heatmap_data <- cu_ranking[, .(unique_cu_count = uniqueN(cu_index)), by = .(rpa_threat_ranking, iucn_l2)]
+
+# Plot heatmap using unique cu_index count as fill
+ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_count)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "#f0f0f0", high = "#996666") +
+  labs(
+    title = "CU Ranking Heatmap by Unique CU Index Count",
+    x = "IUCN Level 2",
+    y = "RPA Threat Ranking",
+    fill = "CU Index Count"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
+
+
+```
+
+<br>
+
+### Ecological Concerns and Risk Assessment Methods (RAMS)
 
 <br>
 
@@ -1373,14 +1499,137 @@ reactable(
 
 <hr>
 
-## Appendix IV - Case Study: 
+## Appendix IV - Case Study: Extreme Threat Ranking - IUCN 10.1 Geological Events
+
+Through the RPA process, one IUCN threat was ranked as "Extreme": 10.1 Geological Events.
+
+Which species / CU
+
+Using the legislative compendium, the clauses and staute breakdown is:
+
+```{r iucn-geological-events-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(DBI)
+library(RSQLite)
+library(here)
+library(data.table)
+
+db_path <- file.path(here("output"), "legislation.db")
+if (!file.exists(db_path)) {
+  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
+} else {
+  conn <- dbConnect(SQLite(), dbname = db_path)
+  
+  # ✅ Step 1: Get IUCN-labeled paragraphs for Geological Events
+  iucn_labels <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, label_value AS iucn_l2
+    FROM paragraph_label_table
+    WHERE label_type = 'IUCN' AND label_value = '10.1 Geological Events'
+  "))
+  
+  # 📄 Step 2: Load paragraph metadata
+  paragraph_meta <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, Section, legislation_id
+    FROM LegislationParagraphs
+    WHERE Section IS NOT NULL
+  "))
+  
+  dbDisconnect(conn)
+  
+  # 🔗 Step 3: Merge with metadata
+  merged <- merge(iucn_labels, paragraph_meta, by = "paragraph_id", all.x = TRUE)
+  
+  # 📊 Step 4: Tally by IUCN label
+  iucn_tally <- merged[, .(
+    clauses = uniqueN(paragraph_id),
+    sections = uniqueN(paste(legislation_id, Section, sep = "_")),
+    statutes = uniqueN(legislation_id)
+  ), by = iucn_l2][order(iucn_l2)]
+  
+  # 🖥️ Output
+  if (nrow(iucn_tally) > 0) {
+    cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
+    for (i in seq_len(nrow(iucn_tally))) {
+      cat(sprintf("<li><strong>%s:</strong> %d clauses | %d sections | %d statutes</li>\n",
+                  iucn_tally$iucn_l2[i],
+                  iucn_tally$clauses[i],
+                  iucn_tally$sections[i],
+                  iucn_tally$statutes[i]))
+    }
+    cat("</ul>\n")
+  } else {
+    cat("<p>No IUCN labels found for Geological Events.</p>\n")
+  }
+}
+
+```
+
+The clause type breakdown is as follows:
+
+Add a reactable to view legislation?
 
 
 <hr>
 
-## Appendix V - Case Study:
+## Appendix V - Case Study: Extreme-High Threat Ranking - IUCN 7.2 Dams & Water Management / Use
 
 <hr>
+
+```{r iucn-dams-water-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(DBI)
+library(RSQLite)
+library(here)
+library(data.table)
+
+db_path <- file.path(here("output"), "legislation.db")
+if (!file.exists(db_path)) {
+  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
+} else {
+  conn <- dbConnect(SQLite(), dbname = db_path)
+  
+  # ✅ Step 1: Get IUCN-labeled paragraphs for Dams & Water Management / Use
+  iucn_labels <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, label_value AS iucn_l2
+    FROM paragraph_label_table
+    WHERE label_type = 'IUCN' AND label_value = '7.2 Dams & Water Management / Use'
+  "))
+  
+  # 📄 Step 2: Load paragraph metadata
+  paragraph_meta <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, Section, legislation_id
+    FROM LegislationParagraphs
+    WHERE Section IS NOT NULL
+  "))
+  
+  dbDisconnect(conn)
+  
+  # 🔗 Step 3: Merge with metadata
+  merged <- merge(iucn_labels, paragraph_meta, by = "paragraph_id", all.x = TRUE)
+  
+  # 📊 Step 4: Tally by IUCN label
+  iucn_tally <- merged[, .(
+    clauses = uniqueN(paragraph_id),
+    sections = uniqueN(paste(legislation_id, Section, sep = "_")),
+    statutes = uniqueN(legislation_id)
+  ), by = iucn_l2][order(iucn_l2)]
+  
+  # 🖥️ Output
+  if (nrow(iucn_tally) > 0) {
+    cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
+    for (i in seq_len(nrow(iucn_tally))) {
+      cat(sprintf("<li><strong>%s:</strong> %d clauses | %d sections | %d statutes</li>\n",
+                  iucn_tally$iucn_l2[i],
+                  iucn_tally$clauses[i],
+                  iucn_tally$sections[i],
+                  iucn_tally$statutes[i]))
+    }
+    cat("</ul>\n")
+  } else {
+    cat("<p>No IUCN labels found for Dams & Water Management / Use.</p>\n")
+  }
+}
+```
+
+<br>
 
 ## Appendix VI - External Resources
 
