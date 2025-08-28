@@ -76,3 +76,4 @@ writeDataTable(wb, "Compendium", compendium_data)
 saveWorkbook(wb, output_file, overwrite = TRUE)
 
 cat("✅ Excel file 'Compendium Checker.xlsx' has been saved to your working directory.\n")
+
