@@ -13,6 +13,7 @@ library(RSQLite)
 library(data.table)
 library(here)
 library(openxlsx)
+library(beepr)
 
 ## Connect to Database ----
 db_path <- file.path(here("output"), "legislation.db")
@@ -77,3 +78,5 @@ saveWorkbook(wb, output_file, overwrite = TRUE)
 
 cat("✅ Excel file 'Compendium Checker.xlsx' has been saved to your working directory.\n")
 
+# At the end of your script
+beep(sound = 1)  # You can choose from 1 to 11
