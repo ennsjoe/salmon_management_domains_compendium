@@ -33,7 +33,7 @@ This report outlines a framework and process to relate human activities that thr
 <ol>
 <li>create a process to categorize specific legislation by anthropogenic threats to Pacific salmon;</li>
 <li>assess legislative factors by threat categorization; and</li>
-<li>connect studied biological and ecological concerns in a current salmon management context.</li>
+<li>assess threats in a current salmon management context.</li>
 </ol>
 </div>
 
@@ -277,10 +277,9 @@ The Management Domains and IUCN threats were assigned to each section based on a
 
 <br>
 
-## Legislative Factors by Threat Categorization
+## Legislative Factors
 
-### Clause Types
-Similar the Management Domain assignment, we created a Clause Type keyword list to assess the nature or purposes of the clauses. Using language patterns within the legislation, we grouped Clause Type by:
+Parsing and assessing clauses by keyword also allows for an assessment of the nature of the clause. Similar the Management Domain assignment, we created a Clause Type keyword list to assess the nature or purposes of the clauses. Using language patterns within the legislation, we grouped Clause Type by:
 
 ```{r clause-type-list, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -324,20 +323,40 @@ if (!file.exists(db_path)) {
 
 <br>
 
-## Biological and Ecological Concerns in a Current Salmon Management Context
+## Current Salmon Management Context
 
-**Description of Wild Salmon Policy and Conservation Units
+The Committee on the Status of Endangered Wildlife in Canada (COSEWIC) assesses the current status of aquatic species, including Pacific salmon stocks, as part of the Species at Risk Act (SARA) process (Arbeider et al 2020). Salmon populations are grouped into genetically and ecologically distinct Diagnostic Units (DU) for the purpose of assessment. When a DU is classified as Threatened, Endangered or Extirpated, a Recovery Potential Assessment (RPA) process is initiated, which calculates risk incorporating the same IUCN-CMP threat classification used in this legislative assessment.
 
-### Conservation Units and RPAs
+Fisheries and Oceans Canada published “Canada’s Policy for Conservation of Wild Pacific Salmon,” or the Wild Salmon Policy (WSP), in 2005, which outlines managing salmon in Conservation Units (CU), differing somewhat from the DUs used by COSEWIC. Conservation Units are defined in the WSP as: “a group of wild salmon sufficiently isolated from other groups that, if extirpated is very unlikely to recolonize naturally within an acceptable timeframe, such as a human lifetime or a specified number of salmon generations” (Canada ed. 2005). Since CUs are the most current unit for managing salmon in British Columbia, we incorporated CUs in this effort.
 
-**Summary of RPAs and connection of IUCN threats to CUs and DUs
+The following Conservation Units were included in this assessment: 
 
-<br>
+```{r cu-species-cu-name-html-list, results='asis', message=FALSE, warning=FALSE, echo=FALSE}
+library(DBI)
+library(RSQLite)
+library(data.table)
+library(here)
 
-### NOAA Ecological Concerns and RAMs
+# Connect to the database
+db_path <- file.path(here("output"), "legislation.db")
+conn <- dbConnect(SQLite(), dbname = db_path)
 
-*RAMs background and NOAA Ecological Concerns
-**Why also use ecological concerns? - life history stages
+# Query and filter the data
+cu_data <- as.data.table(dbReadTable(conn, "cu_ranking"))
+filtered_cu <- cu_data[!is.na(rpa_threat_ranking) & rpa_threat_ranking != "", .(cu_species, cu_name)]
+unique_cu <- unique(filtered_cu)
+
+# Render as HTML unordered list
+cat("<ul>\n")
+for (i in seq_len(nrow(unique_cu))) {
+  item <- paste0(unique_cu$cu_species[i], " | ", unique_cu$cu_name[i])
+  cat(paste0("  <li>", item, "</li>\n"))
+}
+cat("</ul>\n")
+
+# Disconnect
+dbDisconnect(conn)
+```
 
 <br>
 
@@ -809,9 +828,9 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = management_domain, fill = paragraph_co
 
 <br>
 
-## Clause Types
+## Clause Type Assessment
 
-**Clause type intro
+<br>
 
 ```{r clause-type-with-domain-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -954,11 +973,7 @@ ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = paragrap
 
 <br>
 
-## Biological and Ecological Concerns in a Current Salmon Management Context
-
-<br>
-
-### Recovery Potential Assessments (RPAs) and Conservation Units (CUs)
+## Conservation Units (CUs) and Recovery Potential Assessments (RPAs)
 
 ```{r cu-index-tally, include=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=9}
 # Load libraries
@@ -1080,10 +1095,6 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_c
 
 <br>
 
-### Ecological Concerns and Risk Assessment Methods (RAMS)
-
-<br>
-
 # REFERENCES
 
 ```{=html}
@@ -1107,6 +1118,8 @@ Becklumb, P. 2013. Federal and provincial jurisdiction to regulate environmental
 Bennett NJ, Roth R, Klain SC, Chan K, Christie P, Clark DA, et al. 2017a. Conservation social science: understanding and integrating human dimensions to improve conservation. Biological Conservation, 205: 93–108. DOI: 10.1016/j.biocon.2016.10.006
 
 Campbell ML, and Thomas VG. 2002. Constitutional impacts on conservation—effects of federalism on biodiversity protection. Environment Policy and Law, 32: 223–233.
+
+Canada, ed. 2005. Canada’s Policy for Conservation of Wild Pacific Salmon. Department of Fisheries and Oceans.
 
 Collins L, and Sossin L. 2019. Approach to constitutional principles and environmental discretion in Canada. UBC Law Review, 52(1): 293–343. [online]: Available from digitalcommons.osgoode.yorku.ca
 
