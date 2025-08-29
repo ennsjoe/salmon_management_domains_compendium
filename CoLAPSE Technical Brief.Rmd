@@ -828,7 +828,7 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = management_domain, fill = paragraph_co
 
 <br>
 
-## Clause Type Assessment
+## Clause Type
 
 <br>
 
@@ -969,11 +969,14 @@ ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = paragrap
   )
 
 ```
+
 <p style="text-align: center;"><em>Figure X. _______.</em></p>
 
 <br>
 
 ## Conservation Units (CUs) and Recovery Potential Assessments (RPAs)
+
+This shows a tally of CUs by threat risk ranking. Chinook and lake type sockeye appear in the most extreme threat risk ranking.
 
 ```{r cu-index-tally, include=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=9}
 # Load libraries
@@ -1034,9 +1037,11 @@ ggplot(cu_tally, aes(x = rpa_threat_ranking, y = unique_cu_count, fill = cu_spec
 
 ```
 
+<p style="text-align: center;"><em>Figure X. _______.</em></p>
+
 <br>
 
-*Shows all salmon species lumped
+We can then break down the threat ranking by IUCN threat category to identify which threats were identified as the highest risk. Geological Events was listed and the most extreme risk, while Dams and Water Management / Use was listed as the next most extreme. For both these threat categories we are able filter the compiled legislation to identify sections and clauses relevant to these extreme risk categories (Appendix ___).
 
 ```{r cu-ranking-heatmap, include=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=9}
 # Load libraries
@@ -1090,6 +1095,59 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_c
   )
 
 
+
+```
+
+<p style="text-align: center;"><em>Figure X. _______.</em></p>
+
+<br>
+
+# DISCUSSION
+
+One criticism could be that the more keywords a category has, the more clauses will be labelled. This is likely true. Here’s a scatterplot that shows number of keywords vs the clause count for that category.
+
+```{r iucn-scatterplot, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=9}
+library(DBI)
+library(RSQLite)
+library(data.table)
+library(here)
+library(ggplot2)
+
+# Connect to the database
+db_path <- file.path(here("output"), "legislation.db")
+conn <- dbConnect(SQLite(), dbname = db_path)
+
+# Load label table and keyword table
+label_table <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
+iucn_keywords <- as.data.table(dbReadTable(conn, "iucn_l2_keywords"))
+dbDisconnect(conn)
+
+# Filter for IUCN labels
+iucn_labels <- label_table[label_type == "IUCN" & !is.na(label_value)]
+
+# Aggregate data
+iucn_summary <- iucn_labels[, .(
+  clause_count = uniqueN(paragraph_id)
+), by = label_value]
+
+# Add keyword count from iucn_l2_keywords
+keyword_counts <- iucn_keywords[, .N, by = iucn_l2]
+setnames(keyword_counts, "N", "keyword_count")
+
+# Merge both summaries
+plot_data <- merge(iucn_summary, keyword_counts, by.x = "label_value", by.y = "iucn_l2", all.x = TRUE)
+
+# Plot
+ggplot(plot_data, aes(x = keyword_count, y = clause_count, label = label_value)) +
+  geom_point(color = "#2c3e50", size = 3) +
+  geom_text(hjust = -0.1, size = 3.5) +
+  labs(
+    title = "IUCN Level 2: Keyword Count vs Clause Count",
+    x = "Keyword Count (from iucn_l2_keywords)",
+    y = "Number of Clauses"
+  ) +
+  theme_minimal() +
+  xlim(0, max(plot_data$keyword_count) * 1.2)  # Add space for labels
 
 ```
 
@@ -1758,4 +1816,5 @@ IUCN Direct Threats Classification 4.0
 
 https://docs.google.com/spreadsheets/d/1yfm7ua9hQJpjycx6FYQJ6Jy5LA4bP0XP61EW3-sX8ZY/edit?gid=179026760#gid=179026760
 
+<br>
 
