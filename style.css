@@ -13,6 +13,12 @@
   z-index: 1000;
 }
 
+/* Fix hanging indent in TOC list items */
+#TOC ul li, #TOC ol li {
+  text-indent: 0em;
+  padding-left: 1em;
+}
+
 /* === Main Content Container === */
 div.main-container {
   margin-left: 0;             /* Just enough to clear TOC width + padding */
