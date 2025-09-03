@@ -10,7 +10,6 @@
 11.3 Changes in Precipitation & Hydrological Regimes,sea level
 2.1 Annual & Perennial Non-Timber Crops,agricultural land
 2.1 Annual & Perennial Non-Timber Crops,agrology
-2.1 Annual & Perennial Non-Timber Crops,farm operation
 2.1 Annual & Perennial Non-Timber Crops,farm practice
 2.1 Annual & Perennial Non-Timber Crops,farm use
 2.2 Wood & Pulp Plantations,agroforestry
@@ -33,11 +32,11 @@
 2.4 Marine & Freshwater Aquaculture,nuisance fish
 2.4 Marine & Freshwater Aquaculture,rearing pond
 3.1 Oil & Gas Exploration & Extraction,energy resource activity
+"4.1 Roads, Trails & Railroads",access roads
 "4.1 Roads, Trails & Railroads",bridge
 "4.1 Roads, Trails & Railroads",causeway
 "4.1 Roads, Trails & Railroads",construct a road
 "4.1 Roads, Trails & Railroads",constructs roads
-"4.1 Roads, Trails & Railroads",access roads
 "4.1 Roads, Trails & Railroads",proposed road
 "4.1 Roads, Trails & Railroads",service road
 4.2 Utility & Service Lines,aqueduct
@@ -91,7 +90,6 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fish lock
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fish under
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fished
-"5.4 Fishing, Harvesting & Controlling Aquatic Species",parts of fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fisher
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fisheries management
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fisheries values
@@ -106,6 +104,7 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",guiding for fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",harvested salmon
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",hooks
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",hunt and fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",incidental catch
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",inshore fisheries
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",kinds of fish
@@ -118,6 +117,7 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",may fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",mesh size
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",not angle
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",parts of fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",possess fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",protection of fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",quantities of fish
@@ -134,8 +134,8 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",sustainability of fisheries
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",trawl
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",trolling
-"5.4 Fishing, Harvesting & Controlling Aquatic Species",hunt and fish
-6.3 Other Human Disturbances,research
+6.3 Other Human Disturbances,research activity
+6.3 Other Human Disturbances,research activities
 7.2 Dams & Water Management / Use,aquatic ecosystem
 7.2 Dams & Water Management / Use,aquifer
 7.2 Dams & Water Management / Use,catch basin
@@ -176,24 +176,25 @@
 7.3 Earth & Sediment Management,dredge
 7.3 Earth & Sediment Management,levee
 7.3 Earth & Sediment Management,levelling
-7.3 Earth & Sediment Management,removing aggregate
+7.3 Earth & Sediment Management,natural grade
 7.3 Earth & Sediment Management,removal of soil
+7.3 Earth & Sediment Management,removing aggregate
 7.3 Earth & Sediment Management,soil or fill
 7.3 Earth & Sediment Management,streamside
-7.3 Earth & Sediment Management,natural grade
 7.5 Biological System Management,ecological community
 7.5 Biological System Management,fisheries sensitive feature
 7.5 Biological System Management,riparian
 7.5 Biological System Management,streamside trees
+7.5 Biological System Management,biodiversity
+8.1 Invasive Non-Native / Alien Species,alien species
 8.1 Invasive Non-Native / Alien Species,biocontrol
 8.1 Invasive Non-Native / Alien Species,exotic
 8.1 Invasive Non-Native / Alien Species,feral
 8.1 Invasive Non-Native / Alien Species,introduced
 8.1 Invasive Non-Native / Alien Species,invasive
 8.1 Invasive Non-Native / Alien Species,mussel
-8.1 Invasive Non-Native / Alien Species,nonferal
 8.1 Invasive Non-Native / Alien Species,non native
-8.1 Invasive Non-Native / Alien Species,alien species
+8.1 Invasive Non-Native / Alien Species,nonferal
 8.2 Problematic Native Species,alga
 8.2 Problematic Native Species,outbreak
 8.2 Problematic Native Species,pest
