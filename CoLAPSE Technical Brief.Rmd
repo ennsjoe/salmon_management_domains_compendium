@@ -1297,11 +1297,11 @@ heatmap_data <- pairwise_data[, .N, by = .(domain_x, domain_y)]
 reverse_pairs <- heatmap_data[, .(domain_x = domain_y, domain_y = domain_x, N)]
 heatmap_data <- rbind(heatmap_data, reverse_pairs)
 
-# 🎨 Plot symmetric heatmap with count labels
+# 🎨 Plot symmetric heatmap with small count labels and no gridlines
 ggplot(heatmap_data, aes(x = domain_x, y = domain_y, fill = N)) +
   geom_tile(color = "white") +
-  geom_text(aes(label = N), color = "white", size = 4) +
-  scale_fill_gradient(low = "grey69", high = "black") +
+  geom_text(aes(label = N), color = "white", size = 2) +  # Smaller labels
+  scale_fill_gradient(low = "grey90", high = "black") +
   labs(
     title = "Co-occurrence of Management Domains by Section",
     x = "Management Domain",
@@ -1313,8 +1313,8 @@ ggplot(heatmap_data, aes(x = domain_x, y = domain_y, fill = N)) +
     plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
     plot.title.position = "plot",
     plot.margin = margin(t = 20, r = 40, b = 20, l = 20),
-    panel.grid.major = element_line(color = "grey80", size = 0.3),
-    panel.grid.minor = element_line(color = "grey90", size = 0.2),
+    panel.grid.major = element_blank(),  # Remove major gridlines
+    panel.grid.minor = element_blank(),  # Remove minor gridlines
     panel.background = element_rect(fill = "white", color = NA),
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
