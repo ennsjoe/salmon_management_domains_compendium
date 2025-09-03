@@ -79,8 +79,15 @@ for (i in seq_along(html_files)) {
   file <- html_files[i]
   legislation_id <- i
   
+  cat(sprintf("Processing file %d of %d: %s\n", i, length(html_files), basename(file)))
+  
   tryCatch({
-    raw_text <- readLines(file, warn = FALSE, encoding = "UTF-8")
+    raw_text <- tryCatch(readLines(file, warn = FALSE, encoding = "UTF-8"), error = function(e) return(NULL))
+    if (is.null(raw_text)) {
+      message(sprintf("Failed to read file: %s", file))
+      bad_files <- c(bad_files, file)
+      next
+    }
     html_file <- read_html(paste(raw_text, collapse = "\n"))
     
     all_paragraphs <- html_file %>% html_nodes("p, div p, dl p, dd p, li p, ul p, dfn p, a p, span p")  
