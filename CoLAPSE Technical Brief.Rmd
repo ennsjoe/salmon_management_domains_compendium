@@ -25,6 +25,12 @@ While legislation and programs may often operate on a sector-by-sector and indiv
 
 <br>
 
+## Agencies and Jurisdictions
+
+Describe the different agencies and present a graphic to show how complicated it is
+
+<br>
+
 ## Purpose and Objectives
 
 This report outlines a framework and process to relate human activities that threaten Pacific salmon stocks, biology, and ecology to their regulatory statutes. The overall goal of this effort is to better understand the legislative context that governs Pacific salmon in British Columbia related to human activities by administrative concern in order to support conservation planning across jurisdictions. To achieve this, the more specific objectives are to:
@@ -309,7 +315,7 @@ if (!file.exists(db_path)) {
   # Output as unordered HTML list
   if (length(clause_values) > 0) {
     cat("<div style='margin-top: 20px;'>")
-    cat("<h4>Clause Type Categories Identified:</h4>")
+    cat("<h4>Clause Type Categories:</h4>")
     cat("<ul style='padding-left: 20px;'>")
     cat(paste0("<li>", clause_values, "</li>", collapse = "\n"))
     cat("</ul>")
@@ -411,14 +417,14 @@ if (!file.exists(db_path)) {
   if (nrow(domain_tally) > 0) {
     cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
     for (i in seq_len(nrow(domain_tally))) {
-      cat(sprintf("<li><strong>%s:</strong> %d clauses | %d sections | %d statutes</li>\n",
+      cat(sprintf("<li><strong>%s:</strong> %d statutes | %d sections | %d clauses</li>\n",
                   domain_tally$management_domain[i],
-                  domain_tally$clauses[i],
+                  domain_tally$statutes[i],
                   domain_tally$sections[i],
-                  domain_tally$statutes[i]))
+                  domain_tally$clauses[i]))
     }
-    cat(sprintf("<li style='margin-top: 10px;'><strong>Total:</strong> %d clauses | %d sections | %d statutes</li>\n",
-                total_clauses, total_sections, total_statutes))
+    cat(sprintf("<li style='margin-top: 10px;'><strong>Total:</strong> %d statutes | %d sections | %d clauses</li>\n",
+                total_statutes, total_sections, total_clauses))
     cat("</ul>\n")
   } else {
     cat("<p>No Management Domain labels found.</p>\n")
@@ -430,17 +436,18 @@ if (!file.exists(db_path)) {
 
 <br>
 
-### Management Domains
+## Management Domains
 
 Management domains were identified within the 177 of the 196 collected statutes. Figure X below shows a count of clauses by management domain split by jurisdiction. Pollution, Spatial Designation, and Water Use and Watercourse Modifications show the highest number of clauses specific to those categories. Climate Change and Natural Disasters received the fewest matches. 
 
-```{r paragraph-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
+```{r section-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
 library(here)
 library(data.table)
 library(ggplot2)
+library(stringr)
 
 # 📁 Define path to the SQLite database
 db_path <- file.path(here("output"), "legislation.db")
@@ -457,9 +464,9 @@ if (!file.exists(db_path)) {
     WHERE label_type = 'Management Domain' AND label_value IS NOT NULL
   "))
   
-  # 🗂️ Load paragraph and legislation metadata
+  # 🗂️ Load paragraph and legislation metadata including Section
   paragraph_table <- data.table(dbGetQuery(conn, "
-    SELECT paragraph_id, legislation_id
+    SELECT paragraph_id, legislation_id, Section
     FROM LegislationParagraphs
   "))
   
@@ -475,15 +482,22 @@ if (!file.exists(db_path)) {
   domain_data <- merge(paragraph_labels, paragraph_table, by = "paragraph_id", all.x = TRUE)
   domain_data <- merge(domain_data, legislation_metadata, by = "legislation_id", all.x = TRUE)
   
-  # 📊 Summarize paragraph counts by management_domain and jurisdiction
-  domain_counts <- domain_data[, .(
-    paragraph_Count = uniqueN(paragraph_id)
-  ), by = .(management_domain, jurisdiction)][order(-paragraph_Count)]
+  # 🧼 Normalize management domain labels
+  domain_data[, management_domain := str_squish(management_domain)]
+  
+  # 📊 Summarize counts by unique Section-legislation_id pairs
+  domain_counts <- domain_data[!is.na(Section), .(
+    section_Count = uniqueN(paste(Section, legislation_id))
+  ), by = .(management_domain, jurisdiction)]
+  
+  # 🧮 Order management domains by total section count (largest to smallest)
+  domain_order <- domain_counts[, .(total = sum(section_Count)), by = management_domain][order(-total)]
+  domain_counts[, management_domain := factor(management_domain, levels = rev(domain_order$management_domain))]  # reverse for top-down
   
   # 🎨 Create stacked horizontal bar chart
   ggplot(domain_counts, aes(
-    x = reorder(management_domain, paragraph_Count),
-    y = paragraph_Count,
+    x = management_domain,
+    y = section_Count,
     fill = jurisdiction
   )) +
     geom_bar(stat = "identity", color = "black", width = 0.8) +
@@ -493,9 +507,9 @@ if (!file.exists(db_path)) {
       guide = guide_legend(reverse = TRUE)
     ) +
     labs(
-      title = "Paragraph Count by Management Domain and Jurisdiction",
+      title = "Section Count by Management Domain and Jurisdiction",
       x = "Management Domain",
-      y = "Paragraph Count",
+      y = "Unique Section Count",
       fill = "Jurisdiction"
     ) +
     theme_minimal(base_size = 14) +
@@ -521,13 +535,14 @@ if (!file.exists(db_path)) {
 
 IUCN Level 2 categories are more specific to salmon threats, and the categorization process matched to 18 categories. Figure X below shows a count of clauses matched to IUCN Level 2 categories broken down by jurisdiction. Pollution, water management, and fisheries management were the top three, and it should be noted that Spatial Designation as a management domain does not occur within the IUCN Level 2 threat categories. 
 
-```{r paragraph-count-by-iucn, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
+```{r section-count-by-iucn, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
 library(here)
 library(data.table)
 library(ggplot2)
+library(stringr)
 
 # 📁 Define path to the SQLite database
 db_path <- file.path(here("output"), "legislation.db")
@@ -544,9 +559,9 @@ if (!file.exists(db_path)) {
     WHERE label_type = 'IUCN' AND label_value IS NOT NULL
   "))
   
-  # 🗂️ Load paragraph and legislation metadata
+  # 🗂️ Load paragraph and legislation metadata including Section
   paragraph_table <- data.table(dbGetQuery(conn, "
-    SELECT paragraph_id, legislation_id
+    SELECT paragraph_id, legislation_id, Section
     FROM LegislationParagraphs
   "))
   
@@ -562,15 +577,22 @@ if (!file.exists(db_path)) {
   iucn_data <- merge(paragraph_labels, paragraph_table, by = "paragraph_id", all.x = TRUE)
   iucn_data <- merge(iucn_data, legislation_metadata, by = "legislation_id", all.x = TRUE)
   
-  # 📊 Summarize paragraph counts by IUCN threat and jurisdiction
-  iucn_counts <- iucn_data[, .(
-    paragraph_Count = uniqueN(paragraph_id)
-  ), by = .(iucn_l2, jurisdiction)][order(-paragraph_Count)]
+  # 🧼 Normalize IUCN labels
+  iucn_data[, iucn_l2 := str_squish(iucn_l2)]
+  
+  # 📊 Summarize counts by unique Section-legislation_id pairs
+  iucn_counts <- iucn_data[!is.na(Section), .(
+    section_Count = uniqueN(paste(Section, legislation_id))
+  ), by = .(iucn_l2, jurisdiction)]
+  
+  # 🧮 Order IUCN threats by total section count (largest to smallest)
+  iucn_order <- iucn_counts[, .(total = sum(section_Count)), by = iucn_l2][order(-total)]
+  iucn_counts[, iucn_l2 := factor(iucn_l2, levels = rev(iucn_order$iucn_l2))]  # reverse for top-down
   
   # 🎨 Create stacked horizontal bar chart
   ggplot(iucn_counts, aes(
-    x = reorder(iucn_l2, paragraph_Count),
-    y = paragraph_Count,
+    x = iucn_l2,
+    y = section_Count,
     fill = jurisdiction
   )) +
     geom_bar(stat = "identity", color = "black", width = 0.8) +
@@ -580,9 +602,9 @@ if (!file.exists(db_path)) {
       guide = guide_legend(reverse = TRUE)
     ) +
     labs(
-      title = "Paragraph Count by IUCN Level 2 Threat and Jurisdiction",
+      title = "Section Count by IUCN Level 2 Threat and Jurisdiction",
       x = "IUCN Threat",
-      y = "Paragraph Count",
+      y = "Unique Section Count",
       fill = "Jurisdiction"
     ) +
     theme_minimal(base_size = 14) +
@@ -602,7 +624,9 @@ if (!file.exists(db_path)) {
 
 <br>
 
-### Scope
+## Scope
+
+Showing specificity of the language to Pacific salmon management. More clauses are less specific. Specific to general.
 
 ```{r scope-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -651,14 +675,14 @@ if (!file.exists(db_path)) {
   if (nrow(scope_tally) > 0) {
     cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
     for (i in seq_len(nrow(scope_tally))) {
-      cat(sprintf("<li><strong>%s:</strong> %d clauses | %d sections | %d statutes</li>\n",
+      cat(sprintf("<li><strong>%s:</strong> %d statutes | %d sections |  %d clauses</li>\n",
                   scope_tally$scope[i],
-                  scope_tally$clauses[i],
+                  scope_tally$statutes[i],
                   scope_tally$sections[i],
-                  scope_tally$statutes[i]))
+                  scope_tally$clauses[i]))
     }
-    cat(sprintf("<li style='margin-top: 10px;'><strong>Total:</strong> %d clauses | %d sections | %d statutes</li>\n",
-                total_clauses, total_sections, total_statutes))
+    cat(sprintf("<li style='margin-top: 10px;'><strong>Total:</strong> %d statutes | %d sections | %d clauses</li>\n",
+                total_statutes, total_sections, total_clauses))
     cat("</ul>\n")
   } else {
     cat("<p>No scope labels found for Management Domain or Salmon Scope.</p>\n")
@@ -668,9 +692,133 @@ if (!file.exists(db_path)) {
 
 <br>
 
+```{r ggplot-multiscope-donut-final, message=FALSE, warning=FALSE, echo=FALSE}
+library(DBI)
+library(RSQLite)
+library(data.table)
+library(here)
+library(dplyr)
+library(ggplot2)
+library(ggforce)
+
+# Connect to the database
+db_path <- file.path(here("output"), "legislation.db")
+conn <- dbConnect(SQLite(), dbname = db_path)
+
+# Load tables
+paragraph_label_table <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
+paragraph_table <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
+dbDisconnect(conn)
+
+# Get paragraph_ids tagged with Salmon Scope
+salmon_scope_ids <- paragraph_label_table[
+  label_type == "Salmon Scope" & scope == "1 - Salmon", paragraph_id
+]
+
+# Get Management Domain labels linked to those Salmon Scope paragraphs
+salmon_ring <- paragraph_label_table[
+  label_type == "Management Domain" & paragraph_id %in% salmon_scope_ids
+][, scope := "1 - Salmon"]
+
+# Get other Management Domain entries (non-Salmon scopes)
+other_rings <- paragraph_label_table[
+  label_type == "Management Domain" & !(paragraph_id %in% salmon_scope_ids)
+]
+
+# Combine all scope-tagged Management Domain entries
+md_labels <- rbind(salmon_ring, other_rings)
+
+# Merge with paragraph_table to get legislation_id and Section
+merged_data <- merge(
+  md_labels,
+  paragraph_table[, .(paragraph_id, legislation_id, Section)],
+  by = "paragraph_id",
+  all.x = TRUE
+)
+
+# Count unique Sections per legislation_id, grouped by scope and label_value
+raw_counts <- merged_data[
+  , .(SectionCount = uniqueN(Section)), by = .(scope, label_value)
+]
+
+# Ensure all scope × label_value combinations are represented
+all_combos <- CJ(scope = unique(md_labels$scope),
+                 label_value = unique(md_labels$label_value))
+donut_data <- merge(all_combos, raw_counts, by = c("scope", "label_value"), all.x = TRUE)
+donut_data[is.na(SectionCount), SectionCount := 0]
+
+# Assign fixed ring positions for each scope
+scope_levels <- sort(unique(donut_data$scope))
+scope_radii <- data.table(
+  scope = scope_levels,
+  r0 = seq(0.3, by = 0.3, length.out = length(scope_levels)),
+  r = seq(0.5, by = 0.3, length.out = length(scope_levels)),
+  label_radius = seq(0.4, by = 0.3, length.out = length(scope_levels))
+)
+donut_data <- merge(donut_data, scope_radii, by = "scope")
+
+# Compute arc positions
+donut_data <- donut_data %>%
+  group_by(scope) %>%
+  arrange(label_value) %>%
+  mutate(
+    total = sum(SectionCount),
+    fraction = ifelse(total > 0, SectionCount / total, 0),
+    ymax = cumsum(fraction),
+    ymin = lag(ymax, default = 0)
+  ) %>%
+  ungroup()
+
+# Create scope labels
+scope_labels <- scope_radii %>%
+  mutate(
+    x = label_radius * cos(pi / 2),
+    y = label_radius * sin(pi / 2)
+  )
+
+# Define custom colors for label_value slices
+domain_colors <- c(
+  "Agriculture" = "greenyellow",
+  "Aquaculture and Hatcheries" = "violetred2",
+  "Climate Change and Natural Disasters" = "tomato2",
+  "Fisheries" = "turquoise2",
+  "Forest and Range" = "sienna3",
+  "Human Disturbance" = "grey50",
+  "Restoration" = "springgreen4",
+  "Invasive or Problematic Species and Disease" = "darkorchid3",
+  "Mining and Energy" = "grey30",
+  "Pollution" = "black",
+  "Spatial Designation" = "grey90",
+  "Species Status and Assessment" = "grey80",
+  "Transportation Infrastructure" = "yellow3",
+  "Water Use and Watercourse Modifications" = "skyblue3"
+)
+
+# Plot multi-ring donut chart
+ggplot(donut_data) +
+  geom_arc_bar(aes(
+    x0 = 0, y0 = 0,
+    r0 = r0, r = r,
+    start = 2 * pi * ymin,
+    end = 2 * pi * ymax,
+    fill = label_value
+  ), color = "white") +
+  geom_text(data = scope_labels, aes(x = x, y = y, label = scope), size = 4, fontface = "bold") +
+  scale_fill_manual(values = domain_colors, na.value = "#999999") +
+  guides(fill = guide_legend(title = "Management Domain")) +
+  coord_fixed() +
+  theme_void() +
+  labs(
+    title = "Management Domains Across Scope",
+    subtitle = "Each ring represents Scope; slices show Management Domain weight by Section count"
+  ) +
+  theme(legend.position = "right")
+
+```
+
 Using the '1 - Salmon' scope for clauses shows the Type A Legislation along with a comparison of the number of paragraphs by Jurisdiction. The results are shown in the bar chart below, which displays the number of paragraphs for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of paragraphs across different legislative frameworks.
 
-```{r unique-paragraph-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
+```{r unique-section-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
 # 📦 Load libraries
 library(DBI)
 library(RSQLite)
@@ -689,7 +837,7 @@ paragraph_labels <- dbGetQuery(conn, "
 ")
 
 paragraph_table <- dbGetQuery(conn, "
-  SELECT paragraph_id, legislation_id
+  SELECT paragraph_id, legislation_id, Section
   FROM LegislationParagraphs
 ")
 
@@ -704,13 +852,19 @@ dbDisconnect(conn)
 # 🔗 Join tables according to schema
 salmon_data <- paragraph_labels %>%
   inner_join(paragraph_table, by = "paragraph_id") %>%
-  inner_join(legislation_metadata, by = "legislation_id")
+  inner_join(legislation_metadata, by = "legislation_id") %>%
+  filter(!is.na(Section))
 
-# 📊 Summarize unique paragraph counts by legislation and jurisdiction
+# 📊 Summarize unique Section-legislation_id counts by legislation and jurisdiction
 summary_data <- salmon_data %>%
+  mutate(section_key = paste(Section, legislation_id)) %>%
   group_by(legislation_name, jurisdiction) %>%
-  summarise(Unique_paragraphs = n_distinct(paragraph_id), .groups = "drop") %>%
-  arrange(desc(Unique_paragraphs))
+  summarise(Unique_sections = n_distinct(section_key), .groups = "drop")
+
+# 🧮 Reorder legislation by total section count (largest to smallest)
+summary_data <- summary_data %>%
+  arrange(desc(Unique_sections)) %>%
+  mutate(legislation_name = factor(legislation_name, levels = rev(legislation_name)))
 
 # 🎨 Font scaling for dashboard readability
 font_scale <- 1.2
@@ -718,33 +872,33 @@ font_scale <- 1.2
 # 📈 Plot or fallback message
 if (nrow(summary_data) > 0) {
   ggplot(summary_data, aes(
-  x = Unique_paragraphs,
-  y = reorder(legislation_name, Unique_paragraphs),
-  fill = jurisdiction
-)) +
-  geom_bar(stat = "identity", color = "black") +
-  scale_fill_manual(values = c(
-    "Federal" = "#996666",
-    "Provincial" = "#668899",
-    "Unknown" = "#999999"
+    x = Unique_sections,
+    y = legislation_name,
+    fill = jurisdiction
   )) +
-  labs(
-    title = "Clause Count by Legislation (Scope: 1 - Salmon)",
-    x = "Number of Paragraphs",
-    y = "Legislation",
-    fill = "Jurisdiction"
-  ) +
-  theme_minimal(base_size = 14 * font_scale) +
-theme(
-  plot.title = element_text(size = 14 * font_scale, face = "bold", hjust = 0.5),
-  plot.title.position = "plot",  # Ensures title spans full plot width
-  plot.margin = margin(t = 20, r = 40, b = 20, l = 20),  # Adds extra space on the right
-  axis.text.y = element_text(size = 14 * font_scale),
-  axis.text.x = element_text(size = 14 * font_scale),
-  legend.position = "bottom"
-)
+    geom_bar(stat = "identity", color = "black") +
+    scale_fill_manual(values = c(
+      "Federal" = "#996666",
+      "Provincial" = "#668899",
+      "Unknown" = "#999999"
+    )) +
+    labs(
+      title = "Section Count by Legislation (Scope: 1 - Salmon)",
+      x = "Unique Section Count",
+      y = "Legislation",
+      fill = "Jurisdiction"
+    ) +
+    theme_minimal(base_size = 14 * font_scale) +
+    theme(
+      plot.title = element_text(size = 14 * font_scale, face = "bold", hjust = 0.5),
+      plot.title.position = "plot",
+      plot.margin = margin(t = 20, r = 40, b = 20, l = 20),
+      axis.text.y = element_text(size = 14 * font_scale),
+      axis.text.x = element_text(size = 14 * font_scale),
+      legend.position = "bottom"
+    )
 } else {
-  cat("<p style='color: red;'>⚠️ No paragraphs found for Salmon Scope '1 - Salmon'.</p>")
+  cat("<p style='color: red;'>⚠️ No sections found for Salmon Scope '1 - Salmon'.</p>")
 }
 
 ```
@@ -752,6 +906,8 @@ theme(
 <p style="text-align: center;"><em>Figure X. ___________________.</em></p>
 
 <br>
+
+**Trying to show the relationship between the domains and IUCN threat categories along with the most common to less common. Maybe a bar graph would be better.
 
 ```{r plot-habitat-domain-heatmap-greygrid, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=9}
 # 📦 Load required libraries
@@ -786,31 +942,31 @@ iucn_labels <- paragraph_labels[
 # 🔗 Merge habitat and IUCN labels
 habitat_paragraphs <- merge(habitat_labels, iucn_labels, by = "paragraph_id")
 
-# 🧭 Add jurisdiction context
+# 🧭 Add jurisdiction and section context
 paragraph_context <- merge(
-  legislation_paragraphs[, .(paragraph_id, legislation_id)],
+  legislation_paragraphs[, .(paragraph_id, legislation_id, Section)],
   legislation_metadata[, .(legislation_id, jurisdiction)],
   by = "legislation_id",
   all.x = TRUE
 )
 habitat_paragraphs <- merge(habitat_paragraphs, paragraph_context, by = "paragraph_id", all.x = TRUE)
 
-# 📊 Aggregate counts
+# 📊 Aggregate counts by unique Section-legislation_id combinations
 heatmap_data <- habitat_paragraphs[
-  !is.na(iucn_l2) & !is.na(management_domain),
-  .(paragraph_count = uniqueN(paragraph_id)),
+  !is.na(iucn_l2) & !is.na(management_domain) & !is.na(Section),
+  .(section_count = uniqueN(paste(Section, legislation_id))),
   by = .(management_domain, iucn_l2)
 ]
 
 # 🎨 Plot heat map with grey grid background
-ggplot(heatmap_data, aes(x = iucn_l2, y = management_domain, fill = paragraph_count)) +
+ggplot(heatmap_data, aes(x = iucn_l2, y = management_domain, fill = section_count)) +
   geom_tile(color = "white") +
-  scale_fill_gradient(low = "#f0f0f0", high = "#996666") +
+  scale_fill_gradient(low = "grey69", high = "black") +
   labs(
-    title = "Clause Density by Management Domain (Scope: 3 - Habitat)",
+    title = "Section Density by Management Domain (Scope: 3 - Habitat)",
     x = "IUCN Level 2 Threat Category",
     y = "Management Domain",
-    fill = "Clause Count"
+    fill = "Section Count"
   ) +
   theme_minimal(base_size = 14 * font_scale) +
   theme(
@@ -830,7 +986,7 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = management_domain, fill = paragraph_co
 
 ## Clause Type
 
-<br>
+Clause types were assessed for all clauses in the collected legislation. The clause types that overlap with assigned management domains are as follows:
 
 ```{r clause-type-with-domain-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -889,14 +1045,14 @@ if (!file.exists(db_path)) {
   if (nrow(clause_tally) > 0) {
     cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
     for (i in seq_len(nrow(clause_tally))) {
-      cat(sprintf("<li><strong>%s:</strong> %d clauses | %d sections | %d statutes</li>\n",
+      cat(sprintf("<li><strong>%s:</strong> %d statutes | %d sections | %d clauses </li>\n",
                   clause_tally$clause_type[i],
-                  clause_tally$clauses[i],
+                  clause_tally$statutes[i],
                   clause_tally$sections[i],
-                  clause_tally$statutes[i]))
+                  clause_tally$clauses[i]))
     }
-    cat(sprintf("<li style='margin-top: 10px;'><strong>Total:</strong> %d clauses | %d sections | %d statutes</li>\n",
-                total_clauses, total_sections, total_statutes))
+    cat(sprintf("<li style='margin-top: 10px;'><strong>Total:</strong> %d statutes | %d sections | %d clauses</li>\n",
+                total_statutes, total_sections, total_clauses))
     cat("</ul>\n")
   } else {
     cat("<p>No Clause Type labels found with Management Domain assigned.</p>\n")
@@ -933,31 +1089,31 @@ domain_labels <- paragraph_labels[label_type == "Management Domain", .(paragraph
 # 🔗 Merge clause and domain labels
 labeled_paragraphs <- merge(clause_labels, domain_labels, by = "paragraph_id")
 
-# 🔗 Add jurisdiction context
+# 🔗 Add jurisdiction and section context
 paragraph_context <- merge(
-  legislation_paragraphs[, .(paragraph_id, legislation_id)],
+  legislation_paragraphs[, .(paragraph_id, legislation_id, Section)],
   legislation_metadata[, .(legislation_id, jurisdiction)],
   by = "legislation_id",
   all.x = TRUE
 )
 labeled_paragraphs <- merge(labeled_paragraphs, paragraph_context, by = "paragraph_id", all.x = TRUE)
 
-# 📊 Aggregate counts
+# 📊 Aggregate counts by unique Section-legislation_id combinations
 heatmap_data <- labeled_paragraphs[
-  !is.na(clause_type) & !is.na(management_domain),
-  .(paragraph_count = uniqueN(paragraph_id)),
+  !is.na(clause_type) & !is.na(management_domain) & !is.na(Section),
+  .(section_count = uniqueN(paste(Section, legislation_id))),
   by = .(clause_type, management_domain)
 ]
 
 # 🎨 Plot heat map
-ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = paragraph_count)) +
+ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = section_count)) +
   geom_tile(color = "white") +
-  scale_fill_gradient(low = "#f0f0f0", high = "#668899") +
+  scale_fill_gradient(low = "grey87", high = "black") +
   labs(
     title = "Clause Type vs. Management Domain",
     x = "Clause Type",
     y = "Management Domain",
-    fill = "Clause Count"
+    fill = "Section Count"
   ) +
   theme_minimal(base_size = 14 * font_scale) +
   theme(
@@ -1081,7 +1237,7 @@ heatmap_data <- cu_ranking[, .(unique_cu_count = uniqueN(cu_index)), by = .(rpa_
 # Plot heatmap using unique cu_index count as fill
 ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_count)) +
   geom_tile(color = "white") +
-  scale_fill_gradient(low = "#f0f0f0", high = "#996666") +
+  scale_fill_gradient(low = "grey75", high = "black") +
   labs(
     title = "CU Ranking Heatmap by Unique CU Index Count",
     x = "IUCN Level 2",
@@ -1104,9 +1260,17 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_c
 
 # DISCUSSION
 
+## Domain Overlap and Connectedness
+
+Show a graphic of domain overlap and connectedness
+
+<br>
+
+## Clause count as a function of keyword quantity
+
 One criticism could be that the more keywords a category has, the more clauses will be labelled. This is likely true. Here’s a scatterplot that shows number of keywords vs the clause count for that category.
 
-```{r iucn-scatterplot, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=9}
+```{r iucn-scatterplot-section-count, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=9}
 library(DBI)
 library(RSQLite)
 library(data.table)
@@ -1119,15 +1283,20 @@ conn <- dbConnect(SQLite(), dbname = db_path)
 
 # Load label table and keyword table
 label_table <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
+paragraph_table <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
 iucn_keywords <- as.data.table(dbReadTable(conn, "iucn_l2_keywords"))
 dbDisconnect(conn)
 
 # Filter for IUCN labels
 iucn_labels <- label_table[label_type == "IUCN" & !is.na(label_value)]
 
-# Aggregate data
-iucn_summary <- iucn_labels[, .(
-  clause_count = uniqueN(paragraph_id)
+# Merge with paragraph table to get Section and legislation_id
+iucn_data <- merge(iucn_labels, paragraph_table[, .(paragraph_id, Section, legislation_id)], by = "paragraph_id", all.x = TRUE)
+iucn_data <- iucn_data[!is.na(Section)]
+
+# Aggregate by unique Section-legislation_id combinations
+iucn_summary <- iucn_data[, .(
+  section_count = uniqueN(paste(Section, legislation_id))
 ), by = label_value]
 
 # Add keyword count from iucn_l2_keywords
@@ -1138,16 +1307,16 @@ setnames(keyword_counts, "N", "keyword_count")
 plot_data <- merge(iucn_summary, keyword_counts, by.x = "label_value", by.y = "iucn_l2", all.x = TRUE)
 
 # Plot
-ggplot(plot_data, aes(x = keyword_count, y = clause_count, label = label_value)) +
+ggplot(plot_data, aes(x = keyword_count, y = section_count, label = label_value)) +
   geom_point(color = "#2c3e50", size = 3) +
   geom_text(hjust = -0.1, size = 3.5) +
   labs(
-    title = "IUCN Level 2: Keyword Count vs Clause Count",
+    title = "IUCN Level 2: Keyword Count vs Section Count",
     x = "Keyword Count (from iucn_l2_keywords)",
-    y = "Number of Clauses"
+    y = "Unique Section Count"
   ) +
   theme_minimal() +
-  xlim(0, max(plot_data$keyword_count) * 1.2)  # Add space for labels
+  xlim(0, max(plot_data$keyword_count, na.rm = TRUE) * 1.2)
 
 ```
 
@@ -1522,7 +1691,7 @@ htmltools::div(
              
 <hr>
 
-## Appendix III - Keywords: 
+## Appendix III - Management Domain Keywords: 
 
 ```{r keyword-frequency-by-domain-corrected, echo=FALSE, message=FALSE, warning=FALSE}
 # 📦 Load required libraries
@@ -1573,6 +1742,56 @@ reactable(
 ```
 
 <hr>
+
+## Appendix III - Clause Type Keywords:
+
+```{r keyword-frequency-by-clause-type, echo=FALSE, message=FALSE, warning=FALSE}
+# 📦 Load required libraries
+library(DBI)
+library(RSQLite)
+library(data.table)
+library(here)
+library(reactable)
+
+# 🔌 Connect to database
+db_path <- here::here("output", "legislation.db")
+conn <- dbConnect(SQLite(), dbname = db_path)
+
+# 🗂️ Load paragraph labels
+paragraph_labels <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
+dbDisconnect(conn)
+
+# 🎯 Extract Clause Type keywords
+clause_labels <- paragraph_labels[label_type == "Clause Type", .(
+  clause_type = label_value,
+  keyword
+)]
+
+# 📊 Summarize keyword frequency by Clause Type
+keyword_summary <- clause_labels[
+  !is.na(clause_type) & !is.na(keyword),
+  .(Frequency = .N),
+  by = .(clause_type, keyword)
+][order(-Frequency)]
+
+# 📊 Render reactable
+reactable(
+  keyword_summary,
+  groupBy = "clause_type",
+  searchable = TRUE,
+  pagination = TRUE,
+  striped = TRUE,
+  bordered = TRUE,
+  highlight = TRUE,
+  defaultPageSize = 15,
+  columns = list(
+    clause_type = colDef(name = "Clause Type", minWidth = 150),
+    keyword = colDef(name = "Keyword", minWidth = 200),
+    Frequency = colDef(name = "Frequency", align = "center")
+  )
+)
+```
+
 
 ## Appendix IV - Case Study: Extreme Threat Ranking - IUCN 10.1 Geological Events
 
