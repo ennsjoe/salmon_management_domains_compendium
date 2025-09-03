@@ -1260,9 +1260,64 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_c
 
 # DISCUSSION
 
-## Domain Overlap and Connectedness
+## Domain Intersectionality
 
-Show a graphic of domain overlap and connectedness
+Show a graphic of domain intersectionality
+
+```{r management-domain-upset-clean, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=9}
+library(DBI)
+library(RSQLite)
+library(data.table)
+library(ComplexUpset)
+library(ggplot2)
+library(here)
+
+# Connect to SQLite
+db_path <- file.path(here::here("output"), "legislation.db")
+conn <- dbConnect(SQLite(), dbname = db_path)
+
+# Query Management Domain labels joined with Sections
+query <- "
+SELECT lp.Section, pl.label_value AS ManagementDomain
+FROM paragraph_label_table pl
+JOIN LegislationParagraphs lp ON pl.paragraph_id = lp.paragraph_id
+WHERE pl.label_type = 'Management Domain' AND lp.Section IS NOT NULL
+"
+md_data <- as.data.table(dbGetQuery(conn, query))
+dbDisconnect(conn)
+
+# Create binary matrix: rows = Sections, columns = Management Domains
+md_matrix <- dcast(
+  md_data, 
+  Section ~ ManagementDomain, 
+  fun.aggregate = function(x) as.integer(length(x) > 0), 
+  value.var = "ManagementDomain"
+)
+
+# Remove Section column to collapse by domain combination only
+domain_cols <- setdiff(names(md_matrix), "Section")
+md_collapsed <- md_matrix[, ..domain_cols][, .N, by = domain_cols]
+
+# Expand rows by frequency
+md_expanded <- md_collapsed[rep(seq_len(.N), times = md_collapsed$N)]
+md_expanded$N <- NULL
+
+# Convert to data.frame for ComplexUpset
+md_df <- as.data.frame(md_expanded)
+
+# Plot using ComplexUpset
+ComplexUpset::upset(
+  md_df,
+  intersect = domain_cols,
+  name = "Management Domain Overlap",
+ base_annotations = list(
+  'Intersection size' = intersection_size(text = list())
+  ),
+  set_sizes = FALSE
+)
+
+
+```
 
 <br>
 
