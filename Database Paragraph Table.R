@@ -173,3 +173,7 @@ if (length(bad_files) > 0) {
 } else {
   cat("All files processed successfully.\n")
 }
+
+## Notify Completion ----
+cat("✅ Labeling complete. Table saved to SQLite.\n")
+beep(sound = 1)

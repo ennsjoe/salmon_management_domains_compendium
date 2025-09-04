@@ -35,3 +35,7 @@ dbWriteTable(conn, "NOAA_ecological_concern", ecological_concern, overwrite = TR
 
 ## Disconnect ----
 dbDisconnect(conn)
+
+## Notify Completion ----
+cat("✅ Labeling complete. Table saved to SQLite.\n")
+beep(sound = 1)

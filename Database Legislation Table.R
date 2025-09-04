@@ -94,9 +94,11 @@ extract_legislation_type <- function(legislation_name) {
       grepl("\\bRegulations\\b", legislation_name, ignore.case = TRUE), "Regulations",
     fifelse(grepl("\\bOrder\\b", legislation_name, ignore.case = TRUE) & grepl("\\bAct\\b", legislation_name, ignore.case = TRUE), "Order",
             fifelse(grepl("\\bOrder\\b", legislation_name, ignore.case = TRUE), "Order",
-                    fifelse(grepl("\\bAct\\b", legislation_name, ignore.case = TRUE), "Act", ""))))
-  return(legislation_type)
-}
+                    fifelse(grepl("\\bCode\\b", legislation_name, ignore.case = TRUE) & grepl("\\bAct\\b", legislation_name, ignore.case = TRUE), "Code",
+                            fifelse(grepl("\\bCode\\b", legislation_name, ignore.case = TRUE), "Code",
+                                    fifelse(grepl("\\bAct\\b", legislation_name, ignore.case = TRUE), "Act", ""))))))
+            return(legislation_type)
+            }
 
 extract_act_name <- function(html_file, legislation_name, legislation_type) {
   act_name <- if (legislation_type == "Act") {
@@ -156,3 +158,8 @@ if (length(bad_files) > 0) {
 } else {
   cat("All files processed successfully.\n")
 }
+
+## Notify Completion ----
+cat("✅ Labeling complete. Table saved to SQLite.\n")
+beep(sound = 1)
+
