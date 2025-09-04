@@ -88,11 +88,13 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fish guards
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fish ladder
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fish lock
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",fish stock
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fish under
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fished
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fisher
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fisheries management
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fisheries values
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",fisheries waters
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fishery
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fishing
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fishway
@@ -128,17 +130,15 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",salmon tag
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",seine
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",shall fish
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",species of fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",sport fishing
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",sportfish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",stock
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",sustainability of fisheries
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",trawl
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",trolling
-"5.4 Fishing, Harvesting & Controlling Aquatic Species",species of fish
-"5.4 Fishing, Harvesting & Controlling Aquatic Species",fish stock
-"5.4 Fishing, Harvesting & Controlling Aquatic Species",fisheries waters
-6.3 Other Human Disturbances,research activity
 6.3 Other Human Disturbances,research activities
+6.3 Other Human Disturbances,research activity
 7.2 Dams & Water Management / Use,aquatic ecosystem
 7.2 Dams & Water Management / Use,aquifer
 7.2 Dams & Water Management / Use,catch basin
@@ -186,11 +186,21 @@
 7.3 Earth & Sediment Management,streamside
 7.3 Earth & Sediment Management,watershed
 7.3 Earth & Sediment Management,watersheds
+7.5 Biological System Management,biodiversity
 7.5 Biological System Management,ecological community
 7.5 Biological System Management,fisheries sensitive feature
+7.5 Biological System Management,habitat conservation
+7.5 Biological System Management,habitat protection
+7.5 Biological System Management,reclaim
+7.5 Biological System Management,reclamation
+7.5 Biological System Management,rehabilitate
+7.5 Biological System Management,rehabilitated
+7.5 Biological System Management,remediation
+7.5 Biological System Management,restoration
+7.5 Biological System Management,restore
+7.5 Biological System Management,restored
 7.5 Biological System Management,riparian
 7.5 Biological System Management,streamside trees
-7.5 Biological System Management,biodiversity
 8.1 Invasive Non-Native / Alien Species,alien species
 8.1 Invasive Non-Native / Alien Species,biocontrol
 8.1 Invasive Non-Native / Alien Species,exotic
@@ -246,13 +256,3 @@
 9.1 Water-Borne & Other Effluent Pollution ,water quality
 9.2 Garbage & Solid Waste,biosolids
 9.2 Garbage & Solid Waste,compost
-7.5 Biological System Management,reclaim
-7.5 Biological System Management,reclamation
-7.5 Biological System Management,rehabilitate
-7.5 Biological System Management,rehabilitated
-7.5 Biological System Management,remediation
-7.5 Biological System Management,restoration
-7.5 Biological System Management,restore
-7.5 Biological System Management,restored
-7.5 Biological System Management,habitat protection
-7.5 Biological System Management,habitat conservation
