@@ -29,6 +29,82 @@ While legislation and programs may often operate on a sector-by-sector and indiv
 
 Describe the different agencies and present a graphic to show how complicated it is
 
+Canada
+
+<a href= “https://laws-lois.justice.gc.ca/eng/tablepublicstatutes/index.html” style=“color:#668899”>Table of Public Statutes and Responsible Ministers</a>
+
+British Columbia
+
+<a href="https://www.bclaws.gov.bc.ca/civix/content/amr/amr/1662622382/?xsl=/templates/browse.xsl” style=”color:#668899">Acts/Ministers' Responsibilities</a>
+
+```{r sankey-agency-act-jurisdiction-split, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(DBI)
+library(RSQLite)
+library(data.table)
+library(here)
+library(networkD3)
+
+# 🔌 Connect to the database
+db_path <- here("output", "legislation.db")
+conn <- dbConnect(SQLite(), dbname = db_path)
+
+# 🗂️ Load tables
+agencies <- as.data.table(dbReadTable(conn, "agencies"))
+legislation <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
+dbDisconnect(conn)
+
+# 🔗 Join to get jurisdiction
+sankey_data <- merge(agencies, legislation[, .(act_name, jurisdiction)], by = "act_name", all.x = TRUE)
+
+# 🎨 Define color palette
+jurisdiction_colors <- list(
+  Federal = "#1f77b4",     # Blue
+  Provincial = "#ff7f0e"   # Orange
+)
+
+# 🔁 Function to build Sankey for a given jurisdiction
+build_sankey <- function(data, jurisdiction_label, color) {
+  data <- data[jurisdiction == jurisdiction_label]
+  if (nrow(data) == 0) {
+    cat(sprintf("<p>No data for %s jurisdiction.</p>", jurisdiction_label))
+    return(invisible(NULL))
+  }
+  
+  nodes <- unique(c(data$agency, data$act_name))
+  nodes_dt <- data.table(name = nodes)
+  
+  data[, source := match(agency, nodes) - 1]
+  data[, target := match(act_name, nodes) - 1]
+  
+  links <- data[, .(source, target, value = .N), by = .(source, target)]
+  
+  sankeyNetwork(
+    Links = links,
+    Nodes = nodes_dt,
+    Source = "source",
+    Target = "target",
+    Value = "value",
+    NodeID = "name",
+    fontSize = 10,
+    nodeWidth = 30,
+    LinkGroup = NULL,
+    NodeGroup = NULL,
+    colourScale = JS(sprintf("d3.scaleOrdinal().range(['%s'])", color))
+  )
+}
+
+# 🧭 Federal Sankey
+cat("<h3>Federal Jurisdiction</h3>")
+build_sankey(sankey_data, "Federal", jurisdiction_colors$Federal)
+
+# 🧭 Provincial Sankey
+cat("<h3>Provincial Jurisdiction</h3>")
+build_sankey(sankey_data, "Provincial", jurisdiction_colors$Provincial)
+
+
+```
+
+
 <br>
 
 ## Purpose and Objectives
@@ -293,7 +369,7 @@ The keyword and keyphrase development process required an iterative researcher r
 
 Conversely, the word “riparian” is very relevant to salmon habitat management in British Columbia, yet that word doesn’t appear in the IUCN threat examples. As well, “riparian” doesn’t appear in word frequency analyses of other legislation. “Riparian” was added as a keyword solely from the researchers’ discretion.
 
-Researcher subjectivity influenced the process on two fronts:
+Researcher subjectivity can influence the process on two fronts:
 <div style="margin-left: 30px; padding-left: 10px">
 <ul>
 <li>Legislation collection</li>
