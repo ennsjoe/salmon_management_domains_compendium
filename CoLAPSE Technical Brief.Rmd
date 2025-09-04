@@ -53,7 +53,7 @@ Legislation governs human activity, which in turn impacts Pacific salmon populat
 
 <br>
 
-### Defining Management Domains
+## Management Domain Developement
 
 <strong>The Four Hs</strong>
 
@@ -178,7 +178,7 @@ The scope assignment process is linked but occurs independent of the management 
 
 <br>
 
-### Assigning Management Domains
+## Management Domain Matching Process
 
 Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the clauses within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable. Other researchers may repeat this process as future legislation and language changes. The process steps are:
 
@@ -242,7 +242,7 @@ Legislation presented on Canadian and British Columbian government websites--and
 
 <br>
 
-<strong>3) Building a Database Compendium</strong>
+<strong>3) Database Compendium Development</strong>
 
 The parsed legislation was stored in a SQLite database with datatables including:
 
@@ -277,13 +277,37 @@ Storing the data as a database rather than one large spreadsheet allows for a mo
 
 <br>
 
-<strong>4) Assigning Management Domains and IUCN Threats</strong>
+## Keyword and Keyphrase Development
 
-The Management Domains and IUCN threats were assigned to each section based on a keyword list developed from the IUCN threat categories. The keywords were used to identify specific sections and subsections within the legislation. Each section was then assigned to one or more Management Domain and IUCN threat based on the presence of these keywords.Iteratively, we adjusted the keyword list to ensure that it accurately captured the scope of each Management Domain and IUCN threat. The keyword list is available in Appendix II.
+The management domain and IUCN threat matching process pivoted around an established list of keywords and phrases relevant to Pacific salmon management. Keywords act as a link between categorization and the legislative clauses. Keywords must be specific enough to match an IUCN threat, yet general enough to appear in the acts and regulations that span many decades of legislative language. The keywords originated from three sources:
+
+<div style="margin-left: 30px; padding-left: 10px">
+<ul>
+<li><a href=" https://docs.google.com/spreadsheets/d/1yfm7ua9hQJpjycx6FYQJ6Jy5LA4bP0XP61EW3-sX8ZY/edit?gid=179026760#gid=179026760" style="color:#668899">IUCN - CMP Direct Threats Classification 4.0</a> examples and definitions</li>
+<li>Word frequency analysis (unigrams, bigrams, and trigrams) of collected legislation</li>
+<li>Iterative researcher input and revision</li>
+</ul> 
+</div>
+
+The keyword and keyphrase development process required an iterative researcher revision step because of the varied context of language. While the words used in the IUCN threat definitions may be specific to those threats, they may not be relevant to salmon management and may also have multiple meanings leading to an over-assignment of categories. For example, the word “landfill” is listed on the IUCN threat examples for “1.2 Commercial & Industrial Areas.” Much of the collected legislation deals with pollution, in which landfills are mentioned. However, for salmon habitat, the threat would come from water effluent, and pollution would be a more accurate designation. “Landfill” as a keyword adds many clauses that could be considered outside of the scope of this tool, and so “landfill” was removed from the keyword list.	
+
+Conversely, the word “riparian” is very relevant to salmon habitat management in British Columbia, yet that word doesn’t appear in the IUCN threat examples. As well, “riparian” doesn’t appear in word frequency analyses of other legislation. “Riparian” was added as a keyword solely from the researchers’ discretion.
+
+Researcher subjectivity influenced the process on two fronts:
+<div style="margin-left: 30px; padding-left: 10px">
+<ul>
+<li>Legislation collection</li>
+<li>Keyword and keyphrase list development</li>
+</ul> 
+</div>
+
+However, using keyword lists allows for the subjectivity to be acknowledged, and the keyword lists to be reported such that the process may be repeatable. The keyword list is shown in Appendix XXX. 
+
+Management domains can overlap within sections and clauses. For example the provincial Land-based Finfish Waste Control Regulation (Environmental Management Act) states in Section 2 that: “The owner of a land-based finfish facility is exempt from section 6 (2) and (3) of the Environmental Management Act with respect to the discharge of wastes from the land-based finfish facility if the owner…” This clause matched appropriately with both the “Aquaculture and Hatcheries” and “Pollution” management domains. Because the matching process allows for multiple keywords to be matched per clause, this method allows for an assessment of co-occurrences and connections between management domains.
 
 <br>
 
-## Legislative Factors
+## Legislative Factors (Clause Types)
 
 Parsing and assessing clauses by keyword also allows for an assessment of the nature of the clause. Similar the Management Domain assignment, we created a Clause Type keyword list to assess the nature or purposes of the clauses. Using language patterns within the legislation, we grouped Clause Type by:
 
