@@ -1300,12 +1300,11 @@ heatmap_data <- rbind(heatmap_data, reverse_pairs)
 # 🎨 Plot symmetric heatmap with small count labels and no gridlines
 ggplot(heatmap_data, aes(x = domain_x, y = domain_y, fill = N)) +
   geom_tile(color = "white") +
-  geom_text(aes(label = N), color = "white", size = 2) +  # Smaller labels
   scale_fill_gradient(low = "grey90", high = "black") +
   labs(
     title = "Co-occurrence of Management Domains by Section",
-    x = "Management Domain",
-    y = "Management Domain",
+    x = "",
+    y = "",
     fill = "Co-occurrence Count"
   ) +
   theme_minimal(base_size = 14) +
@@ -1313,14 +1312,82 @@ ggplot(heatmap_data, aes(x = domain_x, y = domain_y, fill = N)) +
     plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
     plot.title.position = "plot",
     plot.margin = margin(t = 20, r = 40, b = 20, l = 20),
-    panel.grid.major = element_blank(),  # Remove major gridlines
-    panel.grid.minor = element_blank(),  # Remove minor gridlines
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = "white", color = NA),
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
 
 
+
 ```
+
+<br>
+
+```{r top-domain-pairs-display, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(DBI)
+library(RSQLite)
+library(here)
+library(data.table)
+
+db_path <- file.path(here("output", "legislation.db"))
+if (!file.exists(db_path)) {
+  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
+} else {
+  conn <- dbConnect(SQLite(), dbname = db_path)
+  
+  # Load Management Domain labels
+  domain_labels <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, label_value AS domain
+    FROM paragraph_label_table
+    WHERE label_type = 'Management Domain' AND label_value IS NOT NULL
+  "))
+  
+  # Load paragraph metadata
+  paragraph_meta <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, Section, legislation_id
+    FROM LegislationParagraphs
+    WHERE Section IS NOT NULL
+  "))
+  
+  dbDisconnect(conn)
+  
+  # Merge and group by Section-legislation
+  merged <- merge(domain_labels, paragraph_meta, by = "paragraph_id", all.x = TRUE)
+  grouped <- merged[, .(domains = unique(domain)), by = .(Section, legislation_id)]
+  
+  # Generate domain pairs safely and consistently (A < B)
+  pairwise <- grouped[, {
+    if (length(domains) >= 2) {
+      combs <- combn(sort(domains), 2, simplify = FALSE)
+      data.table(domain1 = sapply(combs, `[`, 1),
+                 domain2 = sapply(combs, `[`, 2))
+    } else {
+      data.table(domain1 = character(0), domain2 = character(0))
+    }
+  }, by = .(Section, legislation_id)]
+  
+  # Count unique co-occurrences
+  pair_counts <- pairwise[, .N, by = .(domain1, domain2)]
+  top_pairs <- pair_counts[N > 75][order(-N)]
+  
+  # Display formatted output
+  if (nrow(top_pairs) > 0) {
+    cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
+    for (i in seq_len(nrow(top_pairs))) {
+      cat(sprintf("<li><strong>%s</strong> | <strong>%s</strong> – %d sections</li>\n",
+                  top_pairs$domain1[i],
+                  top_pairs$domain2[i],
+                  top_pairs$N[i]))
+    }
+    cat("</ul>\n")
+  } else {
+    cat("<p>No domain pairs with more than 100 co-occurrences found.</p>\n")
+  }
+}
+
+```
+
 
 <br>
 
