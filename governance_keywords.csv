@@ -1,47 +1,32 @@
 ﻿management_domain,keyword,scope
-Spatial Designation,adverse environmental,3 - Habitat
+Spatial Designation,adverse environmental,4 - Governance
 Spatial Designation,classified water,4 - Governance
 Spatial Designation,community forest,4 - Governance
 Spatial Designation,conservation area,4 - Governance
 Spatial Designation,conservation areas,4 - Governance
 Spatial Designation,crown land,4 - Governance
 Spatial Designation,ecological,4 - Governance
-Species Status and Assessment,endangered,4 - Governance
-Spatial Designation,environmental assessment,3 - Habitat
-Spatial Designation,environmental impact,3 - Habitat
-Species Status and Assessment,extinct,4 - Governance
-Species Status and Assessment,extirpated,4 - Governance
-Species Status and Assessment,fish stock,2 - Fish
-Species Status and Assessment,fishes,2 - Fish
+Spatial Designation,environmental assessment,4 - Governance
+Spatial Designation,environmental impact,4 - Governance
 Spatial Designation,forest region,4 - Governance
 Spatial Designation,internal waters,4 - Governance
 Spatial Designation,land use,4 - Governance
 Spatial Designation,management unit,4 - Governance
 Spatial Designation,non tidal,4 - Governance
-Species Status and Assessment,osteichthyes,2 - Fish
 Spatial Designation,park community,4 - Governance
 Spatial Designation,park reserve,4 - Governance
 Spatial Designation,park reserves,4 - Governance
 Spatial Designation,private land,4 - Governance
-Species Status and Assessment,qualified environmental professional,4 - Governance
-Restoration,reclaim,3 - Habitat
-Restoration,reclamation,3 - Habitat
-Restoration,rehabilitate,3 - Habitat
-Restoration,rehabilitated,3 - Habitat
-Restoration,remediation,3 - Habitat
-Restoration,restoration,3 - Habitat
-Restoration,restore,3 - Habitat
-Restoration,restored,3 - Habitat
-Spatial Designation,river,4 - Governance
 Spatial Designation,sensitive area,4 - Governance
 Spatial Designation,sensitive areas,4 - Governance
 Spatial Designation,significant area,4 - Governance
-Species Status and Assessment,species of fish,2 - Fish
 Spatial Designation,territorial sea,4 - Governance
-Species Status and Assessment,threatened species,4 - Governance
 Spatial Designation,tidal ,4 - Governance
-Spatial Designation,waters,4 - Governance
-Spatial Designation,watershed,4 - Governance
-Spatial Designation,watersheds,4 - Governance
 Spatial Designation,wilderness area,4 - Governance
 Spatial Designation,wildlife management area,4 - Governance
+Species Status and Assessment,endangered,4 - Governance
+Species Status and Assessment,extinct,4 - Governance
+Species Status and Assessment,extirpated,4 - Governance
+Species Status and Assessment,osteichthyes,4 - Governance
+Species Status and Assessment,qualified environmental professional,4 - Governance
+Species Status and Assessment,threatened species,4 - Governance
