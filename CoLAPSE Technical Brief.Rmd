@@ -485,42 +485,38 @@ if (!file.exists(db_path)) {
 } else {
   conn <- dbConnect(SQLite(), dbname = db_path)
   
-  # Step 1: Get all Management Domain labels
+  # ✅ Step 1: Get Management Domain-labeled paragraphs directly from label_value
   domain_labels <- data.table(dbGetQuery(conn, "
     SELECT paragraph_id, label_value AS management_domain
     FROM paragraph_label_table
     WHERE label_type = 'Management Domain' AND label_value IS NOT NULL
   "))
   
-  # Step 2: Load paragraph metadata
+  # 📄 Step 2: Load paragraph metadata
   paragraph_meta <- data.table(dbGetQuery(conn, "
     SELECT paragraph_id, Section, legislation_id
     FROM LegislationParagraphs
+    WHERE Section IS NOT NULL
   "))
   
   dbDisconnect(conn)
   
-  # Step 3: Merge labels with metadata
-  merged <- merge(domain_labels, paragraph_meta, by = "paragraph_id", all.x = FALSE)
-  merged[, management_domain := trimws(management_domain)]
-  merged <- merged[management_domain != ""]
+  # 🔗 Step 3: Merge with metadata
+  merged <- merge(domain_labels, paragraph_meta, by = "paragraph_id", all.x = TRUE)
   
-  # Step 4: Create Section–legislation key
-  merged[, section_key := paste(legislation_id, Section, sep = "_")]
-  
-  # Step 5: Tally per domain
+  # 📊 Step 4: Tally by management_domain
   domain_tally <- merged[, .(
     clauses = uniqueN(paragraph_id),
-    sections = uniqueN(section_key),
+    sections = uniqueN(paste(legislation_id, Section, sep = "_")),
     statutes = uniqueN(legislation_id)
   ), by = management_domain][order(management_domain)]
   
-  # Step 6: Global statute count (acts with at least one Management Domain label)
-  total_statutes <- uniqueN(merged$legislation_id)
+  # 📦 Totals
   total_clauses <- sum(domain_tally$clauses)
   total_sections <- sum(domain_tally$sections)
+  total_statutes <- uniqueN(merged$legislation_id)
   
-  # Step 7: Output
+  # 🖥️ Output
   if (nrow(domain_tally) > 0) {
     cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
     for (i in seq_len(nrow(domain_tally))) {

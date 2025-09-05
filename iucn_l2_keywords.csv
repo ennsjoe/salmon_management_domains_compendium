@@ -31,6 +31,7 @@
 2.4 Marine & Freshwater Aquaculture,net pen
 2.4 Marine & Freshwater Aquaculture,nuisance fish
 2.4 Marine & Freshwater Aquaculture,rearing pond
+2.4 Marine & Freshwater Aquaculture,aquatic plants
 3.1 Oil & Gas Exploration & Extraction,energy resource activity
 "4.1 Roads, Trails & Railroads",access roads
 "4.1 Roads, Trails & Railroads",bridge
@@ -69,7 +70,6 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",caught fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",chemical attractant
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",commercial fisheries
-"5.4 Fishing, Harvesting & Controlling Aquatic Species",conservation licence
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",conservation stamp
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",conservation surcharge
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",conservation surcharges
@@ -116,7 +116,6 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",live fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",lure
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",management of fisheries
-"5.4 Fishing, Harvesting & Controlling Aquatic Species",may fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",mesh size
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",not angle
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",parts of fish
@@ -137,6 +136,7 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",sustainability of fisheries
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",trawl
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",trolling
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",harvest agreement
 6.3 Other Human Disturbances,research activities
 6.3 Other Human Disturbances,research activity
 7.2 Dams & Water Management / Use,aquatic ecosystem
@@ -254,6 +254,10 @@
 9.1 Water-Borne & Other Effluent Pollution ,wastes
 9.1 Water-Borne & Other Effluent Pollution ,wastewater
 9.1 Water-Borne & Other Effluent Pollution ,water quality
+9.1 Water-Borne & Other Effluent Pollution ,bioaccumulation
+9.1 Water-Borne & Other Effluent Pollution ,concentration of a substance
 9.2 Garbage & Solid Waste,biosolids
 9.2 Garbage & Solid Waste,compost
 9.2 Garbage & Solid Waste,hazardous waste
+7.2 Dams & Water Management / Use,water system
+7.2 Dams & Water Management / Use,fresh water

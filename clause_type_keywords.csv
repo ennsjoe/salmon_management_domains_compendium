@@ -15,6 +15,7 @@ boundary,Designation
 class,Designation
 classes,Designation
 designate,Designation
+designated,Designation
 designation,Designation
 district,Designation
 establish,Designation
@@ -24,11 +25,14 @@ lands,Designation
 prescribe,Designation
 prescribed,Designation
 property,Designation
+deemed,Designation
+designating,Designation
 instruction,Instruction
 must,Instruction
 obligation,Instruction
 obligations,Instruction
 shall,Instruction
+in the case of,Instruction
 amended,Interpretation & Purpose
 definition,Interpretation & Purpose
 definitions,Interpretation & Purpose
@@ -51,11 +55,13 @@ permit,"Licence, Permitting, & Exemptions"
 permits,"Licence, Permitting, & Exemptions"
 permitted,"Licence, Permitting, & Exemptions"
 permitting,"Licence, Permitting, & Exemptions"
+permission,"Licence, Permitting, & Exemptions"
 quota,"Licence, Permitting, & Exemptions"
 quotas,"Licence, Permitting, & Exemptions"
 tag,"Licence, Permitting, & Exemptions"
 unless,"Licence, Permitting, & Exemptions"
 surcharge,"Licence, Permitting, & Exemptions"
+covenant,"Licence, Permitting, & Exemptions"
 limit,"Prohibition, Restriction, or Limitation"
 limitation,"Prohibition, Restriction, or Limitation"
 limitations,"Prohibition, Restriction, or Limitation"

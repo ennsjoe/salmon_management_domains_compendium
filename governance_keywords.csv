@@ -24,6 +24,7 @@ Spatial Designation,park reserve,4 - Governance
 Spatial Designation,park reserves,4 - Governance
 Spatial Designation,private land,4 - Governance
 Species Status and Assessment,qualified environmental professional,4 - Governance
+Species Status and Assessment,aquatic animal,4 - Governance
 Spatial Designation,sensitive area,4 - Governance
 Spatial Designation,sensitive areas,4 - Governance
 Spatial Designation,significant area,4 - Governance
@@ -33,4 +34,16 @@ Spatial Designation,tidal ,4 - Governance
 Spatial Designation,wilderness area,4 - Governance
 Spatial Designation,wildlife management area,4 - Governance
 Spatial Designation,wildlife habitat,4 - Governance
+Species Status and Assessment,wildlife species,4 - Governance
 Spatial Designation,water district,4 - Governance
+Governance Administration,water agency,4 - Governance
+Governance Administration,water agencies,4 - Governance
+Governance Administration,conservation officer,4 - Governance
+Governance Administration,conservation officers,4 - Governance
+Governance Administration,fisheries officer,4 - Governance
+Governance Administration,fisheries officers,4 - Governance
+Spatial Designation,natural environment,4 - Governance
+Spatial Designation,environmental quality,4 - Governance
+Governance Administration,natural resource officers,4 - Governance
+Governance Administration,natural resource officer,4 - Governance
+Spatial Designation,critical habitat,4 - Governance
