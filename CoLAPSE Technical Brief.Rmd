@@ -58,8 +58,8 @@ sankey_data <- merge(agencies, legislation[, .(act_name, jurisdiction)], by = "a
 
 # 🎨 Define color palette
 jurisdiction_colors <- list(
-  Federal = "#1f77b4",     # Blue
-  Provincial = "#ff7f0e"   # Orange
+  Federal = "#996666",     # Red
+  Provincial = "#668899"  # Blue
 )
 
 # 🔁 Function to build Sankey for a given jurisdiction
@@ -385,7 +385,7 @@ Management domains can overlap within sections and clauses. For example the prov
 
 ## Legislative Factors (Clause Types)
 
-Parsing and assessing clauses by keyword also allows for an assessment of the nature of the clause. Similar the Management Domain assignment, we created a Clause Type keyword list to assess the nature or purposes of the clauses. Using language patterns within the legislation, we grouped Clause Type by:
+The process of parsing legislation by clause and section, then matching categories by keywords also allows for other possible categorizations. Similar to management domains and IUCN threats, the nature of the clauses was also matched in terms of the “clause type.” Clauses, in general, fit into groupings by their context and the nature of their intent. For this exercise, the categories and keywords were developed solely by the researchers through a subjective process; however, the keywords are listed in Appendix XXX allowing for the work to be transparent and repeatable.
 
 ```{r clause-type-list, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -412,18 +412,21 @@ if (!file.exists(db_path)) {
   # Disconnect from the database
   dbDisconnect(conn)
   
-  # Output as unordered HTML list
+  # Output as indented unordered HTML list
   if (length(clause_values) > 0) {
-    cat("<div style='margin-top: 20px;'>")
-    cat("<h4>Clause Type Categories:</h4>")
-    cat("<ul style='padding-left: 20px;'>")
-    cat(paste0("<li>", clause_values, "</li>", collapse = "\n"))
-    cat("</ul>")
-    cat("</div>")
+    cat("<div style='margin-left: 30px; padding-left: 10px;'>\n")
+    cat("  <h4>Clause Type Categories:</h4>\n")
+    cat("  <ul>\n")
+    for (val in clause_values) {
+      cat(paste0("    <li>", val, "</li>\n"))
+    }
+    cat("  </ul>\n")
+    cat("</div>\n")
   } else {
-    cat("<p>No Clause Type values found in the database.</p>")
+    cat("<p>No Clause Type values found in the database.</p>\n")
   }
 }
+
 
 ```
 
@@ -482,38 +485,42 @@ if (!file.exists(db_path)) {
 } else {
   conn <- dbConnect(SQLite(), dbname = db_path)
   
-  # ✅ Step 1: Get Management Domain-labeled paragraphs directly from label_value
+  # Step 1: Get all Management Domain labels
   domain_labels <- data.table(dbGetQuery(conn, "
     SELECT paragraph_id, label_value AS management_domain
     FROM paragraph_label_table
     WHERE label_type = 'Management Domain' AND label_value IS NOT NULL
   "))
   
-  # 📄 Step 2: Load paragraph metadata
+  # Step 2: Load paragraph metadata
   paragraph_meta <- data.table(dbGetQuery(conn, "
     SELECT paragraph_id, Section, legislation_id
     FROM LegislationParagraphs
-    WHERE Section IS NOT NULL
   "))
   
   dbDisconnect(conn)
   
-  # 🔗 Step 3: Merge with metadata
-  merged <- merge(domain_labels, paragraph_meta, by = "paragraph_id", all.x = TRUE)
+  # Step 3: Merge labels with metadata
+  merged <- merge(domain_labels, paragraph_meta, by = "paragraph_id", all.x = FALSE)
+  merged[, management_domain := trimws(management_domain)]
+  merged <- merged[management_domain != ""]
   
-  # 📊 Step 4: Tally by management_domain
+  # Step 4: Create Section–legislation key
+  merged[, section_key := paste(legislation_id, Section, sep = "_")]
+  
+  # Step 5: Tally per domain
   domain_tally <- merged[, .(
     clauses = uniqueN(paragraph_id),
-    sections = uniqueN(paste(legislation_id, Section, sep = "_")),
+    sections = uniqueN(section_key),
     statutes = uniqueN(legislation_id)
   ), by = management_domain][order(management_domain)]
   
-  # 📦 Totals
+  # Step 6: Global statute count (acts with at least one Management Domain label)
+  total_statutes <- uniqueN(merged$legislation_id)
   total_clauses <- sum(domain_tally$clauses)
   total_sections <- sum(domain_tally$sections)
-  total_statutes <- uniqueN(merged$legislation_id)
   
-  # 🖥️ Output
+  # Step 7: Output
   if (nrow(domain_tally) > 0) {
     cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
     for (i in seq_len(nrow(domain_tally))) {
@@ -1028,22 +1035,21 @@ if (!file.exists(db_path)) {
 } else {
   conn <- dbConnect(SQLite(), dbname = db_path)
   
-  # ✅ Step 1: Get paragraph_ids with Management Domain assigned
-  domain_paragraphs <- data.table(dbGetQuery(conn, "
-    SELECT DISTINCT paragraph_id
+  # ✅ Step 1: Get all labels for paragraphs
+  label_data <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, label_type, label_value
     FROM paragraph_label_table
-    WHERE label_type = 'Management Domain' AND label_value IS NOT NULL
+    WHERE label_value IS NOT NULL
   "))
   
-  # ✅ Step 2: Get Clause Type-labeled paragraphs
-  clause_labels <- data.table(dbGetQuery(conn, "
-    SELECT paragraph_id, label_value AS clause_type
-    FROM paragraph_label_table
-    WHERE label_type = 'Clause Type' AND label_value IS NOT NULL
-  "))
+  # ✅ Step 2: Identify paragraph_ids that have a Management Domain label
+  domain_paragraphs <- unique(label_data[label_type == 'Management Domain', paragraph_id])
   
-  # 🔍 Step 3: Filter clause labels to only those with a Management Domain
-  clause_labels <- clause_labels[paragraph_id %in% domain_paragraphs$paragraph_id]
+  # ✅ Step 3: Filter Clause Type labels to only those paragraph_ids
+  clause_labels <- label_data[
+    label_type == 'Clause Type' & paragraph_id %in% domain_paragraphs,
+    .(paragraph_id, clause_type = label_value)
+  ]
   
   # 📄 Step 4: Load paragraph metadata
   paragraph_meta <- data.table(dbGetQuery(conn, "
@@ -1083,9 +1089,10 @@ if (!file.exists(db_path)) {
                 total_statutes, total_sections, total_clauses))
     cat("</ul>\n")
   } else {
-    cat("<p>No Clause Type labels found with Management Domain assigned.</p>\n")
+    cat("<p>No Clause Type labels found in paragraphs with Management Domain labels.</p>\n")
   }
 }
+
 ```
 
 <br>
@@ -1290,7 +1297,7 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_c
 
 ## Domain Intersectionality
 
-Show a graphic of domain intersectionality
+Show a graphic of domain co-occurrence
 
 ```{r management-domain-upset-clean, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=9}
 library(DBI)
@@ -1424,6 +1431,7 @@ ggplot(heatmap_data, aes(x = domain_x, y = domain_y, fill = N)) +
 
 <br>
 
+
 ```{r top-domain-pairs-display, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
 library(RSQLite)
@@ -1456,38 +1464,44 @@ if (!file.exists(db_path)) {
   merged <- merge(domain_labels, paragraph_meta, by = "paragraph_id", all.x = TRUE)
   grouped <- merged[, .(domains = unique(domain)), by = .(Section, legislation_id)]
   
-  # Generate domain pairs safely and consistently (A < B)
+  # Generate domain pairs
   pairwise <- grouped[, {
     if (length(domains) >= 2) {
-      combs <- combn(sort(domains), 2, simplify = FALSE)
-      data.table(domain1 = sapply(combs, `[`, 1),
-                 domain2 = sapply(combs, `[`, 2))
+      combs <- combn(domains, 2, simplify = FALSE)
+      # Canonicalize each pair: sort alphabetically
+      data.table(
+        domain1 = sapply(combs, function(x) sort(x)[1]),
+        domain2 = sapply(combs, function(x) sort(x)[2])
+      )
     } else {
-      data.table(domain1 = character(0), domain2 = character(0))
+      NULL
     }
   }, by = .(Section, legislation_id)]
   
   # Count unique co-occurrences
   pair_counts <- pairwise[, .N, by = .(domain1, domain2)]
+  
+  # Filter and sort
   top_pairs <- pair_counts[N > 75][order(-N)]
   
   # Display formatted output
   if (nrow(top_pairs) > 0) {
-    cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
+    cat("<div style='margin-left: 30px; padding-left: 10px;'>\n")
+    cat("  <h4>Top Domain Co-occurrences:</h4>\n")
+    cat("  <ul style='list-style-type: none; padding-left: 0;'>\n")
     for (i in seq_len(nrow(top_pairs))) {
-      cat(sprintf("<li><strong>%s</strong> | <strong>%s</strong> – %d sections</li>\n",
+      cat(sprintf("    <li><strong>%s</strong> → <strong>%s</strong> – %d sections</li>\n",
                   top_pairs$domain1[i],
                   top_pairs$domain2[i],
                   top_pairs$N[i]))
     }
-    cat("</ul>\n")
+    cat("  </ul>\n")
+    cat("</div>\n")
   } else {
-    cat("<p>No domain pairs with more than 100 co-occurrences found.</p>\n")
+    cat("<p>No domain pairs with more than 75 co-occurrences found.</p>\n")
   }
 }
-
 ```
-
 
 <br>
 
