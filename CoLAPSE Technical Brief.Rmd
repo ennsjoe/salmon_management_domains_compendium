@@ -1,5 +1,5 @@
 ---
-title: "Compendium of Legislation Applicable to Pacific Salmon and Ecosystems (CoLAPSE)"
+title: "Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE)"
 author: "Joe Enns, Cory Lagasse"
 date: "`r Sys.Date()`"
 output:
@@ -24,6 +24,26 @@ Resource conservation and stewardship in Canada is governed through a decentrali
 While legislation and programs may often operate on a sector-by-sector and individual resource basis, integrated stewardship relies on scale-appropriate planning and decision making (Ray et al 2021). The need for collaborative, transparent decision-making in salmon management is recognized throughout policies, plans, and initiatives, such as the Pacific Salmon Strategy Initiative and the Wild Salmon Policy. Successful conservation and rebuilding of Pacific salmon populations therefore requires coordination of activities across discrete administrative responsibilities and regulatory frameworks. However, such coordination requires adequate organizational capacity and systems for effective implementation to ensure that regulatory controls and mitigation activities address underlying threats and factors that limit salmon habitat capacity and reduce population productivity.
 
 <br>
+
+## Purpose and Objectives
+
+This report outlines a framework and process to relate human activities that threaten Pacific salmon stocks, biology, and ecology to their regulatory statutes. The overall goal of this effort is to better understand the legislative context that governs Pacific salmon in British Columbia related to human activities by administrative concern in order to support conservation planning across jurisdictions. To achieve this, the more specific objectives are to:
+
+<div style="margin-left: 30px; padding-left: 10px">
+<ol>
+<li>create a process to categorize specific legislation by anthropogenic threats to Pacific salmon;</li>
+<li>assess legislative factors by threat categorization; and</li>
+<li>assess threats in a current salmon management context.</li>
+</ol>
+</div>
+
+<br>
+
+# METHODS
+
+## Legislation by Anthrogogenic Threats to Salmon
+
+Legislation governs human activity, which in turn impacts Pacific salmon population and habitat. Federal and provincial acts and regulations in British Columbia might be designed to address one broad category of human activity; however, this activity can cover many aspects of salmon management. For example, the provincial Forest and Range Practices Act is specific to forestry practices and planning, along with cattle ranging practices, but in terms of salmon threats, these activities impact many aspects including stream hydrology, water temperature, effluent, riparian habitat destruction, watercourse changes from road infrastructure, and the spread of invasive species. To better categorize legislation aligned with salmon threats and create a “buffer” between biological management and the regulatory context, this study defines discrete areas of administrative responsibility for Pacific salmon as “management domains.”
 
 ## Agencies and Jurisdictions
 
@@ -104,28 +124,6 @@ build_sankey(sankey_data, "Provincial", jurisdiction_colors$Provincial)
 
 ```
 
-
-<br>
-
-## Purpose and Objectives
-
-This report outlines a framework and process to relate human activities that threaten Pacific salmon stocks, biology, and ecology to their regulatory statutes. The overall goal of this effort is to better understand the legislative context that governs Pacific salmon in British Columbia related to human activities by administrative concern in order to support conservation planning across jurisdictions. To achieve this, the more specific objectives are to:
-
-<div style="margin-left: 30px; padding-left: 10px">
-<ol>
-<li>create a process to categorize specific legislation by anthropogenic threats to Pacific salmon;</li>
-<li>assess legislative factors by threat categorization; and</li>
-<li>assess threats in a current salmon management context.</li>
-</ol>
-</div>
-
-<br>
-
-# METHODS
-
-## Legislation by Anthrogogenic Threats to Salmon
-
-Legislation governs human activity, which in turn impacts Pacific salmon population and habitat. Federal and provincial acts and regulations in British Columbia might be designed to address one broad category of human activity; however, this activity can cover many aspects of salmon management. For example, the provincial Forest and Range Practices Act is specific to forestry practices and planning, along with cattle ranging practices, but in terms of salmon threats, these activities impact many aspects including stream hydrology, water temperature, effluent, riparian habitat destruction, watercourse changes from road infrastructure, and the spread of invasive species. To better categorize legislation aligned with salmon threats and create a “buffer” between biological management and the regulatory context, this study defines discrete areas of administrative responsibility for Pacific salmon as “management domains.”
 
 <br>
 
@@ -1611,6 +1609,8 @@ Salafsky, N., Salzer, D., Stattersfield, A.J., Hilton-Taylor, C., Nuegarten, R.,
 
 Swerdfager, Trevor, and Andrea Olive. “Laws Matter: A Foundational Approach to Biodiversity Conservation in Canada.” Edited by David Lesbarreres. FACETS 8 (January 1, 2023): 1–13.
 
+Ulaski, Marta E., Jonathan W. Moore, Deborah Carlson, et al. 2025. “Barriers and Opportunities for the Effective Management of Cumulative Effects in Salmon Ecosystems in British Columbia, Canada.” FACETS 10 (January): 1–25. https://doi.org/10.1139/facets-2024-0348.
+
 Westwood AR, Otto SP, Mooers A, Darimont C, Hodges KE, Johnson C, et al. 2019. Protecting biodiversity in British Columbia: recommendations for developing species at risk legislation. FACETS, 4(1): 136–160. DOI: 10.1139/facets-2018-0042
 
 :::
@@ -1712,7 +1712,7 @@ if (!file.exists(db_path)) {
 
 <hr>
 
-## Appendix II - CoLAPSE Viewer
+## Appendix II - LAPSE Viewer
 The following interactive table contains the full compendium of legislation by Management Domain and IUCN Threat category. Search topics by domain and salmon threats to view applicable legislation.
 
 ```{r domain-filter-list, echo=FALSE}
