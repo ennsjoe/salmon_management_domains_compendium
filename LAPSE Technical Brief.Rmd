@@ -1856,7 +1856,7 @@ section_data <- merge(
 section_data <- merge(section_data, label_data, by = "paragraph_id", all.x = TRUE)
 
 # 🧠 Step 6: Create combined columns
-section_data[, Act := paste(jurisdiction, act_name, sep = " | ")]
+section_data[, Act := paste(act_name, jurisdiction, sep = " | ")]
 section_data[, Legislation := paste(legislation_type, legislation_name, sep = " | ")]
 section_data[, HeadingSection := paste(Heading, paste0("Section ", Section), sep = " | ")]
 
@@ -1890,6 +1890,9 @@ section_summary[, Paragraphs := paste(
   sep = ""
 )]
 
+# ✅ Sort section_summary by Act (which includes act_name)
+section_summary <- section_summary[order(Act)]
+
 # 🖥️ Step 9: Render reactable inside a responsive container
 htmltools::div(
   style = "width: 100%; overflow-x: auto;",
@@ -1918,8 +1921,6 @@ htmltools::div(
     )
   )
 )
-
-
 ```
              
 <hr>
