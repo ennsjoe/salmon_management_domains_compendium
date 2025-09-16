@@ -1627,98 +1627,7 @@ Westwood AR, Otto SP, Mooers A, Darimont C, Hodges KE, Johnson C, et al. 2019. P
 
 <hr>
 
-## Appendix I - Legislation Accumulation and Review
-
-```{r legislation-count-by-type, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-# 📦 Load required libraries
-library(DBI)
-library(RSQLite)
-library(here)
-library(dplyr)
-
-# 📁 Define path to the SQLite database
-db_path <- file.path(here("output"), "legislation.db")
-
-# 🔍 Check if database file exists
-if (!file.exists(db_path)) {
-  cat("<p style='color:red;'>❌ Database file not found at:", db_path, "</p>")
-} else {
-  
-  # 🔌 Connect to the database
-  conn <- dbConnect(SQLite(), dbname = db_path)
-  
-  # 📋 Check if required table exists
-  available_tables <- dbListTables(conn)
-  
-  if (!"LegislationMetadata" %in% available_tables) {
-    cat("<p style='color:red;'>❌ Table 'LegislationMetadata' not found. Available tables: ",
-        paste(available_tables, collapse = ", "), "</p>")
-    dbDisconnect(conn)
-  } else {
-    
-    # 📊 Query Acts and Regulations from metadata
-    metadata <- dbGetQuery(conn, "
-      SELECT jurisdiction, legislation_name, legislation_type
-      FROM LegislationMetadata
-      WHERE legislation_type IN ('Act', 'Regulations')
-    ")
-    
-    # 🔌 Disconnect from the database
-    dbDisconnect(conn)
-    
-    # ⚠️ Handle empty result
-    if (nrow(metadata) == 0) {
-      cat("<p style='color:orange;'>⚠️ No data found for Acts or Regulations</p>")
-    } else {
-      
-      # 📈 Count Acts by jurisdiction
-      acts_count <- metadata %>%
-        filter(legislation_type == "Act") %>%
-        group_by(jurisdiction) %>%
-        summarise(act_count = n_distinct(legislation_name), .groups = "drop") %>%
-        arrange(desc(act_count))
-      
-      # 📈 Count Regulations by jurisdiction
-      regs_count <- metadata %>%
-        filter(legislation_type == "Regulations") %>%
-        group_by(jurisdiction) %>%
-        summarise(reg_count = n_distinct(legislation_name), .groups = "drop") %>%
-        arrange(desc(reg_count))
-      
-      # 📝 Display Acts
-      cat("<h3>Acts per Jurisdiction</h3>\n<ul>\n")
-      if (nrow(acts_count) > 0) {
-        for (i in seq_len(nrow(acts_count))) {
-          cat(sprintf("<li><strong>%s:</strong> %d Acts</li>\n", 
-                      acts_count$jurisdiction[i], 
-                      acts_count$act_count[i]))
-        }
-      } else {
-        cat("<li>No Acts found in the database.</li>\n")
-      }
-      cat("</ul>\n\n")
-      
-      # 📝 Display Regulations
-      cat("<h3>Regulations per Jurisdiction</h3>\n<ul>\n")
-      if (nrow(regs_count) > 0) {
-        for (i in seq_len(nrow(regs_count))) {
-          cat(sprintf("<li><strong>%s:</strong> %d Regulations</li>\n", 
-                      regs_count$jurisdiction[i], 
-                      regs_count$reg_count[i]))
-        }
-      } else {
-        cat("<li>No Regulations found in the database.</li>\n")
-      }
-      cat("</ul>\n")
-    }
-  }
-}
-
-```
-
-<hr>
-
-## Appendix II - LAPSE Viewer
+## Appendix I - LAPSE Viewer
 The following interactive table contains the full compendium of legislation by Management Domain and IUCN Threat category. Search topics by domain and salmon threats to view applicable legislation.
 
 ```{r domain-filter-list, echo=FALSE}
@@ -1935,7 +1844,7 @@ htmltools::div(
              
 <hr>
 
-## Appendix III - Management Domain Keywords: 
+## Appendix II - Management Domain Keywords: 
 
 ```{r keyword-frequency-by-domain-corrected, echo=FALSE, message=FALSE, warning=FALSE}
 # 📦 Load required libraries
@@ -2037,7 +1946,7 @@ reactable(
 ```
 
 
-## Appendix IV - Case Study: Extreme Threat Ranking - IUCN 10.1 Geological Events
+## Appendix IV - Case Study: IUCN 10.1 Geological Events
 
 One IUCN threat was assessed as "Extreme" through COSEWIC Recovery Potential Assessment processes, which was the "10.1 Geological Events" threat (DFO 2020; DFO 2022). This threat was assigned to one sockeye and three Chinook conservation units, all in the Fraser Interior area related to the "ongoing effects from Big Bar landslide" in 2018 (DFO 2020; DFO 2022):
 
@@ -2048,7 +1957,44 @@ One IUCN threat was assessed as "Extreme" through COSEWIC Recovery Potential Ass
 <li>Sockeye: SEL-06-14, TAKLA/TREMBLEUR-EARLY STUART TIMING</li>
 </ul>
 
-Using the keywords as shown in Appendix III, the LAPSE process identified the following number of references to that specific threat in the legislation: 
+"Geological events" is not a large category to be assigned to appropriate legislation (Figure X). Aside from landscape-scale changes due to actions like forestry or mining, much of the nature of this category might not be viewed human-caused or managed. Subsequently, this threat has a small proportion of keywords that match the relevant legislation:
+
+```{r geological-events-keywords-tags, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(DBI)
+library(RSQLite)
+library(here)
+library(data.table)
+
+# 📁 Connect to the database
+db_path <- file.path(here("output"), "legislation.db")
+if (!file.exists(db_path)) {
+  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
+} else {
+  conn <- dbConnect(SQLite(), dbname = db_path)
+  
+  # 🔍 Extract keywords for 10.1 Geological Events
+  geo_keywords <- data.table(dbGetQuery(conn, "
+    SELECT keyword
+    FROM iucn_l2_keywords
+    WHERE iucn_l2 = '10.1 Geological Events'
+  "))
+  
+  dbDisconnect(conn)
+  
+  # 🎨 Render as styled tags
+  if (nrow(geo_keywords) > 0) {
+    cat("<div style='display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;'>\n")
+    for (kw in geo_keywords$keyword) {
+      cat(sprintf("<span style='background-color: #f0f0f0; border-radius: 12px; padding: 6px 12px; font-size: 14px; font-family: sans-serif; border: 1px solid #ccc;'>%s</span>\n", kw))
+    }
+    cat("</div>\n")
+  } else {
+    cat("<p>No keywords found for IUCN 10.1 Geological Events.</p>\n")
+  }
+}
+```
+
+<br>
 
 ```{r iucn-geological-events-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -2108,8 +2054,6 @@ if (!file.exists(db_path)) {
 ```
 
 <br>
-
-Only provincial legislation was identified as having legislation specific to 10.1 Geological Events (Figure X).
 
 ```{r section-count-by-geological-events, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
 # 📦 Load required libraries
@@ -2194,48 +2138,6 @@ if (!file.exists(db_path)) {
 <p style="text-align: center;">
   <em>Figure X. Description.</em>
 </p>
-
-The clause type breakdown is as follows:
-
-
-Examples?
-
-Chart of clause types for legislation?
-
-```{r geological-events-keywords-tags, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-library(DBI)
-library(RSQLite)
-library(here)
-library(data.table)
-
-# 📁 Connect to the database
-db_path <- file.path(here("output"), "legislation.db")
-if (!file.exists(db_path)) {
-  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
-} else {
-  conn <- dbConnect(SQLite(), dbname = db_path)
-  
-  # 🔍 Extract keywords for 10.1 Geological Events
-  geo_keywords <- data.table(dbGetQuery(conn, "
-    SELECT keyword
-    FROM iucn_l2_keywords
-    WHERE iucn_l2 = '10.1 Geological Events'
-  "))
-  
-  dbDisconnect(conn)
-  
-  # 🎨 Render as styled tags
-  if (nrow(geo_keywords) > 0) {
-    cat("<div style='display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;'>\n")
-    for (kw in geo_keywords$keyword) {
-      cat(sprintf("<span style='background-color: #f0f0f0; border-radius: 12px; padding: 6px 12px; font-size: 14px; font-family: sans-serif; border: 1px solid #ccc;'>%s</span>\n", kw))
-    }
-    cat("</div>\n")
-  } else {
-    cat("<p>No keywords found for IUCN 10.1 Geological Events.</p>\n")
-  }
-}
-```
 
 <br>
 
@@ -2332,10 +2234,58 @@ if (!file.exists(db_path)) {
 }
 ```
 
+<p style="text-align: center;">
+  <em>Figure X. Description.</em>
+</p>
+
 <hr>
 
-## Appendix V - Case Study: Extreme-High Threat Ranking - IUCN 7.2 Dams & Water Management / Use
+## Appendix V - Case Study: IUCN 7.2 Dams & Water Management / Use
 
+One IUCN threat was assessed as "Extreme-High" through COSEWIC Recovery Potential Assessment processes, which was "7.2 Dams & Water Management / Use" (DFO 2020). Water extraction, including groundwater, for irrigation and domestic purposes is listed as the most significant concern (DFO 2020). This threat was assigned to one Chinook conservation unit in the Fraser Interior area: 
+
+<ul>
+<li>Chinook: CK-16, SOUTH THOMPSON-BESSETTE CREEK_SU_1.2</li>
+</ul>
+
+"Dams and Water Management / Use" is one of the largest categories assigned to appropriate legislation (Figure X). Aside from pollution and fisheries, watercourse alterations are recognized as one of the top human activities that require regulation. Subsequently, this threat has a large proportion of keywords that match the relevant legislation:
+
+```{r dams-water-management-keywords-tags, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(DBI)
+library(RSQLite)
+library(here)
+library(data.table)
+
+# 📁 Connect to the database
+db_path <- file.path(here("output"), "legislation.db")
+if (!file.exists(db_path)) {
+  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
+} else {
+  conn <- dbConnect(SQLite(), dbname = db_path)
+  
+  # 🔍 Extract keywords for 7.2 Dams & Water Management / Use
+  dams_keywords <- data.table(dbGetQuery(conn, "
+    SELECT keyword
+    FROM iucn_l2_keywords
+    WHERE iucn_l2 = '7.2 Dams & Water Management / Use'
+  "))
+  
+  dbDisconnect(conn)
+  
+  # 🎨 Render as styled tags
+  if (nrow(dams_keywords) > 0) {
+    cat("<div style='display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;'>\n")
+    for (kw in dams_keywords$keyword) {
+      cat(sprintf("<span style='background-color: #f0f0f0; border-radius: 12px; padding: 6px 12px; font-size: 14px; font-family: sans-serif; border: 1px solid #ccc;'>%s</span>\n", kw))
+    }
+    cat("</div>\n")
+  } else {
+    cat("<p>No keywords found for IUCN 7.2 Dams & Water Management / Use.</p>\n")
+  }
+}
+```
+
+<br>
 
 ```{r iucn-dams-water-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -2474,21 +2424,24 @@ if (!file.exists(db_path)) {
 }
 ```
 
-
-
+<p style="text-align: center;">
+  <em>Figure X. Description.</em>
+</p>
 
 <br>
 
 ## Appendix VI - External Resources
 
+### Canadian Legal Information Institute (CanLII)
 https://www.canlii.org/
 
+### Canadian Federal Legislation
 https://laws-lois.justice.gc.ca/eng/acts/
 
+### British Columbia Provincial Legislation
 https://www.bclaws.gov.bc.ca/civix/content/complete/statreg/?xsl=/templates/browse.xsl
 
-IUCN Direct Threats Classification 4.0
-
+### IUCN Direct Threats Classification 4.0
 https://docs.google.com/spreadsheets/d/1yfm7ua9hQJpjycx6FYQJ6Jy5LA4bP0XP61EW3-sX8ZY/edit?gid=179026760#gid=179026760
 
 <br>
