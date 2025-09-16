@@ -1972,11 +1972,11 @@ if (!file.exists(db_path)) {
 } else {
   conn <- dbConnect(SQLite(), dbname = db_path)
   
-  # 🔍 Extract keywords for 10.1 Geological Events
+  # 🔍 Extract matched keywords from paragraph_label_table
   geo_keywords <- data.table(dbGetQuery(conn, "
-    SELECT keyword
-    FROM iucn_l2_keywords
-    WHERE iucn_l2 = '10.1 Geological Events'
+    SELECT DISTINCT keyword
+    FROM paragraph_label_table
+    WHERE label_type = 'IUCN' AND label_value = '10.1 Geological Events'
   "))
   
   dbDisconnect(conn)
@@ -1989,12 +1989,14 @@ if (!file.exists(db_path)) {
     }
     cat("</div>\n")
   } else {
-    cat("<p>No keywords found for IUCN 10.1 Geological Events.</p>\n")
+    cat("<p>No matched keywords found for IUCN 10.1 Geological Events.</p>\n")
   }
 }
 ```
 
 <br>
+
+The above keywords matched to the following amount of legislation:
 
 ```{r iucn-geological-events-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -2054,6 +2056,8 @@ if (!file.exists(db_path)) {
 ```
 
 <br>
+
+
 
 ```{r section-count-by-geological-events, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
 # 📦 Load required libraries
@@ -2263,11 +2267,11 @@ if (!file.exists(db_path)) {
 } else {
   conn <- dbConnect(SQLite(), dbname = db_path)
   
-  # 🔍 Extract keywords for 7.2 Dams & Water Management / Use
+  # 🔍 Extract matched keywords from paragraph_label_table
   dams_keywords <- data.table(dbGetQuery(conn, "
-    SELECT keyword
-    FROM iucn_l2_keywords
-    WHERE iucn_l2 = '7.2 Dams & Water Management / Use'
+    SELECT DISTINCT keyword
+    FROM paragraph_label_table
+    WHERE label_type = 'IUCN' AND label_value = '7.2 Dams & Water Management / Use'
   "))
   
   dbDisconnect(conn)
@@ -2280,7 +2284,7 @@ if (!file.exists(db_path)) {
     }
     cat("</div>\n")
   } else {
-    cat("<p>No keywords found for IUCN 7.2 Dams & Water Management / Use.</p>\n")
+    cat("<p>No matched keywords found for IUCN 7.2 Dams & Water Management / Use.</p>\n")
   }
 }
 ```
@@ -2344,7 +2348,7 @@ if (!file.exists(db_path)) {
 
 <br>
 
-```{r section-count-by-dams-water-management, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
+```{r section-count-by-dams-water-management, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=12}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
