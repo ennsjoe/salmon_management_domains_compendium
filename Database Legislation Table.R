@@ -24,6 +24,7 @@ library(rvest)
 library(stringi)
 library(stringr)
 library(RSQLite)
+library(beepr)
 
 ## Define the folders dynamically using `here()`
 html_dirs <- here("legislation_html")
@@ -62,9 +63,7 @@ clean_text <- function(text) {
 format_act_name <- function(act_name) {
   act_name <- gsub(r"(\s*\(.*?\))", "", act_name, perl = TRUE)
   act_name <- gsub(r"(\s*
-
 \[.*?\]
-
 )", "", act_name, perl = TRUE)
   act_name <- tolower(act_name)
   act_name <- gsub("(^|\\s)([a-z])", "\\1\\U\\2", act_name, perl = TRUE)
