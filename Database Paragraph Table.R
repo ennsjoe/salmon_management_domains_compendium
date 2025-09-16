@@ -24,6 +24,7 @@ library(rvest)
 library(stringi)
 library(stringr)
 library(RSQLite)
+library(beepr)
 
 ## Define the folders dynamically using `here()`
 html_dirs <- here("legislation_html")
