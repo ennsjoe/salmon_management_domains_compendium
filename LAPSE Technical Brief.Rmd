@@ -46,7 +46,7 @@ This report outlines a framework and process to relate human activities that thr
 
 The plural federal and provincial legal systems govern and uphold the human activities that impact Pacific salmon productivity and habitat capacity (Ulaski et al 2025). Acts and regulations in British Columbia might be designed to address one broad category of human activity; however, this activity can cover many aspects of salmon management. For example, the provincial <em>Forest and Range Practices Act</em> is specific to forestry practices and planning, along with cattle ranging practices, but in terms of salmon threats, these activities impact many aspects including stream hydrology, water temperature, effluent, riparian habitat destruction, watercourse changes from road infrastructure, and the spread of invasive species. Figure 1 shows the fractured, yet interconnected, relationships between statutes and responsible minister and agency (Canada: <a href= "https://laws-lois.justice.gc.ca/eng/tablepublicstatutes/index.html" style="color:#668899">Table of Public Statutes and Responsible Ministers</a>; British Columbia: <a href="https://www.bclaws.gov.bc.ca/civix/content/amr/amr/1662622382/?xsl=/templates/browse.xsl" style="color:#668899">Acts/Ministers' Responsibilities</a>. To better categorize legislation aligned with salmon threats and create a “buffer” between biological management and the regulatory context, this study defines discrete areas of administrative responsibility for Pacific salmon as “management domains.”
 
-```{r sankey-agency-act-jurisdiction-split, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+```{r sankey-legislation-to-agency-by-section, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
 library(RSQLite)
 library(data.table)
@@ -60,10 +60,19 @@ conn <- dbConnect(SQLite(), dbname = db_path)
 # 🗂️ Load tables
 agencies <- as.data.table(dbReadTable(conn, "agencies"))
 legislation <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
+paragraphs <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
 dbDisconnect(conn)
 
-# 🔗 Join to get jurisdiction
-sankey_data <- merge(agencies, legislation[, .(act_name, jurisdiction)], by = "act_name", all.x = TRUE)
+# 🧮 Compute unique section count per legislation_id
+section_counts <- paragraphs[!is.na(Section), .(
+  section_count = uniqueN(Section)
+), by = legislation_id]
+
+# 🔗 Merge with legislation metadata to get act_name and jurisdiction
+section_counts <- merge(section_counts, legislation[, .(legislation_id, act_name, legislation_name, jurisdiction)], by = "legislation_id", all.x = TRUE)
+
+# 🔗 Merge with agencies to get agency-act pairs
+sankey_data <- merge(agencies, section_counts, by = "act_name", all.x = TRUE)
 
 # 🎨 Define color palette
 jurisdiction_colors <- list(
@@ -79,16 +88,17 @@ build_sankey <- function(data, jurisdiction_label, color_map) {
     return(invisible(NULL))
   }
   
-  nodes <- unique(c(data$agency, data$act_name))
+  nodes <- unique(c(data$act_name, data$agency))
   nodes_dt <- data.table(name = nodes)
   
   # Assign group based on jurisdiction
   nodes_dt[, group := jurisdiction_label]
   
-  data[, source := match(agency, nodes) - 1]
-  data[, target := match(act_name, nodes) - 1]
+  # Flip direction: legislation ➝ agency
+  data[, source := match(act_name, nodes) - 1]
+  data[, target := match(agency, nodes) - 1]
   
-  links <- data[, .(source, target, value = .N), by = .(source, target)]
+  links <- data[, .(source, target, value = section_count), by = .(source, target)]
   
   sankeyNetwork(
     Links = links,
@@ -109,18 +119,16 @@ build_sankey <- function(data, jurisdiction_label, color_map) {
 }
 
 # 🧭 Federal Sankey
-cat("<h3>Federal Jurisdiction</h3>")
+cat("<h3>Federal Jurisdiction: Legislation ➝ Agency</h3>")
 build_sankey(sankey_data, "Federal", jurisdiction_colors)
 
 # 🧭 Provincial Sankey
-cat("<h3>Provincial Jurisdiction</h3>")
+cat("<h3>Provincial Jurisdiction: Legislation ➝ Agency</h3>")
 build_sankey(sankey_data, "Provincial", jurisdiction_colors)
-
-
 ```
 
 <p style="text-align: center;">
-  <em>Figure 1. Federal and provincial acts and regulations by the responsible minister.</em>
+  <em>Figure 1. Federal and provincial acts and regulations by the responsible minister (line thickness by section count).</em>
 </p>
 
 <br>
@@ -2194,7 +2202,135 @@ Examples?
 
 Chart of clause types for legislation?
 
+```{r geological-events-keywords-tags, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(DBI)
+library(RSQLite)
+library(here)
+library(data.table)
 
+# 📁 Connect to the database
+db_path <- file.path(here("output"), "legislation.db")
+if (!file.exists(db_path)) {
+  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
+} else {
+  conn <- dbConnect(SQLite(), dbname = db_path)
+  
+  # 🔍 Extract keywords for 10.1 Geological Events
+  geo_keywords <- data.table(dbGetQuery(conn, "
+    SELECT keyword
+    FROM iucn_l2_keywords
+    WHERE iucn_l2 = '10.1 Geological Events'
+  "))
+  
+  dbDisconnect(conn)
+  
+  # 🎨 Render as styled tags
+  if (nrow(geo_keywords) > 0) {
+    cat("<div style='display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;'>\n")
+    for (kw in geo_keywords$keyword) {
+      cat(sprintf("<span style='background-color: #f0f0f0; border-radius: 12px; padding: 6px 12px; font-size: 14px; font-family: sans-serif; border: 1px solid #ccc;'>%s</span>\n", kw))
+    }
+    cat("</div>\n")
+  } else {
+    cat("<p>No keywords found for IUCN 10.1 Geological Events.</p>\n")
+  }
+}
+```
+
+<br>
+
+```{r clause-type-heatmap-geological-events-opacity, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=14, fig.height=8}
+library(DBI)
+library(RSQLite)
+library(here)
+library(data.table)
+library(ggplot2)
+
+# 📁 Connect to the database
+db_path <- file.path(here("output"), "legislation.db")
+if (!file.exists(db_path)) {
+  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
+} else {
+  conn <- dbConnect(SQLite(), dbname = db_path)
+  
+  # 🗂️ Load IUCN-labeled paragraphs for Geological Events
+  geo_paragraphs <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id
+    FROM paragraph_label_table
+    WHERE label_type = 'IUCN' AND label_value = '10.1 Geological Events'
+  "))
+  
+  # 🗂️ Load Clause Type labels
+  clause_labels <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, label_value
+    FROM paragraph_label_table
+    WHERE label_type = 'Clause Type' AND label_value IS NOT NULL
+  "))
+  
+  # 🗂️ Load paragraph metadata
+  paragraph_meta <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, legislation_id, Section
+    FROM LegislationParagraphs
+    WHERE Section IS NOT NULL
+  "))
+  
+  # 🗂️ Load legislation metadata
+  legislation_meta <- data.table(dbGetQuery(conn, "
+    SELECT legislation_id, legislation_name, jurisdiction
+    FROM LegislationMetadata
+  "))
+  
+  dbDisconnect(conn)
+  
+  # 🔗 Filter clause labels to only those linked to Geological Events
+  clause_geo <- merge(clause_labels, geo_paragraphs, by = "paragraph_id")
+  
+  # 🔗 Merge with paragraph and legislation metadata
+  merged <- merge(clause_geo, paragraph_meta, by = "paragraph_id", all.x = TRUE)
+  merged <- merge(merged, legislation_meta, by = "legislation_id", all.x = TRUE)
+  
+  # 📊 Count unique sections per clause type and legislation
+  heatmap_data <- merged[, .(
+    section_count = uniqueN(Section)
+  ), by = .(legislation_name, label_value, jurisdiction)]
+  
+  # 🧮 Order legislation by total section count
+  leg_order <- heatmap_data[, .(total = sum(section_count)), by = legislation_name][order(-total)]
+  heatmap_data[, legislation_name := factor(legislation_name, levels = leg_order$legislation_name)]
+  
+  # 🧮 Order clause types
+  clause_order <- heatmap_data[, .(total = sum(section_count)), by = label_value][order(-total)]
+  heatmap_data[, label_value := factor(label_value, levels = rev(clause_order$label_value))]  # reverse for top-down
+  
+  # 🎨 Define jurisdiction colors
+  jurisdiction_colors <- c(
+    "Federal" = "#996666",
+    "Provincial" = "#668899",
+    "Unknown" = "#999999"
+  )
+  
+  # 📈 Plot heatmap with alpha mapped to section count
+  ggplot(heatmap_data, aes(x = legislation_name, y = label_value)) +
+    geom_tile(aes(fill = jurisdiction, alpha = section_count), color = "white", size = 0.5) +
+    scale_fill_manual(values = jurisdiction_colors) +
+    scale_alpha_continuous(range = c(0.3, 1), guide = "none") +
+    labs(
+      title = "Clause Types Count by Legislation for 10.1 Geological Events",
+      x = "Legislation Name",
+      y = "Clause Type",
+      fill = "Jurisdiction"
+    ) +
+    theme_minimal(base_size = 13) +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+      axis.text.y = element_text(size = 11),
+      plot.title = element_text(size = 16, face = "bold"),
+      legend.position = "bottom",
+      legend.title = element_text(size = 12),
+      legend.text = element_text(size = 11)
+    )
+}
+```
 
 <hr>
 
