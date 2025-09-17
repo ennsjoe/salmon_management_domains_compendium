@@ -10,10 +10,17 @@ output:
     self_contained: true
     fig_caption: true
     code_folding: none
-    css: "style.css"
+    css: "brief_style.css"
     theme: flatly
     highlight: tango
 ---
+
+<div class="sticky-icon">
+  <a href="https://ennsjoe.shinyapps.io/lapse_dashboard/" target="_blank">
+    <img src="dashboard_icon.png" alt="Launch LAPSE Dashboard">
+    <span>LAPSE Dashboard</span>
+  </a>
+</div>
 
 # INTRODUCTION
 

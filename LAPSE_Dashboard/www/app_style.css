@@ -85,26 +85,3 @@ table.dataTable td {
   }
 }
 
-.sticky-icon {
-  position: sticky;
-  top: 20px;
-  margin: 20px 0;
-  padding: 8px 12px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: bold;
-  display: inline-block;
-}
-
-.sticky-icon a {
-  text-decoration: none;
-  color: #2c3e50;
-}
-
-.sticky-icon a:hover {
-  color: #1a252f;
-}
-
-

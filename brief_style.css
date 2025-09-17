@@ -21,10 +21,10 @@
 
 /* === Main Content Container === */
 div.main-container {
-  margin-left: 0;             /* Just enough to clear TOC width + padding */
+  margin-left: 220px; /* Adjusted to clear TOC width */
   margin-right: 40px;
   max-width: none !important;
-  width: calc(100% - 40px);      /* Fill remaining space */
+  width: calc(100% - 260px); /* Fill remaining space */
   padding: 0;
 }
 
@@ -51,9 +51,46 @@ table, pre, code {
   display: block;
 }
 
+/* === Custom Highlighting === */
 .active-domain {
   background-color: #668899 !important;
   color: white !important;
-  border-color: #black !important;
+  border-color: black !important;
 }
 
+/* === Sticky Icon Panel === */
+.sticky-icon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #f9f9f9;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  text-align: center;
+  z-index: 1001;
+  width: 120px;
+}
+
+.sticky-icon img {
+  width: 60px;
+  height: auto;
+  display: block;
+  margin: 0 auto 8px auto;
+}
+
+.sticky-icon span {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.sticky-icon a {
+  text-decoration: none;
+}
+
+.sticky-icon a:hover span {
+  color: #1a252f;
+}
