@@ -1,4 +1,4 @@
-/* Base layout */
+/* === Base Layout === */
 body {
   background-color: #f4f6f9;
   font-family: 'Segoe UI', 'Roboto', sans-serif;
@@ -7,81 +7,163 @@ body {
   padding: 0;
 }
 
-/* Header */
-h1, h2, h3 {
+/* === Header === */
+h1, h2, h3, h4 {
   color: #2c3e50;
   font-weight: 600;
   margin-top: 20px;
+  margin-bottom: 10px;
 }
 
-/* Sidebar panel */
-.sidebar {
+/* === Domain Panel === */
+.domain-panel {
   background-color: #ffffff;
   padding: 20px;
   border-right: 1px solid #ddd;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+  height: 100vh;
+  overflow-y: auto;
 }
 
-/* Inputs */
-select, input[type="text"], input[type="number"] {
+.domain-button {
+  display: block;
   width: 100%;
-  padding: 8px 12px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
+  padding: 10px 16px;
+  background-color: #e0e0e0;
+  color: #2c3e50;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-align: left;
+  transition: background-color 0.3s ease;
 }
 
-/* Buttons */
-button, .btn {
+.domain-button:hover {
+  background-color: #d0d0d0;
+  cursor: pointer;
+}
+
+/* === Reset Button === */
+#reset_filters {
+  margin-bottom: 16px;
   background-color: #2c3e50;
   color: white;
   border: none;
   padding: 10px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
+  border-radius: 6px;
+  font-weight: 600;
+  width: 100%;
   transition: background-color 0.3s ease;
 }
 
-button:hover, .btn:hover {
+#reset_filters:hover {
   background-color: #1a252f;
+  cursor: pointer;
 }
 
-/* DataTable styling */
-table.dataTable {
-  background-color: #fff;
-  border-collapse: collapse;
-  width: 100%;
-  margin-top: 20px;
-  font-size: 14px;
-}
-
-table.dataTable th {
-  background-color: #2c3e50;
-  color: white;
-  padding: 10px;
-  text-align: left;
-}
-
-table.dataTable td {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-}
-
-/* Main panel */
+/* === Main Panel === */
 .main-panel {
   padding: 20px;
+  background-color: #ffffff;
+  border-left: 1px solid #ddd;
+  min-height: 100vh;
 }
 
-/* Responsive tweaks */
+/* === Act Buttons === */
+.act-button {
+  display: block;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px 16px;
+  background-color: #f0f0f0;
+  color: #2c3e50;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-weight: 500;
+  text-align: left;
+  transition: background-color 0.3s ease;
+}
+
+.act-button:hover {
+  background-color: #e0e0e0;
+  cursor: pointer;
+}
+
+/* === Legislation Buttons === */
+.legislation-button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px 16px;
+  background-color: #ffffff;
+  color: #2c3e50;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-weight: 500;
+  text-align: left;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease;
+}
+
+.legislation-button:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+/* === Section Buttons === */
+.section-button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px 16px;
+  background-color: #fefefe;
+  color: #2c3e50;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-weight: 500;
+  text-align: left;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease;
+}
+
+.section-button:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+/* === Keyword Highlighting === */
+.highlight {
+  background-color: #fff3b0;
+  font-weight: bold;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+/* === Modal Content === */
+.modal-body {
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* === Responsive Tweaks === */
 @media (max-width: 768px) {
-  .sidebar, .main-panel {
+  .domain-panel, .main-panel {
     padding: 10px;
   }
 
   h1 {
     font-size: 24px;
   }
-}
 
+  .domain-button,
+  .act-button,
+  .legislation-button,
+  .section-button,
+  #reset_filters {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+}
