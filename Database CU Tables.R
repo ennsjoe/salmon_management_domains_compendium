@@ -10,6 +10,7 @@
 library(here)
 library(data.table)
 library(RSQLite)
+library(beepr)
 
 ## Define file paths ----
 agencies_path <- here("agencies.csv")
