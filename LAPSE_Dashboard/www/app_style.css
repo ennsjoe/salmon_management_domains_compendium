@@ -44,8 +44,7 @@ h1, h2, h3, h4 {
 }
 
 /* === Reset Button === */
-#reset_filters {
-  margin-bottom: 16px;
+#reset_domain {
   background-color: #2c3e50;
   color: white;
   border: none;
@@ -53,10 +52,11 @@ h1, h2, h3, h4 {
   border-radius: 6px;
   font-weight: 600;
   width: 100%;
+  margin-bottom: 16px;
   transition: background-color 0.3s ease;
 }
 
-#reset_filters:hover {
+#reset_domain:hover {
   background-color: #1a252f;
   cursor: pointer;
 }
@@ -66,7 +66,23 @@ h1, h2, h3, h4 {
   padding: 20px;
   background-color: #ffffff;
   border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
   min-height: 100vh;
+}
+
+/* === Graph Panel === */
+.graph-panel {
+  background-color: #ffffff;
+  padding: 20px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.graph-panel h4 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #2c3e50;
 }
 
 /* === Act Buttons === */
@@ -150,7 +166,9 @@ h1, h2, h3, h4 {
 
 /* === Responsive Tweaks === */
 @media (max-width: 768px) {
-  .domain-panel, .main-panel {
+  .domain-panel,
+  .main-panel,
+  .graph-panel {
     padding: 10px;
   }
 
@@ -162,8 +180,12 @@ h1, h2, h3, h4 {
   .act-button,
   .legislation-button,
   .section-button,
-  #reset_filters {
+  #reset_domain {
     font-size: 13px;
     padding: 8px 12px;
+  }
+
+  .graph-panel h4 {
+    font-size: 14px;
   }
 }
