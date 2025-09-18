@@ -2152,12 +2152,13 @@ if (!file.exists(db_path)) {
 
 <br>
 
-```{r clause-type-heatmap-geological-events-opacity, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=14, fig.height=8}
+```{r clause-type-pie-geological-events, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, fig.height=8}
 library(DBI)
 library(RSQLite)
 library(here)
 library(data.table)
 library(ggplot2)
+library(wesanderson)
 
 # 📁 Connect to the database
 db_path <- file.path(here("output"), "legislation.db")
@@ -2166,82 +2167,46 @@ if (!file.exists(db_path)) {
 } else {
   conn <- dbConnect(SQLite(), dbname = db_path)
   
-  # 🗂️ Load IUCN-labeled paragraphs for Geological Events
+  # 🗂️ Get paragraph_ids for Geological Events
   geo_paragraphs <- data.table(dbGetQuery(conn, "
     SELECT paragraph_id
     FROM paragraph_label_table
     WHERE label_type = 'IUCN' AND label_value = '10.1 Geological Events'
   "))
   
-  # 🗂️ Load Clause Type labels
+  # 🗂️ Get Clause Type labels for those paragraphs
   clause_labels <- data.table(dbGetQuery(conn, "
     SELECT paragraph_id, label_value
     FROM paragraph_label_table
     WHERE label_type = 'Clause Type' AND label_value IS NOT NULL
   "))
   
-  # 🗂️ Load paragraph metadata
-  paragraph_meta <- data.table(dbGetQuery(conn, "
-    SELECT paragraph_id, legislation_id, Section
-    FROM LegislationParagraphs
-    WHERE Section IS NOT NULL
-  "))
-  
-  # 🗂️ Load legislation metadata
-  legislation_meta <- data.table(dbGetQuery(conn, "
-    SELECT legislation_id, legislation_name, jurisdiction
-    FROM LegislationMetadata
-  "))
-  
   dbDisconnect(conn)
   
-  # 🔗 Filter clause labels to only those linked to Geological Events
+  # 🔗 Filter Clause Type labels to only those linked to Geological Events
   clause_geo <- merge(clause_labels, geo_paragraphs, by = "paragraph_id")
   
-  # 🔗 Merge with paragraph and legislation metadata
-  merged <- merge(clause_geo, paragraph_meta, by = "paragraph_id", all.x = TRUE)
-  merged <- merge(merged, legislation_meta, by = "legislation_id", all.x = TRUE)
+  # 📊 Count frequency of each Clause Type
+  pie_data <- clause_geo[, .N, by = label_value]
+  pie_data[, percent := round(100 * N / sum(N), 1)]
+  pie_data[, label := paste0(label_value, " (", percent, "%)")]
   
-  # 📊 Count unique sections per clause type and legislation
-  heatmap_data <- merged[, .(
-    section_count = uniqueN(Section)
-  ), by = .(legislation_name, label_value, jurisdiction)]
-  
-  # 🧮 Order legislation by total section count
-  leg_order <- heatmap_data[, .(total = sum(section_count)), by = legislation_name][order(-total)]
-  heatmap_data[, legislation_name := factor(legislation_name, levels = leg_order$legislation_name)]
-  
-  # 🧮 Order clause types
-  clause_order <- heatmap_data[, .(total = sum(section_count)), by = label_value][order(-total)]
-  heatmap_data[, label_value := factor(label_value, levels = rev(clause_order$label_value))]  # reverse for top-down
-  
-  # 🎨 Define jurisdiction colors
-  jurisdiction_colors <- c(
-    "Federal" = "#996666",
-    "Provincial" = "#668899",
-    "Unknown" = "#999999"
+ # Choose a palette (e.g., "Royal1")
+palette <- wes_palette("FantasticFox1", n = nrow(pie_data), type = "continuous")
+
+ggplot(pie_data, aes(x = "", y = N, fill = label)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar("y", start = 0) +
+  scale_fill_manual(values = palette) +
+  labs(
+    title = "Clause Type Distribution for IUCN Threat 10.1 Geological Events",
+    fill = "Clause Type"
+  ) +
+  theme_void(base_size = 14) +
+  theme(
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    legend.position = "right"
   )
-  
-  # 📈 Plot heatmap with alpha mapped to section count
-  ggplot(heatmap_data, aes(x = legislation_name, y = label_value)) +
-    geom_tile(aes(fill = jurisdiction, alpha = section_count), color = "white", size = 0.5) +
-    scale_fill_manual(values = jurisdiction_colors) +
-    scale_alpha_continuous(range = c(0.3, 1), guide = "none") +
-    labs(
-      title = "Clause Types Count by Legislation for 10.1 Geological Events",
-      x = "Legislation Name",
-      y = "Clause Type",
-      fill = "Jurisdiction"
-    ) +
-    theme_minimal(base_size = 13) +
-    theme(
-      axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
-      axis.text.y = element_text(size = 11),
-      plot.title = element_text(size = 16, face = "bold"),
-      legend.position = "bottom",
-      legend.title = element_text(size = 12),
-      legend.text = element_text(size = 11)
-    )
 }
 ```
 
@@ -2431,6 +2396,72 @@ if (!file.exists(db_path)) {
       legend.position = "bottom",
       legend.title = element_text(size = 13),
       legend.text = element_text(size = 12)
+    )
+}
+```
+
+<p style="text-align: center;">
+  <em>Figure X. Description.</em>
+</p>
+
+<br>
+
+```{r clause-type-pie-dams-water-management, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, fig.height=8}
+library(DBI)
+library(RSQLite)
+library(here)
+library(data.table)
+library(ggplot2)
+library(wesanderson)
+
+# 📁 Connect to the database
+db_path <- file.path(here("output"), "legislation.db")
+if (!file.exists(db_path)) {
+  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
+} else {
+  conn <- dbConnect(SQLite(), dbname = db_path)
+  
+  # 🗂️ Get paragraph_ids for Dams & Water Management / Use
+  dams_paragraphs <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id
+    FROM paragraph_label_table
+    WHERE label_type = 'IUCN' AND label_value = '7.2 Dams & Water Management / Use'
+  "))
+  
+  # 🗂️ Get Clause Type labels for those paragraphs
+  clause_labels <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, label_value
+    FROM paragraph_label_table
+    WHERE label_type = 'Clause Type' AND label_value IS NOT NULL
+  "))
+  
+  dbDisconnect(conn)
+  
+  # 🔗 Filter Clause Type labels to only those linked to Dams & Water Management
+  clause_dams <- merge(clause_labels, dams_paragraphs, by = "paragraph_id")
+  
+  # 📊 Count frequency of each Clause Type
+  pie_data <- clause_dams[, .N, by = label_value]
+  pie_data <- pie_data[order(-N)]
+  pie_data[, percent := round(100 * N / sum(N), 1)]
+  pie_data[, label := paste0(label_value, " (", percent, "%)")]
+  
+  # 🎨 Choose a Wes Anderson palette
+  palette <- wes_palette("FantasticFox1", n = nrow(pie_data), type = "continuous")
+
+  # 🥧 Plot pie chart
+  ggplot(pie_data, aes(x = "", y = N, fill = label)) +
+    geom_bar(stat = "identity", width = 1, color = "white") +
+    coord_polar("y", start = 0) +
+    scale_fill_manual(values = palette) +
+    labs(
+      title = "Clause Type Distribution for IUCN Threat 7.2 Dams & Water Management / Use",
+      fill = "Clause Type"
+    ) +
+    theme_void(base_size = 14) +
+    theme(
+      plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+      legend.position = "right"
     )
 }
 ```
