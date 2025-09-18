@@ -172,7 +172,7 @@ if (file.exists(image_path)) {
   cat(paste0(
     '<div style="text-align: center;">',
     '<img src="', image_path, '" alt="Flowchart" style="max-width: 85%; height: auto;"><br>',
-    '<p><em>Figure 1. Flowchart showing alignment of Pacific salmon threat factors (Four H\'s) with Management Domain in relation to legislation and jurisdiction.</em></p>',
+    '<p><em>Figure 2. Flowchart showing alignment of Pacific salmon threat factors (Four H\'s) with Management Domain in relation to legislation and jurisdiction.</em></p>',
     '</div>'
   ))
 } else {
@@ -316,7 +316,7 @@ if (file.exists(image_path)) {
   # Manually create figure with caption below
   cat('<div style="text-align: center;">')
   cat('<img src="', image_path, '" alt="Diagram" style="max-width: 85%; height: auto;"><br>', sep = "")
-  cat('<p><em>Figure 2. Fisheries Act (federal) examples of paragraph parsing from HTML code.</em></p>')
+  cat('<p><em>Figure 3. Fisheries Act (federal) examples of paragraph parsing from HTML code.</em></p>')
   cat('</div>')
 } else {
   cat("<p style='color:red;'>❌ Image file not found: ", image_path, "</p>")
@@ -641,7 +641,7 @@ if (!file.exists(db_path)) {
 ```
 
 <p style="text-align: center;">
-  <em>Figure X. Count of clauses matched by management domains stacked by jurisdiction.</em>
+  <em>Figure 4. Count of clauses matched by management domains stacked by jurisdiction.</em>
 </p>
 
 
@@ -734,7 +734,7 @@ if (!file.exists(db_path)) {
 
 ```
 
-<p style="text-align: center;"><em>Figure X. Stacked bar chart showing alignment of Pacific salmon threat factors (IUCN Level 2) with jurisdictional distribution of legislative paragraphs.</em></p>
+<p style="text-align: center;"><em>Figure 5. Stacked bar chart showing alignment of Pacific salmon threat factors (IUCN Level 2) with jurisdictional distribution of legislative paragraphs.</em></p>
 
 <br>
 
@@ -930,6 +930,10 @@ ggplot(donut_data) +
 
 ```
 
+<p style="text-align: center;"><em>Figure 6. Count of sections as a proportion by management domain categories and tiered by scope.</em></p>
+
+<br>
+
 Using the '1 - Salmon' scope for clauses shows the Type A Legislation along with a comparison of the number of paragraphs by Jurisdiction. The results are shown in the bar chart below, which displays the number of paragraphs for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of paragraphs across different legislative frameworks.
 
 ```{r unique-section-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
@@ -1017,12 +1021,7 @@ if (nrow(summary_data) > 0) {
 
 ```
 
-<p style="text-align: center;"><em>Figure X. ___________________.</em></p>
-
-<br>
-
-
-
+<p style="text-align: center;"><em>Figure 7. Count of sections by individual legislation (acts and regulations) and coloured by jurisdiction.</em></p>
 
 <br>
 
