@@ -133,13 +133,11 @@ build_sankey(sankey_data, "Provincial", jurisdiction_colors)
 
 To better categorize legislation aligned with salmon threats and create an interface between biological management and the regulatory context, this study defined discrete areas of administrative responsibility for Pacific salmon as “management domains.”
 
-<br>
-
 # Methods
 
 ## Management domain developement
 
-<strong>International Union for Conservation of Nature (IUCN) Threat Categories</strong>
+### International Union for Conservation of Nature (IUCN) Threat Categories
 
 Management decisions and activities related to salmon have often been in response to identifiable threats to salmon health and population status. Human systems can be categorized as direct threats to biodiversity more specifically for conservation strategies (Salafsky et al 2024). The International Union for Conservation of Nature (IUCN) and Conservation Measures Partnership (CMP) has developed a hierarchical grouping of threats used globally by conservation practitioners. IUCN direct threat categories are widely used to assess threats as part of IUCN red list assessments, as well as, in status assessments for Pacific salmon populations conducted by the Committee for the Status of Endangered Wildlife in Canada (COSEWIC). For this study, the <a href=" https://docs.google.com/spreadsheets/d/1yfm7ua9hQJpjycx6FYQJ6Jy5LA4bP0XP61EW3-sX8ZY/edit?gid=179026760#gid=179026760" style="color:#668899">IUCN - CMP Direct Threats Classification 4.0</a> was used to categorize legislation by direct threats to salmon conservation. Level 2 threat classification was used as the finest resolution that could be applied legislative clause consistently. 
 
@@ -249,16 +247,16 @@ Assessment of legislative context is prone to subjective interpretation. The inc
 <div style="margin-left: 30px; padding-left: 10px">
 <ol>
 <li>Legislation accumulation and review (CanLii)</li>
-<li>Parse legislation by subclause, section, and heading (R)</li>
-<li>Match management domain and IUCN threat keywords to subclauses (R)</li>
-<li>Match clause type keywords to subclauses (R)</li>
+<li>Parse legislation by clause, section, and heading (R)</li>
+<li>Match management domain and IUCN threat keywords to clauses (R)</li>
+<li>Match clause type keywords to clauses (R)</li>
 <li>Assign Scope (R)</li>
 </ol>
 </div>
 
-### 1) Legislation accumulation and review</strong>
+### Legislation accumulation and review</strong>
 
-We focused our review on established Canadian federal and British Columbian provincial legislation (acts and regulations) for inclusion in the management domain process. We did not include specific departmental policy frameworks and processes throughout this exercise unless specifically referenced in the statutes because these executive strategies are prone to changes in the political, administrative, and budgetary landscape. Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were not included explicitly. Although this other legislation is pivotal in the management of Pacific salmon, considering this regionally diverse administration was outside the scope of this legislative review in terms of feasibility. However .
+We focused our review on established Canadian federal and British Columbian provincial legislation (acts and regulations) for inclusion in the management domain process. We did not include specific departmental policy frameworks and processes throughout this exercise unless specifically referenced in the statutes because these executive strategies are prone to changes in the political, administrative, and budgetary landscape. Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were not included explicitly. Although this other legislation is pivotal in the management of Pacific salmon, considering this regionally diverse administration was outside the scope of this legislative review in terms of feasibility.
 
 The <a href="https://www.canlii.org/" style="color:#668899">Canadian Legal Information Institute website, CanLII</a>, provides an excellent resource for searching federal and provincial acts and regulations by keywords. We created a systematic process for collecting legislation by:
 
@@ -272,13 +270,11 @@ The <a href="https://www.canlii.org/" style="color:#668899">Canadian Legal Infor
 </ol>
 </div>
 
-Through the CanLII website, the user may look up the keywords queried in each act and regulation chosen. This allows the user to quickly assess the context of the word in the legislation and determine if the section is relevant to Pacific salmon. The full list of legislation reviewed in this process is available in Appendix 5.2.
+Through the CanLII website, the user may look up the keywords queried in each act and regulation chosen. This allows the user to quickly assess the context of the word in the legislation and determine if the section is relevant to Pacific salmon. The full list of legislation reviewed in this process is available in Appendix 1.
 
-<br>
+### Parsing legislation from HTML files
 
-### 2) Parsing legislation from HTML files</strong>
-
-The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular management domain. Typological device structure and definitions were derived from the Government of Canada’s <a href="https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html" style="color:#668899">“Legistics Paragraphing”</a> (Department of Justice Canada 2022). For the purpose of this review, we used the individual clause (Figure 2) as the sample unit for assignment into management domains and other attributes.  
+The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular management domain. Typological device structure and definitions were derived from the Government of Canada’s <a href="https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html" style="color:#668899">“Legistics Paragraphing”</a> (Department of Justice Canada 2022). For the purpose of this review, we used the individual clause (Figure 3) as the sample unit for assignment into management domains and other attributes.  
 
 ```{r legistics-paragraphing, echo=FALSE, results='asis'}
 library(here)
@@ -299,9 +295,9 @@ if (file.exists(image_path)) {
 }
 ```
 
-Legislation presented on Canadian and British Columbian government websites--and corresponding HTML code--is structured such that each clause and subclause is separated individually as a paragraph element. HTML code for paragraph elements is generally consistent across legislation, but section, subsection, and heading elements are not. As shown in Figure 2, when we refer to a “clause” we are including subclauses, but also sections, subsections, and opening words (chapeau or umbrella) when they are stand-alone paragraph elements in the HTML. We parsed the HTML files using R and the "rvest" package to extract the text of each clause, then grouped by section and heading.
+Legislation presented on Canadian and British Columbian government websites, and corresponding HTML code, is structured such that each clause is separated individually as a paragraph element. HTML code for paragraph elements is generally consistent across legislation, but section, subsection, and heading elements are not. As shown in Figure 3, when we refer to a “clause” we are including subclauses, but also sections, subsections, and opening words (chapeau or umbrella) when they are stand-alone paragraph elements in the HTML. We parsed the HTML files using R and the "rvest" package to extract the text of each clause, then grouped by section and heading.
 
-### 3) Database Compendium Development</strong>
+### Database Compendium Development
 
 The parsed legislation was stored in a SQLite database with datatables including:
 
@@ -332,9 +328,9 @@ The parsed legislation was stored in a SQLite database with datatables including
   </ul>
 </div>
 
-Storing the data as a database rather than one large spreadsheet allows for a more dynamic and versatile system for querying, while streamlining the parsing and collection process.
+Storing the data as a database rather than one large spreadsheet allowed for a more dynamic and versatile system for querying, while streamlining the parsing and collection process.
 
-## Keyword and Keyphrase Development
+## Keyword and keyphrase development
 
 The management domain and IUCN threat matching process pivoted around an established list of keywords and phrases relevant to Pacific salmon management. Keywords act as a link between categorization and the legislative clauses. Keywords must be specific enough to match an IUCN threat, yet general enough to appear in the acts and regulations that span many decades of legislative language. The keywords originated from three sources:
 
@@ -358,13 +354,15 @@ Researcher subjectivity can influence the process on two fronts:
 </ul> 
 </div>
 
-However, using keyword lists allows for the subjectivity to be acknowledged, and the keyword lists to be reported such that the process may be repeatable. The keyword list is shown in Appendix XXX. 
+However, using keyword lists allows for the subjectivity to be acknowledged, and the keyword lists to be reported such that the process may be repeatable. The keyword list is shown in Appendix II. 
+
+### Multiple matches
 
 Management domains can overlap within sections and clauses. For example the provincial Land-based Finfish Waste Control Regulation (Environmental Management Act) states in Section 2 that: “The owner of a land-based finfish facility is exempt from section 6 (2) and (3) of the Environmental Management Act with respect to the discharge of wastes from the land-based finfish facility if the owner…” This clause matched appropriately with both the “Aquaculture and Hatcheries” and “Pollution” management domains. Because the matching process allows for multiple keywords to be matched per clause, this method allows for an assessment of co-occurrences and connections between management domains.
 
-## Legislative Factors (Clause Types)
+## Legislative context (clause types)
 
-The process of parsing legislation by clause and section, then matching categories by keywords also allows for other possible categorizations. Similar to management domains and IUCN threats, the nature of the clauses was also matched in terms of the “clause type.” Clauses, in general, fit into groupings by their context and the nature of their intent. For this exercise, the categories and keywords were developed solely by the researchers through a subjective process; however, the keywords are listed in Appendix XXX allowing for the work to be transparent and repeatable.
+The process of parsing legislation by clause and section, then matching categories by keywords also allows for other possible categorizations. Similar to management domains and IUCN threats, the nature of the clauses was also matched in terms of the “clause type.” Clauses, in general, fit into groupings by their context and the nature of their intent. For this exercise, the categories and keywords were developed solely by the researchers through a subjective process; however, the keywords are listed in Appendix III allowing for the work to be transparent and repeatable.
 
 ```{r clause-type-list, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -409,9 +407,7 @@ if (!file.exists(db_path)) {
 
 ```
 
-<br>
-
-## Current Salmon Management Context
+## Current salmon management
 
 The Committee on the Status of Endangered Wildlife in Canada (COSEWIC) assesses the current status of aquatic species, including Pacific salmon stocks, as part of the Species at Risk Act (SARA) process (Arbeider et al 2020). Salmon populations are grouped into genetically and ecologically distinct Diagnostic Units (DU) for the purpose of assessment. When a DU is classified as Threatened, Endangered or Extirpated, a Recovery Potential Assessment (RPA) process is initiated, which calculates risk incorporating the same IUCN-CMP threat classification used in this legislative assessment.
 
@@ -446,9 +442,9 @@ cat("</ul>\n")
 dbDisconnect(conn)
 ```
 
-<br>
-
 # Results
+
+Management domains were identified within all the collected statutes. Figure 4 below shows a count of clauses by management domain split by jurisdiction. Pollution, Spatial Designation, and Water Use and Watercourse Modifications show the highest number of clauses specific to those categories. Climate Change and Natural Disasters received the fewest matches. 
 
 A summary of results from the iterations of the automated compendium are shown below. The complete compendium can also be queried using the "legislation.db" SQLite database, which is available in the "output" folder of this repository. The keyword matching categorization process was applied to 196 acts and regulations chosen as relevant to salmon and habitat management. Broken down to the clause level, the categorization process matched the following totals by scope:
 
@@ -517,10 +513,6 @@ if (!file.exists(db_path)) {
 ```
 
 <br>
-
-## Management domains
-
-Management domains were identified within the 177 of the 196 collected statutes. Figure X below shows a count of clauses by management domain split by jurisdiction. Pollution, Spatial Designation, and Water Use and Watercourse Modifications show the highest number of clauses specific to those categories. Climate Change and Natural Disasters received the fewest matches. 
 
 ```{r section-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
 # 📦 Load required libraries
@@ -612,9 +604,6 @@ if (!file.exists(db_path)) {
   <em>Figure 4. Count of clauses matched by management domains stacked by jurisdiction.</em>
 </p>
 
-
-<br>
-
 IUCN Level 2 categories are more specific to salmon threats, and the categorization process matched to 18 categories. Figure X below shows a count of clauses matched to IUCN Level 2 categories broken down by jurisdiction. Pollution, water management, and fisheries management were the top three, and it should be noted that Spatial Designation as a management domain does not occur within the IUCN Level 2 threat categories. 
 
 ```{r section-count-by-iucn, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
@@ -703,8 +692,6 @@ if (!file.exists(db_path)) {
 ```
 
 <p style="text-align: center;"><em>Figure 5. Stacked bar chart showing alignment of Pacific salmon threat factors (IUCN Level 2) with jurisdictional distribution of legislative paragraphs.</em></p>
-
-<br>
 
 ## Scope
 
@@ -900,8 +887,6 @@ ggplot(donut_data) +
 
 <p style="text-align: center;"><em>Figure 6. Count of sections as a proportion by management domain categories and tiered by scope.</em></p>
 
-<br>
-
 Using the '1 - Salmon' scope for clauses shows the Type A Legislation along with a comparison of the number of paragraphs by Jurisdiction. The results are shown in the bar chart below, which displays the number of paragraphs for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of paragraphs across different legislative frameworks.
 
 ```{r unique-section-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
@@ -990,8 +975,6 @@ if (nrow(summary_data) > 0) {
 ```
 
 <p style="text-align: center;"><em>Figure 7. Count of sections by individual legislation (acts and regulations) and coloured by jurisdiction.</em></p>
-
-<br>
 
 ## Clause type
 
@@ -1137,8 +1120,6 @@ ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = section_
 
 <p style="text-align: center;"><em>Figure X. _______.</em></p>
 
-<br>
-
 ## Conservation Units (CUs) and Recovery Potential Assessments (RPAs)
 
 This shows a tally of CUs by threat risk ranking. Chinook and lake type sockeye appear in the most extreme threat risk ranking.
@@ -1204,8 +1185,6 @@ ggplot(cu_tally, aes(x = rpa_threat_ranking, y = unique_cu_count, fill = cu_spec
 
 <p style="text-align: center;"><em>Figure X. _______.</em></p>
 
-<br>
-
 We can then break down the threat ranking by IUCN threat category to identify which threats were identified as the highest risk. Geological Events was listed and the most extreme risk, while Dams and Water Management / Use was listed as the next most extreme. For both these threat categories we are able filter the compiled legislation to identify sections and clauses relevant to these extreme risk categories (Appendix ___).
 
 ```{r cu-ranking-heatmap, include=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=9}
@@ -1264,8 +1243,6 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_c
 ```
 
 <p style="text-align: center;"><em>Figure X. _______.</em></p>
-
-<br>
 
 # Discussion
 
@@ -1405,7 +1382,6 @@ ggplot(heatmap_data, aes(x = domain_x, y = domain_y, fill = N)) +
 
 <br>
 
-
 ```{r top-domain-pairs-display, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
 library(RSQLite)
@@ -1477,8 +1453,6 @@ if (!file.exists(db_path)) {
 }
 ```
 
-<br>
-
 ## Clause count as a function of keyword quantity
 
 One criticism could be that the more keywords a category has, the more clauses will be labelled. This is likely true. Here’s a scatterplot that shows number of keywords vs the clause count for that category.
@@ -1532,8 +1506,6 @@ ggplot(plot_data, aes(x = keyword_count, y = section_count, label = label_value)
   xlim(0, max(plot_data$keyword_count, na.rm = TRUE) * 1.2)
 
 ```
-
-<br>
 
 # References
 
@@ -1919,7 +1891,6 @@ reactable(
 )
 ```
 
-
 ## Appendix IV - Case Study: IUCN 10.1 Geological Events
 
 One IUCN threat was assessed as "Extreme" through COSEWIC Recovery Potential Assessment processes, which was the "10.1 Geological Events" threat (DFO 2020; DFO 2022). This threat was assigned to one sockeye and three Chinook conservation units, all in the Fraser Interior area related to the "ongoing effects from Big Bar landslide" in 2018 (DFO 2020; DFO 2022):
@@ -1967,8 +1938,6 @@ if (!file.exists(db_path)) {
   }
 }
 ```
-
-<br>
 
 The above keywords matched to the following amount of legislation:
 
@@ -2030,8 +1999,6 @@ if (!file.exists(db_path)) {
 ```
 
 <br>
-
-
 
 ```{r section-count-by-geological-events, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
 # 📦 Load required libraries
