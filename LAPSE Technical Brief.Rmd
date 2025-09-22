@@ -26,19 +26,19 @@ output:
 
 ## Background
 
-Resource conservation and stewardship in Canada is governed through a decentralized, multi-sector array of constitutional authority administered through federal, provincial, territorial, and municipal governments (Ray et al 2021; Campbell and Thomas 2002). Stemming from the Constitution Act, legislative control over ecological conservation has been a reactionary process of assigning authority to multiple jurisdictions over new environmental issues as they arise, which creates a complex and overlapping distribution of governance (Becklumb 2013). This patchwork of authority is most prominent in Pacific salmon management due to the complicated geographic nature of their anadromous life cycle, spanning a variety of freshwater and marine ecosystems coast-wide and across international boundaries.
+Resource conservation and stewardship in Canada is governed through a decentralized, multi-sector array of constitutional authority administered through federal, provincial, territorial, and municipal governments (Ray et al 2021; Campbell and Thomas 2002). Stemming from the Constitution Act, legislative control over ecological conservation has been a reactionary process of assigning authority to multiple jurisdictions over new environmental issues as they arise, which creates a complex and overlapping distribution of governance (Becklumb 2013). This patchwork of authority is most prominent in Pacific salmon management due to the complicated geographic nature of the salmon anadromous life cycle, spanning a variety of freshwater and marine ecosystems coast-wide and across international boundaries.
 
-While legislation and programs may often operate on a sector-by-sector and individual resource basis, integrated stewardship relies on scale-appropriate planning and decision making (Ray et al 2021). The need for collaborative, transparent decision-making in salmon management is recognized throughout policies, plans, and initiatives, such as the Pacific Salmon Strategy Initiative and the Wild Salmon Policy. Successful conservation and rebuilding of Pacific salmon populations therefore requires coordination of activities across discrete administrative responsibilities and regulatory frameworks. However, such coordination requires adequate organizational capacity and systems for effective implementation to ensure that regulatory controls and mitigation activities address underlying threats and factors that limit salmon habitat capacity and reduce population productivity.
+While legislation and programs may often operate on a sector-by-sector and individual resource basis, integrated stewardship relies on scale-appropriate planning and decision making (Ray et al 2021). The need for collaborative, transparent decision-making in salmon management is recognized throughout policies, plans, and initiatives, such as the Pacific Salmon Strategy Initiative and the Wild Salmon Policy. Successful conservation and rebuilding of Pacific salmon populations therefore requires coordination of activities across regulatory frameworks. However, such coordination requires adequate organizational capacity and systems for effective implementation to ensure that regulatory controls and mitigation activities address underlying threats and factors that limit salmon habitat capacity and reduce population productivity.
 
 <br>
 
 ## Purpose and Objectives
 
-This report outlines a framework and process to relate human activities that threaten Pacific salmon stocks, biology, and ecology to their regulatory statutes. The overall goal of this effort is to better understand the legislative context that governs Pacific salmon in British Columbia related to human activities by administrative concern in order to support conservation planning across jurisdictions. To achieve this, the more specific objectives are to:
+This report outlines a framework and process to relate human activities that threaten Pacific salmon abundance, biology, and ecology to their regulatory statutes. The overall goal of this effort was to better understand the legislative context that governs Pacific salmon in British Columbia related to human activities across jurisdictions. To achieve this, the more specific objectives were to:
 
 <div style="margin-left: 30px; padding-left: 10px">
 <ol>
-<li>create a process to categorize specific legislation by anthropogenic threats to Pacific salmon;</li>
+<li>create a process and tool to categorize specific legislation by anthropogenic threats to Pacific salmon;</li>
 <li>assess legislative factors by threat categorization; and</li>
 <li>assess threats in a current salmon management context.</li>
 </ol>
@@ -50,8 +50,7 @@ This report outlines a framework and process to relate human activities that thr
 
 ## Legislation by Anthropogenic Threats to Salmon
 
-
-The plural federal and provincial legal systems govern and uphold the human activities that impact Pacific salmon productivity and habitat capacity (Ulaski et al 2025). Acts and regulations in British Columbia might be designed to address one broad category of human activity; however, this activity can cover many aspects of salmon management. For example, the provincial <em>Forest and Range Practices Act</em> is specific to forestry practices and planning, along with cattle ranging practices, but in terms of salmon threats, these activities impact many aspects including stream hydrology, water temperature, effluent, riparian habitat destruction, watercourse changes from road infrastructure, and the spread of invasive species. Figure 1 shows the fractured, yet interconnected, relationships between statutes and responsible minister and agency (Canada: <a href= "https://laws-lois.justice.gc.ca/eng/tablepublicstatutes/index.html" style="color:#668899">Table of Public Statutes and Responsible Ministers</a>; British Columbia: <a href="https://www.bclaws.gov.bc.ca/civix/content/amr/amr/1662622382/?xsl=/templates/browse.xsl" style="color:#668899">Acts/Ministers' Responsibilities</a>. To better categorize legislation aligned with salmon threats and create a “buffer” between biological management and the regulatory context, this study defines discrete areas of administrative responsibility for Pacific salmon as “management domains.”
+The plural federal and provincial legal systems govern and uphold the human activities that impact Pacific salmon productivity and habitat capacity (Ulaski et al 2025). Acts and regulations in British Columbia might be designed to address one broad category of human activity; however, this activity can cover many aspects of salmon management. For example, the provincial <em>Forest and Range Practices Act</em> is specific to forestry practices and planning, along with cattle ranging practices, but in terms of salmon threats, these activities impact many aspects including stream hydrology, water temperature, effluent, riparian habitat destruction, watercourse changes from road infrastructure, and the spread of invasive species. Figure 1 shows the fractured, yet interconnected, relationships between statutes and responsible minister and agency (Canada: <a href= "https://laws-lois.justice.gc.ca/eng/tablepublicstatutes/index.html" style="color:#668899">Table of Public Statutes and Responsible Ministers</a>; British Columbia: <a href="https://www.bclaws.gov.bc.ca/civix/content/amr/amr/1662622382/?xsl=/templates/browse.xsl" style="color:#668899">Acts/Ministers' Responsibilities</a>). 
 
 ```{r sankey-legislation-to-agency-by-section, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -138,19 +137,15 @@ build_sankey(sankey_data, "Provincial", jurisdiction_colors)
   <em>Figure 1. Federal and provincial acts and regulations by the responsible minister (line thickness by section count).</em>
 </p>
 
+To better categorize legislation aligned with salmon threats and create an interface between biological management and the regulatory context, this study defined discrete areas of administrative responsibility for Pacific salmon as “management domains.”
+
 <br>
 
 ## Management Domain Developement
 
-<strong>The Four Hs</strong>
-
-Management decisions and activities related to salmon have often been in response to identifiable threats to salmon health and population status. One common framework used to describe impacts to salmon are the “Four Hs”: Habitat, Hydropower, Harvest, and Hatcheries. Many aspects of salmon management are associated with governance and agreements rather than one of the other H’s, which also could be categorized by a fifth H as “Handshaking.” While this categorization structure of salmon concerns presents a good starting point, it is too broad and oversimplified considering the range of legislation involved.
-
-<br>
-
 <strong>International Union for Conservation of Nature (IUCN) Threat Categories</strong>
 
-Human systems can be categorized as direct threats to biodiversity more specifically for conservation strategies (Salafsky et al 2024). The International Union for Conservation of Nature (IUCN) and Conservation Measures Partnership (CMP) has developed a hierarchical grouping of threats used globally by conservation practitioners. IUCN direct threat categories are widely used to assess threats as part of IUCN red list assessments, as well as, in status assessments for Pacific salmon populations conducted by the Committee for the Status of Endangered Wildlife in Canada (COSEWIC). 
+Management decisions and activities related to salmon have often been in response to identifiable threats to salmon health and population status. Human systems can be categorized as direct threats to biodiversity more specifically for conservation strategies (Salafsky et al 2024). The International Union for Conservation of Nature (IUCN) and Conservation Measures Partnership (CMP) has developed a hierarchical grouping of threats used globally by conservation practitioners. IUCN direct threat categories are widely used to assess threats as part of IUCN red list assessments, as well as, in status assessments for Pacific salmon populations conducted by the Committee for the Status of Endangered Wildlife in Canada (COSEWIC). 
 
 For this study, the <a href=" https://docs.google.com/spreadsheets/d/1yfm7ua9hQJpjycx6FYQJ6Jy5LA4bP0XP61EW3-sX8ZY/edit?gid=179026760#gid=179026760" style="color:#668899">IUCN - CMP Direct Threats Classification 4.0</a> was used to categorize legislation by direct threats to salmon conservation. Level 2 threat classification was used as the finest resolution that could be applied legislative clause consistently. 
 
@@ -158,7 +153,7 @@ For this study, the <a href=" https://docs.google.com/spreadsheets/d/1yfm7ua9hQJ
 
 <strong>Management Domains</strong>
 
-Legislative clauses that influence Pacific salmon governance in British Columbia are not always associated with conservation threats. As well, some clauses may involve all threats. For example, statutes that outline species status or determine ecological reserves have relevance to how salmon are managed, but can’t be attributed to any one IUCN threat category. Pacific salmon life history also ranges over a broad geography of marine and freshwater habitat (including terrestrial watershed aspects), touching on almost every conservation threat available. “Management Domains” were identified through this study as a clearer and more comprehensive alignment between regulatory administrative concern and conservation threat categories (Figure 1).
+Legislative clauses that influence Pacific salmon governance in British Columbia are not always associated with conservation threats. As well, some clauses may involve all threats. For example, statutes that outline species status or determine ecological reserves have relevance to how salmon are managed, but can’t be attributed to any one IUCN threat category. Pacific salmon life history also ranges over a broad geography of marine and freshwater habitat (including terrestrial watershed aspects), touching on almost every conservation threat available. Management domains were identified through this study as a clearer and more comprehensive alignment between regulatory administrative concern and conservation threat categories (Figure 1).
 
 ```{r flowchart-image, echo=FALSE, results='asis', message=FALSE}
 # Load library quietly
