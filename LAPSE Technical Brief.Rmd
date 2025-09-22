@@ -30,18 +30,6 @@ Resource conservation and stewardship in Canada is governed through a decentrali
 
 While legislation and programs may often operate on a sector-by-sector and individual resource basis, integrated stewardship relies on scale-appropriate planning and decision making (Ray et al 2021). The need for collaborative, transparent decision-making in salmon management is recognized throughout policies, plans, and initiatives, such as the Pacific Salmon Strategy Initiative and the Wild Salmon Policy. Successful conservation and rebuilding of Pacific salmon populations therefore requires coordination of activities across regulatory frameworks. However, such coordination requires adequate organizational capacity and systems for effective implementation to ensure that regulatory controls and mitigation activities address underlying threats and factors that limit salmon habitat capacity and reduce population productivity.
 
-## Purpose and objectives
-
-This report outlines a framework and process to relate human activities that threaten Pacific salmon abundance, biology, and ecology to their regulatory statutes. The overall goal of this effort was to better understand the legislative context that governs Pacific salmon in British Columbia related to human activities across jurisdictions. To achieve this, the more specific objectives were to:
-
-<div style="margin-left: 30px; padding-left: 10px">
-<ol>
-<li>create a process and tool to categorize specific legislation by anthropogenic threats to Pacific salmon;</li>
-<li>assess legislative factors by threat categorization; and</li>
-<li>assess threats in a current salmon management context.</li>
-</ol>
-</div>
-
 ## Legislation by anthropogenic threats to salmon
 
 The plural federal and provincial legal systems govern and uphold the human activities that impact Pacific salmon productivity and habitat capacity (Ulaski et al 2025). Acts and regulations in British Columbia might be designed to address one broad category of human activity; however, this activity can cover many aspects of salmon management. For example, the provincial <em>Forest and Range Practices Act</em> is specific to forestry practices and planning, along with cattle ranging practices, but in terms of salmon threats, these activities impact many aspects including stream hydrology, water temperature, effluent, riparian habitat destruction, watercourse changes from road infrastructure, and the spread of invasive species. Figure 1 shows the fractured, yet interconnected, relationships between statutes and responsible minister and agency (Canada: <a href= "https://laws-lois.justice.gc.ca/eng/tablepublicstatutes/index.html" style="color:#668899">Table of Public Statutes and Responsible Ministers</a>; British Columbia: <a href="https://www.bclaws.gov.bc.ca/civix/content/amr/amr/1662622382/?xsl=/templates/browse.xsl" style="color:#668899">Acts/Ministers' Responsibilities</a>). 
@@ -130,6 +118,18 @@ build_sankey(sankey_data, "Provincial", jurisdiction_colors)
 <p style="text-align: center;">
   <em>Figure 1. Federal and provincial acts and regulations by the responsible minister (line thickness by section count).</em>
 </p>
+
+## Purpose and objectives
+
+This report outlines a framework and process to relate human activities that threaten Pacific salmon abundance, biology, and ecology to their regulatory statutes. The overall goal of this effort was to better understand the legislative context that governs Pacific salmon in British Columbia related to human activities across jurisdictions. To achieve this, the more specific objectives were to:
+
+<div style="margin-left: 30px; padding-left: 10px">
+<ol>
+<li>create a process and tool to categorize specific legislation by anthropogenic threats to Pacific salmon;</li>
+<li>assess legislative factors by threat categorization; and</li>
+<li>assess threats in a current salmon management context.</li>
+</ol>
+</div>
 
 To better categorize legislation aligned with salmon threats and create an interface between biological management and the regulatory context, this study defined discrete areas of administrative responsibility for Pacific salmon as “management domains.”
 
@@ -444,9 +444,9 @@ dbDisconnect(conn)
 
 # Results
 
-Management domains were identified within all the collected statutes. Figure 4 below shows a count of clauses by management domain split by jurisdiction. Pollution, Spatial Designation, and Water Use and Watercourse Modifications show the highest number of clauses specific to those categories. Climate Change and Natural Disasters received the fewest matches. 
+## Management domains and IUCN threat categories
 
-A summary of results from the iterations of the automated compendium are shown below. The complete compendium can also be queried using the "legislation.db" SQLite database, which is available in the "output" folder of this repository. The keyword matching categorization process was applied to 196 acts and regulations chosen as relevant to salmon and habitat management. Broken down to the clause level, the categorization process matched the following totals by scope:
+Management domains were identified within all the collected statutes. Pollution was the management domain with the highest section count (Figures 4), split almost evenly between federal and provincial jurisdictions. Human Disturbance (research activities) and Climate Change and Natural Disasters had the fewest section count. Fisheries was in the top three for section count, with a majority of sections under federal jurisdiction. Water Use and Watercourse Modifications was in the top four for section count, with a majority of sections under provincial jurisdiction. This count indicates an underlying relationship where salmon harvest is controlled federally while habitat aspects are governed provincially.
 
 ```{r management-domain-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -581,7 +581,7 @@ if (!file.exists(db_path)) {
       guide = guide_legend(reverse = TRUE)
     ) +
     labs(
-      title = "Section Count by Management Domain and Jurisdiction",
+      title = "Section Count by Management Domain",
       x = "Management Domain",
       y = "Unique Section Count",
       fill = "Jurisdiction"
@@ -600,11 +600,11 @@ if (!file.exists(db_path)) {
 
 ```
 
-<p style="text-align: center;">
+<p style="text-align: left;">
   <em>Figure 4. Count of clauses matched by management domains stacked by jurisdiction.</em>
 </p>
 
-IUCN Level 2 categories are more specific to salmon threats, and the categorization process matched to 18 categories. Figure X below shows a count of clauses matched to IUCN Level 2 categories broken down by jurisdiction. Pollution, water management, and fisheries management were the top three, and it should be noted that Spatial Designation as a management domain does not occur within the IUCN Level 2 threat categories. 
+IUCN Level 2 categories are more specific to salmon threats, and the categorization process matched to 25 categories (Figure 5) that parallel the management domain categories. 
 
 ```{r section-count-by-iucn, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
 # 📦 Load required libraries
@@ -673,7 +673,7 @@ if (!file.exists(db_path)) {
       guide = guide_legend(reverse = TRUE)
     ) +
     labs(
-      title = "Section Count by IUCN Level 2 Threat and Jurisdiction",
+      title = "Section Count by IUCN Level 2 Threat",
       x = "IUCN Threat",
       y = "Unique Section Count",
       fill = "Jurisdiction"
@@ -691,11 +691,11 @@ if (!file.exists(db_path)) {
 
 ```
 
-<p style="text-align: center;"><em>Figure 5. Stacked bar chart showing alignment of Pacific salmon threat factors (IUCN Level 2) with jurisdictional distribution of legislative paragraphs.</em></p>
+<p style="text-align: left;"><em>Figure 5. Stacked bar chart showing alignment of Pacific salmon threat factors (IUCN Level 2) with jurisdictional distribution of legislative paragraphs.</em></p>
 
 ## Scope
 
-Showing specificity of the language to Pacific salmon management. More clauses are less specific. Specific to general.
+Language more specific and direct to Pacific salmon management is found in far fewer sections than indirect, less specific language (Figure 6). Only 74 sections in 22 statutes mention Pacific salmon, while 2,607 sections in 165 statutes mention habitat aspects that impact salmon. It is also interesting to note that the federal Fisheries Act does not use the word "salmon" or any salmon-specific keywords (1 - Salmon) at all, only the regulations made under the Fisheries Act use those words.
 
 ```{r scope-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -885,7 +885,7 @@ ggplot(donut_data) +
 
 ```
 
-<p style="text-align: center;"><em>Figure 6. Count of sections as a proportion by management domain categories and tiered by scope.</em></p>
+<p style="text-align: left;"><em>Figure 6. Count of sections as a proportion by management domain categories and tiered by scope.</em></p>
 
 Using the '1 - Salmon' scope for clauses shows the Type A Legislation along with a comparison of the number of paragraphs by Jurisdiction. The results are shown in the bar chart below, which displays the number of paragraphs for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of paragraphs across different legislative frameworks.
 
