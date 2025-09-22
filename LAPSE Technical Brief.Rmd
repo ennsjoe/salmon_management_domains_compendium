@@ -165,15 +165,14 @@ image_path <- here("Management Domain Flowchart.png")
 # Render image only if it exists
 if (file.exists(image_path)) {
   cat(paste0(
-    '<div style="text-align: center;">',
-    '<img src="', image_path, '" alt="Flowchart" style="max-width: 85%; height: auto;"><br>',
-    '<p><em>Figure 2. Flowchart showing alignment of Pacific salmon threat factors (Four H\'s) with Management Domain in relation to legislation and jurisdiction.</em></p>',
+    '<div style="max-width:600px; margin-left:0; padding:10px;">',
+    '<img src="', image_path, '" alt="Flowchart" style="width:85%; height:auto;">',
+    '<p style="font-size:0.9em;"><em>Figure 2. Flowchart showing alignment of Pacific salmon threat factors (Four H\'s) with Management Domain in relation to legislation and jurisdiction.</em></p>',
     '</div>'
   ))
 } else {
   cat(paste0("<p style='color:red;'>❌ Image file not found: ", image_path, "</p>"))
 }
-
 
 ```
 
@@ -308,13 +307,14 @@ image_path <- here("Legistics Paragraphing.png")
 
 # Check if image exists
 if (file.exists(image_path)) {
-  # Manually create figure with caption below
-  cat('<div style="text-align: center;">')
-  cat('<img src="', image_path, '" alt="Diagram" style="max-width: 85%; height: auto;"><br>', sep = "")
-  cat('<p><em>Figure 3. Fisheries Act (federal) examples of paragraph parsing from HTML code.</em></p>')
-  cat('</div>')
+  cat(paste0(
+    '<div style="max-width:600px; margin-left:0; padding:10px;">',
+    '<img src="', image_path, '" alt="Diagram" style="width:85%; height:auto;">',
+    '<p style="font-size:0.9em;"><em>Figure 3. Fisheries Act (federal) examples of paragraph parsing from HTML code.</em></p>',
+    '</div>'
+  ))
 } else {
-  cat("<p style='color:red;'>❌ Image file not found: ", image_path, "</p>")
+  cat(paste0("<p style='color:red;'>❌ Image file not found: ", image_path, "</p>"))
 }
 ```
 
