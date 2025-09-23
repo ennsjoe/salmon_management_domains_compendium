@@ -1,65 +1,82 @@
 library(shiny)
 library(DBI)
-library(RPostgres)
-library(pool)
+library(RSQLite)
 library(ggplot2)
+library(here)
 
-# Create a connection pool to PostgreSQL
-pool <- dbPool(
-  drv = RPostgres::Postgres(),
-  dbname = "your_db",
-  host = "your_host",
-  user = "your_user",
-  password = "your_password"
-)
+db_path <- here("output", "legislation.db")
+conn <- dbConnect(RSQLite::SQLite(), dbname = db_path)
 
-# Close pool when app stops
+# Disconnect when app stops
 onStop(function() {
-  poolClose(pool)
+  dbDisconnect(conn)
 })
 
-# Load data from PostgreSQL
-label_data <- dbGetQuery(pool, "SELECT * FROM paragraph_label_table")
-legislation_data <- dbGetQuery(pool, "SELECT * FROM LegislationMetadata")
-paragraph_data <- dbGetQuery(pool, "SELECT * FROM LegislationParagraphs")
-clause_data <- dbGetQuery(pool, "SELECT * FROM clause_type_keywords")
+# Load data
+label_data <- dbReadTable(conn, "paragraph_label_table")
+legislation_data <- dbReadTable(conn, "LegislationMetadata")
+paragraph_data <- dbReadTable(conn, "LegislationParagraphs")
+clause_data <- dbReadTable(conn, "clause_type_keywords")
 
 # Prepare UI choices
 management_domains <- unique(label_data$label_value[label_data$label_type == "Management Domain"])
 jurisdictions <- unique(legislation_data$jurisdiction)
 
-# UI
+# Define UI
 ui <- fluidPage(
-  tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "app_style.css")),
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "app_style.css")
+  ),
+  
   titlePanel("LAPSE Dashboard"),
+  
   fluidRow(
+    # Sidebar: Management Domains
     column(
       width = 2,
-      div(class = "domain-panel", h4("Management Domains"), uiOutput("domain_buttons"))
+      div(class = "domain-panel",
+          h4("Management Domains"),
+          uiOutput("domain_buttons")
+      )
     ),
+    
+    # Main Panel: Filters and Section Navigation
     column(
       width = 6,
       div(class = "main-panel",
-          h4("Acts Filtered by Domain and Jurisdiction"),
+          h4("Filter by Jurisdiction"),
           selectInput("jurisdiction_filter", "Jurisdiction", choices = c("All", jurisdictions)),
+          hr(),
+          
+          h4("Acts Matching Filters"),
           uiOutput("act_buttons"),
           hr(),
-          h4("Legislation Filtered by Act"),
+          
+          h4("Legislation Matching Acts"),
           uiOutput("legislation_buttons"),
           hr(),
-          h4("Sections Filtered by Legislation and Domain"),
+          
+          h4("Sections Matching Selection"),
           uiOutput("section_buttons")
       )
     ),
+    
+    # Graph Panel: Visualizations
     column(
       width = 4,
       div(class = "graph-panel",
-          h4("IUCN Value Tally"),
+          h4("IUCN Threats"),
           plotOutput("iucn_plot", height = "200px"),
+          hr(),
+          
           h4("Clause Type Distribution"),
           plotOutput("clause_plot", height = "200px"),
+          hr(),
+          
           h4("Section Counts by IUCN"),
           plotOutput("tornado_plot", height = "200px"),
+          hr(),
+          
           h4("Keyword Frequency"),
           plotOutput("keyword_plot", height = "200px")
       )
@@ -67,31 +84,29 @@ ui <- fluidPage(
   )
 )
 
-
 # Server
 server <- function(input, output, session) {
   selected_domain <- reactiveVal(NULL)
   selected_act <- reactiveVal(NULL)
   selected_legislation <- reactiveVal(NULL)
   
-  # Domain buttons
+  # Render domain buttons
   output$domain_buttons <- renderUI({
     selected <- selected_domain()
     if (is.null(selected)) {
       lapply(seq_along(management_domains), function(i) {
         domain <- management_domains[i]
-        btn_id <- paste0("domain_", i)
-        actionButton(inputId = btn_id, label = domain, class = "domain-button")
+        actionButton(inputId = paste0("domain_", i), label = domain, class = "domain-button")
       })
     } else {
       actionButton(inputId = "reset_domain", label = selected, class = "domain-button")
     }
   })
   
+  # Observe domain selection
   observe({
     lapply(seq_along(management_domains), function(i) {
-      btn_id <- paste0("domain_", i)
-      observeEvent(input[[btn_id]], {
+      observeEvent(input[[paste0("domain_", i)]], {
         selected_domain(management_domains[i])
         selected_act(NULL)
         selected_legislation(NULL)
@@ -105,7 +120,7 @@ server <- function(input, output, session) {
     selected_legislation(NULL)
   })
   
-  # Filtered legislation
+  # Reactive: Filter legislation
   filtered_legislation <- reactive({
     data <- legislation_data
     if (input$jurisdiction_filter != "All") {
@@ -117,24 +132,10 @@ server <- function(input, output, session) {
         label_data$label_type == "Management Domain" &
           label_data$label_value == selected_domain()
       ]
-      if (length(domain_paragraphs) > 0) {
-        query <- sprintf(
-          "SELECT DISTINCT legislation_id FROM LegislationParagraphs WHERE paragraph_id IN (%s)",
-          paste(domain_paragraphs, collapse = ",")
-        )
-        leg_ids <- tryCatch({
-          result <- dbGetQuery(pool, query)
-          if (!is.null(result) && "legislation_id" %in% names(result)) {
-            result$legislation_id
-          } else character(0)
-        }, error = function(e) {
-          message("DB query failed: ", e$message)
-          character(0)
-        })
-        data <- subset(data, legislation_id %in% leg_ids)
-      } else {
-        data <- data[0, ]
-      }
+      leg_ids <- unique(paragraph_data$legislation_id[
+        paragraph_data$paragraph_id %in% domain_paragraphs
+      ])
+      data <- subset(data, legislation_id %in% leg_ids)
     }
     
     if (!is.null(selected_act())) {
@@ -144,48 +145,46 @@ server <- function(input, output, session) {
     data
   })
   
-  # Act buttons
+  # Render act buttons
   output$act_buttons <- renderUI({
     acts <- unique(filtered_legislation()$act_name)
     if (length(acts) == 0) return(div("No acts match the selected filters."))
     lapply(seq_along(acts), function(i) {
-      act <- acts[i]
-      btn_id <- paste0("act_", i)
-      actionButton(inputId = btn_id, label = act, class = "act-button")
+      actionButton(inputId = paste0("act_", i), label = acts[i], class = "act-button")
     })
   })
   
+  # Observe act selection
   observe({
-    lapply(seq_along(unique(legislation_data$act_name)), function(i) {
-      btn_id <- paste0("act_", i)
-      observeEvent(input[[btn_id]], {
-        selected_act(unique(legislation_data$act_name)[i])
+    acts <- unique(legislation_data$act_name)
+    lapply(seq_along(acts), function(i) {
+      observeEvent(input[[paste0("act_", i)]], {
+        selected_act(acts[i])
         selected_legislation(NULL)
       }, ignoreInit = TRUE)
     })
   })
   
-  # Legislation buttons
+  # Render legislation buttons
   output$legislation_buttons <- renderUI({
-    legislation <- unique(filtered_legislation()$legislation_name)
-    if (length(legislation) == 0) return(div("No legislation found."))
-    lapply(seq_along(legislation), function(i) {
-      name <- legislation[i]
-      btn_id <- paste0("leg_", i)
-      actionButton(inputId = btn_id, label = name, class = "legislation-button")
+    laws <- unique(filtered_legislation()$legislation_name)
+    if (length(laws) == 0) return(div("No legislation found."))
+    lapply(seq_along(laws), function(i) {
+      actionButton(inputId = paste0("leg_", i), label = laws[i], class = "legislation-button")
     })
   })
   
+  # Observe legislation selection
   observe({
-    lapply(seq_along(unique(legislation_data$legislation_name)), function(i) {
-      btn_id <- paste0("leg_", i)
-      observeEvent(input[[btn_id]], {
-        selected_legislation(unique(legislation_data$legislation_name)[i])
+    laws <- unique(legislation_data$legislation_name)
+    lapply(seq_along(laws), function(i) {
+      observeEvent(input[[paste0("leg_", i)]], {
+        selected_legislation(laws[i])
       }, ignoreInit = TRUE)
     })
   })
   
-  # Section buttons
+  # Render section buttons
   output$section_buttons <- renderUI({
     leg_name <- selected_legislation()
     domain <- selected_domain()
@@ -205,21 +204,25 @@ server <- function(input, output, session) {
     if (length(section_labels) == 0) return(div("No sections match the selected filters."))
     
     lapply(seq_along(section_labels), function(i) {
-      label <- section_labels[i]
-      btn_id <- paste0("section_", i)
-      actionButton(inputId = btn_id, label = label, class = "section-button")
+      actionButton(inputId = paste0("section_", i), label = section_labels[i], class = "section-button")
     })
   })
   
+  # Observe section selection
   observe({
-    lapply(seq_along(unique(paragraph_data$Section)), function(i) {
-      btn_id <- paste0("section_", i)
-      observeEvent(input[[btn_id]], {
-        label <- input[[btn_id]]
+    sections <- unique(paragraph_data$Section)
+    lapply(seq_along(sections), function(i) {
+      observeEvent(input[[paste0("section_", i)]], {
+        label <- input[[paste0("section_", i)]]
         parts <- strsplit(label, " \\| ")[[1]]
         section <- parts[1]
         heading <- parts[2]
-        matching <- paragraph_data[paragraph_data$Section == section, ]
+        leg_id <- legislation_data$legislation_id[legislation_data$legislation_name == selected_legislation()]
+        matching <- paragraph_data[
+          paragraph_data$Section == section &
+            paragraph_data$Heading == heading &
+            paragraph_data$legislation_id == leg_id,
+        ]
         
         paragraph_text <- if (nrow(matching) > 0) {
           paste(matching$Paragraph, collapse = "\n\n")
@@ -255,17 +258,18 @@ server <- function(input, output, session) {
     })
   })
   
-  # Plots
+  # IUCN Plot
   output$iucn_plot <- renderPlot({
     domain <- selected_domain()
     leg_ids <- filtered_legislation()$legislation_id
     
     df <- label_data[label_data$label_type == "IUCN", ]
     if (!is.null(domain)) {
-      df <- df[df$paragraph_id %in% label_data$paragraph_id[
+      domain_paragraphs <- label_data$paragraph_id[
         label_data$label_type == "Management Domain" &
           label_data$label_value == domain
-      ], ]
+      ]
+      df <- df[df$paragraph_id %in% domain_paragraphs, ]
     }
     if (length(leg_ids) > 0) {
       df <- df[df$paragraph_id %in% paragraph_data$paragraph_id[
@@ -277,9 +281,11 @@ server <- function(input, output, session) {
     ggplot(df, aes(x = label_value)) +
       geom_bar(fill = "#2c3e50") +
       theme_minimal() +
-      labs(x = "IUCN Level 2", y = "Count")
+      labs(x = "IUCN Level 2", y = "Count") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
   })
   
+  # Clause Type Plot
   output$clause_plot <- renderPlot({
     domain <- selected_domain()
     df <- clause_data
@@ -302,11 +308,11 @@ server <- function(input, output, session) {
       labs(title = "Clause Types")
   })
   
+  # Tornado Plot
   output$tornado_plot <- renderPlot({
     domain <- selected_domain()
     leg_ids <- filtered_legislation()$legislation_id
     
-    # Filter IUCN-labeled paragraphs
     iucn_labels <- label_data[label_data$label_type == "IUCN", ]
     if (!is.null(domain)) {
       domain_paragraphs <- label_data$paragraph_id[
@@ -316,25 +322,23 @@ server <- function(input, output, session) {
       iucn_labels <- iucn_labels[iucn_labels$paragraph_id %in% domain_paragraphs, ]
     }
     
-    # Filter paragraph_data by legislation
     para_filtered <- paragraph_data[paragraph_data$legislation_id %in% leg_ids, ]
-    
-    # Merge and aggregate
     df <- merge(para_filtered, iucn_labels, by = "paragraph_id")
     df <- aggregate(paragraph_id ~ Section + label_value, data = df, FUN = length)
     
     validate(need(nrow(df) > 0, "No data available for Section Counts by IUCN."))
     ggplot(df, aes(x = paragraph_id, y = Section, fill = label_value)) +
-      geom_bar(stat = "identity") +
+      geom_bar(stat = "identity", position = "dodge") +
       theme_minimal() +
-      labs(x = "Count", y = "Section")
+      labs(x = "Paragraph Count", y = "Section", fill = "IUCN Threat") +
+      theme(axis.text.y = element_text(size = 8))
   })
   
+  # Keyword Frequency Plot
   output$keyword_plot <- renderPlot({
     domain <- selected_domain()
     leg_ids <- filtered_legislation()$legislation_id
     
-    # Filter label_data to Management Domain keywords
     df <- label_data[label_data$label_type == "Management Domain", ]
     if (!is.null(domain)) {
       df <- df[df$label_value == domain, ]
@@ -344,7 +348,6 @@ server <- function(input, output, session) {
       df <- df[df$paragraph_id %in% para_ids, ]
     }
     
-    # Count and plot top 10 keywords
     keyword_counts <- as.data.frame(table(df$keyword))
     colnames(keyword_counts) <- c("keyword", "count")
     keyword_counts <- keyword_counts[order(-keyword_counts$count), ][1:min(10, nrow(keyword_counts)), ]
@@ -357,12 +360,13 @@ server <- function(input, output, session) {
       labs(x = "Keyword", y = "Frequency")
   })
   
-  # Properly close the PostgreSQL pool when the app stops
+  # Disconnect SQLite when app stops
   onStop(function() {
-    poolClose(pool)
+    dbDisconnect(conn)
   })
 }
 
 # Launch the app
 shinyApp(ui = ui, server = server)
+
 
