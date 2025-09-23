@@ -2,6 +2,7 @@ library(shiny)
 library(DBI)
 library(RSQLite)
 library(ggplot2)
+library(data.table)
 
 # Define database path
 db_path <- "legislation.db"
@@ -242,95 +243,75 @@ server <- function(input, output, session) {
   })
   
 ################################################################################  
-  # Render section buttons----
+  # Render section buttons
   output$section_buttons <- renderUI({
-    leg_name <- selected_legislation()
-    domain <- selected_domain()
+    req(selected_legislation(), selected_domain())
     
-    if (is.null(leg_name) || is.null(domain)) {
-      return(div("Select both a Management Domain and Legislation to view sections."))
-    }
-    
-    leg_id <- legislation_data$legislation_id[legislation_data$legislation_name == leg_name]
-    domain_paragraphs <- label_data$paragraph_id[
-      label_data$label_type == "Management Domain" &
-        label_data$label_value == domain
+    leg_id <- legislation_data$legislation_id[
+      legislation_data$legislation_name == selected_legislation()
     ]
     
-    filtered <- subset(paragraph_data,
-                       legislation_id == leg_id &
-                         paragraph_id %in% domain_paragraphs
-    )
+    domain_ids <- label_data$paragraph_id[
+      label_data$label_type == "Management Domain" &
+        label_data$label_value == selected_domain()
+    ]
     
-    section_labels <- unique(paste(filtered$Section, filtered$Heading, sep = " | "))
-    if (length(section_labels) == 0) {
+    # Filter only for button display
+    filtered <- paragraph_data[
+      paragraph_data$legislation_id == leg_id &
+        paragraph_data$paragraph_id %in% domain_ids,
+    ]
+    
+    if (nrow(filtered) == 0 || all(is.na(filtered$Section))) {
       return(div("No sections match the selected filters."))
     }
+    
+    section_labels <- unique(na.omit(filtered$Section))
     
     lapply(seq_along(section_labels), function(i) {
       div(
         class = "section-button",
-        `onclick` = paste0("Shiny.setInputValue('section_click', '", section_labels[i], "', {priority: 'event'})"),
-        section_labels[i]
+        `onclick` = paste0(
+          "Shiny.setInputValue('section_click', '",
+          section_labels[i],
+          "', {priority: 'event'})"
+        ),
+        paste("Section", section_labels[i])
       )
     })
   })
   
-  # Observe section selection
+################################################################################  
   observeEvent(input$section_click, {
-    label <- input$section_click
-    if (!is.null(label) && is.character(label)) {
-      parts <- strsplit(label, " \\| ")[[1]]
-      if (length(parts) == 2) {
-        section <- parts[1]
-        heading <- parts[2]
-        leg_id <- legislation_data$legislation_id[
-          legislation_data$legislation_name == selected_legislation()
-        ]
-        
-        matching <- subset(paragraph_data,
-                           Section == section &
-                             Heading == heading &
-                             legislation_id == leg_id
-        )
-        
-        paragraph_text <- if (nrow(matching) > 0) {
-          paste(matching$Paragraph, collapse = "\n\n")
-        } else {
-          "No paragraphs found."
-        }
-        
-        keywords <- unique(label_data$keyword[
-          label_data$label_type == "Management Domain" &
-            label_data$label_value == selected_domain()
-        ])
-        
-        for (kw in keywords) {
-          if (!is.na(kw) && nzchar(kw)) {
-            safe_kw <- gsub("([\\W])", "\\\\\\1", kw, perl = TRUE)
-            pattern <- paste0("\\b", safe_kw, "\\b")
-            paragraph_text <- gsub(
-              pattern,
-              paste0("<span class='highlight'>", kw, "</span>"),
-              paragraph_text,
-              ignore.case = TRUE,
-              perl = TRUE
-            )
-          }
-        }
-        
-        showModal(modalDialog(
-          title = paste("Section:", section, "| Heading:", heading),
-          div(
-            style = "white-space: pre-wrap; max-height: 400px; overflow-y: auto;",
-            HTML(paragraph_text)
-          ),
-          easyClose = TRUE,
-          size = "l"
-        ))
-      }
+    selected_section <- input$section_click
+    req(selected_section)
+    
+    leg_id <- legislation_data$legislation_id[
+      legislation_data$legislation_name == selected_legislation()
+    ]
+    
+    # ✅ Show all paragraphs for the section, regardless of domain
+    section_paragraphs <- paragraph_data[
+      paragraph_data$legislation_id == leg_id &
+        paragraph_data$Section == selected_section,
+    ]
+    
+    aggregated_text <- if (nrow(section_paragraphs) > 0) {
+      paste(unique(na.omit(section_paragraphs$Paragraph)), collapse = "\n\n")
+    } else {
+      "No paragraphs found for this section."
     }
-  }, ignoreInit = TRUE)
+    
+    showModal(modalDialog(
+      title = paste("Section", selected_section, "|", selected_legislation()),
+      div(
+        style = "white-space: pre-wrap; max-height: 400px; overflow-y: auto;",
+        HTML(aggregated_text)
+      ),
+      easyClose = TRUE,
+      size = "l"
+    ))
+  })
   
 ################################################################################  
   # IUCN Plot
