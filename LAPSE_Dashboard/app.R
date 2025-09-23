@@ -4,12 +4,15 @@ library(RSQLite)
 library(ggplot2)
 library(here)
 
+# Connect to SQLite database
 db_path <- here("output", "legislation.db")
 conn <- dbConnect(RSQLite::SQLite(), dbname = db_path)
 
 # Disconnect when app stops
 onStop(function() {
-  dbDisconnect(conn)
+  if (DBI::dbIsValid(conn)) {
+    dbDisconnect(conn)
+  }
 })
 
 # Load data
@@ -84,29 +87,55 @@ ui <- fluidPage(
   )
 )
 
-# Server
+################################################################################
+################################################################################
+# Server----
 server <- function(input, output, session) {
   selected_domain <- reactiveVal(NULL)
   selected_act <- reactiveVal(NULL)
   selected_legislation <- reactiveVal(NULL)
   
+################################################################################  
+  # Render domain buttons----
   # Render domain buttons
   output$domain_buttons <- renderUI({
     selected <- selected_domain()
-    if (is.null(selected)) {
-      lapply(seq_along(management_domains), function(i) {
-        domain <- management_domains[i]
-        actionButton(inputId = paste0("domain_", i), label = domain, class = "domain-button")
-      })
-    } else {
-      actionButton(inputId = "reset_domain", label = selected, class = "domain-button")
-    }
+    
+    tagList(
+      # Always show the reset button
+      div(
+        class = "domain-button reset",
+        `onclick` = "Shiny.setInputValue('reset_domain', Math.random())",
+        tagList(icon("sync"), "All")
+      ),
+      tags$hr(),
+      
+      # Show either all buttons or just the selected one
+      if (is.null(selected)) {
+        lapply(seq_along(management_domains), function(i) {
+          domain <- management_domains[i]
+          btn_id <- paste0("domain_", i)
+          div(
+            class = "domain-button",
+            `onclick` = paste0("Shiny.setInputValue('", btn_id, "', Math.random())"),
+            domain
+          )
+        })
+      } else {
+        div(
+          class = "domain-button selected",
+          title = "Currently selected domain",
+          selected
+        )
+      }
+    )
   })
   
   # Observe domain selection
   observe({
     lapply(seq_along(management_domains), function(i) {
-      observeEvent(input[[paste0("domain_", i)]], {
+      btn_id <- paste0("domain_", i)
+      observeEvent(input[[btn_id]], {
         selected_domain(management_domains[i])
         selected_act(NULL)
         selected_legislation(NULL)
@@ -114,13 +143,15 @@ server <- function(input, output, session) {
     })
   })
   
+  # Observe reset button
   observeEvent(input$reset_domain, {
     selected_domain(NULL)
     selected_act(NULL)
     selected_legislation(NULL)
   })
   
-  # Reactive: Filter legislation
+################################################################################  
+  # Reactive: Filter legislation----
   filtered_legislation <- reactive({
     data <- legislation_data
     if (input$jurisdiction_filter != "All") {
@@ -285,10 +316,13 @@ server <- function(input, output, session) {
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
   })
   
-  # Clause Type Plot
+################################################################################  
+  # Clause Type Plot----
   output$clause_plot <- renderPlot({
     domain <- selected_domain()
     df <- clause_data
+    
+    # Filter by selected domain
     if (!is.null(domain)) {
       domain_keywords <- unique(label_data$keyword[
         label_data$label_type == "Management Domain" &
@@ -297,18 +331,26 @@ server <- function(input, output, session) {
       df <- df[df$keyword %in% domain_keywords, ]
     }
     
+    # Safely generate clause counts
     clause_counts <- as.data.frame(table(df$clause_type))
-    colnames(clause_counts) <- c("clause_type", "count")
+    if (ncol(clause_counts) == 2) {
+      colnames(clause_counts) <- c("clause_type", "count")
+    } else {
+      clause_counts <- data.frame(clause_type = character(0), count = numeric(0))
+    }
     
+    # Validate and plot
     validate(need(nrow(clause_counts) > 0, "No clause data available."))
     ggplot(clause_counts, aes(x = "", y = count, fill = clause_type)) +
       geom_bar(stat = "identity", width = 1) +
       coord_polar("y") +
       theme_void() +
-      labs(title = "Clause Types")
+      labs(title = "Clause Types") +
+      theme(legend.title = element_blank())
   })
   
-  # Tornado Plot
+################################################################################  
+  # Tornado Plot----
   output$tornado_plot <- renderPlot({
     domain <- selected_domain()
     leg_ids <- filtered_legislation()$legislation_id
