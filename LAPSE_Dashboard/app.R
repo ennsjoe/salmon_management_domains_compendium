@@ -2,10 +2,16 @@ library(shiny)
 library(DBI)
 library(RSQLite)
 library(ggplot2)
-library(here)
+
+# Define database path
+db_path <- "legislation.db"
+
+# Check if database exists before connecting
+if (!file.exists(db_path)) {
+  stop("Database file not found: ", db_path)
+}
 
 # Connect to SQLite database
-db_path <- here("output", "legislation.db")
 conn <- dbConnect(RSQLite::SQLite(), dbname = db_path)
 
 # Disconnect when app stops
@@ -15,7 +21,7 @@ onStop(function() {
   }
 })
 
-# Load data
+# Load data safely
 label_data <- dbReadTable(conn, "paragraph_label_table")
 legislation_data <- dbReadTable(conn, "LegislationMetadata")
 paragraph_data <- dbReadTable(conn, "LegislationParagraphs")
@@ -71,20 +77,16 @@ ui <- fluidPage(
     column(
       width = 4,
       div(class = "graph-panel",
-          h4("IUCN Threats"),
-          plotOutput("iucn_plot", height = "200px"),
+          h4("Keyword Frequency"),
+          plotOutput("keyword_plot", height = "250px"),
+          
+          h4("IUCN Co-occurence"),
+          plotOutput("iucn_plot", height = "250px"),
           hr(),
           
           h4("Clause Type Distribution"),
-          plotOutput("clause_plot", height = "200px"),
-          hr(),
-          
-          h4("Section Counts by IUCN"),
-          plotOutput("tornado_plot", height = "200px"),
-          hr(),
-          
-          h4("Keyword Frequency"),
-          plotOutput("keyword_plot", height = "200px")
+          plotOutput("clause_plot", height = "250px"),
+          hr()
       )
     )
   )
@@ -392,43 +394,6 @@ server <- function(input, output, session) {
   })
   
 ################################################################################  
-  # Tornado Plot----
-  output$tornado_plot <- renderPlot({
-    domain <- selected_domain()
-    leg_ids <- filtered_legislation()$legislation_id
-    
-    # Filter IUCN labels
-    iucn_labels <- label_data[label_data$label_type == "IUCN", ]
-    if (!is.null(domain)) {
-      domain_paragraphs <- label_data$paragraph_id[
-        label_data$label_type == "Management Domain" &
-          label_data$label_value == domain
-      ]
-      iucn_labels <- iucn_labels[iucn_labels$paragraph_id %in% domain_paragraphs, ]
-    }
-    
-    # Filter paragraphs by legislation
-    para_filtered <- paragraph_data[paragraph_data$legislation_id %in% leg_ids, ]
-    
-    # Merge and aggregate
-    df <- merge(para_filtered, iucn_labels, by = "paragraph_id")
-    if (nrow(df) > 0) {
-      df <- aggregate(paragraph_id ~ Section + label_value, data = df, FUN = length)
-      colnames(df) <- c("Section", "IUCN_Threat", "Paragraph_Count")
-    } else {
-      df <- data.frame(Section = character(0), IUCN_Threat = character(0), Paragraph_Count = numeric(0))
-    }
-    
-    # Validate and plot
-    validate(need(nrow(df) > 0, "No data available for Section Counts by IUCN."))
-    ggplot(df, aes(x = Paragraph_Count, y = reorder(Section, Paragraph_Count), fill = IUCN_Threat)) +
-      geom_bar(stat = "identity", position = "dodge") +
-      theme_minimal() +
-      labs(x = "Paragraph Count", y = "Section", fill = "IUCN Threat") +
-      theme(axis.text.y = element_text(size = 8))
-  })
-  
-################################################################################  
   # Keyword Frequency Plot
   output$keyword_plot <- renderPlot({
     domain <- selected_domain()
@@ -449,7 +414,7 @@ server <- function(input, output, session) {
     
     validate(need(nrow(keyword_counts) > 0, "No keyword data available."))
     ggplot(keyword_counts, aes(x = reorder(keyword, count), y = count)) +
-      geom_bar(stat = "identity", fill = "#e67e22") +
+      geom_bar(stat = "identity", fill = "#2c3e50") +
       coord_flip() +
       theme_minimal() +
       labs(x = "Keyword", y = "Frequency")
