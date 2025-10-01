@@ -74,6 +74,18 @@ h1, h2, h3, h4 {
   min-height: 100vh;
 }
 
+.section-block h6 {
+  font-weight: normal;
+  font-style: italic;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.highlight {
+  background-color: #ffff99;
+  font-weight: bold;
+}
+
 /* === Graph Panel === */
 .graph-panel {
   background-color: #ffffff;
