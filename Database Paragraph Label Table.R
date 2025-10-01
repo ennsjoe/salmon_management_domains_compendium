@@ -9,10 +9,8 @@
 # Dependencies: DBI, RSQLite, data.table, here, stringr, quanteda, beepr
 ################################################################################
 
-## Set Working Directory ----
-library(here)
-
 ## Load Libraries ----
+library(here)
 library(data.table)
 library(RSQLite)
 library(stringr)

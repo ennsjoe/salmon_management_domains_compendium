@@ -14,10 +14,8 @@
 #   containing a table with metadata about the legislative paragraphs.
 ################################################################################
 
-## Set Working Directory ----
-library(here)
-
 ## Load Libraries ----
+library(here)
 library(data.table)
 library(xml2)
 library(rvest)
