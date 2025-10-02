@@ -26,7 +26,7 @@ if (!file.exists(db_path)) {
   stop("Database file not found: ", db_path)
 }
 
-# Connect to SQLite database
+# 📁 ️Connect to SQLite database
 conn <- dbConnect(RSQLite::SQLite(), dbname = db_path)
 
 # Disconnect when app stops
@@ -46,7 +46,7 @@ clause_data <- dbReadTable(conn, "clause_type_keywords")
 management_domains <- unique(label_data$label_value[label_data$label_type == "Management Domain"])
 jurisdictions <- unique(legislation_data$jurisdiction)
 
-# Define UI
+# 💻 Define UI----
 ui <- fluidPage(
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "app_style.css")
@@ -104,13 +104,13 @@ ui <- fluidPage(
   )
 )
 
-# Server----
+# ⚙️ Server----
 server <- function(input, output, session) {
   selected_domain <- reactiveVal(NULL)
   selected_act <- reactiveVal(NULL)
   selected_legislation <- reactiveVal(NULL)
   
-  # Render domain buttons----
+  # 🔼 Render domain buttons----
   output$domain_buttons <- renderUI({
     selected <- selected_domain()
     
@@ -188,7 +188,7 @@ server <- function(input, output, session) {
     data
   })
   
-  # Render act buttons
+  # 🔼 Render act buttons----
   output$act_buttons <- renderUI({
     acts <- unique(filtered_legislation()$act_name)
     selected <- selected_act()
@@ -228,7 +228,7 @@ server <- function(input, output, session) {
     selected_legislation(NULL)
   })
   
-  # Render legislation buttons----
+  # 🔼 Render legislation buttons----
   output$legislation_buttons <- renderUI({
     laws <- unique(filtered_legislation()$legislation_name)
     if (length(laws) == 0) return(div("No legislation found."))
@@ -239,10 +239,10 @@ server <- function(input, output, session) {
   
   # Observe legislation selection
   observe({
-    laws <- unique(legislation_data$legislation_name)
-    lapply(seq_along(laws), function(i) {
+    laws <- filtered_legislation()
+    lapply(seq_len(nrow(laws)), function(i) {
       observeEvent(input[[paste0("leg_", i)]], {
-        selected_legislation(laws[i])
+        selected_legislation(laws$legislation_id[i])  # store ID directly
       }, ignoreInit = TRUE)
     })
   })
@@ -285,80 +285,103 @@ server <- function(input, output, session) {
     })
   })
   
+  # ✅ Output section paragraphs with keyword highlighting----
   output$section_paragraphs <- renderUI({
     req(selected_legislation(), selected_domain())
     
     # Normalize domain for matching
     selected_domain_clean <- trimws(tolower(selected_domain()))
-    label_data$label_value <- trimws(tolower(label_data$label_value))  # normalize only label_value
+    label_data$label_value <- trimws(tolower(label_data$label_value))
     
     # Get legislation ID
-    leg_id <- legislation_data$legislation_id[
-      legislation_data$legislation_name == selected_legislation()
-    ]
+    leg_id <- selected_legislation()
+    all_paragraphs <- paragraph_data[paragraph_data$legislation_id == leg_id, ]
     
-    # Filter paragraph_data by legislation only
-    filtered <- paragraph_data[
-      paragraph_data$legislation_id == leg_id,
-    ]
-    
-    if (nrow(filtered) == 0 || all(is.na(filtered$Section))) {
+    if (nrow(all_paragraphs) == 0 || all(is.na(all_paragraphs$Section))) {
       return(div("No sections or paragraphs found for this legislation."))
     }
     
-    # Get domain-labeled paragraph IDs (for keyword highlighting only)
+    # Get paragraph IDs tagged with the selected domain
     domain_para_ids <- label_data$paragraph_id[
       label_data$label_type == "Management Domain" &
         label_data$label_value == selected_domain_clean
     ]
     
-    section_groups <- split(filtered, filtered$Section)
+    # Define CSS classes for label types
+    label_classes <- c(
+      "Management Domain" = "highlight-domain",
+      "Clause Type" = "highlight-clause"
+    )
     
-    return(
-      tagList(
-        lapply(names(section_groups), function(sec) {
-          section_data <- section_groups[[sec]]
-          heading <- unique(na.omit(section_data$Heading))
-          heading_text <- if (length(heading) > 0) heading[1] else "No heading available"
-          paragraphs <- section_data$Paragraph
+    # Group all paragraphs by section
+    section_groups <- split(all_paragraphs, all_paragraphs$Section)
+    
+    # Sort sections numerically if possible
+    section_names <- names(section_groups)
+    section_order <- suppressWarnings(as.numeric(section_names))
+    sorted_names <- if (any(!is.na(section_order))) {
+      section_names[order(section_order, na.last = TRUE)]
+    } else {
+      sort(section_names)
+    }
+    
+    section_groups <- section_groups[sorted_names]
+    
+    tagList(
+      lapply(sorted_names, function(sec) {
+        section_data <- section_groups[[sec]]
+        
+        # Filter to domain-tagged paragraphs in this section
+        matched_ids <- intersect(section_data$paragraph_id, domain_para_ids)
+        if (length(matched_ids) == 0) return(NULL)
+        
+        heading <- unique(na.omit(section_data$Heading))
+        heading_text <- if (length(heading) > 0) heading[1] else "No heading available"
+        
+        # Aggregate all paragraphs in the section
+        aggregated_text <- paste(na.omit(section_data$Paragraph), collapse = "\n\n")
+        
+        # Filter label_data to relevant keywords
+        relevant_labels <- label_data[
+          label_data$paragraph_id %in% matched_ids &
+            label_data$label_type %in% names(label_classes),
+        ]
+        
+        # Filter label_data to Management Domain keywords in this section
+        domain_labels <- label_data[
+          label_data$paragraph_id %in% section_data$paragraph_id &
+            label_data$label_type == "Management Domain",
+        ]
+        
+        # Highlight Management Domain keywords
+        highlighted_text <- aggregated_text
+        for (kw in unique(domain_labels$keyword)) {
+          css_class <- "highlight-domain"
           
-          print(paste("Rendering section:", sec, "| Paragraphs:", length(paragraphs)))
-          
-          aggregated_text <- paste(na.omit(paragraphs), collapse = "\n\n")
-          
-          # Get keywords for this section's paragraphs (only those labeled with domain)
-          section_para_ids <- section_data$paragraph_id
-          keywords <- label_data[
-            label_data$paragraph_id %in% section_para_ids &
-              label_data$paragraph_id %in% domain_para_ids &
-              label_data$label_type %in% c("Management Domain", "IUCN", "Clause Type", "Salmon Scope"),
-          ]$keyword
-          
-          # Highlight keywords in the aggregated text
-          highlighted_text <- aggregated_text
-          for (kw in unique(keywords)) {
+          # Only highlight if keyword appears in text
+          if (!is.null(css_class) && grepl(fixed(kw), highlighted_text, ignore.case = TRUE)) {
             highlighted_text <- str_replace_all(
               string = highlighted_text,
               pattern = fixed(kw, ignore_case = TRUE),
-              replacement = paste0("<span class='highlight'>", kw, "</span>")
+              replacement = paste0("<span class='", css_class, "'>", kw, "</span>")
             )
           }
-          
+        }
+        
+        div(
+          class = "section-block",
+          h5(paste("Section", sec)),
+          h6(heading_text),
           div(
-            class = "section-block",
-            h5(paste("Section", sec)),
-            h6(heading_text),
-            div(
-              style = "white-space: pre-wrap; margin-bottom: 20px;",
-              HTML(highlighted_text)
-            )
+            style = "white-space: pre-wrap; margin-bottom: 20px;",
+            HTML(highlighted_text)
           )
-        })
-      )
+        )
+      })
     )
   })
   
-  # IUCN Plot----
+  # 📈 IUCN Plot----
   output$iucn_plot <- renderPlot({
     domain <- selected_domain()
     domain_clean <- if (!is.null(domain) && !is.na(domain)) trimws(tolower(domain)) else ""
@@ -399,7 +422,7 @@ server <- function(input, output, session) {
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
   })
   
-  # Clause Type Plot----
+  # 📈 Clause Type Plot----
   output$clause_plot <- renderPlot({
     # Ensure required packages are loaded
     library(dplyr)
@@ -453,7 +476,7 @@ server <- function(input, output, session) {
             axis.text.y = element_text(size = 10))
   })
   
-  # Keyword Frequency Plot----
+  # 📈 Keyword Frequency Plot----
   output$keyword_plot <- renderPlot({
     domain <- selected_domain()
     domain_clean <- if (!is.null(domain) && !is.na(domain)) trimws(tolower(domain)) else ""

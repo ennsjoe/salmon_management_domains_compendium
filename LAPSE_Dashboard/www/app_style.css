@@ -81,11 +81,6 @@ h1, h2, h3, h4 {
   margin-bottom: 10px;
 }
 
-.highlight {
-  background-color: #ffff99;
-  font-weight: bold;
-}
-
 /* === Graph Panel === */
 .graph-panel {
   background-color: #ffffff;
@@ -182,8 +177,15 @@ h1, h2, h3, h4 {
 }
 
 /* === Keyword Highlighting === */
-.highlight {
-  background-color: #fff3b0;
+.highlight-domain {
+  background-color: #ffeeba;
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.highlight-clause {
+  background-color: #f8d7da; /* soft red */
   font-weight: bold;
   border-radius: 3px;
   padding: 0 2px;
