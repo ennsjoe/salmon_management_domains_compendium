@@ -178,17 +178,17 @@ h1, h2, h3, h4 {
 
 /* === Keyword Highlighting === */
 .highlight-domain {
-  background-color: #ffeeba;
-  font-weight: bold;
+  background-color: #fce4ec;
+  font-style: italic;
   padding: 2px 4px;
   border-radius: 3px;
 }
 
 .highlight-clause {
-  background-color: #f8d7da; /* soft red */
-  font-weight: bold;
+  background-color: #e3f2fd;
+  font-style: italic;
+  padding: 2px 4px;
   border-radius: 3px;
-  padding: 0 2px;
 }
 
 /* === Modal Content === */

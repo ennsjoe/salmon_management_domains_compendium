@@ -368,6 +368,26 @@ server <- function(input, output, session) {
           }
         }
         
+        # Filter label_data to Clause Type keywords in this section
+        clause_labels <- label_data[
+          label_data$paragraph_id %in% section_data$paragraph_id &
+            label_data$label_type == "Clause Type",
+        ]
+        
+        # Highlight Clause Type keywords
+        for (kw in unique(clause_labels$keyword)) {
+          css_class <- "highlight-clause"
+          
+          # Only highlight if keyword appears in text
+          if (!is.null(css_class) && grepl(fixed(kw), highlighted_text, ignore.case = TRUE)) {
+            highlighted_text <- str_replace_all(
+              string = highlighted_text,
+              pattern = fixed(kw, ignore_case = TRUE),
+              replacement = paste0("<span class='", css_class, "'>", kw, "</span>")
+            )
+          }
+        }
+        
         div(
           class = "section-block",
           h5(paste("Section", sec)),
