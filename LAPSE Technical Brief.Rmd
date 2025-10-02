@@ -115,7 +115,7 @@ cat("<h3>Provincial Jurisdiction: Legislation ➝ Agency</h3>")
 build_sankey(sankey_data, "Provincial", jurisdiction_colors)
 ```
 
-<p style="text-align: center;">
+<p style="text-align: left;">
   <em>Figure 1. Federal and provincial acts and regulations by the responsible minister (line thickness by section count).</em>
 </p>
 
@@ -139,7 +139,7 @@ To better categorize legislation aligned with salmon threats and create an inter
 
 ### International Union for Conservation of Nature (IUCN) Threat Categories
 
-Management decisions and activities related to salmon have often been in response to identifiable threats to salmon health and population status. Human systems can be categorized as direct threats to biodiversity more specifically for conservation strategies (Salafsky et al 2024). The International Union for Conservation of Nature (IUCN) and Conservation Measures Partnership (CMP) has developed a hierarchical grouping of threats used globally by conservation practitioners. IUCN direct threat categories are widely used to assess threats as part of IUCN red list assessments, as well as, in status assessments for Pacific salmon populations conducted by the Committee for the Status of Endangered Wildlife in Canada (COSEWIC). For this study, the <a href=" https://docs.google.com/spreadsheets/d/1yfm7ua9hQJpjycx6FYQJ6Jy5LA4bP0XP61EW3-sX8ZY/edit?gid=179026760#gid=179026760" style="color:#668899">IUCN - CMP Direct Threats Classification 4.0</a> was used to categorize legislation by direct threats to salmon conservation. Level 2 threat classification was used as the finest resolution that could be applied legislative clause consistently. 
+Management decisions and activities related to salmon are often in response to identifiable threats to salmon health and population status. Human systems can be categorized as direct threats to biodiversity more specifically for conservation strategies (Salafsky et al 2024). The International Union for Conservation of Nature (IUCN) and Conservation Measures Partnership (CMP) has developed a hierarchical grouping of threats used globally by conservation practitioners. IUCN direct threat categories are widely used to assess threats as part of IUCN red list assessments, as well as, in status assessments for Pacific salmon populations conducted by the Committee for the Status of Endangered Wildlife in Canada (COSEWIC). For this study, the <a href=" https://docs.google.com/spreadsheets/d/1yfm7ua9hQJpjycx6FYQJ6Jy5LA4bP0XP61EW3-sX8ZY/edit?gid=179026760#gid=179026760" style="color:#668899">IUCN - CMP Direct Threats Classification 4.0</a> was used to categorize legislation by direct threats to salmon conservation. Level 2 threat classification was used as the finest resolution that could be applied consistently. 
 
 Legislative clauses that influence Pacific salmon governance in British Columbia are not always associated with conservation threats. As well, some clauses may involve all threats. For example, statutes that outline species status or determine ecological reserves have relevance to how salmon are managed, but can’t be attributed to any one IUCN threat category. Pacific salmon life history also ranges over a broad geography of marine and freshwater habitat (including terrestrial watershed aspects), touching on almost every conservation threat available. Management domains were identified through this study as a clearer and more comprehensive alignment between regulatory administrative concern and conservation threat categories (Figure 1).
 
@@ -227,18 +227,18 @@ cat("</div>")
 
 ## Scope
 
-Categorizing clauses and sections by management domain does not necessarily provide a measure of language specificity towards Pacific salmon. However, the clauses can be seen to fall within a spectrum of relevance. For example, a clause that states catch limits for Chinook salmon would be much more specific to salmon management than a clause that states that a minister shall include ecological integrity objectives in a park management plan. Both clauses influence salmon governance and management, but one clause is more direct. A “scope” classification was developed as part of this study to parallel management domains and categorize clauses based on their direct application to Pacific salmon. The scope was determined by the specificity of the language used in the section. The scope categories were defined as follows:
+Regulatory language that can be matched to management domain and IUCN threat categories is not inherently specific to Pacific salmon. However, clauses fall within a relevance spectrum. For example, a clause that states catch limits for Chinook salmon would be much more specific to salmon management than a clause that states that a minister shall include ecological integrity objectives in a park management plan. Both clauses influence salmon governance and management, but one clause is more direct. A “scope” classification was developed as part of this study to parallel management domains and categorize clauses based on their direct application to Pacific salmon. The scope was determined by the specificity of the language used in the section. The scope categories were defined as follows:
 
 <div style="margin-left: 30px; padding-left: 10px">
 <ul style='list-style-type: none'>
-<li>1 – Salmon: refers to Pacific salmon specifically</li>
-<li>2 – Fish: refers to fish that include salmon</li>
-<li>3 – Habitat: refers to any habitat that includes salmon habitat</li>
-<li>4 – Governance: refers to administrative processes and structure</li>
+<li><strong>1 – Salmon</strong>: refers to Pacific salmon specifically</li>
+<li><strong>2 – Fish</strong>: refers to fish that include salmon</li>
+<li><strong>3 – Habitat</strong>: refers to any habitat that includes salmon habitat</li>
+<li><strong>4 – Governance</strong>: refers to administrative processes and structure</li>
 </ul>
 </div>
 
-The scope assignment process was linked but occurred independent of the management domain and IUCN threat assignment process. The “1 – Salmon” scope was assigned based solely on salmon keywords (salmon, Chinook, sockeye, etc.), regardless of management domain or IUCN threat. The “2 – Fish” and “3 – Habitat” scopes align directly to IUCN threats (unless already classified as “1 – Salmon”). The “4 – Governance” scope was applied lastly in a separate matching process.
+The scope assignment process was linked but occurred independent of the management domain and IUCN threat assignment process. The “1 – Salmon” scope was assigned based solely on salmon keywords (salmon, Chinook, sockeye, etc.), regardless of management domain or IUCN threat. The “2 – Fish” and “3 – Habitat” scopes align directly to IUCN threats (unless already classified as “1 – Salmon”). The “4 – Governance” scope was applied last in a separate matching process.
 
 ## Keyword matching process
 
@@ -249,24 +249,24 @@ Assessment of legislative context is prone to subjective interpretation. The inc
 <li>Legislation accumulation and review (CanLii)</li>
 <li>Parse legislation by clause, section, and heading (R)</li>
 <li>Match management domain and IUCN threat keywords to clauses (R)</li>
-<li>Match clause type keywords to clauses (R)</li>
 <li>Assign Scope (R)</li>
+<li>Match clause type keywords to clauses (R)</li>
 </ol>
 </div>
 
 ### Legislation accumulation and review</strong>
 
-We focused our review on established Canadian federal and British Columbian provincial legislation (acts and regulations) for inclusion in the management domain process. We did not include specific departmental policy frameworks and processes throughout this exercise unless specifically referenced in the statutes because these executive strategies are prone to changes in the political, administrative, and budgetary landscape. Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were not included explicitly. Although this other legislation is pivotal in the management of Pacific salmon, considering this regionally diverse administration was outside the scope of this legislative review in terms of feasibility.
+This review focused on established Canadian federal and British Columbian provincial legislation (acts and regulations) for inclusion in the management domain process. Specific departmental policy frameworks and processes were not included throughout this exercise unless specifically referenced in the statutes because these executive strategies are prone to changes in the political, administrative, and budgetary landscape. Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were not included explicitly. Although this other legislation is pivotal in the management of Pacific salmon, considering this regionally diverse administration was outside the scope of this legislative review in terms of feasibility and timeline.
 
-The <a href="https://www.canlii.org/" style="color:#668899">Canadian Legal Information Institute website, CanLII</a>, provides an excellent resource for searching federal and provincial acts and regulations by keywords. We created a systematic process for collecting legislation by:
+The <a href="https://www.canlii.org/" style="color:#668899">Canadian Legal Information Institute website, CanLII</a>, provides an excellent resource for searching federal and provincial legislation by keyword search. CanLii was used as a systematic process to collect relevant legislation in the following steps:
 
 <div style="margin-left: 30px; padding-left: 10px">
 <ol>
-<li>querying Pacific salmon specific terms (salmon, chinook, sockeye, etc.), which we called "Type A Legislation,"</li>
-<li>extracting adjacent keywords from the Type A Legislation (word frequency analysis),</li>
-<li>querying new keywords and IUCN Threat keywords in CanLII to find "Type B Legislation" (doesn't mention salmon by name),</li>
-<li>filtering legislation regionally (excluding provinces other than BC), and</li>
-<li>downloading HTML files for relevant legislation directly from government websites.</li>
+<li>query Pacific salmon specific terms (salmon, chinook, sockeye, etc.),</li>
+<li>extract other keywords from the salmon-specific legislation (word frequency analysis),</li>
+<li>query new keywords and IUCN Threat keywords in CanLII to find adjacent legislation,</li>
+<li>filter legislation regionally (excluding provinces other than BC), and</li>
+<li>download HTML files for relevant legislation directly from government websites.</li>
 </ol>
 </div>
 
@@ -295,7 +295,7 @@ if (file.exists(image_path)) {
 }
 ```
 
-Legislation presented on Canadian and British Columbian government websites, and corresponding HTML code, is structured such that each clause is separated individually as a paragraph element. HTML code for paragraph elements is generally consistent across legislation, but section, subsection, and heading elements are not. As shown in Figure 3, when we refer to a “clause” we are including subclauses, but also sections, subsections, and opening words (chapeau or umbrella) when they are stand-alone paragraph elements in the HTML. We parsed the HTML files using R and the "rvest" package to extract the text of each clause, then grouped by section and heading.
+Legislation presented on Canadian and British Columbian government websites, and corresponding HTML code, is structured such that each clause is separated individually as a paragraph element. HTML code for paragraph elements is generally consistent across legislation, but section, subsection, and heading elements are not. As shown in Figure 3, “clause” in this study can also refer to subclauses, but also sections, subsections, and opening words (chapeau or umbrella) when they are stand-alone paragraph elements. HTML files were parsed using R and the "rvest" package to extract the text of each clause, then grouped by section and heading.
 
 ### Database Compendium Development
 
@@ -446,7 +446,7 @@ dbDisconnect(conn)
 
 ## Management domains and IUCN threat categories
 
-Management domains were identified within all the collected statutes. Pollution was the management domain with the highest section count (Figures 4), split almost evenly between federal and provincial jurisdictions. Human Disturbance (research activities) and Climate Change and Natural Disasters had the fewest section count. Fisheries was in the top three for section count, with a majority of sections under federal jurisdiction. Water Use and Watercourse Modifications was in the top four for section count, with a majority of sections under provincial jurisdiction. This count indicates an underlying relationship where salmon harvest is controlled federally while habitat aspects are governed provincially.
+Management domains were identified within all the collected statutes. Pollution was the management domain with the highest section count (Figure 4), split almost evenly between federal and provincial jurisdictions. Human Disturbance (research activities) and Climate Change and Natural Disasters had the fewest section count. Fisheries was in the top three for section count, with a majority of sections under federal jurisdiction. Water Use and Watercourse Modifications was in the top four for section count, with a majority of sections under provincial jurisdiction. This count indicates an underlying possibly dysfunctional relationship where salmon harvest is controlled federally while habitat aspects are governed provincially.
 
 ```{r management-domain-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -601,10 +601,10 @@ if (!file.exists(db_path)) {
 ```
 
 <p style="text-align: left;">
-  <em>Figure 4. Count of clauses matched by management domains stacked by jurisdiction.</em>
+  <em>Figure 4. Count of sections matched by management domains stacked by jurisdiction.</em>
 </p>
 
-IUCN Level 2 categories are more specific to salmon threats, and the categorization process matched to 25 categories (Figure 5) that parallel the management domain categories. 
+IUCN Level 2 categories are more specific, and the categorization process matched to 25 categories (Figure 5) that parallel the management domain categories. Multiple IUCN threats comprise a management domain; however Water-Borne & Other Effluent Pollution (9.1) matched with the highest number of sections (as in the management domains) followed by Fishing, Harvesting & Controlling Aquatic Species (5.4). Eight IUCN threat categories make up the Water Use and Watercourse Modifications management domain, but Dams & Water Management / Use (7.2) has the majority of matches.
 
 ```{r section-count-by-iucn, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
 # 📦 Load required libraries
@@ -691,11 +691,11 @@ if (!file.exists(db_path)) {
 
 ```
 
-<p style="text-align: left;"><em>Figure 5. Stacked bar chart showing alignment of Pacific salmon threat factors (IUCN Level 2) with jurisdictional distribution of legislative paragraphs.</em></p>
+<p style="text-align: left;"><em>Figure 5. Count of sections matched by IUCN threat categories stacked by jurisdiction..</em></p>
 
 ## Scope
 
-Language more specific and direct to Pacific salmon management is found in far fewer sections than indirect, less specific language (Figure 6). Only 74 sections in 22 statutes mention Pacific salmon, while 2,607 sections in 165 statutes mention habitat aspects that impact salmon. It is also interesting to note that the federal Fisheries Act does not use the word "salmon" or any salmon-specific keywords (1 - Salmon) at all, only the regulations made under the Fisheries Act use those words.
+Scope categories were assigned to clauses and sections parallel to management domains and IUCN threat categories. Language specific to Pacific salmon management was found in far fewer sections than indirect, less specific language (Figure 6). Only 74 sections in 22 statutes mention Pacific salmon, while 2,607 sections in 165 statutes mention habitat aspects that impact salmon. It is also interesting to note that the federal Fisheries Act does not use the word "salmon" or any salmon-specific keywords (1 - Salmon) at all, only the regulations made under the Fisheries Act use salmon-specific language.
 
 ```{r scope-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -887,7 +887,7 @@ ggplot(donut_data) +
 
 <p style="text-align: left;"><em>Figure 6. Count of sections as a proportion by management domain categories and tiered by scope.</em></p>
 
-Using the '1 - Salmon' scope for clauses shows the Type A Legislation along with a comparison of the number of paragraphs by Jurisdiction. The results are shown in the bar chart below, which displays the number of paragraphs for each piece of legislation that is specific to salmon. The chart is color-coded by jurisdiction (Federal or Provincial) to highlight the distribution of paragraphs across different legislative frameworks.
+More federal legislation sections matched with salmon harvest categories than provincial, as shown in Figures 4 and 5 above. Pacific salmon-specific language (1 - Salmon scope) also matched more federal statutes, specifically, the British Columbia Sport Fishing Regulations, 1996; National Parks of Canada Fishing Regulations; and Pacific Fishery Regulations 1993 (Figure 7).
 
 ```{r unique-section-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
 # 📦 Load libraries
@@ -974,7 +974,7 @@ if (nrow(summary_data) > 0) {
 
 ```
 
-<p style="text-align: center;"><em>Figure 7. Count of sections by individual legislation (acts and regulations) and coloured by jurisdiction.</em></p>
+<p style="text-align: left;"><em>Figure 7. Count of sections by individual legislation (acts and regulations) and coloured by jurisdiction.</em></p>
 
 ## Clause type
 
