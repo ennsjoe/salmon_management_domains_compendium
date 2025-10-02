@@ -978,7 +978,7 @@ if (nrow(summary_data) > 0) {
 
 ## Clause type
 
-Clause types were assessed for all clauses in the collected legislation. The clause types that overlap with assigned management domains are as follows:
+Independent of management domain and IUCN threat categories, the clause types (contextual nature of clauses) was assessed by matching "clause type keywords" (Appendix III) to clauses. Authorization & Mandate; Instruction; and Licence, Permitting, & Exemptions matched the largest number of sections, while Prohibition, Restriction, or Limitation matched the fewest. Naturally, the management domains with the highest number of matched sections also had the highest number of matched clause types; however, the density of the clause type matching can be shown relatively (Figure 8).
 
 ```{r clause-type-with-domain-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -1118,13 +1118,13 @@ ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = section_
 
 ```
 
-<p style="text-align: center;"><em>Figure X. _______.</em></p>
+<p style="text-align: left;"><em>Figure 8. Section count of clause types in relation to management domains.</em></p>
 
 ## Conservation Units (CUs) and Recovery Potential Assessments (RPAs)
 
 This shows a tally of CUs by threat risk ranking. Chinook and lake type sockeye appear in the most extreme threat risk ranking.
 
-```{r cu-index-tally, include=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=9}
+```{r cu-index-tally, include=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=8}
 # Load libraries
 library(here)
 library(data.table)
@@ -1172,10 +1172,10 @@ ggplot(cu_tally, aes(x = rpa_threat_ranking, y = unique_cu_count, fill = cu_spec
   geom_bar(stat = "identity") +
   scale_fill_manual(values = custom_colors) +
   labs(
-    title = "Unique CU Index Count per RPA Threat Ranking",
+    title = "CU Count per RPA Threat Ranking",
     x = "RPA Threat Ranking",
-    y = "Number of Unique CU Indexes",
-    fill = "CU Species"
+    y = "Conservation Unit Count",
+    fill = "Species"
   ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
@@ -1183,7 +1183,7 @@ ggplot(cu_tally, aes(x = rpa_threat_ranking, y = unique_cu_count, fill = cu_spec
 
 ```
 
-<p style="text-align: center;"><em>Figure X. _______.</em></p>
+<p style="text-align: left;"><em>Figure 9. _______.</em></p>
 
 We can then break down the threat ranking by IUCN threat category to identify which threats were identified as the highest risk. Geological Events was listed and the most extreme risk, while Dams and Water Management / Use was listed as the next most extreme. For both these threat categories we are able filter the compiled legislation to identify sections and clauses relevant to these extreme risk categories (Appendix ___).
 
