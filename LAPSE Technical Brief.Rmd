@@ -156,7 +156,7 @@ image_path <- here("Management Domain Flowchart.png")
 if (file.exists(image_path)) {
   cat(paste0(
     '<div style="max-width:600px; margin-left:0; padding:10px;">',
-    '<img src="', image_path, '" alt="Flowchart" style="width:85%; height:auto;">',
+    '<img src="', image_path, '" alt="Flowchart" style="width:90%; height:auto;">',
     '<p style="font-size:0.9em;"><em>Figure 2. Flowchart showing alignment of Pacific salmon threat factors (Four H\'s) with Management Domain in relation to legislation and jurisdiction.</em></p>',
     '</div>'
   ))
@@ -288,7 +288,7 @@ image_path <- here("Legistics Paragraphing.png")
 if (file.exists(image_path)) {
   cat(paste0(
     '<div style="max-width:600px; margin-left:0; padding:10px;">',
-    '<img src="', image_path, '" alt="Diagram" style="width:85%; height:auto;">',
+    '<img src="', image_path, '" alt="Diagram" style="width:90%; height:auto;">',
     '<p style="font-size:0.9em;"><em>Figure 3. Fisheries Act (federal) examples of paragraph parsing from HTML code.</em></p>',
     '</div>'
   ))
@@ -516,7 +516,7 @@ if (!file.exists(db_path)) {
 
 <br>
 
-```{r section-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
+```{r section-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, fig.height=8}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
@@ -583,9 +583,9 @@ if (!file.exists(db_path)) {
       guide = guide_legend(reverse = TRUE)
     ) +
     labs(
-      title = "Section Count by Management Domain",
-      x = "Management Domain",
-      y = "Unique Section Count",
+      title = NULL,
+      x = "Management domain",
+      y = "Section count",
       fill = "Jurisdiction"
     ) +
     theme_minimal(base_size = 14) +
@@ -598,8 +598,6 @@ if (!file.exists(db_path)) {
       legend.text = element_text(size = 12)
     )
 }
-
-
 ```
 
 <p style="text-align: left;">
@@ -608,7 +606,7 @@ if (!file.exists(db_path)) {
 
 IUCN Level 2 categories are more specific, and the categorization process matched to 25 categories (Figure 5) that parallel the management domain categories. Multiple IUCN threats comprise a management domain; however Water-Borne & Other Effluent Pollution (9.1) matched with the highest number of sections (as in the management domains) followed by Fishing, Harvesting & Controlling Aquatic Species (5.4). Eight IUCN threat categories make up the Water Use and Watercourse Modifications management domain, but Dams & Water Management / Use (7.2) has the majority of matches.
 
-```{r section-count-by-iucn, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
+```{r section-count-by-iucn, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, fig.height=8}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
@@ -675,9 +673,9 @@ if (!file.exists(db_path)) {
       guide = guide_legend(reverse = TRUE)
     ) +
     labs(
-      title = "Section Count by IUCN Level 2 Threat",
-      x = "IUCN Threat",
-      y = "Unique Section Count",
+      title = NULL,
+      x = "IUCN threat",
+      y = "Section count",
       fill = "Jurisdiction"
     ) +
     theme_minimal(base_size = 14) +
@@ -880,8 +878,8 @@ ggplot(donut_data) +
   coord_fixed() +
   theme_void() +
   labs(
-    title = "Management Domains Across Scope",
-    subtitle = "Each ring represents Scope; slices show Management Domain weight by Section count"
+    title = NULL,
+    subtitle = NULL
   ) +
   theme(legend.position = "right")
 
@@ -891,7 +889,7 @@ ggplot(donut_data) +
 
 More federal legislation sections matched with salmon harvest categories than provincial, as shown in Figures 4 and 5 above. Pacific salmon-specific language (1 - Salmon scope) also matched more federal statutes, specifically, the British Columbia Sport Fishing Regulations, 1996; National Parks of Canada Fishing Regulations; and Pacific Fishery Regulations 1993 (Figure 7).
 
-```{r unique-section-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
+```{r unique-section-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, fig.height=8}
 # 📦 Load libraries
 library(DBI)
 library(RSQLite)
@@ -956,8 +954,8 @@ if (nrow(summary_data) > 0) {
       "Unknown" = "#999999"
     )) +
     labs(
-      title = "Section Count by Legislation (Scope: 1 - Salmon)",
-      x = "Unique Section Count",
+      title = "Section count by legislation (Scope: 1 - Salmon)",
+      x = "Section count",
       y = "Legislation",
       fill = "Jurisdiction"
     ) +
@@ -1056,7 +1054,7 @@ if (!file.exists(db_path)) {
 
 <br>
 
-```{r plot-clause-type-heatmap, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=9}
+```{r plot-clause-type-heatmap, message=FALSE, warning=FALSE, echo=FALSE, fig.width=10, fig.height=8}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
@@ -1104,10 +1102,10 @@ ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = section_
   geom_tile(color = "white") +
   scale_fill_gradient(low = "grey87", high = "black") +
   labs(
-    title = "Clause Type vs. Management Domain",
-    x = "Clause Type",
-    y = "Management Domain",
-    fill = "Section Count"
+    title = NULL,
+    x = "Clause type",
+    y = "Management domain",
+    fill = "Section count"
   ) +
   theme_minimal(base_size = 14 * font_scale) +
   theme(
@@ -1176,9 +1174,9 @@ ggplot(cu_tally, aes(x = rpa_threat_ranking, y = unique_cu_count, fill = cu_spec
   geom_bar(stat = "identity") +
   scale_fill_manual(values = custom_colors) +
   labs(
-    title = "CU Count per RPA Threat Ranking",
-    x = "RPA Threat Ranking",
-    y = "Conservation Unit Count",
+    title = NULL,
+    x = "RPA threat ranking",
+    y = "Conservation Unit count",
     fill = "Species"
   ) +
   theme_minimal() +
@@ -1231,10 +1229,10 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_c
   geom_tile(color = "white") +
   scale_fill_gradient(low = "grey75", high = "black") +
   labs(
-    title = "Threat Ranking by IUCN Threat",
-    x = "IUCN Threat (Level 2)",
-    y = "RPA Threat Ranking",
-    fill = "CU Count"
+    title = NULL,
+    x = "IUCN threat (level 2)",
+    y = "RPA threat ranking",
+    fill = "CU count"
   ) +
   theme_minimal() +
   theme(
@@ -1395,10 +1393,10 @@ ggplot(heatmap_data, aes(x = domain_x, y = domain_y, fill = N)) +
   geom_tile(color = "white") +
   scale_fill_gradient(low = "grey90", high = "black") +
   labs(
-    title = "Co-occurrence of Management Domains by Section",
-    x = "",
-    y = "",
-    fill = "Co-occurrence Count"
+    title = NULL,
+    x = NULL,
+    y = NULL,
+    fill = "Co-occurrence count"
   ) +
   theme_minimal(base_size = 14) +
   theme(
@@ -1410,9 +1408,6 @@ ggplot(heatmap_data, aes(x = domain_x, y = domain_y, fill = N)) +
     panel.background = element_rect(fill = "white", color = NA),
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
-
-
-
 ```
 
 <p style="text-align: left;"><em>Figure 11. Section count across management domains.</em></p>
@@ -1464,7 +1459,7 @@ ggplot(plot_data, aes(x = keyword_count, y = section_count, label = label_value)
   geom_point(color = "#2c3e50", size = 3) +
   geom_text(hjust = -0.1, size = 3.5) +
   labs(
-    title = "Keyword quantity vs. section count",
+    title = NULL,
     x = "Keyword count (IUCN threat)",
     y = "Section count"
   ) +
@@ -1476,6 +1471,10 @@ ggplot(plot_data, aes(x = keyword_count, y = section_count, label = label_value)
 <p style="text-align: left;"><em>Figure 12. Section count as a function of keyword quantity (IUCN threat) .</em></p>
 
 <br>
+
+# Conclusion
+
+The LAPSE tool framework provides a novel approach to linking legal language with salmon biology language. The framework can be used to identify relevant legislation for specific salmon management issues, such as those identified through the COSEWIC Recovery Potential Assessment (RPA) process. The framework's flexibility allows for the inclusion of multiple management domains and IUCN threat categories, reflecting the complexities of legal language and salmon management. However, the framework also has limitations, such as the potential for bias towards categories with more keywords. Future work could focus on refining the keyword lists and exploring the relationships between management domains.
 
 # References
 
