@@ -1474,7 +1474,7 @@ ggplot(plot_data, aes(x = keyword_count, y = section_count, label = label_value)
 
 # Conclusion
 
-The LAPSE tool framework provides a novel approach to linking legal language with salmon biology language. The framework can be used to identify relevant legislation for specific salmon management issues, such as those identified through the COSEWIC Recovery Potential Assessment (RPA) process. The framework's flexibility allows for the inclusion of multiple management domains and IUCN threat categories, reflecting the complexities of legal language and salmon management. However, the framework also has limitations, such as the potential for bias towards categories with more keywords. Future work could focus on refining the keyword lists and exploring the relationships between management domains.
+The LAPSE tool framework provides a novel approach to linking legal language with salmon management categorization. The framework can be used to identify relevant legislation for specific human activity concerns, such as those identified through the COSEWIC Recovery Potential Assessment (RPA) process. The framework's flexibility allows for the inclusion of multiple management domains and IUCN threat categories, reflecting the complexities of legal language and salmon management. However, the framework also has limitations, such as the potential for bias towards categories with more keywords. Future work could focus on refining the keyword lists and exploring the relationships between management domains.
 
 # References
 
@@ -1538,7 +1538,7 @@ Westwood AR, Otto SP, Mooers A, Darimont C, Hodges KE, Johnson C, et al. 2019. P
 
 <hr>
 
-# Appendix
+# Appendices
 
 <hr>
 
@@ -1853,16 +1853,16 @@ reactable(
   highlight = TRUE,
   defaultPageSize = 15,
   columns = list(
-    clause_type = colDef(name = "Clause Type", minWidth = 150),
+    clause_type = colDef(name = "Clause type", minWidth = 150),
     keyword = colDef(name = "Keyword", minWidth = 200),
     Frequency = colDef(name = "Frequency", align = "center")
   )
 )
 ```
 
-## Appendix IV - Case Study: IUCN 10.1 Geological Events
+## Appendix IV - Case Study: Geological Events
 
-One IUCN threat was assessed as "Extreme" through COSEWIC Recovery Potential Assessment processes, which was the "10.1 Geological Events" threat (DFO 2020; DFO 2022). This threat was assigned to one sockeye and three Chinook conservation units, all in the Fraser Interior area related to the "ongoing effects from Big Bar landslide" in 2018 (DFO 2020; DFO 2022):
+One IUCN threat was assessed as "Extreme" through COSEWIC Recovery Potential Assessment processes, which was "10.1 Geological Events" (DFO 2020; DFO 2022). This threat was assigned to one sockeye and three Chinook conservation units, all in the Fraser Interior area related to the "ongoing effects from Big Bar landslide" in 2018 (DFO 2020; DFO 2022):
 
 <ul>
 <li>Chinook: CK-10, MIDDLE FRASER RIVER_SP_1.3</li>
@@ -1871,7 +1871,7 @@ One IUCN threat was assessed as "Extreme" through COSEWIC Recovery Potential Ass
 <li>Sockeye: SEL-06-14, TAKLA/TREMBLEUR-EARLY STUART TIMING</li>
 </ul>
 
-"Geological events" is not a large category to be assigned to appropriate legislation (Figure X). Aside from landscape-scale changes due to actions like forestry or mining, much of the nature of this category might not be viewed human-caused or managed. Subsequently, this threat has a small proportion of keywords that match the relevant legislation:
+"Geological events" is not a large category to be assigned to appropriate legislation (Figure 5). Aside from landscape-scale changes due to actions like forestry or mining, much of the nature of this category might not be viewed as human-caused or managed. Subsequently, this threat has a small proportion of keywords that match the relevant legislation:
 
 ```{r geological-events-keywords-tags, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -1910,7 +1910,7 @@ if (!file.exists(db_path)) {
 
 The above keywords matched to the following amount of legislation:
 
-```{r iucn-geological-events-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+```{r iucn-geological-events-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, fig.height=8}
 library(DBI)
 library(RSQLite)
 library(here)
@@ -1969,7 +1969,7 @@ if (!file.exists(db_path)) {
 
 <br>
 
-```{r section-count-by-geological-events, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=12, fig.height=9}
+```{r section-count-by-geological-events, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, fig.height=8}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
@@ -2032,9 +2032,9 @@ if (!file.exists(db_path)) {
       guide = guide_legend(reverse = TRUE)
     ) +
     labs(
-      title = "Section Count for 10.1 Geological Events (IUCN)",
-      x = "Unique Section Count",
-      y = "Legislation Name",
+      title = NULL,
+      x = "Section count",
+      y = "Legislation name",
       fill = "Jurisdiction"
     ) +
     theme_minimal(base_size = 14) +
@@ -2049,11 +2049,11 @@ if (!file.exists(db_path)) {
 }
 ```
 
-<p style="text-align: center;">
-  <em>Figure X. Description.</em>
+<p style="text-align: left;">
+  <em>Figure 13. Section count by legislation for the IUCN threat category "Geological Events (10.1)" coloured by jurisdiction.</em>
 </p>
 
-<br>
+The Designation clause type category matched the largest proportion of clauses that also match Geological Events (Figure 14). This is largely due to the designation of avalanche and landslide areas. Instruction also had a large proportion of clause type matches due to the nature of forestry legislation and the prevalence of forestry actions to result in landslides. Prohibition, Restriction, or Limitation clause types matched the fewest clauses.
 
 ```{r clause-type-pie-geological-events, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, fig.height=8}
 library(DBI)
@@ -2113,13 +2113,13 @@ ggplot(pie_data, aes(x = "", y = N, fill = label)) +
 }
 ```
 
-<p style="text-align: center;">
-  <em>Figure X. Description.</em>
+<p style="text-align: left;">
+  <em>Figure 14. Proportion of clause type matches for the "Geological Events (10.1)" IUCN threat category.</em>
 </p>
 
 <hr>
 
-## Appendix V - Case Study: IUCN 7.2 Dams & Water Management / Use
+## Appendix V - Case Study: Dams & Water Management / Use
 
 One IUCN threat was assessed as "Extreme-High" through COSEWIC Recovery Potential Assessment processes, which was "7.2 Dams & Water Management / Use" (DFO 2020). Water extraction, including groundwater, for irrigation and domestic purposes is listed as the most significant concern (DFO 2020). This threat was assigned to one Chinook conservation unit in the Fraser Interior area: 
 
@@ -2127,7 +2127,7 @@ One IUCN threat was assessed as "Extreme-High" through COSEWIC Recovery Potentia
 <li>Chinook: CK-16, SOUTH THOMPSON-BESSETTE CREEK_SU_1.2</li>
 </ul>
 
-"Dams and Water Management / Use" is one of the largest categories assigned to appropriate legislation (Figure X). Aside from pollution and fisheries, watercourse alterations are recognized as one of the top human activities that require regulation. Subsequently, this threat has a large proportion of keywords that match the relevant legislation:
+"Dams and Water Management / Use" is one of the largest categories matched with appropriate legislation (Figure 5). Aside from pollution and fisheries, watercourse alterations are recognized as one of the top human activities that require regulation. This threat also has a large proportion of keywords that match the relevant legislation:
 
 ```{r dams-water-management-keywords-tags, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -2286,9 +2286,9 @@ if (!file.exists(db_path)) {
       guide = guide_legend(reverse = TRUE)
     ) +
     labs(
-      title = "Section Count for 7.2 Dams & Water Management / Use (IUCN)",
-      x = "Unique Section Count",
-      y = "Legislation Name",
+      title = NULL,
+      x = "Section count",
+      y = "Legislation name",
       fill = "Jurisdiction"
     ) +
     theme_minimal(base_size = 14) +
@@ -2303,11 +2303,11 @@ if (!file.exists(db_path)) {
 }
 ```
 
-<p style="text-align: center;">
-  <em>Figure X. Description.</em>
+<p style="text-align: left;">
+  <em>Figure 15. Section count by legislation for the IUCN threat category "Dams and Water Management / Use" coloured by jurisdiction.</em>
 </p>
 
-<br>
+The clause type matches for Dams and Water Management / Use was much more evenly distributed (Figure 16) likely due to the large number of clause matches in total for that IUCN threat category. Interpretation & Purpose matched the most clauses (includes Definition sections), while Administration, Application, & Structure matched the fewest clauses followed by Prohibition, Restriction, or Limitation.
 
 ```{r clause-type-pie-dams-water-management, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=10, fig.height=8}
 library(DBI)
@@ -2358,8 +2358,8 @@ if (!file.exists(db_path)) {
     coord_polar("y", start = 0) +
     scale_fill_manual(values = palette) +
     labs(
-      title = "Clause Type Distribution for IUCN Threat 7.2 Dams & Water Management / Use",
-      fill = "Clause Type"
+      title = NULL,
+      fill = "Clause type"
     ) +
     theme_void(base_size = 14) +
     theme(
@@ -2369,8 +2369,8 @@ if (!file.exists(db_path)) {
 }
 ```
 
-<p style="text-align: center;">
-  <em>Figure X. Description.</em>
+<p style="text-align: left;">
+  <em>Figure 16. Proportion of clause type matches for the "Dams and Water Management / Use" IUCN threat category.</em>
 </p>
 
 <br>

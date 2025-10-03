@@ -5,6 +5,6 @@ account: ennsjoe
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 15483903
-bundleId: 10985373
+bundleId: 10989541
 url: https://ennsjoe.shinyapps.io/lapse_dashboard/
 version: 1

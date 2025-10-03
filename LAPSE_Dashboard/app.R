@@ -353,7 +353,7 @@ server <- function(input, output, session) {
             label_data$label_type == "Management Domain",
         ]
         
-        # Highlight Management Domain keywords
+        # Highlight Management Domain keywords----
         highlighted_text <- aggregated_text
         for (kw in unique(domain_labels$keyword)) {
           css_class <- "highlight-domain"
@@ -362,7 +362,7 @@ server <- function(input, output, session) {
           if (!is.null(css_class) && grepl(fixed(kw), highlighted_text, ignore.case = TRUE)) {
             highlighted_text <- str_replace_all(
               string = highlighted_text,
-              pattern = fixed(kw, ignore_case = TRUE),
+              pattern = regex(kw, ignore_case = TRUE),
               replacement = paste0("<span class='", css_class, "'>", kw, "</span>")
             )
           }
@@ -382,7 +382,7 @@ server <- function(input, output, session) {
           if (!is.null(css_class) && grepl(fixed(kw), highlighted_text, ignore.case = TRUE)) {
             highlighted_text <- str_replace_all(
               string = highlighted_text,
-              pattern = fixed(kw, ignore_case = TRUE),
+              pattern = regex(kw, ignore_case = TRUE),
               replacement = paste0("<span class='", css_class, "'>", kw, "</span>")
             )
           }
