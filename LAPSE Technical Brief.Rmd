@@ -131,6 +131,8 @@ This report outlines a framework and process to relate human activities that thr
 </ol>
 </div>
 
+⚠️ Disclaimer: none of the information presented in this report qualifies as legal advice. The authors of this report are aquatic biologists with little to no legal training.
+
 To better categorize legislation aligned with salmon threats and create an interface between biological management and the regulatory context, this study defined discrete areas of administrative responsibility for Pacific salmon as “management domains.”
 
 # Methods
@@ -1120,9 +1122,11 @@ ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = section_
 
 <p style="text-align: left;"><em>Figure 8. Section count of clause types in relation to management domains.</em></p>
 
+<br>
+
 ## Conservation Units (CUs) and Recovery Potential Assessments (RPAs)
 
-This shows a tally of CUs by threat risk ranking. Chinook and lake type sockeye appear in the most extreme threat risk ranking.
+Twenty-seven Conservation Units (CU) were included in this exercise, having been assessed through the COSEWIC Recovery Potential Assessment (RPA) process. RPAs used the same IUCN threat categories for assessment ranked from low to extreme by CU. Figure 9 shows the aggregate of the rankings regardless of threat, but stacked by species. More CUs had IUCN threats ranked from negligible to low while a few CUs had extreme to high rankings, specifically for Chinook and lake type sockeye.
 
 ```{r cu-index-tally, include=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=8}
 # Load libraries
@@ -1183,11 +1187,11 @@ ggplot(cu_tally, aes(x = rpa_threat_ranking, y = unique_cu_count, fill = cu_spec
 
 ```
 
-<p style="text-align: left;"><em>Figure 9. _______.</em></p>
+<p style="text-align: left;"><em>Figure 9. Conservation Unit (CU) count by IUCN threat ranking through the COSEWIC Recovery Potential Analysis (RPA) process.</em></p>
 
-We can then break down the threat ranking by IUCN threat category to identify which threats were identified as the highest risk. Geological Events was listed and the most extreme risk, while Dams and Water Management / Use was listed as the next most extreme. For both these threat categories we are able filter the compiled legislation to identify sections and clauses relevant to these extreme risk categories (Appendix ___).
+The RPA process identified two IUCN threat categories as being extreme or extreme-high ranking. Geological Events (10.1) received an extreme ranking, and Dams & Water Management / Use (7.2) received an extreme-high ranking (Figure 10). Appendices IV and V of this report use these categories as case studies to demonstrate how the use of the LAPSE tool framework can identify relevant legislation.
 
-```{r cu-ranking-heatmap, include=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=9}
+```{r cu-ranking-heatmap, include=TRUE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=8}
 # Load libraries
 library(here)
 library(data.table)
@@ -1227,10 +1231,10 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_c
   geom_tile(color = "white") +
   scale_fill_gradient(low = "grey75", high = "black") +
   labs(
-    title = "CU Ranking Heatmap by Unique CU Index Count",
-    x = "IUCN Level 2",
+    title = "Threat Ranking by IUCN Threat",
+    x = "IUCN Threat (Level 2)",
     y = "RPA Threat Ranking",
-    fill = "CU Index Count"
+    fill = "CU Count"
   ) +
   theme_minimal() +
   theme(
@@ -1242,7 +1246,7 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_c
 
 ```
 
-<p style="text-align: center;"><em>Figure X. _______.</em></p>
+<p style="text-align: left;"><em>Figure 10. Conservation Unit (CU) count across IUCN threat categories and the RPA threat ranking.</em></p>
 
 # Discussion
 
@@ -1250,7 +1254,7 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_c
 
 Show a graphic of domain co-occurrence
 
-```{r management-domain-upset-clean, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=9}
+```{r management-domain-upset-clean, message=FALSE, warning=FALSE, echo=FALSE, fig.width=10, fig.height=8}
 library(DBI)
 library(RSQLite)
 library(data.table)
@@ -1297,17 +1301,15 @@ ComplexUpset::upset(
   intersect = domain_cols,
   name = "Management Domain Overlap",
  base_annotations = list(
-  'Intersection size' = intersection_size(text = list())
-  ),
-  set_sizes = FALSE
+  'Intersection size' = intersection_size(text = list(size = 0))
+),
+set_sizes = FALSE
 )
-
-
 ```
 
 <br>
 
-```{r plot-domain-cooccurrence-heatmap, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=9}
+```{r plot-domain-cooccurrence-heatmap, message=FALSE, warning=FALSE, echo=FALSE, fig.width=10, fig.height=8}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
