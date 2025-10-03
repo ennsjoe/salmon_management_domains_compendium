@@ -1250,61 +1250,94 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_c
 
 # Discussion
 
-## Domain co-occurence
+The LAPSE tool framework creates an interface between legal and salmon biology languages. This approach may be somewhat new and untested. Other advantages, opportunities, and weaknesses may become apparent through wider use. Possible study opportunities and weaknesses identified are:
 
-Show a graphic of domain co-occurrence
+<ul>
+<li><strong>Opportunities</strong></li>
+<ul>
+<li>Domain co-occurrence (overlap)</li>
+</ul>
+<li><strong>Weaknesses</strong></li>
+<ul>
+<li>Clause count as a function of keyword quantity</li>
+</ul>
+</ul>
 
-```{r management-domain-upset-clean, message=FALSE, warning=FALSE, echo=FALSE, fig.width=10, fig.height=8}
+## Domain co-occurrence
+
+The LAPSE keyword matching process allows that multiple management domains (and IUCN threats) can be matched to clauses and sections. This dynamic is not a flaw, but rather a way of showing the complexities of legal language as related to salmon management. For example, Section 7 of the federal Aquaculture Activities Regulations (Fisheries Act) states that: "The owner or the operator of the aquaculture facility must, in depositing a deleterious substance referred to in paragraph 2(a) or (b), take reasonable measures to minimize detriment to fish and fish habitat outside the facility..." Keywords in this clause correctly match to the Pollution, as well as, Aquaculture and Hatcheries management domains. Assigning only one management domain would over-simplify the classification in terms of salmon management as the clause clearly references both aquaculture and pollution. This section could be important for users searching either aquaculture or pollution regulations for a particular watercourse.
+
+Domain co-occurrence within sections allows for an interesting study of how management domains overlap (Figure 11). A frequent co-occurrence among management domains doesn't necessarily represent a relationship in reality, simply the legal framing used to regulate these aspects. The Pollution management domain and Water Use and Watercourse Modifications are in the top four most matched to sections (Figure 4), and expectedly, these domains have the largest number of co-occurrences. Both domains relate generally to the impacts from anthropogenic industrialization and commercial development, which is reflected in the legal language.
+
+```{r top-domain-pairs-display, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
 library(RSQLite)
-library(data.table)
-library(ComplexUpset)
-library(ggplot2)
 library(here)
+library(data.table)
 
-# Connect to SQLite
-db_path <- file.path(here::here("output"), "legislation.db")
-conn <- dbConnect(SQLite(), dbname = db_path)
-
-# Query Management Domain labels joined with Sections
-query <- "
-SELECT lp.Section, pl.label_value AS ManagementDomain
-FROM paragraph_label_table pl
-JOIN LegislationParagraphs lp ON pl.paragraph_id = lp.paragraph_id
-WHERE pl.label_type = 'Management Domain' AND lp.Section IS NOT NULL
-"
-md_data <- as.data.table(dbGetQuery(conn, query))
-dbDisconnect(conn)
-
-# Create binary matrix: rows = Sections, columns = Management Domains
-md_matrix <- dcast(
-  md_data, 
-  Section ~ ManagementDomain, 
-  fun.aggregate = function(x) as.integer(length(x) > 0), 
-  value.var = "ManagementDomain"
-)
-
-# Remove Section column to collapse by domain combination only
-domain_cols <- setdiff(names(md_matrix), "Section")
-md_collapsed <- md_matrix[, ..domain_cols][, .N, by = domain_cols]
-
-# Expand rows by frequency
-md_expanded <- md_collapsed[rep(seq_len(.N), times = md_collapsed$N)]
-md_expanded$N <- NULL
-
-# Convert to data.frame for ComplexUpset
-md_df <- as.data.frame(md_expanded)
-
-# Plot using ComplexUpset
-ComplexUpset::upset(
-  md_df,
-  intersect = domain_cols,
-  name = "Management Domain Overlap",
- base_annotations = list(
-  'Intersection size' = intersection_size(text = list(size = 0))
-),
-set_sizes = FALSE
-)
+db_path <- file.path(here("output", "legislation.db"))
+if (!file.exists(db_path)) {
+  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
+} else {
+  conn <- dbConnect(SQLite(), dbname = db_path)
+  
+  # Load Management Domain labels
+  domain_labels <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, label_value AS domain
+    FROM paragraph_label_table
+    WHERE label_type = 'Management Domain' AND label_value IS NOT NULL
+  "))
+  
+  # Load paragraph metadata
+  paragraph_meta <- data.table(dbGetQuery(conn, "
+    SELECT paragraph_id, Section, legislation_id
+    FROM LegislationParagraphs
+    WHERE Section IS NOT NULL
+  "))
+  
+  dbDisconnect(conn)
+  
+  # Merge and group by Section-legislation
+  merged <- merge(domain_labels, paragraph_meta, by = "paragraph_id", all.x = TRUE)
+  grouped <- merged[, .(domains = unique(domain)), by = .(Section, legislation_id)]
+  
+  # Generate domain pairs
+  pairwise <- grouped[, {
+    if (length(domains) >= 2) {
+      combs <- combn(domains, 2, simplify = FALSE)
+      # Canonicalize each pair: sort alphabetically
+      data.table(
+        domain1 = sapply(combs, function(x) sort(x)[1]),
+        domain2 = sapply(combs, function(x) sort(x)[2])
+      )
+    } else {
+      NULL
+    }
+  }, by = .(Section, legislation_id)]
+  
+  # Count unique co-occurrences
+  pair_counts <- pairwise[, .N, by = .(domain1, domain2)]
+  
+  # Filter and sort
+  top_pairs <- pair_counts[N > 75][order(-N)]
+  
+  # Display formatted output
+  if (nrow(top_pairs) > 0) {
+    cat("<div style='margin-left: 30px; padding-left: 10px;'>\n")
+    cat("  <h4>Domain Co-occurrence:</h4>\n")
+    cat("  <ul style='list-style-type: none; padding-left: 0;'>\n")
+    for (i in seq_len(nrow(top_pairs))) {
+      cat(sprintf("    <li><strong>%s</strong> → <strong>%s</strong> – %d sections</li>\n",
+                  top_pairs$domain1[i],
+                  top_pairs$domain2[i],
+                  top_pairs$N[i]))
+    }
+    cat("  </ul>\n")
+    cat("</div>\n")
+  } else {
+    cat("<p>No domain pairs with more than 75 co-occurrences found.</p>\n")
+  }
+}
 ```
 
 <br>
@@ -1382,84 +1415,15 @@ ggplot(heatmap_data, aes(x = domain_x, y = domain_y, fill = N)) +
 
 ```
 
+<p style="text-align: left;"><em>Figure 11. Section count across management domains.</em></p>
+
 <br>
-
-```{r top-domain-pairs-display, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-library(DBI)
-library(RSQLite)
-library(here)
-library(data.table)
-
-db_path <- file.path(here("output", "legislation.db"))
-if (!file.exists(db_path)) {
-  cat("<p style='color:red;'>❌ Database file not found at: ", db_path, "</p>")
-} else {
-  conn <- dbConnect(SQLite(), dbname = db_path)
-  
-  # Load Management Domain labels
-  domain_labels <- data.table(dbGetQuery(conn, "
-    SELECT paragraph_id, label_value AS domain
-    FROM paragraph_label_table
-    WHERE label_type = 'Management Domain' AND label_value IS NOT NULL
-  "))
-  
-  # Load paragraph metadata
-  paragraph_meta <- data.table(dbGetQuery(conn, "
-    SELECT paragraph_id, Section, legislation_id
-    FROM LegislationParagraphs
-    WHERE Section IS NOT NULL
-  "))
-  
-  dbDisconnect(conn)
-  
-  # Merge and group by Section-legislation
-  merged <- merge(domain_labels, paragraph_meta, by = "paragraph_id", all.x = TRUE)
-  grouped <- merged[, .(domains = unique(domain)), by = .(Section, legislation_id)]
-  
-  # Generate domain pairs
-  pairwise <- grouped[, {
-    if (length(domains) >= 2) {
-      combs <- combn(domains, 2, simplify = FALSE)
-      # Canonicalize each pair: sort alphabetically
-      data.table(
-        domain1 = sapply(combs, function(x) sort(x)[1]),
-        domain2 = sapply(combs, function(x) sort(x)[2])
-      )
-    } else {
-      NULL
-    }
-  }, by = .(Section, legislation_id)]
-  
-  # Count unique co-occurrences
-  pair_counts <- pairwise[, .N, by = .(domain1, domain2)]
-  
-  # Filter and sort
-  top_pairs <- pair_counts[N > 75][order(-N)]
-  
-  # Display formatted output
-  if (nrow(top_pairs) > 0) {
-    cat("<div style='margin-left: 30px; padding-left: 10px;'>\n")
-    cat("  <h4>Top Domain Co-occurrences:</h4>\n")
-    cat("  <ul style='list-style-type: none; padding-left: 0;'>\n")
-    for (i in seq_len(nrow(top_pairs))) {
-      cat(sprintf("    <li><strong>%s</strong> → <strong>%s</strong> – %d sections</li>\n",
-                  top_pairs$domain1[i],
-                  top_pairs$domain2[i],
-                  top_pairs$N[i]))
-    }
-    cat("  </ul>\n")
-    cat("</div>\n")
-  } else {
-    cat("<p>No domain pairs with more than 75 co-occurrences found.</p>\n")
-  }
-}
-```
 
 ## Clause count as a function of keyword quantity
 
-One criticism could be that the more keywords a category has, the more clauses will be labelled. This is likely true. Here’s a scatterplot that shows number of keywords vs the clause count for that category.
+The LAPSE exercise is an analysis of language. Yet, language is always shifting in society, along with the societal values codified by law. Regulating salmon harvest and pollution has a long history in British Columbia, and is directly relevant to salmon abundance and habitat quality. Subsequently, many keywords and phrases can be identified for these topics. In contrast, regulating aspects of climate change is relatively new and more indirectly linked to salmon management such that fewer keywords and phrases can be found in salmon-specific legislation. A category with more keywords will likely match with more clauses (Figure 12); however, the context of these keyword matches and possible missing keywords must be constantly assessed. 
 
-```{r iucn-scatterplot-section-count, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=9}
+```{r iucn-scatterplot-section-count, message=FALSE, warning=FALSE, echo=FALSE, fig.width=10, fig.height=8}
 library(DBI)
 library(RSQLite)
 library(data.table)
@@ -1500,14 +1464,18 @@ ggplot(plot_data, aes(x = keyword_count, y = section_count, label = label_value)
   geom_point(color = "#2c3e50", size = 3) +
   geom_text(hjust = -0.1, size = 3.5) +
   labs(
-    title = "IUCN Level 2: Keyword Count vs Section Count",
-    x = "Keyword Count (from iucn_l2_keywords)",
-    y = "Unique Section Count"
+    title = "Keyword quantity vs. section count",
+    x = "Keyword count (IUCN threat)",
+    y = "Section count"
   ) +
   theme_minimal() +
   xlim(0, max(plot_data$keyword_count, na.rm = TRUE) * 1.2)
 
 ```
+
+<p style="text-align: left;"><em>Figure 12. Section count as a function of keyword quantity (IUCN threat) .</em></p>
+
+<br>
 
 # References
 
