@@ -358,6 +358,16 @@ Researcher subjectivity can influence the process on two fronts:
 
 However, using keyword lists allows for the subjectivity to be acknowledged, and the keyword lists to be reported such that the process may be repeatable. The keyword list is shown in Appendix II. 
 
+### Keyword and keyphrase revision
+
+The meaning and context behind keywords, especially single words, can cause mis-categorization in unexpected ways. For example, the word "stock" is an important keyword for salmon management (the Fisheries management domain).  However, as a single word, "stock" can also refer to business holdings, freight cars, and cattle, which do not fit the Fisheries management domain. Revision of "stock" as a keyword is important for the accuracy of categorization. Outputs were reviewed iteratively, and keyword revision was a continuous process to:
+
+<ul>
+<li>find more relevant bigram or trigram alternatives (,</li>
+<li>remove keywords where sections are already matched with other, more applicable keywords, and</li>
+<li>search for more specific word variations (plural, past tense, etc.)</li>
+</ul>
+
 ### Multiple matches
 
 Management domains can overlap within sections and clauses. For example the provincial Land-based Finfish Waste Control Regulation (Environmental Management Act) states in Section 2 that: “The owner of a land-based finfish facility is exempt from section 6 (2) and (3) of the Environmental Management Act with respect to the discharge of wastes from the land-based finfish facility if the owner…” This clause matched appropriately with both the “Aquaculture and Hatcheries” and “Pollution” management domains. Because the matching process allows for multiple keywords to be matched per clause, this method allows for an assessment of co-occurrences and connections between management domains.
