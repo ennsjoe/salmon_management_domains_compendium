@@ -17,6 +17,7 @@ library(stringi)
 library(stringr)
 library(dplyr)
 library(tidyr)
+library(shinyWidgets)
 
 # Define database path
 db_path <- "legislation.db"
@@ -69,8 +70,15 @@ ui <- fluidPage(
       width = 6,
       div(class = "main-panel",
           h4("Filter by Jurisdiction"),
-          selectInput("jurisdiction_filter", "Jurisdiction", choices = c("All", jurisdictions)),
-          hr(),
+          radioGroupButtons(
+            inputId = "jurisdiction_filter",
+            label = "Jurisdiction",
+            choices = c("All", "Federal", "Provincial"),
+            selected = "All",
+            justified = TRUE,
+            size = "sm",
+            individual = TRUE
+          ),
           
           h4("Acts"),
           uiOutput("act_buttons"),
