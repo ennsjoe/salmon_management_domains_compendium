@@ -27,7 +27,7 @@ if (!file.exists(db_path)) {
   stop("Database file not found: ", db_path)
 }
 
-# 📁 ️Connect to SQLite database
+# 🔧 Connect to SQLite database
 conn <- dbConnect(RSQLite::SQLite(), dbname = db_path)
 
 # Disconnect when app stops
@@ -50,7 +50,88 @@ jurisdictions <- unique(legislation_data$jurisdiction)
 # 💻 Define UI----
 ui <- fluidPage(
   tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "app_style.css")
+    tags$link(rel = "stylesheet", type = "text/css", href = "app_style.css"),
+    tags$style(HTML("
+      /* Jurisdiction color coding */
+      .act-button.federal,
+      .legislation-button.federal {
+        background-color: #996666;
+        border-left: 4px solid #773333;
+        color: white;
+      }
+      
+      .act-button.provincial,
+      .legislation-button.provincial {
+        background-color: #668899;
+        border-left: 4px solid #446677;
+        color: white;
+      }
+      
+      .act-button.unknown,
+      .legislation-button.unknown {
+        background-color: #999999;
+        border-left: 4px solid #777777;
+        color: white;
+      }
+      
+      .act-button.federal:hover,
+      .legislation-button.federal:hover {
+        background-color: #aa7777;
+        color: white;
+      }
+      
+      .act-button.provincial:hover,
+      .legislation-button.provincial:hover {
+        background-color: #7799aa;
+        color: white;
+      }
+      
+      .act-button.unknown:hover,
+      .legislation-button.unknown:hover {
+        background-color: #aaaaaa;
+        color: white;
+      }
+      
+      /* Jurisdiction toggle switch color coding */
+      .radio-group-buttons .btn[data-value='Federal'] {
+        background-color: #996666 !important;
+        border-color: #773333 !important;
+        color: white !important;
+      }
+      
+      .radio-group-buttons .btn[data-value='Federal']:hover {
+        background-color: #aa7777 !important;
+        border-color: #883333 !important;
+      }
+      
+      .radio-group-buttons .btn[data-value='Provincial'] {
+        background-color: #668899 !important;
+        border-color: #446677 !important;
+        color: white !important;
+      }
+      
+      .radio-group-buttons .btn[data-value='Provincial']:hover {
+        background-color: #7799aa !important;
+        border-color: #557788 !important;
+      }
+      
+      .radio-group-buttons .btn[data-value='All'] {
+        background-color: #f0f0f0 !important;
+        border-color: #ccc !important;
+        color: #333 !important;
+      }
+      
+      .radio-group-buttons .btn[data-value='All']:hover {
+        background-color: #e0e0e0 !important;
+        border-color: #bbb !important;
+      }
+      
+      /* Active state for selected button */
+      .radio-group-buttons .btn.active {
+        opacity: 1 !important;
+        box-shadow: inset 0 3px 5px rgba(0,0,0,.125) !important;
+      }
+    "))
   ),
   
   titlePanel("LAPSE Dashboard"),
@@ -89,7 +170,7 @@ ui <- fluidPage(
           hr(),
           
           h4("Sections and Paragraphs"),
-          uiOutput("section_paragraphs")  # ✅ New inline display
+          uiOutput("section_paragraphs")
       )
     ),
     
@@ -118,7 +199,7 @@ server <- function(input, output, session) {
   selected_act <- reactiveVal(NULL)
   selected_legislation <- reactiveVal(NULL)
   
-  # 🔼 Render domain buttons----
+  # 📼 Render domain buttons----
   output$domain_buttons <- renderUI({
     selected <- selected_domain()
     
@@ -171,6 +252,12 @@ server <- function(input, output, session) {
     selected_legislation(NULL)
   })
   
+  # Observe act reset button
+  observeEvent(input$reset_act, {
+    selected_act(NULL)
+    selected_legislation(NULL)
+  })
+  
   # Reactive: Filter legislation----
   filtered_legislation <- reactive({
     data <- legislation_data
@@ -196,38 +283,56 @@ server <- function(input, output, session) {
     data
   })
   
-  # 🔼 Render act buttons----
+  # 📼 Render act buttons----
   output$act_buttons <- renderUI({
-    acts <- unique(filtered_legislation()$act_name)
+    acts_data <- filtered_legislation()[, c("act_name", "jurisdiction")]
+    acts_data <- unique(acts_data)
     selected <- selected_act()
     
-    if (length(acts) == 0) {
+    if (nrow(acts_data) == 0) {
       return(div("No acts match the selected filters."))
     }
     
-    # If no act is selected, show all available act buttons
-    if (is.null(selected)) {
-      lapply(seq_along(acts), function(i) {
-        act <- acts[i]
-        div(
-          class = "act-button",
-          `onclick` = paste0("Shiny.setInputValue('act_click', '", act, "', {priority: 'event'})"),
-          act
-        )
-      })
-    } else {
-      # Show only the selected act if it's still in the filtered list
-      if (selected %in% acts) {
-        div(
-          class = "act-button selected",
-          selected
-        )
+    tagList(
+      # Always show the reset button
+      div(
+        class = "act-button reset",
+        `onclick` = "Shiny.setInputValue('reset_act', Math.random())",
+        tagList(icon("sync"), "All")
+      ),
+      tags$hr(),
+      
+      # Show either all buttons or just the selected one
+      if (is.null(selected)) {
+        lapply(seq_len(nrow(acts_data)), function(i) {
+          act <- acts_data$act_name[i]
+          jurisdiction <- acts_data$jurisdiction[i]
+          jurisdiction_class <- if (jurisdiction == "Federal") "federal" else if (jurisdiction == "Provincial") "provincial" else "unknown"
+          
+          div(
+            class = paste("act-button", jurisdiction_class),
+            `onclick` = paste0("Shiny.setInputValue('act_click', '", act, "', {priority: 'event'})"),
+            act
+          )
+        })
       } else {
-        # If selected act is no longer valid, reset selection
-        selected_act(NULL)
-        return(div("Selected act is no longer available."))
+        # Show only the selected act if it's still in the filtered list
+        if (selected %in% acts_data$act_name) {
+          jurisdiction <- acts_data$jurisdiction[acts_data$act_name == selected][1]
+          jurisdiction_class <- if (jurisdiction == "Federal") "federal" else if (jurisdiction == "Provincial") "provincial" else "unknown"
+          
+          div(
+            class = paste("act-button selected", jurisdiction_class),
+            title = "Currently selected act",
+            selected
+          )
+        } else {
+          # If selected act is no longer valid, reset selection
+          selected_act(NULL)
+          return(div("Selected act is no longer available."))
+        }
       }
-    }
+    )
   })
   
   # Observe act selection
@@ -236,12 +341,20 @@ server <- function(input, output, session) {
     selected_legislation(NULL)
   })
   
-  # 🔼 Render legislation buttons----
+  # 📼 Render legislation buttons----
   output$legislation_buttons <- renderUI({
-    laws <- unique(filtered_legislation()$legislation_name)
-    if (length(laws) == 0) return(div("No legislation found."))
-    lapply(seq_along(laws), function(i) {
-      actionButton(inputId = paste0("leg_", i), label = laws[i], class = "legislation-button")
+    laws <- filtered_legislation()
+    if (nrow(laws) == 0) return(div("No legislation found."))
+    
+    lapply(seq_len(nrow(laws)), function(i) {
+      jurisdiction <- laws$jurisdiction[i]
+      jurisdiction_class <- if (jurisdiction == "Federal") "federal" else if (jurisdiction == "Provincial") "provincial" else "unknown"
+      
+      actionButton(
+        inputId = paste0("leg_", i), 
+        label = laws$legislation_name[i], 
+        class = paste("legislation-button", jurisdiction_class)
+      )
     })
   })
   
@@ -295,11 +408,7 @@ server <- function(input, output, session) {
   
   # ✅ Output section paragraphs with keyword highlighting----
   output$section_paragraphs <- renderUI({
-    req(selected_legislation(), selected_domain())
-    
-    # Normalize domain for matching
-    selected_domain_clean <- trimws(tolower(selected_domain()))
-    label_data$label_value <- trimws(tolower(label_data$label_value))
+    req(selected_legislation())
     
     # Get legislation ID
     leg_id <- selected_legislation()
@@ -309,11 +418,23 @@ server <- function(input, output, session) {
       return(div("No sections or paragraphs found for this legislation."))
     }
     
-    # Get paragraph IDs tagged with the selected domain
-    domain_para_ids <- label_data$paragraph_id[
-      label_data$label_type == "Management Domain" &
-        label_data$label_value == selected_domain_clean
-    ]
+    # Check if a domain is selected
+    domain <- selected_domain()
+    domain_clean <- if (!is.null(domain) && !is.na(domain)) trimws(tolower(domain)) else NULL
+    
+    # Normalize domain for matching if selected
+    if (!is.null(domain_clean)) {
+      label_data$label_value <- trimws(tolower(label_data$label_value))
+      
+      # Get paragraph IDs tagged with the selected domain
+      domain_para_ids <- label_data$paragraph_id[
+        label_data$label_type == "Management Domain" &
+          label_data$label_value == domain_clean
+      ]
+    } else {
+      # No domain filter - include all paragraphs
+      domain_para_ids <- all_paragraphs$paragraph_id
+    }
     
     # Define CSS classes for label types
     label_classes <- c(
@@ -339,60 +460,65 @@ server <- function(input, output, session) {
       lapply(sorted_names, function(sec) {
         section_data <- section_groups[[sec]]
         
-        # Filter to domain-tagged paragraphs in this section
+        # Filter to domain-tagged paragraphs in this section (or all if no domain)
         matched_ids <- intersect(section_data$paragraph_id, domain_para_ids)
         if (length(matched_ids) == 0) return(NULL)
         
         heading <- unique(na.omit(section_data$Heading))
         heading_text <- if (length(heading) > 0) heading[1] else "No heading available"
         
-        # Aggregate all paragraphs in the section
-        aggregated_text <- paste(na.omit(section_data$Paragraph), collapse = "\n\n")
-        
-        # Filter label_data to relevant keywords
-        relevant_labels <- label_data[
-          label_data$paragraph_id %in% matched_ids &
-            label_data$label_type %in% names(label_classes),
-        ]
-        
-        # Filter label_data to Management Domain keywords in this section
-        domain_labels <- label_data[
-          label_data$paragraph_id %in% section_data$paragraph_id &
-            label_data$label_type == "Management Domain",
-        ]
-        
-        # Highlight Management Domain keywords----
-        highlighted_text <- aggregated_text
-        for (kw in unique(domain_labels$keyword)) {
-          css_class <- "highlight-domain"
-          
-          # Only highlight if keyword appears in text
-          if (!is.null(css_class) && grepl(fixed(kw), highlighted_text, ignore.case = TRUE)) {
-            highlighted_text <- str_replace_all(
-              string = highlighted_text,
-              pattern = regex(kw, ignore_case = TRUE),
-              replacement = paste0("<span class='", css_class, "'>", kw, "</span>")
-            )
-          }
+        # Aggregate paragraphs - use matched_ids to filter if domain is selected
+        if (!is.null(domain_clean)) {
+          # Filter to only matched paragraphs
+          filtered_section <- section_data[section_data$paragraph_id %in% matched_ids, ]
+          aggregated_text <- paste(na.omit(filtered_section$Paragraph), collapse = "\n\n")
+        } else {
+          # Show all paragraphs in section
+          aggregated_text <- paste(na.omit(section_data$Paragraph), collapse = "\n\n")
         }
         
-        # Filter label_data to Clause Type keywords in this section
-        clause_labels <- label_data[
-          label_data$paragraph_id %in% section_data$paragraph_id &
-            label_data$label_type == "Clause Type",
-        ]
+        # Only apply highlighting if a domain is selected
+        highlighted_text <- aggregated_text
         
-        # Highlight Clause Type keywords
-        for (kw in unique(clause_labels$keyword)) {
-          css_class <- "highlight-clause"
+        if (!is.null(domain_clean)) {
+          # Filter label_data to Management Domain keywords in this section
+          domain_labels <- label_data[
+            label_data$paragraph_id %in% section_data$paragraph_id &
+              label_data$label_type == "Management Domain",
+          ]
           
-          # Only highlight if keyword appears in text
-          if (!is.null(css_class) && grepl(fixed(kw), highlighted_text, ignore.case = TRUE)) {
-            highlighted_text <- str_replace_all(
-              string = highlighted_text,
-              pattern = regex(kw, ignore_case = TRUE),
-              replacement = paste0("<span class='", css_class, "'>", kw, "</span>")
-            )
+          # Highlight Management Domain keywords
+          for (kw in unique(domain_labels$keyword)) {
+            css_class <- "highlight-domain"
+            
+            # Only highlight if keyword appears in text
+            if (!is.null(css_class) && grepl(fixed(kw), highlighted_text, ignore.case = TRUE)) {
+              highlighted_text <- str_replace_all(
+                string = highlighted_text,
+                pattern = regex(kw, ignore_case = TRUE),
+                replacement = paste0("<span class='", css_class, "'>", kw, "</span>")
+              )
+            }
+          }
+          
+          # Filter label_data to Clause Type keywords in this section
+          clause_labels <- label_data[
+            label_data$paragraph_id %in% section_data$paragraph_id &
+              label_data$label_type == "Clause Type",
+          ]
+          
+          # Highlight Clause Type keywords
+          for (kw in unique(clause_labels$keyword)) {
+            css_class <- "highlight-clause"
+            
+            # Only highlight if keyword appears in text
+            if (!is.null(css_class) && grepl(fixed(kw), highlighted_text, ignore.case = TRUE)) {
+              highlighted_text <- str_replace_all(
+                string = highlighted_text,
+                pattern = regex(kw, ignore_case = TRUE),
+                replacement = paste0("<span class='", css_class, "'>", kw, "</span>")
+              )
+            }
           }
         }
         
@@ -530,13 +656,12 @@ server <- function(input, output, session) {
       theme_minimal() +
       labs(x = "Keyword", y = "Frequency")
   })
-
+  
   # Disconnect SQLite when app stops
   onStop(function() {
     dbDisconnect(conn)
   })
 }
+
 # Launch the app
 shinyApp(ui = ui, server = server)
-
-

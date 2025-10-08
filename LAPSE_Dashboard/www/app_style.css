@@ -196,6 +196,41 @@ h1, h2, h3, h4 {
   cursor: pointer;
 }
 
+/* Jurisdiction color coding */
+.act-button.federal,
+.legislation-button.federal {
+  background-color: #996666; /* Federal red */
+  border-left: 4px solid #773333;
+}
+
+.act-button.provincial,
+.legislation-button.provincial {
+  background-color: #668899; /* Provincial blue */
+  border-left: 4px solid #446677;
+}
+
+.act-button.unknown,
+.legislation-button.unknown {
+  background-color: #999999; /* Unknown gray */
+  border-left: 4px solid #777777;
+}
+
+/* Hover states for jurisdiction colors */
+.act-button.federal:hover,
+.legislation-button.federal:hover {
+  background-color: #aa7777;
+}
+
+.act-button.provincial:hover,
+.legislation-button.provincial:hover {
+  background-color: #7799aa;
+}
+
+.act-button.unknown:hover,
+.legislation-button.unknown:hover {
+  background-color: #aaaaaa;
+}
+
 /* === Keyword Highlighting === */
 .highlight-domain {
   background-color: #fce4ec;
