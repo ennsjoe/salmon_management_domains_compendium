@@ -1651,6 +1651,7 @@ library(data.table)
 library(here)
 library(reactable)
 library(htmltools)
+library(stringr)
 
 # 🗂️ Step 1: Resolve database path safely
 db_path <- here::here("output", "legislation.db")
@@ -1670,7 +1671,7 @@ dbDisconnect(conn)
 clause_labels <- paragraph_labels[label_type == "Clause Type", .(paragraph_id, keyword)]
 clause_labels <- merge(clause_labels, clause_type_keywords[, .(keyword, clause_type)], by = "keyword", all.x = TRUE)
 clause_labels <- clause_labels[
-  , .(clause_type = unique(clause_type)[1]),  # Select only one unique clause type per paragraph
+  , .(clause_type = unique(clause_type)[1]),
   by = paragraph_id
 ]
 
@@ -1698,7 +1699,7 @@ section_data <- merge(
 section_data <- merge(section_data, label_data, by = "paragraph_id", all.x = TRUE)
 
 # 🧠 Step 6: Create combined columns
-section_data[, Section_num := as.numeric(Section)]  # Create numeric version for sorting
+section_data[, Section_num := as.numeric(Section)]
 section_data[, Act := paste(act_name, jurisdiction, sep = " | ")]
 section_data[, Legislation := paste(legislation_type, legislation_name, sep = " | ")]
 section_data[, HeadingSection := paste(Heading, paste0("Section ", Section), sep = " | ")]
@@ -1707,20 +1708,64 @@ section_data[, HeadingSection := paste(Heading, paste0("Section ", Section), sep
 section_summary <- section_data[
   !is.na(Section),
   .(
-    Section_num = unique(Section_num),  # Include numeric section for sorting
+    Section_num = unique(Section_num),
     DomainFilter = paste(unique(na.omit(management_domain)), collapse = ", "),
     Paragraphs = paste(unique(na.omit(Paragraph)), collapse = "<br><br>"),
     ManagementDomain = paste(unique(na.omit(management_domain)), collapse = ", "),
     IUCNThreat = paste(unique(na.omit(iucn_l2)), collapse = ", "),
     ClauseType = paste(unique(na.omit(clause_type)), collapse = ", "),
-    Scope = paste(unique(na.omit(scope)), collapse = ", ")
+    Scope = paste(unique(na.omit(scope)), collapse = ", "),
+    paragraph_ids = paste(unique(paragraph_id), collapse = ",")
   ),
   by = .(Act, Legislation, HeadingSection)
 ]
 
-# 🧠 Step 8: Format Paragraphs with metadata block
-section_summary[, Paragraphs := paste(
+# 🎨 Step 8: Add keyword highlighting function
+highlight_keywords <- function(text, paragraph_ids_str, domain_filter) {
+  if (is.na(text) || text == "" || domain_filter == "") return(text)
+  
+  # Get paragraph IDs for this row
+  para_ids <- as.integer(strsplit(paragraph_ids_str, ",")[[1]])
+  
+  # Get keywords for this domain and these paragraphs
+  keywords <- paragraph_labels[
+    paragraph_id %in% para_ids &
+    label_type == "Management Domain" &
+    label_value %in% strsplit(domain_filter, ", ")[[1]],
+    unique(keyword)
+  ]
+  
+  if (length(keywords) == 0) return(text)
+  
+  # Sort keywords by length (longest first) to avoid partial replacements
+  keywords <- keywords[order(-nchar(keywords))]
+  
+  # Highlight each keyword
+  highlighted_text <- text
+  for (kw in keywords) {
+    pattern <- regex(paste0("\\b", kw, "\\b"), ignore_case = TRUE)
+    highlighted_text <- str_replace_all(
+      highlighted_text,
+      pattern,
+      function(match) paste0("<mark style='background-color: #fce4ec; padding: 2px 4px; border-radius: 3px;'>", match, "</mark>")
+    )
+  }
+  
+  return(highlighted_text)
+}
+
+# Apply highlighting to paragraphs based on DomainFilter
+section_summary[, Paragraphs_Highlighted := mapply(
+  highlight_keywords,
   Paragraphs,
+  paragraph_ids,
+  DomainFilter,
+  SIMPLIFY = TRUE
+)]
+
+# 🧠 Step 9: Format Paragraphs with metadata block
+section_summary[, Paragraphs_Final := paste(
+  Paragraphs_Highlighted,
   "<br><br>",
   "<div style='font-size: 0.85em; color: #333; background-color: #f9f9f9; padding: 8px; border-left: 4px solid #0074D9;'>",
   sprintf(
@@ -1734,14 +1779,14 @@ section_summary[, Paragraphs := paste(
   sep = ""
 )]
 
-# ✅ Sort section_summary by Act (which includes act_name)
+# ✅ Sort section_summary
 section_summary <- section_summary[order(Act, Legislation, Section_num)]
 
-# 🖥️ Step 9: Render reactable inside a responsive container
+# 🖥️ Step 10: Render reactable
 htmltools::div(
   style = "width: 100%; overflow-x: auto;",
   reactable(
-    section_summary[, .(Act, Legislation, HeadingSection, DomainFilter, Paragraphs)],
+    section_summary[, .(Act, Legislation, HeadingSection, DomainFilter, Paragraphs = Paragraphs_Final)],
     elementId = "act-legislation-summary-table",
     groupBy = c("Act", "Legislation"),
     searchable = TRUE,
