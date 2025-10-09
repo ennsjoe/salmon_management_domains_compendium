@@ -93,44 +93,70 @@ ui <- fluidPage(
       }
       
       /* Jurisdiction toggle switch color coding */
-      .radio-group-buttons .btn[data-value='Federal'] {
+      #jurisdiction_filter .radiobtn-all {
+        background-color: #cccccc !important;
+        border-color: #999999 !important;
+        color: white !important;
+      }
+      
+      #jurisdiction_filter .radiobtn-federal {
         background-color: #996666 !important;
         border-color: #773333 !important;
         color: white !important;
       }
       
-      .radio-group-buttons .btn[data-value='Federal']:hover {
-        background-color: #aa7777 !important;
-        border-color: #883333 !important;
-      }
-      
-      .radio-group-buttons .btn[data-value='Provincial'] {
+      #jurisdiction_filter .radiobtn-provincial {
         background-color: #668899 !important;
         border-color: #446677 !important;
         color: white !important;
       }
       
-      .radio-group-buttons .btn[data-value='Provincial']:hover {
+      #jurisdiction_filter .radiobtn-all:hover {
+        background-color: #bbbbbb !important;
+      }
+      
+      #jurisdiction_filter .radiobtn-federal:hover {
+        background-color: #aa7777 !important;
+      }
+      
+      #jurisdiction_filter .radiobtn-provincial:hover {
         background-color: #7799aa !important;
-        border-color: #557788 !important;
       }
-      
-      .radio-group-buttons .btn[data-value='All'] {
-        background-color: #f0f0f0 !important;
-        border-color: #ccc !important;
-        color: #333 !important;
-      }
-      
-      .radio-group-buttons .btn[data-value='All']:hover {
-        background-color: #e0e0e0 !important;
-        border-color: #bbb !important;
-      }
-      
-      /* Active state for selected button */
-      .radio-group-buttons .btn.active {
-        opacity: 1 !important;
-        box-shadow: inset 0 3px 5px rgba(0,0,0,.125) !important;
-      }
+    ")),
+    tags$script(HTML("
+      $(document).ready(function() {
+        // Wait for shinyWidgets to render
+        setTimeout(function() {
+          // Find all buttons in the jurisdiction filter
+          $('#jurisdiction_filter .btn').each(function() {
+            var btnText = $(this).text().trim();
+            $(this).removeClass('radiobtn-all radiobtn-federal radiobtn-provincial');
+            
+            if (btnText === 'All') {
+              $(this).addClass('radiobtn-all');
+              $(this).css({
+                'background-color': '#cccccc',
+                'border-color': '#999999',
+                'color': 'white'
+              });
+            } else if (btnText === 'Federal') {
+              $(this).addClass('radiobtn-federal');
+              $(this).css({
+                'background-color': '#996666',
+                'border-color': '#773333',
+                'color': 'white'
+              });
+            } else if (btnText === 'Provincial') {
+              $(this).addClass('radiobtn-provincial');
+              $(this).css({
+                'background-color': '#668899',
+                'border-color': '#446677',
+                'color': 'white'
+              });
+            }
+          });
+        }, 100);
+      });
     "))
   ),
   
@@ -153,7 +179,7 @@ ui <- fluidPage(
           h4("Filter by Jurisdiction"),
           radioGroupButtons(
             inputId = "jurisdiction_filter",
-            label = "Jurisdiction",
+            label = NULL,
             choices = c("All", "Federal", "Provincial"),
             selected = "All",
             justified = TRUE,
@@ -460,22 +486,17 @@ server <- function(input, output, session) {
       lapply(sorted_names, function(sec) {
         section_data <- section_groups[[sec]]
         
-        # Filter to domain-tagged paragraphs in this section (or all if no domain)
+        # Check if this section has any domain-tagged paragraphs
         matched_ids <- intersect(section_data$paragraph_id, domain_para_ids)
-        if (length(matched_ids) == 0) return(NULL)
+        
+        # If domain is selected and no matches in this section, skip it
+        if (!is.null(domain_clean) && length(matched_ids) == 0) return(NULL)
         
         heading <- unique(na.omit(section_data$Heading))
         heading_text <- if (length(heading) > 0) heading[1] else "No heading available"
         
-        # Aggregate paragraphs - use matched_ids to filter if domain is selected
-        if (!is.null(domain_clean)) {
-          # Filter to only matched paragraphs
-          filtered_section <- section_data[section_data$paragraph_id %in% matched_ids, ]
-          aggregated_text <- paste(na.omit(filtered_section$Paragraph), collapse = "\n\n")
-        } else {
-          # Show all paragraphs in section
-          aggregated_text <- paste(na.omit(section_data$Paragraph), collapse = "\n\n")
-        }
+        # Always aggregate ALL paragraphs in the section
+        aggregated_text <- paste(na.omit(section_data$Paragraph), collapse = "\n\n")
         
         # Only apply highlighting if a domain is selected
         highlighted_text <- aggregated_text
@@ -489,14 +510,15 @@ server <- function(input, output, session) {
           
           # Highlight Management Domain keywords
           for (kw in unique(domain_labels$keyword)) {
-            css_class <- "highlight-domain"
-            
-            # Only highlight if keyword appears in text
-            if (!is.null(css_class) && grepl(fixed(kw), highlighted_text, ignore.case = TRUE)) {
-              highlighted_text <- str_replace_all(
-                string = highlighted_text,
-                pattern = regex(kw, ignore_case = TRUE),
-                replacement = paste0("<span class='", css_class, "'>", kw, "</span>")
+            # Only highlight if keyword appears in text (case-insensitive)
+            if (grepl(kw, highlighted_text, ignore.case = TRUE)) {
+              # Create a temporary marker to avoid nested replacements
+              temp_marker <- paste0("###HIGHLIGHT_DOMAIN_", gsub(" ", "_", kw), "###")
+              highlighted_text <- gsub(
+                pattern = paste0("(?i)\\b", kw, "\\b"),
+                replacement = temp_marker,
+                x = highlighted_text,
+                perl = TRUE
               )
             }
           }
@@ -509,16 +531,41 @@ server <- function(input, output, session) {
           
           # Highlight Clause Type keywords
           for (kw in unique(clause_labels$keyword)) {
-            css_class <- "highlight-clause"
-            
-            # Only highlight if keyword appears in text
-            if (!is.null(css_class) && grepl(fixed(kw), highlighted_text, ignore.case = TRUE)) {
-              highlighted_text <- str_replace_all(
-                string = highlighted_text,
-                pattern = regex(kw, ignore_case = TRUE),
-                replacement = paste0("<span class='", css_class, "'>", kw, "</span>")
+            # Only highlight if keyword appears in text (case-insensitive)
+            if (grepl(kw, highlighted_text, ignore.case = TRUE)) {
+              # Create a temporary marker to avoid nested replacements
+              temp_marker <- paste0("###HIGHLIGHT_CLAUSE_", gsub(" ", "_", kw), "###")
+              highlighted_text <- gsub(
+                pattern = paste0("(?i)\\b", kw, "\\b"),
+                replacement = temp_marker,
+                x = highlighted_text,
+                perl = TRUE
               )
             }
+          }
+          
+          # Replace all domain markers with actual HTML
+          domain_kws <- unique(domain_labels$keyword)
+          for (kw in domain_kws) {
+            temp_marker <- paste0("###HIGHLIGHT_DOMAIN_", gsub(" ", "_", kw), "###")
+            highlighted_text <- gsub(
+              pattern = temp_marker,
+              replacement = paste0("<span class='highlight-domain'>", kw, "</span>"),
+              x = highlighted_text,
+              fixed = TRUE
+            )
+          }
+          
+          # Replace all clause markers with actual HTML
+          clause_kws <- unique(clause_labels$keyword)
+          for (kw in clause_kws) {
+            temp_marker <- paste0("###HIGHLIGHT_CLAUSE_", gsub(" ", "_", kw), "###")
+            highlighted_text <- gsub(
+              pattern = temp_marker,
+              replacement = paste0("<span class='highlight-clause'>", kw, "</span>"),
+              x = highlighted_text,
+              fixed = TRUE
+            )
           }
         }
         
@@ -584,25 +631,75 @@ server <- function(input, output, session) {
     
     # Normalize selected domain
     domain <- selected_domain()
-    domain_clean <- if (!is.null(domain) && !is.na(domain)) trimws(tolower(domain)) else ""
+    domain_clean <- if (!is.null(domain) && !is.na(domain)) trimws(tolower(domain)) else NULL
     
-    # Normalize label_data values
-    label_data <- label_data %>%
-      mutate(label_value = trimws(tolower(label_value)))
+    # Get filtered legislation IDs
+    leg_ids <- filtered_legislation()$legislation_id
+    if (is.null(leg_ids) || length(leg_ids) == 0) {
+      leg_ids <- legislation_data$legislation_id
+    }
     
-    # Filter paragraph IDs for selected domain
-    domain_paragraphs <- label_data %>%
-      filter(label_type == "Management Domain", label_value == domain_clean) %>%
-      pull(paragraph_id)
+    # Determine which paragraphs to include based on selections
+    if (!is.null(selected_legislation())) {
+      # Legislation is selected - filter to that legislation
+      leg_id <- selected_legislation()
+      relevant_paragraphs <- paragraph_data[paragraph_data$legislation_id == leg_id, ]
+      
+      # If domain is selected, further filter to sections containing that domain
+      if (!is.null(domain_clean)) {
+        # Get paragraph IDs tagged with the selected domain
+        label_data_normalized <- label_data
+        label_data_normalized$label_value <- trimws(tolower(label_data_normalized$label_value))
+        
+        domain_para_ids <- label_data_normalized$paragraph_id[
+          label_data_normalized$label_type == "Management Domain" &
+            label_data_normalized$label_value == domain_clean
+        ]
+        
+        # Find sections that contain domain-tagged paragraphs
+        sections_with_domain <- unique(relevant_paragraphs$Section[
+          relevant_paragraphs$paragraph_id %in% domain_para_ids
+        ])
+        
+        # Filter to only paragraphs in those sections
+        relevant_paragraphs <- relevant_paragraphs[
+          relevant_paragraphs$Section %in% sections_with_domain,
+        ]
+      }
+      
+      domain_paragraphs <- relevant_paragraphs$paragraph_id
+      
+    } else if (!is.null(domain_clean)) {
+      # Only domain selected (no legislation)
+      label_data_normalized <- label_data
+      label_data_normalized$label_value <- trimws(tolower(label_data_normalized$label_value))
+      
+      domain_paragraphs <- label_data_normalized$paragraph_id[
+        label_data_normalized$label_type == "Management Domain" &
+          label_data_normalized$label_value == domain_clean
+      ]
+    } else {
+      # Nothing selected - use all paragraphs from filtered legislation
+      domain_paragraphs <- paragraph_data$paragraph_id[
+        paragraph_data$legislation_id %in% leg_ids
+      ]
+    }
     
     # Exit early if no matching paragraphs
-    validate(need(length(domain_paragraphs) > 0, "No paragraphs found for this domain."))
+    validate(need(length(domain_paragraphs) > 0, "No paragraphs found."))
+    
+    # Normalize label_data values
+    label_data_plot <- label_data %>%
+      mutate(label_value = trimws(tolower(label_value)))
     
     # Filter label_data to relevant label types within selected paragraphs
-    co_labels <- label_data %>%
+    co_labels <- label_data_plot %>%
       filter(paragraph_id %in% domain_paragraphs,
              label_type %in% c("Management Domain", "Clause Type")) %>%
       select(paragraph_id, label_type, label_value)
+    
+    # Exit if no co-occurrence data
+    validate(need(nrow(co_labels) > 0, "No label data available."))
     
     # Pivot to wide format and filter valid co-occurrences
     co_occurrence <- co_labels %>%
@@ -618,7 +715,7 @@ server <- function(input, output, session) {
       count(`Management Domain`, `Clause Type`, name = "Count")
     
     # Validate and plot
-    validate(need(nrow(co_counts) > 0, "No clause type co-occurrence data available for this domain."))
+    validate(need(nrow(co_counts) > 0, "No clause type co-occurrence data available."))
     
     ggplot(co_counts, aes(x = `Management Domain`, y = `Clause Type`, fill = Count)) +
       geom_tile(color = "white") +
