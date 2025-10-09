@@ -131,9 +131,9 @@ This report outlines a framework and process to relate human activities that thr
 </ol>
 </div>
 
-⚠️ Disclaimer: none of the information presented in this report qualifies as legal advice. The authors of this report are aquatic biologists with little to no legal training.
-
 To better categorize legislation aligned with salmon threats and create an interface between biological management and the regulatory context, this study defined discrete areas of administrative responsibility for Pacific salmon as “management domains.”
+
+⚠️ <em>Disclaimer: none of the information presented in this report qualifies as legal advice. The authors of this report are aquatic biologists with little to no legal training.</em>
 
 # Methods
 
@@ -242,7 +242,7 @@ Regulatory language that can be matched to management domain and IUCN threat cat
 
 The scope assignment process was linked but occurred independent of the management domain and IUCN threat assignment process. The “1 – Salmon” scope was assigned based solely on salmon keywords (salmon, Chinook, sockeye, etc.), regardless of management domain or IUCN threat. The “2 – Fish” and “3 – Habitat” scopes align directly to IUCN threats (unless already classified as “1 – Salmon”). The “4 – Governance” scope was applied last in a separate matching process.
 
-## Keyword matching process
+## Process for legislation categorization
 
 Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the clauses within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable. Other researchers may repeat this process as future legislation and language changes. The process steps are:
 
@@ -256,7 +256,7 @@ Assessment of legislative context is prone to subjective interpretation. The inc
 </ol>
 </div>
 
-### Legislation accumulation and review</strong>
+### Legislation accumulation and review
 
 This review focused on established Canadian federal and British Columbian provincial legislation (acts and regulations) for inclusion in the management domain process. Specific departmental policy frameworks and processes were not included throughout this exercise unless specifically referenced in the statutes because these executive strategies are prone to changes in the political, administrative, and budgetary landscape. Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were not included explicitly. Although this other legislation is pivotal in the management of Pacific salmon, considering this regionally diverse administration was outside the scope of this legislative review in terms of feasibility and timeline.
 
@@ -274,7 +274,7 @@ The <a href="https://www.canlii.org/" style="color:#668899">Canadian Legal Infor
 
 Through the CanLII website, the user may look up the keywords queried in each act and regulation chosen. This allows the user to quickly assess the context of the word in the legislation and determine if the section is relevant to Pacific salmon. The full list of legislation reviewed in this process is available in Appendix 1.
 
-### Parsing legislation from HTML files
+### Parsing HTML files
 
 The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular management domain. Typological device structure and definitions were derived from the Government of Canada’s <a href="https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html" style="color:#668899">“Legistics Paragraphing”</a> (Department of Justice Canada 2022). For the purpose of this review, we used the individual clause (Figure 3) as the sample unit for assignment into management domains and other attributes.  
 
@@ -299,7 +299,7 @@ if (file.exists(image_path)) {
 
 Legislation presented on Canadian and British Columbian government websites, and corresponding HTML code, is structured such that each clause is separated individually as a paragraph element. HTML code for paragraph elements is generally consistent across legislation, but section, subsection, and heading elements are not. As shown in Figure 3, “clause” in this study can also refer to subclauses, but also sections, subsections, and opening words (chapeau or umbrella) when they are stand-alone paragraph elements. HTML files were parsed using R and the "rvest" package to extract the text of each clause, then grouped by section and heading.
 
-### Database Compendium Development
+### Database compendium development
 
 The parsed legislation was stored in a SQLite database with datatables including:
 
@@ -332,7 +332,7 @@ The parsed legislation was stored in a SQLite database with datatables including
 
 Storing the data as a database rather than one large spreadsheet allowed for a more dynamic and versatile system for querying, while streamlining the parsing and collection process.
 
-## Keyword and keyphrase development
+### Keyword and keyphrase list development
 
 The management domain and IUCN threat matching process pivoted around an established list of keywords and phrases relevant to Pacific salmon management. Keywords act as a link between categorization and the legislative clauses. Keywords must be specific enough to match an IUCN threat, yet general enough to appear in the acts and regulations that span many decades of legislative language. The keywords originated from three sources:
 
@@ -372,7 +372,7 @@ The meaning and context behind keywords, especially single words, can cause mis-
 
 Management domains can overlap within sections and clauses. For example the provincial Land-based Finfish Waste Control Regulation (Environmental Management Act) states in Section 2 that: “The owner of a land-based finfish facility is exempt from section 6 (2) and (3) of the Environmental Management Act with respect to the discharge of wastes from the land-based finfish facility if the owner…” This clause matched appropriately with both the “Aquaculture and Hatcheries” and “Pollution” management domains. Because the matching process allows for multiple keywords to be matched per clause, this method allows for an assessment of co-occurrences and connections between management domains.
 
-## Legislative context (clause types)
+## Clause typing for legislative context
 
 The process of parsing legislation by clause and section, then matching categories by keywords also allows for other possible categorizations. Similar to management domains and IUCN threats, the nature of the clauses was also matched in terms of the “clause type.” Clauses, in general, fit into groupings by their context and the nature of their intent. For this exercise, the categories and keywords were developed solely by the researchers through a subjective process; however, the keywords are listed in Appendix III allowing for the work to be transparent and repeatable.
 
@@ -419,7 +419,7 @@ if (!file.exists(db_path)) {
 
 ```
 
-## Current salmon management
+## COSEWIC current threat assessments in BC
 
 The Committee on the Status of Endangered Wildlife in Canada (COSEWIC) assesses the current status of aquatic species, including Pacific salmon stocks, as part of the Species at Risk Act (SARA) process (Arbeider et al 2020). Salmon populations are grouped into genetically and ecologically distinct Diagnostic Units (DU) for the purpose of assessment. When a DU is classified as Threatened, Endangered or Extirpated, a Recovery Potential Assessment (RPA) process is initiated, which calculates risk incorporating the same IUCN-CMP threat classification used in this legislative assessment.
 
@@ -1271,7 +1271,7 @@ The LAPSE tool framework creates an interface between legal and salmon biology l
 </ul>
 </ul>
 
-## Domain co-occurrence
+## Co-occurrence of domains
 
 The LAPSE keyword matching process allows that multiple management domains (and IUCN threats) can be matched to clauses and sections. This dynamic is not a flaw, but rather a way of showing the complexities of legal language as related to salmon management. For example, Section 7 of the federal Aquaculture Activities Regulations (Fisheries Act) states that: "The owner or the operator of the aquaculture facility must, in depositing a deleterious substance referred to in paragraph 2(a) or (b), take reasonable measures to minimize detriment to fish and fish habitat outside the facility..." Keywords in this clause correctly match to the Pollution, as well as, Aquaculture and Hatcheries management domains. Assigning only one management domain would over-simplify the classification in terms of salmon management as the clause clearly references both aquaculture and pollution. This section could be important for users searching either aquaculture or pollution regulations for a particular watercourse.
 
