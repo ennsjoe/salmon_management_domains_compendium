@@ -48,6 +48,7 @@ management_domains <- unique(label_data$label_value[label_data$label_type == "Ma
 jurisdictions <- unique(legislation_data$jurisdiction)
 
 # 💻 Define UI----
+
 ui <- fluidPage(
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "app_style.css"),
@@ -161,6 +162,18 @@ ui <- fluidPage(
   ),
   
   titlePanel("LAPSE Dashboard"),
+  
+  # Information link below title
+  div(
+    style = "text-align: left; margin-bottom: 20px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;",
+    tags$a(
+      href = "https://ennsjoe.github.io/salmon_management_domains_compendium/LAPSE-Technical-Brief.html",
+      target = "_blank",
+      style = "color: #996666; font-weight: 600; text-decoration: none; font-size: 16px;",
+      icon("info-circle"),
+      " About: LAPSE Technical Brief"
+    )
+  ),
   
   fluidRow(
     # Sidebar: Management Domains
@@ -432,7 +445,7 @@ server <- function(input, output, session) {
     })
   })
   
-  # ✅ Output section paragraphs with keyword highlighting----
+  # âœ… Output section paragraphs with keyword highlighting----
   output$section_paragraphs <- renderUI({
     req(selected_legislation())
     
@@ -462,12 +475,6 @@ server <- function(input, output, session) {
       domain_para_ids <- all_paragraphs$paragraph_id
     }
     
-    # Define CSS classes for label types
-    label_classes <- c(
-      "Management Domain" = "highlight-domain",
-      "Clause Type" = "highlight-clause"
-    )
-    
     # Group all paragraphs by section
     section_groups <- split(all_paragraphs, all_paragraphs$Section)
     
@@ -495,8 +502,11 @@ server <- function(input, output, session) {
         heading <- unique(na.omit(section_data$Heading))
         heading_text <- if (length(heading) > 0) heading[1] else "No heading available"
         
-        # Always aggregate ALL paragraphs in the section
-        aggregated_text <- paste(na.omit(section_data$Paragraph), collapse = "\n\n")
+        # Sort paragraphs by paragraph_id to maintain order
+        section_data <- section_data[order(section_data$paragraph_id), ]
+        
+        # Always aggregate ALL paragraphs in the section in order
+        aggregated_text <- paste(section_data$Paragraph[!is.na(section_data$Paragraph)], collapse = "\n\n")
         
         # Only apply highlighting if a domain is selected
         highlighted_text <- aggregated_text
