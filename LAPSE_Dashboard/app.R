@@ -709,8 +709,7 @@ server <- function(input, output, session) {
             pattern = "###HIGHLIGHT_SEARCH###",
             replacement = paste0("<span class='highlight-search'>", search, "</span>"),
             x = highlighted_text,
-            fixed = TRUE,
-            ignore.case = TRUE
+            fixed = TRUE
           )
         }
         
@@ -943,11 +942,18 @@ server <- function(input, output, session) {
       }
     }
     
-    keyword_counts <- as.data.frame(table(df$keyword))
-    colnames(keyword_counts) <- c("keyword", "count")
-    keyword_counts <- keyword_counts[order(-keyword_counts$count), ][1:min(10, nrow(keyword_counts)), ]
+    # Check if df has any rows before proceeding
+    validate(need(nrow(df) > 0, "No keyword data available."))
     
+    keyword_counts <- as.data.frame(table(df$keyword), stringsAsFactors = FALSE)
+    
+    # Check if keyword_counts has rows
     validate(need(nrow(keyword_counts) > 0, "No keyword data available."))
+    
+    colnames(keyword_counts) <- c("keyword", "count")
+    keyword_counts <- keyword_counts[order(-keyword_counts$count), ]
+    keyword_counts <- keyword_counts[1:min(10, nrow(keyword_counts)), ]
+    
     ggplot(keyword_counts, aes(x = reorder(keyword, count), y = count)) +
       geom_bar(stat = "identity", fill = "#2c3e50") +
       coord_flip() +
