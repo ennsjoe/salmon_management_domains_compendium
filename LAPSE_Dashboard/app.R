@@ -805,7 +805,7 @@ server <- function(input, output, session) {
     ggplot(iucn_counts, aes(x = label_value, y = n)) +
       geom_bar(stat = "identity", fill = "#2c3e50") +
       theme_minimal() +
-      labs(x = "IUCN Level 2", y = "Count") +
+      labs(x = "IUCN Level 2", y = "Clause Count") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
   })
   
