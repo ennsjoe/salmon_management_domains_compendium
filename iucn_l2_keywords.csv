@@ -48,6 +48,8 @@
 4.2 Utility & Service Lines,crossing
 4.3 Shipping Lanes,canals
 4.3 Shipping Lanes,shipping lane
+4.3 Shipping Lanes,navigable water
+4.3 Shipping Lanes,navigable waters
 "5.3 Logging, Harvesting & Controlling Trees",fan destabilization
 "5.3 Logging, Harvesting & Controlling Trees",forest ecosystem
 "5.3 Logging, Harvesting & Controlling Trees",forest ecosystems
@@ -65,6 +67,7 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",anadromous stock
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",anadromous stocks
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",angle from a vessel
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",anglers
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",angler
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",angling
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",any fish
@@ -98,6 +101,7 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fish stocks
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fish trap
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fish under
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",fish taken
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fished
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fisher
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fisheries management
@@ -108,14 +112,22 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fishing
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fishway
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",fishwheel
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",fishwheels
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",foul hook
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",foul hooks
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",frozen fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",gill net
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",gill nets
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",guiding for fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",harvest agreement
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",harvested salmon
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",gear restriction
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",gear restrictions
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",hooks
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",set gear
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",close times
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",size limit
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",size limits
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",hunt and fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",incidental catch
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",inshore fisheries
@@ -123,6 +135,7 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",landing of fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",lead jig
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",lead sinker
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",limit reference point
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",live fish
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",lure
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",management of fisheries
@@ -145,6 +158,12 @@
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",sustainability of fisheries
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",trawl
 "5.4 Fishing, Harvesting & Controlling Aquatic Species",trolling
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",receive salmon
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",receives salmon
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",canning
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",fish received
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",take fish
+"5.4 Fishing, Harvesting & Controlling Aquatic Species",unprocessed fish
 6.3 Other Human Disturbances,research activities
 6.3 Other Human Disturbances,research activity
 7.2 Dams & Water Management / Use,aquatic ecosystem
@@ -187,6 +206,8 @@
 7.2 Dams & Water Management / Use,water system
 7.2 Dams & Water Management / Use,water use
 7.2 Dams & Water Management / Use,wetland
+7.2 Dams & Water Management / Use,water conservation
+7.2 Dams & Water Management / Use,water sustainability
 7.3 Earth & Sediment Management,aggregate removal
 7.3 Earth & Sediment Management,aggregate removed
 7.3 Earth & Sediment Management,berming
@@ -259,13 +280,13 @@
 9.1 Water-Borne & Other Effluent Pollution ,leaching
 9.1 Water-Borne & Other Effluent Pollution ,leakage
 9.1 Water-Borne & Other Effluent Pollution ,manure
-9.1 Water-Borne & Other Effluent Pollution ,nutrient
 9.1 Water-Borne & Other Effluent Pollution ,noxious
+9.1 Water-Borne & Other Effluent Pollution ,nutrient
 9.1 Water-Borne & Other Effluent Pollution ,outfall
 9.1 Water-Borne & Other Effluent Pollution ,pesticide
 9.1 Water-Borne & Other Effluent Pollution ,pesticides
-9.1 Water-Borne & Other Effluent Pollution ,polluting
 9.1 Water-Borne & Other Effluent Pollution ,pollutant
+9.1 Water-Borne & Other Effluent Pollution ,polluting
 9.1 Water-Borne & Other Effluent Pollution ,runoff
 9.1 Water-Borne & Other Effluent Pollution ,salinity
 9.1 Water-Borne & Other Effluent Pollution ,septic
