@@ -229,8 +229,8 @@ ui <- fluidPage(
             actionButton(
               inputId = "clear_search",
               label = NULL,
-              icon = icon("times"),
-              style = "background-color: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;",
+              icon = icon("backspace"),
+              style = "background-color: #2c3e50; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;",
               title = "Clear Search"
             )
           ),
