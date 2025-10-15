@@ -456,7 +456,7 @@ dbDisconnect(conn)
 
 # Results
 
-## Management domains and IUCN threat categories
+can ## Management domains and IUCN threat categories
 
 Management domains were identified within all the collected statutes. Pollution was the management domain with the highest section count (Figure 4), split almost evenly between federal and provincial jurisdictions. Human Disturbance (research activities) and Climate Change and Natural Disasters had the fewest section count. Fisheries was in the top three for section count, with a majority of sections under federal jurisdiction. Water Use and Watercourse Modifications was in the top four for section count, with a majority of sections under provincial jurisdiction. This count indicates an underlying possibly dysfunctional relationship where salmon harvest is controlled federally while habitat aspects are governed provincially.
 
@@ -1484,7 +1484,17 @@ ggplot(plot_data, aes(x = keyword_count, y = section_count, label = label_value)
 
 # Conclusion
 
-The LAPSE tool framework provides a novel approach to linking legal language with salmon management categorization. The framework can be used to identify relevant legislation for specific human activity concerns, such as those identified through the COSEWIC Recovery Potential Assessment (RPA) process. The framework's flexibility allows for the inclusion of multiple management domains and IUCN threat categories, reflecting the complexities of legal language and salmon management. However, the framework also has limitations, such as the potential for bias towards categories with more keywords. Future work could focus on refining the keyword lists and exploring the relationships between management domains.
+Pacific salmon management projects (e.g. monitoring, restoration, enhancement, etc.) and decision processes often consider policies, methodologies, and literature, but the federal and provincial legislation that regulates human activities is not often reviewed. Legislative language can be vague and illusive, and the administrative structure of salmon jurisdiction in British Columbia is a decentralized and overlapping mosaic. The disconnect between legislative and natural resource language can lead to ineffective compliance with social values. The Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE) process developed through this study attempts to bridge the language gap to equip practitioners with fuller knowledge of the legal landscape available.
+
+The LAPSE tool provides a novel approach of linking legal language with salmon management categorization by developing management domain categories based on internationally recognized biodiversity threat categories (IUCN threats). The methods developed to identify and match salmon management keywords and keyphrases to clauses allow for multiple outputs and opportunities including:
+
+<ul>
+<li>An extensive list of legislation (acts, regulations, sections, and paragraphs) relevant to a human activity or salmon management decisions</li>
+<li>Assessment of the nature or context of the legislation (clause type) by management domain and threat</li>
+<li>Assessment of the overlap and connectedness in management domains (co-occurrence) to better understand the relationship between salmon threats</li>
+</ul> 
+
+While this process and tool are relatively new and untested, further development could lead to a better integration of salmon management decisions and administrative responsibility.
 
 # References
 
