@@ -456,7 +456,7 @@ dbDisconnect(conn)
 
 # Results
 
-can ## Management domains and IUCN threat categories
+## Management domains and IUCN threat categories
 
 Management domains were identified within all the collected statutes. Pollution was the management domain with the highest section count (Figure 4), split almost evenly between federal and provincial jurisdictions. Human Disturbance (research activities) and Climate Change and Natural Disasters had the fewest section count. Fisheries was in the top three for section count, with a majority of sections under federal jurisdiction. Water Use and Watercourse Modifications was in the top four for section count, with a majority of sections under provincial jurisdiction. This count indicates an underlying possibly dysfunctional relationship where salmon harvest is controlled federally while habitat aspects are governed provincially.
 
@@ -988,7 +988,7 @@ if (nrow(summary_data) > 0) {
 
 ## Clause type
 
-Independent of management domain and IUCN threat categories, the clause types (contextual nature of clauses) was assessed by matching "clause type keywords" (Appendix III) to clauses. Authorization & Mandate; Instruction; and Licence, Permitting, & Exemptions matched the largest number of sections, while Prohibition, Restriction, or Limitation matched the fewest. Naturally, the management domains with the highest number of matched sections also had the highest number of matched clause types; however, the density of the clause type matching can be shown relatively (Figure 8).
+Independent of management domain and IUCN threat category matching, the clause types (contextual nature of clauses) were assessed by matching "clause type keywords" (Appendix III) to clauses. The tally below shows the clause, section, and statute count for the clause type categories for clauses that were also matched to management domain categories.
 
 ```{r clause-type-with-domain-tally, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 library(DBI)
@@ -1002,23 +1002,15 @@ if (!file.exists(db_path)) {
 } else {
   conn <- dbConnect(SQLite(), dbname = db_path)
   
-  # ✅ Step 1: Get all labels for paragraphs
+  # ✅ Step 1: Get Management Domain and Clause Type labels
   label_data <- data.table(dbGetQuery(conn, "
     SELECT paragraph_id, label_type, label_value
     FROM paragraph_label_table
-    WHERE label_value IS NOT NULL
+    WHERE label_type IN ('Management Domain', 'Clause Type') 
+      AND label_value IS NOT NULL
   "))
   
-  # ✅ Step 2: Identify paragraph_ids that have a Management Domain label
-  domain_paragraphs <- unique(label_data[label_type == 'Management Domain', paragraph_id])
-  
-  # ✅ Step 3: Filter Clause Type labels to only those paragraph_ids
-  clause_labels <- label_data[
-    label_type == 'Clause Type' & paragraph_id %in% domain_paragraphs,
-    .(paragraph_id, clause_type = label_value)
-  ]
-  
-  # 📄 Step 4: Load paragraph metadata
+  # 📄 Step 2: Load paragraph metadata
   paragraph_meta <- data.table(dbGetQuery(conn, "
     SELECT paragraph_id, Section, legislation_id
     FROM LegislationParagraphs
@@ -1027,7 +1019,16 @@ if (!file.exists(db_path)) {
   
   dbDisconnect(conn)
   
-  # 🔗 Step 5: Merge with metadata
+  # 🎯 Step 3: Identify paragraph_ids that have BOTH a Management Domain AND Clause Type label
+  domain_paragraphs <- unique(label_data[label_type == 'Management Domain', paragraph_id])
+  
+  # 🔍 Step 4: Filter Clause Type labels to only those paragraph_ids with Management Domain
+  clause_labels <- label_data[
+    label_type == 'Clause Type' & paragraph_id %in% domain_paragraphs,
+    .(paragraph_id, clause_type = label_value)
+  ]
+  
+  # 🔗 Step 5: Merge with paragraph metadata
   merged <- merge(clause_labels, paragraph_meta, by = "paragraph_id", all.x = TRUE)
   
   # 📊 Step 6: Tally by clause_type
@@ -1037,16 +1038,16 @@ if (!file.exists(db_path)) {
     statutes = uniqueN(legislation_id)
   ), by = clause_type][order(clause_type)]
   
-  # 📦 Totals
+  # 📦 Calculate totals
   total_clauses <- sum(clause_tally$clauses)
   total_sections <- sum(clause_tally$sections)
   total_statutes <- uniqueN(merged$legislation_id)
   
-  # 🖥️ Output
+  # 🖥️ Output formatted results
   if (nrow(clause_tally) > 0) {
     cat("<ul style='list-style-type: none; padding-left: 0; margin: 0;'>\n")
     for (i in seq_len(nrow(clause_tally))) {
-      cat(sprintf("<li><strong>%s:</strong> %d statutes | %d sections | %d clauses </li>\n",
+      cat(sprintf("<li><strong>%s:</strong> %d statutes | %d sections | %d clauses</li>\n",
                   clause_tally$clause_type[i],
                   clause_tally$statutes[i],
                   clause_tally$sections[i],
@@ -1059,12 +1060,13 @@ if (!file.exists(db_path)) {
     cat("<p>No Clause Type labels found in paragraphs with Management Domain labels.</p>\n")
   }
 }
-
 ```
 
 <br>
 
-```{r plot-clause-type-heatmap, message=FALSE, warning=FALSE, echo=FALSE, fig.width=10, fig.height=8}
+Prohibition, Restriction, or Limitation matched the fewest number of sections, but showed the highest percentage within the Fisheries management domain (Figure 8). 
+
+```{r plot-clause-type-stacked-percent, message=FALSE, warning=FALSE, echo=FALSE, fig.width=10, fig.height=8}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
@@ -1101,34 +1103,50 @@ paragraph_context <- merge(
 labeled_paragraphs <- merge(labeled_paragraphs, paragraph_context, by = "paragraph_id", all.x = TRUE)
 
 # 📊 Aggregate counts by unique Section-legislation_id combinations
-heatmap_data <- labeled_paragraphs[
+clause_domain_counts <- labeled_paragraphs[
   !is.na(clause_type) & !is.na(management_domain) & !is.na(Section),
   .(section_count = uniqueN(paste(Section, legislation_id))),
   by = .(clause_type, management_domain)
 ]
 
-# 🎨 Plot heat map
-ggplot(heatmap_data, aes(x = clause_type, y = management_domain, fill = section_count)) +
-  geom_tile(color = "white") +
-  scale_fill_gradient(low = "grey87", high = "black") +
+# 📈 Calculate percentages within each management domain
+percent_data <- clause_domain_counts[, .(
+  clause_type = clause_type,
+  section_count = section_count,
+  percent = 100 * section_count / sum(section_count)
+), by = management_domain]
+
+# 🧮 Order management domains by total section count (largest to smallest)
+domain_order <- clause_domain_counts[, .(total = sum(section_count)), by = management_domain][order(-total)]
+percent_data[, management_domain := factor(management_domain, levels = rev(domain_order$management_domain))]
+
+# 🎨 Plot stacked percentage bar chart
+ggplot(percent_data, aes(x = management_domain, y = percent, fill = clause_type)) +
+  geom_bar(stat = "identity", color = "white", linewidth = 0.3) +
+  coord_flip() +
+  scale_fill_brewer(palette = "Set3", name = "Clause type") +
+  scale_y_continuous(labels = function(x) paste0(x, "%"), expand = c(0, 0)) +
   labs(
     title = NULL,
-    x = "Clause type",
-    y = "Management domain",
-    fill = "Section count"
+    x = "Management domain",
+    y = "Percentage of sections (%)"
   ) +
-  theme_minimal(base_size = 14 * font_scale) +
+  theme_minimal(base_size = 14) +
   theme(
     plot.title = element_text(size = 15, face = "bold", hjust = 0.5),
     plot.title.position = "plot",
     plot.margin = margin(t = 20, r = 40, b = 20, l = 20),
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    panel.grid = element_blank()
+    axis.text.y = element_text(size = 12),
+    axis.text.x = element_text(size = 12),
+    legend.position = "right",
+    legend.title = element_text(size = 13),
+    legend.text = element_text(size = 11),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank()
   )
-
 ```
 
-<p style="text-align: left;"><em>Figure 8. Section count of clause types in relation to management domains.</em></p>
+<p style="text-align: left;"><em>Figure 8. Clause type stacked percentage bar chart of sections by management domains.</em></p>
 
 <br>
 

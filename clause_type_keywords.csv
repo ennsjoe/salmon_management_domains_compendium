@@ -4,10 +4,8 @@ agreement,"Licence, Permitting, & Exemptions"
 amended,Interpretation & Purpose
 application,"Administration, Application, & Structure"
 applies,"Administration, Application, & Structure"
-apply,"Administration, Application, & Structure"
 area,Designation
 authorization,Authorization & Mandate
-right to,Authorization & Mandate
 authorizations,Authorization & Mandate
 authorized,Authorization & Mandate
 authorizing,Authorization & Mandate
@@ -15,6 +13,8 @@ boundary,Designation
 change approval,"Licence, Permitting, & Exemptions"
 class,Designation
 classes,Designation
+contravene,"Prohibition, Restriction, or Limitation"
+contravenes,"Prohibition, Restriction, or Limitation"
 covenant,"Licence, Permitting, & Exemptions"
 deemed,Designation
 definition,Interpretation & Purpose
@@ -24,6 +24,7 @@ designated,Designation
 designating,Designation
 designation,Designation
 district,Designation
+does not apply,"Licence, Permitting, & Exemptions"
 establish,Designation
 established,Designation
 establishment,Designation
@@ -34,8 +35,8 @@ exemption,"Licence, Permitting, & Exemptions"
 exemtions,"Licence, Permitting, & Exemptions"
 granting,Authorization & Mandate
 in the case of,Instruction
+includes,Interpretation & Purpose
 instruction,Instruction
-to be used,Instruction
 lands,Designation
 licence,"Licence, Permitting, & Exemptions"
 licencing,"Licence, Permitting, & Exemptions"
@@ -50,11 +51,8 @@ may,Authorization & Mandate
 may direct,Authorization & Mandate
 meaning,Interpretation & Purpose
 means,Interpretation & Purpose
-includes,Interpretation & Purpose
 must,Instruction
 must not,"Prohibition, Restriction, or Limitation"
-contravene,"Prohibition, Restriction, or Limitation"
-contravenes,"Prohibition, Restriction, or Limitation"
 no person,"Prohibition, Restriction, or Limitation"
 no persons,"Prohibition, Restriction, or Limitation"
 objective,Interpretation & Purpose
@@ -73,6 +71,7 @@ preclude,Interpretation & Purpose
 prescribe,Designation
 prescribed,Designation
 prohibit,"Prohibition, Restriction, or Limitation"
+prohibited,"Prohibition, Restriction, or Limitation"
 prohibition,"Prohibition, Restriction, or Limitation"
 prohibitions,"Prohibition, Restriction, or Limitation"
 property,Designation
@@ -85,10 +84,12 @@ report,Instruction
 restrict,"Prohibition, Restriction, or Limitation"
 restriction,"Prohibition, Restriction, or Limitation"
 restrictions,"Prohibition, Restriction, or Limitation"
+right to,Authorization & Mandate
 role,Authorization & Mandate
 shall,Instruction
 shall not,"Prohibition, Restriction, or Limitation"
 submit,Instruction
 surcharge,"Licence, Permitting, & Exemptions"
 tag,"Licence, Permitting, & Exemptions"
+to be used,Instruction
 unless,"Licence, Permitting, & Exemptions"
