@@ -1,17 +1,11 @@
 ################################################################################
-# Title: Database Paragraph Table
+# Title: Database Paragraph Table (Fixed)
 # Authors: Joe Enns, Cory Lagasse, Max Elinson
 # Date Created: 2025-08-07
 # Purpose / Description: 
 #   This script processes HTML files containing legislative paragraphs,
 #   extracts relevant information, and saves it into a structured SQLite database.
-# Dependencies: DBI, RSQLite, data.table, here, xml2, rvest, stringi, stringr
-# Execution: Run in RStudio or via Rscript; ensure working directory is project root
-# Inputs:
-#   HTML files located in the "legislation_html" directory.
-# Outputs:
-#   A SQLite database file named "legislation.db" in the "output" directory,
-#   containing a table with metadata about the legislative paragraphs.
+#   FIXED: Now filters out footer/metadata content during parsing.
 ################################################################################
 
 ## Load Libraries ----
@@ -55,10 +49,41 @@ bad_files <- character()
 
 ## Utility Functions ----
 clean_text <- function(text) {
-  text <- stri_enc_toutf8(text)  # Normalize to UTF-8
+  text <- stri_enc_toutf8(text)
   text <- stri_trans_general(text, "Latin-ASCII")
   text <- gsub("[^[:print:]]", "", text)
   return(trimws(text))
+}
+
+# Function to check if a paragraph is footer/metadata content
+is_footer_or_metadata <- function(text) {
+  if (is.na(text) || text == "") return(TRUE)
+  
+  # Patterns that indicate footer/metadata content
+  footer_patterns <- c(
+    "King's Printer",
+    "Queen's Printer",
+    "Copyright ©",
+    "Provisions relevant to the enactment",
+    "Schedule [A-Z]\\s+[A-Z]",  # Schedule headers
+    "^\\[Provisions relevant",
+    "Victoria, British Columbia, Canada$",
+    "^For the purposes of this regulation, a .* area is the area inside the boundary"
+  )
+  
+  # Check if text matches any footer pattern
+  for (pattern in footer_patterns) {
+    if (grepl(pattern, text, ignore.case = TRUE, perl = TRUE)) {
+      return(TRUE)
+    }
+  }
+  
+  # Check for very short paragraphs that are just numbers
+  if (nchar(text) < 5 && grepl("^[0-9]+$", text)) {
+    return(TRUE)
+  }
+  
+  return(FALSE)
 }
 
 extract_inline_section <- function(node) {
@@ -123,9 +148,15 @@ for (i in seq_along(html_files)) {
       } 
       
       paragraph_text <- xml_text(node, trim = TRUE)
-      paragraph_text <- stri_enc_toutf8(paragraph_text)  # Normalize here too
+      paragraph_text <- stri_enc_toutf8(paragraph_text)
       
-      if (nzchar(paragraph_text)) {
+      # CRITICAL: Skip footer/metadata content
+      if (is_footer_or_metadata(paragraph_text)) {
+        next
+      }
+      
+      # Only add paragraphs that have valid content and section numbers
+      if (nzchar(paragraph_text) && !is.na(last_section)) {
         paragraph_table <- rbind(paragraph_table, data.table(
           legislation_id = legislation_id,
           Section = last_section,
@@ -149,6 +180,9 @@ paragraph_table <- paragraph_table[!is.na(Section)]
 filter_words <- c("repeal", "repealed", "revoked", "Marginal note", "Not in force")
 escaped_words <- sapply(filter_words, function(w) paste0("\\b", stringr::str_replace_all(w, "([\\W])", "\\\\\\1"), "\\b"))
 paragraph_table <- paragraph_table[!grepl(paste(escaped_words, collapse = "|"), Paragraph, ignore.case = TRUE)]
+
+# Additional filter: Remove any remaining footer/metadata that slipped through
+paragraph_table <- paragraph_table[!sapply(paragraph_table$Paragraph, is_footer_or_metadata)]
 
 ## Add Unique paragraph_id ----
 paragraph_table[, paragraph_id := .I]
@@ -175,4 +209,5 @@ if (length(bad_files) > 0) {
 
 ## Notify Completion ----
 cat("✅ Labeling complete. Table saved to SQLite.\n")
+cat(sprintf("Total paragraphs saved: %d\n", nrow(paragraph_table)))
 beep(sound = 1)
