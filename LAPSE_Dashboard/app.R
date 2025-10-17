@@ -43,6 +43,48 @@ legislation_data <- dbReadTable(conn, "LegislationMetadata")
 paragraph_data <- dbReadTable(conn, "LegislationParagraphs")
 clause_data <- dbReadTable(conn, "clause_type_keywords")
 
+# Load legislation URLs
+legislation_url <- tryCatch({
+  message("Attempting to load legislation_url table...")
+  dbReadTable(conn, "legislation_url")
+}, error = function(e) {
+  message("Error loading legislation_url table: ", e$message)
+  data.frame(legislation_name = character(), url = character(), stringsAsFactors = FALSE)
+})
+
+# Debug: Check what we loaded
+message("Debug - legislation_url rows loaded: ", nrow(legislation_url))
+
+# Create a named vector for quick URL lookup - filter out empty URLs
+if (nrow(legislation_url) > 0) {
+  message("Debug - Processing URL data...")
+  
+  # Remove rows with empty, NA, or whitespace-only URLs
+  legislation_url$url <- trimws(legislation_url$url)
+  legislation_url_clean <- legislation_url[
+    !is.na(legislation_url$url) & 
+      legislation_url$url != "" & 
+      nchar(legislation_url$url) > 0, 
+  ]
+  message("Debug - Clean rows (non-empty URLs): ", nrow(legislation_url_clean))
+  
+  if (nrow(legislation_url_clean) > 0) {
+    url_lookup <- setNames(legislation_url_clean$url, legislation_url_clean$legislation_name)
+    message("Debug - url_lookup created with length: ", length(url_lookup))
+    message("Debug - Sample names: ", paste(head(names(url_lookup), 3), collapse = ", "))
+  } else {
+    url_lookup <- character(0)
+    message("Debug - All URLs were empty, url_lookup is empty")
+  }
+} else {
+  url_lookup <- character(0)
+  message("Debug - No data in legislation_url, url_lookup is empty")
+}
+
+# Prepare UI choices
+management_domains <- unique(label_data$label_value[label_data$label_type == "Management Domain"])
+jurisdictions <- unique(legislation_data$jurisdiction)
+
 # Prepare UI choices
 management_domains <- unique(label_data$label_value[label_data$label_type == "Management Domain"])
 jurisdictions <- unique(legislation_data$jurisdiction)
@@ -151,7 +193,8 @@ ui <- fluidPage(
       .section-content {
         border-top: 1px solid #e0e0e0;
       }
-    ")),
+    "))
+    ,
     tags$script(HTML("
       $(document).ready(function() {
         // Wait for shinyWidgets to render
@@ -278,6 +321,11 @@ ui <- fluidPage(
                     )
                   )
                 )
+            ),
+            # Add link button below dropdowns
+            div(
+              style = "margin-top: 10px;",
+              uiOutput("legislation_link_button")
             )
           ),
           hr(),
@@ -542,6 +590,39 @@ server <- function(input, output, session) {
       }
     }
     return(NULL)
+  })
+  
+  # Render legislation link button
+  output$legislation_link_button <- renderUI({
+    leg_id <- current_legislation_id()
+    
+    if (is.null(leg_id) || length(leg_id) == 0) {
+      return(NULL)
+    }
+    
+    # Get legislation info
+    leg_info <- legislation_data[legislation_data$legislation_id == leg_id, ]
+    
+    if (nrow(leg_info) == 0) {
+      return(NULL)
+    }
+    
+    leg_name <- leg_info$legislation_name[1]
+    leg_url <- url_lookup[[leg_name]]
+    
+    if (is.null(leg_url) || is.na(leg_url) || leg_url == "") {
+      return(NULL)
+    }
+    
+    # Create button
+    tags$a(
+      href = leg_url,
+      target = "_blank",
+      class = "btn btn-primary",
+      style = "background-color: #0074D9; border: none; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px;",
+      icon("external-link-alt"),
+      "View Full Legislation"
+    )
   })
   
   # ✅ Output section paragraphs with keyword highlighting and collapsible sections----

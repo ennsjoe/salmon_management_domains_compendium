@@ -231,6 +231,26 @@ h1, h2, h3, h4 {
   background-color: #aaaaaa;
 }
 
+/* Link button styling */
+.legislation-link-btn {
+  background-color: transparent;
+  border: none;
+  color: #0074D9;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px;
+  transition: color 0.2s ease;
+}
+
+.legislation-link-btn:hover {
+  color: #0056b3;
+}
+
+.legislation-link-btn i {
+  font-size: 16px;
+}
+
 /* === Keyword Highlighting === */
 .highlight-domain {
   background-color: #fce4ec;
