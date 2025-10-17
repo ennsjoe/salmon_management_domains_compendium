@@ -779,6 +779,7 @@ library(here)
 library(dplyr)
 library(ggplot2)
 library(ggforce)
+library(paletteer)
 
 # Connect to the database
 db_path <- file.path(here("output"), "legislation.db")
@@ -855,23 +856,12 @@ scope_labels <- scope_radii %>%
     y = label_radius * sin(pi / 2)
   )
 
-# Define custom colors for label_value slices
-domain_colors <- c(
-  "Agriculture" = "greenyellow",
-  "Aquaculture and Hatcheries" = "violetred2",
-  "Climate Change and Natural Disasters" = "tomato2",
-  "Fisheries" = "turquoise2",
-  "Forest and Range" = "sienna3",
-  "Human Disturbance" = "grey50",
-  "Restoration" = "springgreen4",
-  "Invasive or Problematic Species and Disease" = "darkorchid3",
-  "Mining and Energy" = "grey30",
-  "Pollution" = "black",
-  "Spatial Designation" = "grey90",
-  "Species Status and Assessment" = "grey80",
-  "Transportation Infrastructure" = "yellow3",
-  "Water Use and Watercourse Modifications" = "skyblue3"
-)
+# Get number of unique domains for color palette
+n_domains <- length(unique(donut_data$label_value))
+
+# Generate colors from paletteer continuous palette
+domain_colors <- paletteer_c("grDevices::RdBu", n = n_domains)
+names(domain_colors) <- sort(unique(donut_data$label_value))
 
 # Plot multi-ring donut chart
 ggplot(donut_data) +
@@ -892,7 +882,6 @@ ggplot(donut_data) +
     subtitle = NULL
   ) +
   theme(legend.position = "right")
-
 ```
 
 <p style="text-align: left;"><em>Figure 6. Count of sections as a proportion by management domain categories and tiered by scope.</em></p>
@@ -1073,6 +1062,7 @@ library(RSQLite)
 library(data.table)
 library(here)
 library(ggplot2)
+library(paletteer)
 
 # 🔌 Connect to the database
 db_path <- here("output", "legislation.db")
@@ -1120,11 +1110,14 @@ percent_data <- clause_domain_counts[, .(
 domain_order <- clause_domain_counts[, .(total = sum(section_count)), by = management_domain][order(-total)]
 percent_data[, management_domain := factor(management_domain, levels = rev(domain_order$management_domain))]
 
+# Get number of clause types for color palette
+n_clause_types <- length(unique(percent_data$clause_type))
+
 # 🎨 Plot stacked percentage bar chart
 ggplot(percent_data, aes(x = management_domain, y = percent, fill = clause_type)) +
   geom_bar(stat = "identity", color = "white", linewidth = 0.3) +
   coord_flip() +
-  scale_fill_brewer(palette = "Set3", name = "Clause type") +
+  scale_fill_paletteer_d("ggsci::light_uchicago", name = "Clause type") +
   scale_y_continuous(labels = function(x) paste0(x, "%"), expand = c(0, 0)) +
   labs(
     title = NULL,
@@ -1160,6 +1153,7 @@ library(here)
 library(data.table)
 library(RSQLite)
 library(ggplot2)
+library(paletteer)
 
 # Connect to SQLite database
 db_path <- file.path(here("output"), "legislation.db")
@@ -1189,18 +1183,17 @@ cu_ranking[, rpa_threat_ranking := factor(rpa_threat_ranking, levels = ordered_l
 # Tally unique cu_index values per rpa_threat_ranking and cu_species
 cu_tally <- cu_ranking[, .(unique_cu_count = uniqueN(cu_index)), by = .(rpa_threat_ranking, cu_species)]
 
-# Define custom colors for each CU species
-custom_colors <- c(
-  "Chinook" = "grey",
-  "Coho"    = "#9acce4",
-  "Sockeye (Lake Type)" = "#996666",
-  "Sockeye (River Type)" = "#EBA0A0"
-)
+# Get number of species for color palette
+n_species <- length(unique(cu_tally$cu_species))
 
-# Plot stacked bar chart with custom colors
+# Generate colors from paletteer
+species_colors <- paletteer_d("ggsci::light_uchicago", n = n_species)
+names(species_colors) <- unique(cu_tally$cu_species)
+
+# Plot stacked bar chart with paletteer colors
 ggplot(cu_tally, aes(x = rpa_threat_ranking, y = unique_cu_count, fill = cu_species)) +
   geom_bar(stat = "identity") +
-  scale_fill_manual(values = custom_colors) +
+  scale_fill_manual(values = species_colors) +
   labs(
     title = NULL,
     x = "RPA threat ranking",
@@ -1547,6 +1540,8 @@ Department of Justice Canada. 2022. Legistics Paragraphing. Government of Canada
 DFO. 2020. Recovery Potential Assessment for 11 Designatable Units of Fraser River Chinook Salmon, Oncorhynchus tshawytscha, Part 1: Elements 1 to 11. DFO Can. Sci. Advis. Sec. Sci. Advis. Rep. 2020/023.
 
 DFO. 2022. Recovery Potential Assessment for Fraser River Sockeye Salmon (Oncorhynchus nerka) – Nine Designatable Units – Part 2: Habitat, Threats Assessment, Mitigation, And Allowable Harm. DFO Can. Sci. Advis. Sec. Sci. Advis. Rep. 2022/003.
+
+Dionne, K., Rachinski, T., Parken, C., Weir, L., Doutaz, D., Ritchie, L., Bailey, R., Jenewein, B., Miller-Saunders, K., Labelle, M., Manson, M., Welch, P., Trouton, N., Mozin, P., and Walsh, M. 2023. Recovery Potential Assessment for Southern British Columbian Chinook Populations, Fraser and Southern Mainland Chinook Designatable Units (1, 6, 13 and 15). DFO Can. Sci. Advis. Sec. Res. Doc. 2023/042. xvii + 291 p.
 
 Dufresne Y, and Ouellet C. 2019. Conceptualization, measurement and effects of positional issues in the Canadian electoral context. Heliyon, 5(4): e01453. <PMID:31025009>. <DOI:10.1016/j.heliyon>. 2019.e01453
 
