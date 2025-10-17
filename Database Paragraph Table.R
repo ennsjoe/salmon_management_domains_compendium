@@ -1,11 +1,11 @@
 ################################################################################
-# Title: Database Paragraph Table (Fixed)
+# Title: Database Paragraph Table (Fixed for Schedules)
 # Authors: Joe Enns, Cory Lagasse, Max Elinson
 # Date Created: 2025-08-07
 # Purpose / Description: 
 #   This script processes HTML files containing legislative paragraphs,
 #   extracts relevant information, and saves it into a structured SQLite database.
-#   FIXED: Now filters out footer/metadata content during parsing.
+#   FIXED: Now properly handles Schedule sections separately from main sections.
 ################################################################################
 
 ## Load Libraries ----
@@ -65,10 +65,8 @@ is_footer_or_metadata <- function(text) {
     "Queen's Printer",
     "Copyright ©",
     "Provisions relevant to the enactment",
-    "Schedule [A-Z]\\s+[A-Z]",  # Schedule headers
     "^\\[Provisions relevant",
-    "Victoria, British Columbia, Canada$",
-    "^For the purposes of this regulation, a .* area is the area inside the boundary"
+    "Victoria, British Columbia, Canada$"
   )
   
   # Check if text matches any footer pattern
@@ -84,6 +82,34 @@ is_footer_or_metadata <- function(text) {
   }
   
   return(FALSE)
+}
+
+# Function to detect schedule headers
+is_schedule_header <- function(text) {
+  if (is.na(text) || text == "") return(FALSE)
+  
+  # Patterns that indicate a schedule header
+  schedule_patterns <- c(
+    "^Schedule [A-Z0-9]",
+    "^SCHEDULE [A-Z0-9]"
+  )
+  
+  for (pattern in schedule_patterns) {
+    if (grepl(pattern, text, perl = TRUE)) {
+      return(TRUE)
+    }
+  }
+  
+  return(FALSE)
+}
+
+# Extract schedule name from heading
+extract_schedule_name <- function(text) {
+  if (grepl("^Schedule ([A-Z0-9]+)", text, ignore.case = TRUE, perl = TRUE)) {
+    match <- regmatches(text, regexpr("^Schedule ([A-Z0-9]+)", text, ignore.case = TRUE, perl = TRUE))
+    return(match[1])
+  }
+  return(NA)
 }
 
 extract_inline_section <- function(node) {
@@ -120,6 +146,7 @@ for (i in seq_along(html_files)) {
     last_section <- NA
     last_heading <- NA
     last_xpath <- NA
+    current_schedule <- NA  # Track which schedule we're in
     
     for (node in all_paragraphs) {
       current_xpath <- xml_path(node)
@@ -127,6 +154,21 @@ for (i in seq_along(html_files)) {
       
       # Skip structural paragraphs like "part"
       if (!is.na(paragraph_class) && tolower(paragraph_class) %in% c("part")) {
+        next
+      }
+      
+      paragraph_text <- xml_text(node, trim = TRUE)
+      paragraph_text <- stri_enc_toutf8(paragraph_text)
+      
+      # Check if this is a schedule header
+      if (is_schedule_header(paragraph_text)) {
+        current_schedule <- extract_schedule_name(paragraph_text)
+        last_section <- NA  # Reset section when entering a new schedule
+        next  # Don't add the schedule header itself as a paragraph
+      }
+      
+      # CRITICAL: Skip footer/metadata content
+      if (is_footer_or_metadata(paragraph_text)) {
         next
       }
       
@@ -147,19 +189,18 @@ for (i in seq_along(html_files)) {
         last_section <- inline_section_number
       } 
       
-      paragraph_text <- xml_text(node, trim = TRUE)
-      paragraph_text <- stri_enc_toutf8(paragraph_text)
-      
-      # CRITICAL: Skip footer/metadata content
-      if (is_footer_or_metadata(paragraph_text)) {
-        next
-      }
-      
       # Only add paragraphs that have valid content and section numbers
       if (nzchar(paragraph_text) && !is.na(last_section)) {
+        # If we're in a schedule, prefix the section number with the schedule name
+        section_identifier <- if (!is.na(current_schedule)) {
+          paste0(current_schedule, "-", last_section)
+        } else {
+          last_section
+        }
+        
         paragraph_table <- rbind(paragraph_table, data.table(
           legislation_id = legislation_id,
-          Section = last_section,
+          Section = section_identifier,
           Heading = last_heading,
           Paragraph = paragraph_text,
           XPath = current_xpath
