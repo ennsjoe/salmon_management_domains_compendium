@@ -91,6 +91,12 @@ is_footer_or_metadata <- function(text) {
 is_amendment_reference <- function(text) {
   if (is.na(text) || text == "") return(FALSE)
   
+  # Check if entire text is enclosed in square brackets with no content outside
+  # This catches: [am. B.C. Reg. ...], [en. ...], [Repealed ...], etc.
+  if (grepl("^\\[.*\\]$", text, perl = TRUE)) {
+    return(TRUE)
+  }
+  
   # Pattern for amendment references like "[Amendments]" or "150 [Amendments]"
   # Often includes year references like "2001, c. 26"
   amendment_patterns <- c(
