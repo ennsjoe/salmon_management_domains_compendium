@@ -232,17 +232,32 @@ ui <- fluidPage(
     "))
   ),
   
-  titlePanel("LAPSE Dashboard"),
+  titlePanel("Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE)"),
   
-  # Information link below title
+  # Instructional text and About link side by side
   div(
-    style = "text-align: left; margin-bottom: 20px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;",
-    tags$a(
-      href = "https://ennsjoe.github.io/salmon_management_domains_compendium/LAPSE-Technical-Brief.html",
-      target = "_blank",
-      style = "color: #996666; font-weight: 600; text-decoration: none; font-size: 16px;",
-      icon("info-circle"),
-      " About: LAPSE Technical Brief"
+    style = "display: flex; gap: 20px; margin-bottom: 20px;",
+    
+    # Instructional text (left side)
+    div(
+      style = "flex: 1; text-align: left; padding: 10px; background-color: #e8f4f8; border-radius: 5px; color: #2c3e50;",
+      p(
+        style = "margin: 0; font-size: 16px;",
+        icon("thumbtack"),
+        " Select a management domain to filter by specific topic, or just explore legislation relevant to Pacific salmon conservation."
+      )
+    ),
+    
+    # Information link (right side)
+    div(
+      style = "text-align: left; padding: 10px; background-color: #f0f0f0; border-radius: 5px;",
+      tags$a(
+        href = "https://ennsjoe.github.io/salmon_management_domains_compendium/LAPSE-Technical-Brief.html",
+        target = "_blank",
+        style = "color: #996666; font-weight: 600; text-decoration: none; font-size: 16px;",
+        icon("info-circle"),
+        " About: LAPSE Technical Brief"
+      )
     )
   ),
   
@@ -342,7 +357,7 @@ ui <- fluidPage(
           h4("Keyword Frequency"),
           plotOutput("keyword_plot", height = "250px"),
           
-          h4("IUCN Co-occurrence"),
+          h4("IUCN Threat Category Co-occurrence"),
           plotOutput("iucn_plot", height = "250px"),
           hr(),
           
@@ -706,8 +721,27 @@ server <- function(input, output, session) {
         
         # Get legislation info for this section
         leg_info <- legislation_data[legislation_data$legislation_id == section_data$legislation_id[1], ]
+        
+        # Determine jurisdiction color
+        jurisdiction_color <- if (nrow(leg_info) > 0) {
+          switch(leg_info$jurisdiction[1],
+                 "Federal" = "#996666",
+                 "Provincial" = "#668899",
+                 "Unknown" = "#999999",
+                 "#999999")
+        } else {
+          "#999999"
+        }
+        
+        # Build section label with jurisdiction indicator
         section_label <- if (search_active && is.null(leg_id) && nrow(leg_info) > 0) {
-          paste0(leg_info$legislation_name[1], " - Section ", sec)
+          # Full label with act name and jurisdiction
+          paste0(
+            leg_info$act_name[1], 
+            " (", leg_info$jurisdiction[1], ") | ",
+            leg_info$legislation_name[1], 
+            " - Section ", sec
+          )
         } else {
           paste("Section", sec)
         }
@@ -802,7 +836,10 @@ server <- function(input, output, session) {
           
           div(
             class = "section-header",
-            style = "background-color: #f5f5f5; padding: 12px 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;",
+            style = sprintf(
+              "background-color: #f5f5f5; padding: 12px 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid %s;",
+              jurisdiction_color
+            ),
             `data-toggle` = "collapse",
             `data-target` = paste0("#", collapse_id),
             `aria-expanded` = "false",
@@ -885,7 +922,7 @@ server <- function(input, output, session) {
     ggplot(iucn_counts, aes(x = label_value, y = n)) +
       geom_bar(stat = "identity", fill = "#2c3e50") +
       theme_minimal() +
-      labs(x = "IUCN Level 2", y = "Clause Count") +
+      labs(x = "", y = "Clause Count") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
   })
   
@@ -1039,7 +1076,7 @@ server <- function(input, output, session) {
       geom_bar(stat = "identity", fill = "#2c3e50") +
       coord_flip() +
       theme_minimal() +
-      labs(x = "Keyword", y = "Frequency")
+      labs(x = "Keyword", y = "Count")
   })
   
   onStop(function() {
