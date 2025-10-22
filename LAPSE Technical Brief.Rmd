@@ -193,36 +193,35 @@ domains <- dbGetQuery(conn, query)$label_value
 # Disconnect from the database
 dbDisconnect(conn)
 
-# Define CSS for button grid
+# Define CSS for pill/badge layout
 cat("
 <style>
-.domain-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+.domain-pills {
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-top: 20px;
+  margin-bottom: 20px;
 }
-.domain-button {
+.domain-pill {
   background-color: #668899;
   color: white;
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: center;
-  border-radius: 5px;
+  padding: 8px 16px;
+  border-radius: 20px;
   font-family: sans-serif;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-.domain-button:hover {
-  background-color: #996666;
+  font-size: 14px;
+  font-weight: 500;
+  border: 2px solid #668899;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 </style>
 ")
 
-# Render buttons in grid
-cat("<div class='domain-grid'>")
+# Render pills
+cat("<div class='domain-pills'>")
 for (domain in domains) {
-  cat(sprintf("<div class='domain-button'>%s</div>", domain))
+  cat(sprintf("<span class='domain-pill'>%s</span>", domain))
 }
 cat("</div>")
 ```
@@ -779,7 +778,7 @@ library(here)
 library(dplyr)
 library(ggplot2)
 library(ggforce)
-library(paletteer)
+library(RColorBrewer)
 
 # Connect to the database
 db_path <- file.path(here("output"), "legislation.db")
@@ -859,8 +858,15 @@ scope_labels <- scope_radii %>%
 # Get number of unique domains for color palette
 n_domains <- length(unique(donut_data$label_value))
 
-# Generate colors from paletteer continuous palette
-domain_colors <- paletteer_c("grDevices::RdBu", n = n_domains)
+# Generate colors from RColorBrewer Set2
+# Set2 has 8 colors, so we'll repeat/extend if needed
+if (n_domains <= 8) {
+  domain_colors <- brewer.pal(n_domains, "Set2")
+} else {
+  # For more than 8 categories, use colorRampPalette to extend Set2
+  set2_extended <- colorRampPalette(brewer.pal(8, "Set2"))(n_domains)
+  domain_colors <- set2_extended
+}
 names(domain_colors) <- sort(unique(donut_data$label_value))
 
 # Plot multi-ring donut chart
@@ -1062,7 +1068,7 @@ library(RSQLite)
 library(data.table)
 library(here)
 library(ggplot2)
-library(paletteer)
+library(RColorBrewer)
 
 # 🔌 Connect to the database
 db_path <- here("output", "legislation.db")
@@ -1113,11 +1119,19 @@ percent_data[, management_domain := factor(management_domain, levels = rev(domai
 # Get number of clause types for color palette
 n_clause_types <- length(unique(percent_data$clause_type))
 
+# 🎨 Generate colors from RColorBrewer Set2
+if (n_clause_types <= 8) {
+  clause_colors <- brewer.pal(n_clause_types, "Set2")
+} else {
+  # For more than 8 categories, extend Set2 palette
+  clause_colors <- colorRampPalette(brewer.pal(8, "Set2"))(n_clause_types)
+}
+
 # 🎨 Plot stacked percentage bar chart
 ggplot(percent_data, aes(x = management_domain, y = percent, fill = clause_type)) +
   geom_bar(stat = "identity", color = "white", linewidth = 0.3) +
   coord_flip() +
-  scale_fill_paletteer_d("ggsci::light_uchicago", name = "Clause type") +
+  scale_fill_manual(values = clause_colors, name = "Clause type") +
   scale_y_continuous(labels = function(x) paste0(x, "%"), expand = c(0, 0)) +
   labs(
     title = NULL,
@@ -1153,7 +1167,7 @@ library(here)
 library(data.table)
 library(RSQLite)
 library(ggplot2)
-library(paletteer)
+library(RColorBrewer)
 
 # Connect to SQLite database
 db_path <- file.path(here("output"), "legislation.db")
@@ -1186,13 +1200,18 @@ cu_tally <- cu_ranking[, .(unique_cu_count = uniqueN(cu_index)), by = .(rpa_thre
 # Get number of species for color palette
 n_species <- length(unique(cu_tally$cu_species))
 
-# Generate colors from paletteer
-species_colors <- paletteer_d("ggsci::light_uchicago", n = n_species)
-names(species_colors) <- unique(cu_tally$cu_species)
+# Generate colors from RColorBrewer Set2
+if (n_species <= 8) {
+  species_colors <- brewer.pal(max(3, n_species), "Set2")[1:n_species]
+} else {
+  # For more than 8 species, extend Set2 palette
+  species_colors <- colorRampPalette(brewer.pal(8, "Set2"))(n_species)
+}
+names(species_colors) <- sort(unique(cu_tally$cu_species))
 
-# Plot stacked bar chart with paletteer colors
+# Plot stacked bar chart with RColorBrewer Set2 colors
 ggplot(cu_tally, aes(x = rpa_threat_ranking, y = unique_cu_count, fill = cu_species)) +
-  geom_bar(stat = "identity") +
+  geom_bar(stat = "identity", color = "white", linewidth = 0.2) +
   scale_fill_manual(values = species_colors) +
   labs(
     title = NULL,
@@ -1200,10 +1219,15 @@ ggplot(cu_tally, aes(x = rpa_threat_ranking, y = unique_cu_count, fill = cu_spec
     y = "Conservation Unit count",
     fill = "Species"
   ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  theme(legend.position = "bottom")
-
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+    axis.text.y = element_text(size = 12),
+    legend.position = "bottom",
+    legend.title = element_text(size = 13),
+    legend.text = element_text(size = 11),
+    panel.grid.minor = element_blank()
+  )
 ```
 
 <p style="text-align: left;"><em>Figure 9. Conservation Unit (CU) count by IUCN threat ranking through the COSEWIC Recovery Potential Analysis (RPA) process.</em></p>
@@ -2139,7 +2163,7 @@ library(RSQLite)
 library(here)
 library(data.table)
 library(ggplot2)
-library(wesanderson)
+library(RColorBrewer)
 
 # 📁 Connect to the database
 db_path <- file.path(here("output"), "legislation.db")
@@ -2169,25 +2193,35 @@ if (!file.exists(db_path)) {
   
   # 📊 Count frequency of each Clause Type
   pie_data <- clause_geo[, .N, by = label_value]
+  pie_data <- pie_data[order(-N)]  # Order by count (largest first)
   pie_data[, percent := round(100 * N / sum(N), 1)]
   pie_data[, label := paste0(label_value, " (", percent, "%)")]
   
- # Choose a palette (e.g., "Royal1")
-palette <- wes_palette("FantasticFox1", n = nrow(pie_data), type = "continuous")
-
-ggplot(pie_data, aes(x = "", y = N, fill = label)) +
-  geom_bar(stat = "identity", width = 1, color = "white") +
-  coord_polar("y", start = 0) +
-  scale_fill_manual(values = palette) +
-  labs(
-    title = "Clause Type Distribution for IUCN Threat 10.1 Geological Events",
-    fill = "Clause Type"
-  ) +
-  theme_void(base_size = 14) +
-  theme(
-    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
-    legend.position = "right"
-  )
+  # 🎨 Generate colors from RColorBrewer Set2
+  n_types <- nrow(pie_data)
+  if (n_types <= 8) {
+    clause_colors <- brewer.pal(max(3, n_types), "Set2")[1:n_types]
+  } else {
+    # For more than 8 categories, extend Set2 palette
+    clause_colors <- colorRampPalette(brewer.pal(8, "Set2"))(n_types)
+  }
+  
+  # 🥧 Plot pie chart
+  ggplot(pie_data, aes(x = "", y = N, fill = label)) +
+    geom_bar(stat = "identity", width = 1, color = "white", linewidth = 0.5) +
+    coord_polar("y", start = 0) +
+    scale_fill_manual(values = clause_colors) +
+    labs(
+      title = NULL,
+      fill = "Clause type"
+    ) +
+    theme_void(base_size = 14) +
+    theme(
+      plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+      legend.position = "right",
+      legend.title = element_text(size = 13, face = "bold"),
+      legend.text = element_text(size = 11)
+    )
 }
 ```
 
@@ -2393,7 +2427,7 @@ library(RSQLite)
 library(here)
 library(data.table)
 library(ggplot2)
-library(wesanderson)
+library(RColorBrewer)
 
 # 📁 Connect to the database
 db_path <- file.path(here("output"), "legislation.db")
@@ -2423,18 +2457,24 @@ if (!file.exists(db_path)) {
   
   # 📊 Count frequency of each Clause Type
   pie_data <- clause_dams[, .N, by = label_value]
-  pie_data <- pie_data[order(-N)]
+  pie_data <- pie_data[order(-N)]  # Order by count (largest first)
   pie_data[, percent := round(100 * N / sum(N), 1)]
   pie_data[, label := paste0(label_value, " (", percent, "%)")]
   
-  # 🎨 Choose a Wes Anderson palette
-  palette <- wes_palette("FantasticFox1", n = nrow(pie_data), type = "continuous")
-
+  # 🎨 Generate colors from RColorBrewer Set2
+  n_types <- nrow(pie_data)
+  if (n_types <= 8) {
+    clause_colors <- brewer.pal(max(3, n_types), "Set2")[1:n_types]
+  } else {
+    # For more than 8 categories, extend Set2 palette
+    clause_colors <- colorRampPalette(brewer.pal(8, "Set2"))(n_types)
+  }
+  
   # 🥧 Plot pie chart
   ggplot(pie_data, aes(x = "", y = N, fill = label)) +
-    geom_bar(stat = "identity", width = 1, color = "white") +
+    geom_bar(stat = "identity", width = 1, color = "white", linewidth = 0.5) +
     coord_polar("y", start = 0) +
-    scale_fill_manual(values = palette) +
+    scale_fill_manual(values = clause_colors) +
     labs(
       title = NULL,
       fill = "Clause type"
@@ -2442,7 +2482,9 @@ if (!file.exists(db_path)) {
     theme_void(base_size = 14) +
     theme(
       plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
-      legend.position = "right"
+      legend.position = "right",
+      legend.title = element_text(size = 13, face = "bold"),
+      legend.text = element_text(size = 11)
     )
 }
 ```
