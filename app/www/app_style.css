@@ -1,0 +1,302 @@
+/* === Base Layout === */
+body {
+  background-color: #f4f6f9;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* === Headers === */
+h1, h2, h3, h4 {
+  color: #2c3e50;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+/* === Domain Panel === */
+.domain-panel {
+  background-color: #ffffff;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+/* === Domain Buttons (div-based, full-width clickable) === */
+.domain-button {
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #2c3e50;
+  text-align: left;
+  word-break: break-word;
+  white-space: normal;
+  line-height: 1.4;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.domain-button:hover {
+  background-color: #d0d0d0;
+}
+
+/* === Selected Domain Button === */
+.domain-button.selected {
+  background-color: #2c3e50;
+  color: #ffffff;
+  border-color: #2c3e50;
+  box-shadow: inset 0 0 0 2px #1a252f;
+}
+
+/* === Reset Button === */
+.domain-button.reset {
+  background-color: #2c3e50;
+  color: white;
+  margin-bottom: 16px;
+}
+
+.domain-button.reset:hover {
+  background-color: #1a252f;
+}
+
+/* === Main Panel === */
+.main-panel {
+  padding: 20px;
+  background-color: #ffffff;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  min-height: 100vh;
+}
+
+.section-block h6 {
+  font-weight: normal;
+  font-style: italic;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* === Graph Panel === */
+.graph-panel {
+  background-color: #ffffff;
+  padding: 20px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.graph-panel h4 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.btn-group .btn[value="All"] {
+  background-color: #cccccc !important;
+  color: white !important;
+}
+
+.btn-group .btn[value="Federal"] {
+  background-color: #996666 !important;
+  color: white !important;
+}
+
+.btn-group .btn[value="Provincial"] {
+  background-color: #668899 !important;
+  color: white !important;
+}
+
+.btn-group .btn.active {
+  box-shadow: inset 0 0 0 2px white;
+}
+
+
+/* === Act Buttons === */
+.act-button {
+  display: block;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px 16px;
+  background-color: #f0f0f0;
+  color: #2c3e50;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-weight: 500;
+  text-align: left;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  word-break: break-word;
+  white-space: normal;
+  line-height: 1.4;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.act-button:hover {
+  background-color: #e0e0e0;
+}
+
+/* === Selected Act Button === */
+.act-button.selected {
+  background-color: #2c3e50;
+  color: #ffffff;
+  border-color: #2c3e50;
+  box-shadow: inset 0 0 0 2px #1a252f;
+}
+
+/* === Legislation Buttons === */
+.legislation-button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px 16px;
+  background-color: #ffffff;
+  color: #2c3e50;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-weight: 500;
+  text-align: left;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease;
+  word-break: break-word;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+.legislation-button:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+/* === Section Buttons === */
+.section-button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px 16px;
+  background-color: #fefefe;
+  color: #2c3e50;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-weight: 500;
+  text-align: left;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease;
+  word-break: break-word;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+.section-button:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+/* Jurisdiction color coding */
+.act-button.federal,
+.legislation-button.federal {
+  background-color: #996666; /* Federal red */
+  border-left: 4px solid #773333;
+}
+
+.act-button.provincial,
+.legislation-button.provincial {
+  background-color: #668899; /* Provincial blue */
+  border-left: 4px solid #446677;
+}
+
+.act-button.unknown,
+.legislation-button.unknown {
+  background-color: #999999; /* Unknown gray */
+  border-left: 4px solid #777777;
+}
+
+/* Hover states for jurisdiction colors */
+.act-button.federal:hover,
+.legislation-button.federal:hover {
+  background-color: #aa7777;
+}
+
+.act-button.provincial:hover,
+.legislation-button.provincial:hover {
+  background-color: #7799aa;
+}
+
+.act-button.unknown:hover,
+.legislation-button.unknown:hover {
+  background-color: #aaaaaa;
+}
+
+/* Link button styling */
+.legislation-link-btn {
+  background-color: transparent;
+  border: none;
+  color: #0074D9;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px;
+  transition: color 0.2s ease;
+}
+
+.legislation-link-btn:hover {
+  color: #0056b3;
+}
+
+.legislation-link-btn i {
+  font-size: 16px;
+}
+
+/* === Keyword Highlighting === */
+.highlight-domain {
+  background-color: #fce4ec;
+  font-style: italic;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.highlight-clause {
+  background-color: #e3f2fd;
+  font-style: italic;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* === Modal Content === */
+.modal-body {
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* === Responsive Tweaks === */
+@media (max-width: 768px) {
+  .domain-panel,
+  .main-panel,
+  .graph-panel {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .domain-button,
+  .act-button,
+  .legislation-button,
+  .section-button,
+  .domain-button.reset {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .graph-panel h4 {
+    font-size: 14px;
+  }
+}
