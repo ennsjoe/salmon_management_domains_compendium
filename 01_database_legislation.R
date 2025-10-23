@@ -1,0 +1,161 @@
+################################################################################
+# Title: Database Legislation Table
+# Authors: Joe Enns, Cory Lagasse, Max Elinson
+# Date Created: 2025-08-07
+# Purpose / Description: 
+#   This script processes HTML files containing metadata about legislation, 
+#   extracts relevant information, and saves it into a structured SQLite database.
+# Dependencies: DBI, RSQLite, data.table, here
+# Execution: Run in RStudio or via Rscript; ensure working directory is project root
+# Inputs: 
+#   HTML files located in the "data/legislation_html" directory.
+# Outputs:
+#   A SQLite database file named "legislation.db" in the "output" directory,
+#   containing a table with metadata about the legislation.
+################################################################################
+
+## Set Working Directory ----
+library(here)
+
+## Load Libraries ----
+library(data.table)
+library(xml2)
+library(rvest)
+library(stringi)
+library(stringr)
+library(RSQLite)
+library(beepr)
+
+## Define the folders dynamically using `here()` ----
+html_dirs <- here("data", "legislation_html")
+
+## Read all HTML files from the directory ----
+html_files <- unlist(lapply(html_dirs, function(dir) {
+  list.files(path = dir, pattern = "\\.html$", full.names = TRUE, recursive = TRUE)
+}))
+
+## Normalize paths to handle special characters ----
+html_files <- normalizePath(html_files, winslash = "/", mustWork = FALSE)
+
+## Debugging print: Confirm files found ----
+cat("Total HTML files detected:", length(html_files), "\n")
+
+## Stop if no files are found ----
+if (length(html_files) == 0) stop("No HTML files found in the specified directories.")
+
+## Initialize legislation_table ----
+legislation_table <- data.table(
+  legislation_id = integer(),
+  jurisdiction = character(),
+  legislation_type = character(),
+  act_name = character(),
+  legislation_name = character()
+)
+
+## Utility Functions ----
+clean_text <- function(text) {
+  text <- stri_enc_toutf8(text)  # Convert to UTF-8 safely
+  text <- stri_trans_general(text, "Latin-ASCII")
+  text <- gsub("[^[:print:]]", "", text)
+  return(trimws(text))
+}
+
+format_act_name <- function(act_name) {
+  act_name <- gsub(r"(\s*\(.*?\))", "", act_name, perl = TRUE)
+  act_name <- gsub(r"(\s*\[.*?\])", "", act_name, perl = TRUE)
+  act_name <- tolower(act_name)
+  act_name <- gsub("(^|\\s)([a-z])", "\\1\\U\\2", act_name, perl = TRUE)
+  return(trimws(act_name))
+}
+
+extract_legislation_name <- function(html_file) {
+  legislation_name <- html_file %>% html_nodes("h1.HeadTitle, div#title h2") %>% html_text(trim = TRUE)
+  legislation_name <- ifelse(length(legislation_name) > 0, clean_text(legislation_name[1]), "Unknown Legislation")
+  legislation_name <- gsub(r"(\s*\(.*?$)", "", legislation_name, perl = TRUE)
+  return(trimws(legislation_name))
+}
+
+extract_jurisdiction <- function(html_file) {
+  head_attrs <- xml_attrs(html_file %>% html_node("head"))
+  meta_description <- html_file %>% html_node("meta[name='description']") %>% html_attr("content")
+  meta_breadcrumb <- html_file %>% html_node("meta[name='breadcrumb']") %>% html_attr("content")
+  
+  jurisdiction <- ifelse(any(grepl("www.gov.bc.ca", head_attrs)) || grepl("British Columbia", meta_breadcrumb), "Provincial",
+                         ifelse(!is.na(meta_description) && grepl("Federal laws of Canada", meta_description), "Federal", "Unknown"))
+  return(jurisdiction)
+}
+
+extract_legislation_type <- function(legislation_name) {
+  legislation_type <- fifelse(
+    grepl("\\bRegulation\\b", legislation_name, ignore.case = TRUE) | 
+      grepl("\\bRegulations\\b", legislation_name, ignore.case = TRUE), "Regulations",
+    fifelse(grepl("\\bOrder\\b", legislation_name, ignore.case = TRUE) & grepl("\\bAct\\b", legislation_name, ignore.case = TRUE), "Order",
+            fifelse(grepl("\\bOrder\\b", legislation_name, ignore.case = TRUE), "Order",
+                    fifelse(grepl("\\bCode\\b", legislation_name, ignore.case = TRUE) & grepl("\\bAct\\b", legislation_name, ignore.case = TRUE), "Code",
+                            fifelse(grepl("\\bCode\\b", legislation_name, ignore.case = TRUE), "Code",
+                                    fifelse(grepl("\\bAct\\b", legislation_name, ignore.case = TRUE), "Act", ""))))))
+  return(legislation_type)
+}
+
+extract_act_name <- function(html_file, legislation_name, legislation_type) {
+  act_name <- if (legislation_type == "Act") {
+    legislation_name
+  } else {
+    html_file %>% html_node("p.EnablingAct a, div#actname h2") %>% html_text(trim = TRUE)
+  }
+  
+  act_name <- ifelse(length(act_name) > 0, clean_text(act_name), legislation_name)
+  act_name <- format_act_name(act_name)
+  return(act_name)
+}
+
+## Track problematic files ----
+bad_files <- character()
+
+## Process Each HTML File ----
+for (i in seq_along(html_files)) {
+  file <- html_files[i]
+  legislation_id <- i
+  
+  tryCatch({
+    raw_text <- readLines(file, warn = FALSE, encoding = "UTF-8")
+    html_file <- read_html(paste(raw_text, collapse = "\n"))
+    legislation_name <- gsub("_", " ", tools::file_path_sans_ext(basename(file)))
+    jurisdiction <- extract_jurisdiction(html_file)
+    legislation_type <- extract_legislation_type(legislation_name)
+    act_name <- extract_act_name(html_file, legislation_name, legislation_type)
+    
+    legislation_table <- rbind(legislation_table, data.table(
+      legislation_id = legislation_id,
+      jurisdiction = jurisdiction,
+      legislation_type = legislation_type,
+      act_name = act_name,
+      legislation_name = legislation_name
+    ), fill = TRUE)
+    
+  }, error = function(e) {
+    message(sprintf("Error processing file %s: %s", file, e$message))
+    bad_files <<- c(bad_files, file)
+  })
+}
+
+## Save to SQLite Database ----
+output_dir <- here("output")
+if (!dir.exists(output_dir)) dir.create(output_dir, recursive = TRUE)
+
+db_path <- file.path(output_dir, "legislation.db")
+conn <- dbConnect(SQLite(), dbname = db_path)
+dbWriteTable(conn, "LegislationMetadata", legislation_table, overwrite = TRUE)
+dbDisconnect(conn)
+
+## Save list of bad files ----
+if (length(bad_files) > 0) {
+  writeLines(bad_files, file.path(output_dir, "bad_html_files.txt"))
+  cat("Some files failed to process. See 'bad_html_files.txt' for details.\n")
+} else {
+  cat("All files processed successfully.\n")
+}
+
+## Notify Completion ----
+cat("✅ Labeling complete. Table saved to SQLite.\n")
+beep(sound = 1)
