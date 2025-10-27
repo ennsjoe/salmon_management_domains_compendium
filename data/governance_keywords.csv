@@ -1,17 +1,60 @@
 ﻿management_domain,keyword,scope
+Spatial Designation,administrative region,4 - Governance
+Spatial Designation,adverse environmental,4 - Governance
 Governance Administration,appoint,4 - Governance
 Governance Administration,appointed,4 - Governance
 Governance Administration,appointing,4 - Governance
+Species Status and Assessment,aquatic animal,4 - Governance
+Species Status and Assessment,biodiversity,4 - Governance
+Species Status and Assessment,biological,4 - Governance
+Spatial Designation,boundaries,4 - Governance
+Spatial Designation,boundary,4 - Governance
+Spatial Designation,classified water,4 - Governance
+Spatial Designation,classified waters,4 - Governance
+Spatial Designation,community forest,4 - Governance
+Spatial Designation,conservancies,4 - Governance
+Spatial Designation,conservany,4 - Governance
+Spatial Designation,conservation area,4 - Governance
+Spatial Designation,conservation areas,4 - Governance
 Governance Administration,conservation officer,4 - Governance
 Governance Administration,conservation officers,4 - Governance
+Spatial Designation,critical habitat,4 - Governance
+Spatial Designation,crown land,4 - Governance
+Species Status and Assessment,cumulative effect,4 - Governance
+Species Status and Assessment,cumulative effects,4 - Governance
 Governance Administration,delegate,4 - Governance
+Spatial Designation,ecological,4 - Governance
+Species Status and Assessment,ecological community,4 - Governance
+Species Status and Assessment,endangered,4 - Governance
+Spatial Designation,environment,4 - Governance
+Spatial Designation,environmental assessment,4 - Governance
+Spatial Designation,environmental effects,4 - Governance
+Spatial Designation,environmental impact,4 - Governance
+Spatial Designation,environmental quality,4 - Governance
+Species Status and Assessment,extinct,4 - Governance
+Species Status and Assessment,extirpated,4 - Governance
 Governance Administration,fisheries officer,4 - Governance
 Governance Administration,fisheries officers,4 - Governance
+Spatial Designation,fishing zone,4 - Governance
+Spatial Designation,forest region,4 - Governance
+Governance Administration,governance,4 - Governance
+Governance Administration,government,4 - Governance
+Governance Administration,jurisdiction,4 - Governance
+Spatial Designation,habitat conservation,4 - Governance
+Restoration,habitat protection,3 - Habitat
+Spatial Designation,internal waters,4 - Governance
+Spatial Designation,land use,4 - Governance
+Spatial Designation,management unit,4 - Governance
+Spatial Designation,natural environment,4 - Governance
 Governance Administration,natural resource officer,4 - Governance
 Governance Administration,natural resource officers,4 - Governance
-Governance Administration,water agencies,4 - Governance
-Governance Administration,water agency,4 - Governance
-Restoration,habitat protection,3 - Habitat
+Spatial Designation,non tidal,4 - Governance
+Species Status and Assessment,osteichthyes,4 - Governance
+Spatial Designation,park community,4 - Governance
+Spatial Designation,park reserve,4 - Governance
+Spatial Designation,park reserves,4 - Governance
+Spatial Designation,private land,4 - Governance
+Species Status and Assessment,qualified environmental professional,4 - Governance
 Restoration,reclaim,3 - Habitat
 Restoration,reclamation,3 - Habitat
 Restoration,rehabilitate,3 - Habitat
@@ -20,56 +63,23 @@ Restoration,remediation,3 - Habitat
 Restoration,restoration,3 - Habitat
 Restoration,restore,3 - Habitat
 Restoration,restored,3 - Habitat
-Spatial Designation,administrative region,4 - Governance
-Spatial Designation,adverse environmental,4 - Governance
-Spatial Designation,classified water,4 - Governance
-Spatial Designation,classified waters,4 - Governance
-Spatial Designation,community forest,4 - Governance
-Spatial Designation,conservancies,4 - Governance
-Spatial Designation,conservany,4 - Governance
-Spatial Designation,conservation area,4 - Governance
-Spatial Designation,conservation areas,4 - Governance
-Spatial Designation,critical habitat,4 - Governance
-Spatial Designation,crown land,4 - Governance
-Spatial Designation,ecological,4 - Governance
-Spatial Designation,environment,4 - Governance
-Spatial Designation,environmental assessment,4 - Governance
-Spatial Designation,environmental effects,4 - Governance
-Spatial Designation,environmental impact,4 - Governance
-Spatial Designation,environmental quality,4 - Governance
-Spatial Designation,fishing zone,4 - Governance
-Spatial Designation,forest region,4 - Governance
-Spatial Designation,habitat conservation,4 - Governance
-Spatial Designation,internal waters,4 - Governance
-Spatial Designation,land use,4 - Governance
-Spatial Designation,management unit,4 - Governance
-Spatial Designation,natural environment,4 - Governance
-Spatial Designation,non tidal,4 - Governance
-Spatial Designation,park community,4 - Governance
-Spatial Designation,park reserve,4 - Governance
-Spatial Designation,park reserves,4 - Governance
-Spatial Designation,private land,4 - Governance
+Species Status and Assessment,scientific name,4 - Governance
+Species Status and Assessment,scientific names,4 - Governance
 Spatial Designation,sensitive area,4 - Governance
 Spatial Designation,sensitive areas,4 - Governance
 Spatial Designation,significant area,4 - Governance
 Spatial Designation,territorial sea,4 - Governance
+Species Status and Assessment,threatened species,4 - Governance
 Spatial Designation,tidal ,4 - Governance
+Governance Administration,water agencies,4 - Governance
+Governance Administration,water agency,4 - Governance
 Spatial Designation,water district,4 - Governance
 Spatial Designation,wilderness area,4 - Governance
 Spatial Designation,wildlife habitat,4 - Governance
 Spatial Designation,wildlife management area,4 - Governance
-Species Status and Assessment,aquatic animal,4 - Governance
-Species Status and Assessment,biodiversity,4 - Governance
-Species Status and Assessment,biological,4 - Governance
-Species Status and Assessment,cumulative effect,4 - Governance
-Species Status and Assessment,cumulative effects,4 - Governance
-Species Status and Assessment,ecological community,4 - Governance
-Species Status and Assessment,endangered,4 - Governance
-Species Status and Assessment,extinct,4 - Governance
-Species Status and Assessment,extirpated,4 - Governance
-Species Status and Assessment,osteichthyes,4 - Governance
-Species Status and Assessment,qualified environmental professional,4 - Governance
-Species Status and Assessment,scientific name,4 - Governance
-Species Status and Assessment,scientific names,4 - Governance
-Species Status and Assessment,threatened species,4 - Governance
 Species Status and Assessment,wildlife species,4 - Governance
+Spatial Designation,waters,4 - Governance
+Spatial Designation,zone,4 - Governance
+Spatial Designation,region,4 - Governance
+Spatial Designation,regions,4 - Governance
+Spatial Designation,zones,4 - Governance
