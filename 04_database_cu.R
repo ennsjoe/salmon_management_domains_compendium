@@ -30,15 +30,13 @@ library(beepr)
 ## Define file paths ----
 agencies_path <- here("data", "agencies.csv")
 cu_ranking_path <- here("data", "cu_ranking.csv")
-ecological_concern_path <- here("data", "NOAA_ecological_concern.csv")
 legislation_url_path <- here("data", "legislation_url.csv")
 
 ## Read CSV files ----
 cat("Reading CSV files...\n")
-agencies <- fread(agencies_path, colClasses = "character")
-cu_ranking <- fread(cu_ranking_path, colClasses = "character")
-ecological_concern <- fread(ecological_concern_path, colClasses = "character")
-legislation_url <- fread(legislation_url_path, colClasses = "character")
+agencies <- fread(file = agencies_path, colClasses = "character")
+cu_ranking <- fread(file = cu_ranking_path, colClasses = "character")
+legislation_url <- fread(file = legislation_url_path, colClasses = "character")
 cat("✓ CSV files loaded\n")
 
 ## Connect to SQLite database ----
@@ -55,9 +53,6 @@ cat("  ✓ agencies table saved\n")
 
 dbWriteTable(conn, "cu_ranking", cu_ranking, overwrite = TRUE)
 cat("  ✓ cu_ranking table saved\n")
-
-dbWriteTable(conn, "NOAA_ecological_concern", ecological_concern, overwrite = TRUE)
-cat("  ✓ NOAA_ecological_concern table saved\n")
 
 dbWriteTable(conn, "legislation_url", legislation_url, overwrite = TRUE)
 cat("  ✓ legislation_url table saved\n")
