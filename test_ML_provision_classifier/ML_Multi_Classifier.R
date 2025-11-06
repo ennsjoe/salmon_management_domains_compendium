@@ -2,12 +2,15 @@
 # Title: Multi-Category ML Classifier for Legislation
 # Authors: Joe Enns, Cory Lagasse
 # Date Created: 2025-10-23
+# Last Modified: 2025-10-27
 # Purpose / Description:
 #   Trains separate ML models for three classification tasks:
 #   1. Clause Types (7 categories)
 #   2. Management Domains (17 categories)  
-#   3. IUCN Threats (Level 1 and Level 2)
+#   3. IUCN Threats Level 2 (direct keyword mapping)
 #   Uses existing labels from paragraph_label_table to train and predict.
+#   Uses direct keyword-to-IUCN L2 mapping for cleaner training data.
+#   Includes class name sanitization to handle special characters.
 # Dependencies: DBI, RSQLite, data.table, here, caret, randomForest, 
 #               quanteda, quanteda.textstats, openxlsx
 # Outputs:
@@ -46,7 +49,7 @@ legislation_table <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
 label_table <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
 clause_keywords <- as.data.table(dbReadTable(conn, "clause_type_keywords"))
 governance_keywords <- as.data.table(dbReadTable(conn, "governance_keywords"))
-threat_table <- as.data.table(dbReadTable(conn, "management_domain_threat_table"))
+iucn_keywords <- as.data.table(dbReadTable(conn, "iucn_l2_keywords"))
 
 dbDisconnect(conn)
 
@@ -151,72 +154,79 @@ domain_training <- domain_training[management_domain %in% valid_domain_classes]
 cat(sprintf("    - Training samples: %d in %d classes\n", 
             nrow(domain_training), length(valid_domain_classes)))
 
-## Task 3: IUCN Threats ----
-cat("\n  Task 3: IUCN THREATS\n")
+## Task 3: IUCN Threats Level 2 ----
+cat("\n  Task 3: IUCN THREATS LEVEL 2\n")
 
 iucn_labels <- label_table[label_type == "IUCN Threat" & !is.na(label_value)]
 
-# Get IUCN levels from threat table
-# First need to map keywords to IUCN
-# Create a lookup from management_domain to IUCN
-domain_to_iucn <- unique(threat_table[!is.na(iucn_l1), .(management_domain, iucn_l1, iucn_l2)])
-
-# Join governance keywords with IUCN threats
-governance_to_iucn <- merge(
-  governance_keywords,
-  domain_to_iucn,
-  by = "management_domain",
-  all.x = TRUE,
-  allow.cartesian = TRUE
-)
-
-# Now join labels
-iucn_training_data <- merge(
+# Direct keyword mapping to IUCN L2
+iucn_l2_labels <- merge(
   iucn_labels[, .(paragraph_id, keyword)],
-  governance_to_iucn[, .(keyword, management_domain, iucn_l1, iucn_l2)],
+  iucn_keywords[!is.na(iucn_l2), .(keyword, iucn_l2)],
   by = "keyword",
   all.x = TRUE
 )
 
-# Aggregate by IUCN L1
-iucn_l1_agg <- iucn_training_data[!is.na(iucn_l1), .(
-  iucn_l1 = paste(unique(iucn_l1), collapse = "; ")
+# Aggregate multiple labels per paragraph
+iucn_l2_agg <- iucn_l2_labels[!is.na(iucn_l2), .(
+  iucn_l2 = paste(unique(iucn_l2), collapse = "; ")
 ), by = paragraph_id]
 
-iucn_l1_single <- iucn_l1_agg[!grepl(";", iucn_l1)]
+# Filter single-label cases
+iucn_l2_single <- iucn_l2_agg[!grepl(";", iucn_l2)]
 
-# Merge with paragraphs
-iucn_training <- merge(
-  iucn_l1_single,
+# Merge with paragraph text
+iucn_l2_training <- merge(
+  iucn_l2_single,
   paragraph_table[, .(paragraph_id, Paragraph, Section, legislation_id)],
   by = "paragraph_id",
   all.x = TRUE
 )
 
-iucn_training <- merge(
-  iucn_training,
+iucn_l2_training <- merge(
+  iucn_l2_training,
   legislation_table[, .(legislation_id, act_name, jurisdiction)],
   by = "legislation_id",
   all.x = TRUE
 )
 
 # Check distribution
-iucn_dist <- iucn_training[, .N, by = iucn_l1][order(-N)]
-cat("    IUCN L1 distribution:\n")
-print(iucn_dist)
+iucn_l2_dist <- iucn_l2_training[, .N, by = iucn_l2][order(-N)]
+cat("    IUCN L2 distribution:\n")
+print(iucn_l2_dist)
 
-# Filter
-valid_iucn_classes <- iucn_dist[N >= 20, iucn_l1]
-iucn_training <- iucn_training[iucn_l1 %in% valid_iucn_classes]
+# Filter to classes with sufficient examples
+valid_iucn_l2_classes <- iucn_l2_dist[N >= 20, iucn_l2]
+iucn_l2_training <- iucn_l2_training[iucn_l2 %in% valid_iucn_l2_classes]
 
 cat(sprintf("    - Training samples: %d in %d classes\n", 
-            nrow(iucn_training), length(valid_iucn_classes)))
+            nrow(iucn_l2_training), length(valid_iucn_l2_classes)))
 
 ## ============================================================================
 ## SECTION 2: FEATURE ENGINEERING FUNCTION
 ## ============================================================================
 
 cat("\nStep 3: Preparing feature engineering pipeline...\n")
+
+## Helper function to sanitize class names ----
+sanitize_class_names <- function(data, target_col) {
+  # Create mapping of original to sanitized names
+  original_names <- unique(data[[target_col]])
+  sanitized_names <- make.names(original_names, unique = TRUE)
+  
+  # Create lookup table
+  name_mapping <- data.frame(
+    original = original_names,
+    sanitized = sanitized_names,
+    stringsAsFactors = FALSE
+  )
+  
+  # Replace in data
+  data[[paste0(target_col, "_original")]] <- data[[target_col]]
+  data[[target_col]] <- sanitized_names[match(data[[target_col]], original_names)]
+  
+  return(list(data = data, mapping = name_mapping))
+}
 
 engineer_features <- function(data, target_col, corpus_name = "corpus") {
   cat(sprintf("  - Engineering features for %s...\n", corpus_name))
@@ -260,26 +270,20 @@ engineer_features <- function(data, target_col, corpus_name = "corpus") {
     has_minister = grepl("\\bminister\\b", Paragraph, ignore.case = TRUE),
     has_governor = grepl("\\bgovernor\\b", Paragraph, ignore.case = TRUE),
     has_director = grepl("\\bdirector\\b", Paragraph, ignore.case = TRUE),
-    has_prohibit = grepl("\\bprohibit|\\bforbid", Paragraph, ignore.case = TRUE),
-    has_permit = grepl("\\bpermit|\\blicen[cs]e", Paragraph, ignore.case = TRUE),
-    has_habitat = grepl("\\bhabitat|\\becosystem", Paragraph, ignore.case = TRUE),
-    has_species = grepl("\\bspecies|\\bwildlife|\\bfish", Paragraph, ignore.case = TRUE),
-    has_water = grepl("\\bwater|\\bstream|\\briver|\\bmarine", Paragraph, ignore.case = TRUE),
-    section_number = suppressWarnings(as.numeric(Section))
+    has_prohibit = grepl("\\bprohibit", Paragraph, ignore.case = TRUE),
+    has_permit = grepl("\\bpermit", Paragraph, ignore.case = TRUE),
+    has_habitat = grepl("\\bhabitat\\b", Paragraph, ignore.case = TRUE),
+    has_species = grepl("\\bspecies\\b", Paragraph, ignore.case = TRUE),
+    has_water = grepl("\\bwater\\b", Paragraph, ignore.case = TRUE)
   )]
   
-  # Handle NAs
-  numeric_cols <- c("paragraph_length", "word_count", "sentence_count", "avg_word_length", "section_number")
-  for (col in numeric_cols) {
-    data[is.na(get(col)) | is.infinite(get(col)), (col) := 0]
-  }
-  
-  logical_cols <- c("has_subsection", "has_number", "starts_with_number", 
-                    "has_shall", "has_must", "has_may", "has_means",
-                    "has_minister", "has_governor", "has_director",
-                    "has_prohibit", "has_permit", "has_habitat", "has_species", "has_water")
-  for (col in logical_cols) {
-    data[is.na(get(col)), (col) := FALSE]
+  # Extract section number
+  section_numbers <- str_extract(data$Section, "^\\d+")
+  if (all(is.na(section_numbers))) {
+    data[, section_number := 0]
+  } else {
+    data[, section_number := as.numeric(section_numbers)]
+    data[is.na(section_number), section_number := 0]
   }
   
   engineered_features <- data[, .(
@@ -323,12 +327,18 @@ train_control <- trainControl(
 
 models <- list()
 performance <- list()
+class_mappings <- list()
 
 ## Train Clause Type Model ----
 if (nrow(clause_training) > 0) {
   cat("\n  Training CLAUSE TYPE classifier...\n")
   
-  clause_ml_data <- engineer_features(clause_training, "clause_type", "Clause Types")
+  # Sanitize class names
+  sanitized <- sanitize_class_names(clause_training, "clause_type")
+  clause_training_clean <- sanitized$data
+  class_mappings$clause_type <- sanitized$mapping
+  
+  clause_ml_data <- engineer_features(clause_training_clean, "clause_type", "Clause Types")
   
   # Split data
   train_idx <- createDataPartition(clause_ml_data$clause_type, p = 0.8, list = FALSE)
@@ -364,7 +374,12 @@ if (nrow(clause_training) > 0) {
 if (nrow(domain_training) > 0) {
   cat("\n  Training MANAGEMENT DOMAIN classifier...\n")
   
-  domain_ml_data <- engineer_features(domain_training, "management_domain", "Management Domains")
+  # Sanitize class names
+  sanitized <- sanitize_class_names(domain_training, "management_domain")
+  domain_training_clean <- sanitized$data
+  class_mappings$management_domain <- sanitized$mapping
+  
+  domain_ml_data <- engineer_features(domain_training_clean, "management_domain", "Management Domains")
   
   train_idx <- createDataPartition(domain_ml_data$management_domain, p = 0.8, list = FALSE)
   train_set <- domain_ml_data[train_idx, ]
@@ -393,37 +408,42 @@ if (nrow(domain_training) > 0) {
   cat(sprintf("    ✓ Accuracy: %.2f%%\n", domain_conf$overall["Accuracy"] * 100))
 }
 
-## Train IUCN Threat Model ----
-if (nrow(iucn_training) > 0) {
-  cat("\n  Training IUCN THREAT classifier...\n")
+## Train IUCN Threat L2 Model ----
+if (nrow(iucn_l2_training) > 0) {
+  cat("\n  Training IUCN THREAT L2 classifier...\n")
   
-  iucn_ml_data <- engineer_features(iucn_training, "iucn_l1", "IUCN Threats")
+  # Sanitize class names
+  sanitized <- sanitize_class_names(iucn_l2_training, "iucn_l2")
+  iucn_l2_training_clean <- sanitized$data
+  class_mappings$iucn_l2 <- sanitized$mapping
   
-  train_idx <- createDataPartition(iucn_ml_data$iucn_l1, p = 0.8, list = FALSE)
-  train_set <- iucn_ml_data[train_idx, ]
-  test_set <- iucn_ml_data[-train_idx, ]
+  iucn_l2_ml_data <- engineer_features(iucn_l2_training_clean, "iucn_l2", "IUCN Threats L2")
+  
+  train_idx <- createDataPartition(iucn_l2_ml_data$iucn_l2, p = 0.8, list = FALSE)
+  train_set <- iucn_l2_ml_data[train_idx, ]
+  test_set <- iucn_l2_ml_data[-train_idx, ]
   
   cat(sprintf("    Training: %d | Test: %d\n", nrow(train_set), nrow(test_set)))
   
-  iucn_model <- train(
-    iucn_l1 ~ .,
+  iucn_l2_model <- train(
+    iucn_l2 ~ .,
     data = train_set,
     method = "rf",
     trControl = train_control,
     ntree = 100
   )
   
-  iucn_pred <- predict(iucn_model, newdata = test_set)
-  iucn_conf <- confusionMatrix(iucn_pred, test_set$iucn_l1)
+  iucn_l2_pred <- predict(iucn_l2_model, newdata = test_set)
+  iucn_l2_conf <- confusionMatrix(iucn_l2_pred, test_set$iucn_l2)
   
-  models$iucn_threat <- iucn_model
-  performance$iucn_threat <- list(
-    confusion = iucn_conf,
-    accuracy = iucn_conf$overall["Accuracy"],
-    kappa = iucn_conf$overall["Kappa"]
+  models$iucn_l2 <- iucn_l2_model
+  performance$iucn_l2 <- list(
+    confusion = iucn_l2_conf,
+    accuracy = iucn_l2_conf$overall["Accuracy"],
+    kappa = iucn_l2_conf$overall["Kappa"]
   )
   
-  cat(sprintf("    ✓ Accuracy: %.2f%%\n", iucn_conf$overall["Accuracy"] * 100))
+  cat(sprintf("    ✓ Accuracy: %.2f%%\n", iucn_l2_conf$overall["Accuracy"] * 100))
 }
 
 ## ============================================================================
@@ -469,14 +489,14 @@ if (!is.null(models$management_domain)) {
   ))
 }
 
-if (!is.null(models$iucn_threat)) {
+if (!is.null(models$iucn_l2)) {
   summary_data <- rbind(summary_data, data.frame(
-    Model = "IUCN Threats (L1)",
-    Training_Samples = nrow(iucn_training) * 0.8,
-    Test_Samples = nrow(iucn_training) * 0.2,
-    Classes = length(valid_iucn_classes),
-    Accuracy = sprintf("%.2f%%", performance$iucn_threat$accuracy * 100),
-    Kappa = sprintf("%.3f", performance$iucn_threat$kappa)
+    Model = "IUCN Threats (L2)",
+    Training_Samples = nrow(iucn_l2_training) * 0.8,
+    Test_Samples = nrow(iucn_l2_training) * 0.2,
+    Classes = length(valid_iucn_l2_classes),
+    Accuracy = sprintf("%.2f%%", performance$iucn_l2$accuracy * 100),
+    Kappa = sprintf("%.3f", performance$iucn_l2$kappa)
   ))
 }
 
@@ -494,6 +514,18 @@ for (model_name in names(performance)) {
   
   # Confusion matrix
   conf_table <- as.data.frame.matrix(perf$confusion$table)
+  
+  # Convert sanitized names back to original names if mapping exists
+  if (model_name %in% names(class_mappings)) {
+    mapping <- class_mappings[[model_name]]
+    
+    # Replace row names
+    rownames(conf_table) <- mapping$original[match(rownames(conf_table), mapping$sanitized)]
+    
+    # Replace column names
+    colnames(conf_table) <- mapping$original[match(colnames(conf_table), mapping$sanitized)]
+  }
+  
   conf_table <- cbind(Actual = rownames(conf_table), conf_table)
   writeDataTable(wb, sheet_name, conf_table)
 }
@@ -503,10 +535,11 @@ saveWorkbook(wb, output_file, overwrite = TRUE)
 
 cat(sprintf("\n✅ Results saved to: %s\n", output_file))
 
-## Save models ----
+## Save models and mappings ----
 model_file <- file.path(here(), "multi_classifier_models.rds")
-saveRDS(models, model_file)
+saveRDS(list(models = models, class_mappings = class_mappings), model_file)
 cat(sprintf("✅ Models saved to: %s\n", model_file))
+cat("   (includes class name mappings for prediction)\n")
 
 ## ============================================================================
 ## SUMMARY
