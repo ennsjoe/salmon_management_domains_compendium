@@ -2,3 +2,12 @@
 .Rhistory
 .RData
 .Ruserdata
+
+# Ignore legislation database and HTML files
+output/legislation.db
+output/legislation_html/
+legislation_html/
+
+# Ignore Excel files and udpipe model files
+*.xlsx
+*.udpipe

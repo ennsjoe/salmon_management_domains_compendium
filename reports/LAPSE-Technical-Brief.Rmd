@@ -16,7 +16,7 @@ output:
 ---
 
 <div class="sticky-icon">
-  <a href="https://ennsjoe.shinyapps.io/lapse_dashboard/" target="_blank">
+  <a href="https://ennsjoe.github.io/salmon_management_domains_compendium/LAPSE-Dashboard-About.html" target="_blank">
     <img src="../assets/dashboard_icon.png" alt="Launch LAPSE Dashboard">
     <span>LAPSE Dashboard</span>
   </a>
