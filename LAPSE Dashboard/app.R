@@ -18,6 +18,7 @@ library(stringr)
 library(dplyr)
 library(tidyr)
 library(shinyWidgets)
+library(plotly)
 
 # Define database path
 db_path <- "legislation.db"
@@ -354,16 +355,16 @@ ui <- fluidPage(
     column(
       width = 4,
       div(class = "graph-panel",
-          h4("Keyword Frequency"),
-          plotOutput("keyword_plot", height = "250px"),
-          
-          h4("IUCN Threat Category Co-occurrence"),
-          plotOutput("iucn_plot", height = "250px"),
-          hr(),
-          
-          h4("Clause Type Distribution"),
-          plotOutput("clause_plot", height = "250px"),
-          hr()
+          tabsetPanel(
+            tabPanel("Keyword Frequency",
+                     br(),
+                     plotlyOutput("keyword_plot", height = "400px")
+            ),
+            tabPanel("IUCN Threats",
+                     br(),
+                     plotlyOutput("iucn_plot", height = "400px")
+            )
+          )
       )
     )
   )
@@ -389,36 +390,40 @@ server <- function(input, output, session) {
   
   # 🔼 Render domain buttons----
   output$domain_buttons <- renderUI({
-    selected <- selected_domain()
-    
-    tagList(
-      # Always show the reset button
-      div(
-        class = "domain-button reset",
-        `onclick` = "Shiny.setInputValue('reset_domain', Math.random())",
-        tagList(icon("sync"), "All")
-      ),
-      tags$hr(),
+    tryCatch({
+      selected <- selected_domain()
       
-      # Show either all buttons or just the selected one
-      if (is.null(selected)) {
-        lapply(seq_along(management_domains), function(i) {
-          domain <- management_domains[i]
-          btn_id <- paste0("domain_", i)
-          div(
-            class = "domain-button",
-            `onclick` = paste0("Shiny.setInputValue('", btn_id, "', Math.random())"),
-            domain
-          )
-        })
-      } else {
+      tagList(
+        # Always show the reset button
         div(
-          class = "domain-button selected",
-          title = "Currently selected domain",
-          selected
-        )
-      }
-    )
+          class = "domain-button reset",
+          `onclick` = "Shiny.setInputValue('reset_domain', Math.random())",
+          tagList(icon("refresh"), "All")
+        ),
+        tags$hr(),
+        
+        # Show either all buttons or just the selected one
+        if (is.null(selected)) {
+          lapply(seq_along(management_domains), function(i) {
+            domain <- management_domains[i]
+            btn_id <- paste0("domain_", i)
+            div(
+              class = "domain-button",
+              `onclick` = paste0("Shiny.setInputValue('", btn_id, "', Math.random())"),
+              domain
+            )
+          })
+        } else {
+          div(
+            class = "domain-button selected",
+            title = "Currently selected domain",
+            selected
+          )
+        }
+      )
+    }, error = function(e) {
+      div("Error in domain buttons:", e$message)
+    })
   })
   
   # Observe domain selection
@@ -878,162 +883,291 @@ server <- function(input, output, session) {
   })
   
   # 📈 IUCN Plot----
-  output$iucn_plot <- renderPlot({
-    domain <- selected_domain()
-    domain_clean <- if (!is.null(domain) && !is.na(domain)) trimws(tolower(domain)) else ""
-    leg_id <- current_legislation_id()
-    
-    df <- label_data[label_data$label_type == "IUCN", ]
-    
-    if (nzchar(domain_clean)) {
-      domain_paragraphs <- label_data$paragraph_id[
-        label_data$label_type == "Management Domain" &
-          trimws(tolower(label_data$label_value)) == domain_clean
-      ]
-      df <- df[df$paragraph_id %in% domain_paragraphs, ]
-    }
-    
-    # Filter by search
-    search_para_ids <- search_matching_paragraphs()
-    if (!is.null(search_para_ids) && length(search_para_ids) > 0) {
-      df <- df[df$paragraph_id %in% search_para_ids, ]
-    }
-    
-    if (!is.null(leg_id)) {
-      df <- df[df$paragraph_id %in% paragraph_data$paragraph_id[
-        paragraph_data$legislation_id == leg_id
-      ], ]
-    } else {
-      leg_ids <- filtered_legislation()$legislation_id
-      if (length(leg_ids) > 0) {
-        df <- df[df$paragraph_id %in% paragraph_data$paragraph_id[
-          paragraph_data$legislation_id %in% leg_ids
-        ], ]
-      }
-    }
-    
-    validate(need(nrow(df) > 0, "No data available for IUCN plot."))
-    
-    iucn_counts <- df %>%
-      count(label_value) %>%
-      arrange(desc(n)) %>%
-      mutate(label_value = factor(label_value, levels = label_value))
-    
-    ggplot(iucn_counts, aes(x = label_value, y = n)) +
-      geom_bar(stat = "identity", fill = "#2c3e50") +
-      theme_minimal() +
-      labs(x = "", y = "Clause Count") +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  })
+  # output$iucn_plot <- renderPlot({
+  #   domain <- selected_domain()
+  #   domain_clean <- if (!is.null(domain) && !is.na(domain)) trimws(tolower(domain)) else ""
+  #   leg_id <- current_legislation_id()
+  # 
+  # 
+  # 
+  #   df <- label_data[label_data$label_type == "IUCN", ]
+  # 
+  #   if (nzchar(domain_clean)) {
+  #     domain_paragraphs <- label_data$paragraph_id[
+  #       label_data$label_type == "Management Domain" &
+  #         trimws(tolower(label_data$label_value)) == domain_clean
+  #     ]
+  #     df <- df[df$paragraph_id %in% domain_paragraphs, ]
+  #   }
+  # 
+  #   # Filter by search
+  #   search_para_ids <- search_matching_paragraphs()
+  #   if (!is.null(search_para_ids) && length(search_para_ids) > 0) {
+  #     df <- df[df$paragraph_id %in% search_para_ids, ]
+  #   }
+  # 
+  #   if (!is.null(leg_id)) {
+  #     df <- df[df$paragraph_id %in% paragraph_data$paragraph_id[
+  #       paragraph_data$legislation_id == leg_id
+  #     ], ]
+  #   } else {
+  #     leg_ids <- filtered_legislation()$legislation_id
+  #     if (length(leg_ids) > 0) {
+  #       df <- df[df$paragraph_id %in% paragraph_data$paragraph_id[
+  #         paragraph_data$legislation_id %in% leg_ids
+  #       ], ]
+  #     }
+  #   }
+  # 
+  #   validate(need(nrow(df) > 0, "No data available for IUCN plot."))
+  # 
+  #   iucn_counts <- df %>%
+  #     count(label_value) %>%
+  #     arrange(desc(n)) %>%
+  #     mutate(label_value = factor(label_value, levels = label_value))
+  # 
+  #   ggplot(iucn_counts, aes(x = label_value, y = n)) +
+  #     geom_bar(stat = "identity", fill = "#2c3e50") +
+  #     theme_minimal() +
+  #     labs(x = "", y = "Clause Count") +
+  #     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  # })
+  # 
+  # 
   
+  output$iucn_plot <- renderPlotly({
+    tryCatch({
+      domain <- selected_domain()
+      domain_clean <- if (!is.null(domain) && !is.na(domain)) trimws(tolower(domain)) else ""
+      leg_id <- current_legislation_id()
+     
+      df <- label_data[label_data$label_type == "IUCN", ]
+      
+      if (nzchar(domain_clean)) {
+        domain_paragraphs <- label_data$paragraph_id[
+          label_data$label_type == "Management Domain" &
+            trimws(tolower(label_data$label_value)) == domain_clean
+        ]
+        df <- df[df$paragraph_id %in% domain_paragraphs, ]
+      }
+      
+      # Filter by search
+      search_para_ids <- search_matching_paragraphs()
+      if (!is.null(search_para_ids) && length(search_para_ids) > 0) {
+        df <- df[df$paragraph_id %in% search_para_ids, ]
+      }
+      
+      if (!is.null(leg_id)) {
+        df <- df[df$paragraph_id %in% paragraph_data$paragraph_id[
+          paragraph_data$legislation_id == leg_id
+        ], ]
+      } else {
+        leg_ids <- filtered_legislation()$legislation_id
+        if (length(leg_ids) > 0) {
+          df <- df[df$paragraph_id %in% paragraph_data$paragraph_id[
+            paragraph_data$legislation_id %in% leg_ids
+          ], ]
+        }
+      }
+      
+      validate(need(nrow(df) > 0, "No data available for IUCN plot."))
+      
+      # Prepare data with short codes and tooltip text
+      iucn_counts <- df %>%
+        count(label_value) %>%
+        arrange(desc(n)) %>%  # Sort by count (largest first)
+        mutate(
+          threat_code = sub("^(\\d+\\.\\d+).*", "\\1", label_value),
+          # Create factor to preserve sorted order
+          threat_code = factor(threat_code, levels = threat_code),
+          # Create custom tooltip text
+          tooltip_text = paste0(
+            "Threat: ", label_value, "\n",
+            "Count: ", n
+          )
+        )
+      
+      # Create ggplot with custom tooltip text in aes
+      p <- ggplot(iucn_counts, aes(x = threat_code, y = n, 
+                                   text = tooltip_text)) +
+        geom_col(fill = "#2c3e50") +
+        theme_minimal() +
+        labs(x = "IUCN Threat Code", y = "Clause Count") +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1))
+      
+      # Convert to plotly with custom tooltip
+      ggplotly(p, tooltip = "text")
+    }, error = function(e) {
+      p <- ggplot() + 
+        annotate("text", x = 0, y = 0, label = paste("Error in IUCN plot:", e$message), size = 4) + 
+        theme_void()
+      ggplotly(p)
+    })
+  })
   # 📈 Clause Type Plot----
-  output$clause_plot <- renderPlot({
-    library(dplyr)
-    library(tidyr)
-    
-    domain <- selected_domain()
-    domain_clean <- if (!is.null(domain) && !is.na(domain)) trimws(tolower(domain)) else NULL
-    
-    leg_id <- current_legislation_id()
-    
-    if (!is.null(leg_id)) {
-      relevant_paragraphs <- paragraph_data[paragraph_data$legislation_id == leg_id, ]
+  output$clause_plot <- renderPlotly({
+    tryCatch({
+      
+      domain <- selected_domain()
+      domain_clean <- if (!is.null(domain) && !is.na(domain)) trimws(tolower(domain)) else NULL
+      
+      leg_id <- current_legislation_id()
+      
+      # 🎯 Extract Clause Type and Management Domain labels
+      clause_labels <- label_data[label_data$label_type == "Clause Type", 
+                                   c("paragraph_id", "label_value")]
+      names(clause_labels) <- c("paragraph_id", "clause_type")
+      
+      domain_labels <- label_data[label_data$label_type == "Management Domain", 
+                                   c("paragraph_id", "label_value")]
+      names(domain_labels) <- c("paragraph_id", "management_domain")
+      
+      # 🔗 Merge clause and domain labels
+      labeled_paragraphs <- merge(clause_labels, domain_labels, by = "paragraph_id")
+      
+      # 🔗 Add jurisdiction and section context
+      paragraph_context <- merge(
+        paragraph_data[, c("paragraph_id", "legislation_id", "Section")],
+        legislation_data[, c("legislation_id", "jurisdiction")],
+        by = "legislation_id",
+        all.x = TRUE
+      )
+      labeled_paragraphs <- merge(labeled_paragraphs, paragraph_context, by = "paragraph_id", all.x = TRUE)
+      
+      # Apply filters
+      if (!is.null(leg_id)) {
+        labeled_paragraphs <- labeled_paragraphs[labeled_paragraphs$legislation_id == leg_id, ]
+      } else {
+        leg_ids <- filtered_legislation()$legislation_id
+        if (length(leg_ids) > 0) {
+          labeled_paragraphs <- labeled_paragraphs[labeled_paragraphs$legislation_id %in% leg_ids, ]
+        }
+      }
       
       if (!is.null(domain_clean)) {
-        label_data_normalized <- label_data
-        label_data_normalized$label_value <- trimws(tolower(label_data_normalized$label_value))
-        
-        domain_para_ids <- label_data_normalized$paragraph_id[
-          label_data_normalized$label_type == "Management Domain" &
-            label_data_normalized$label_value == domain_clean
-        ]
-        
-        sections_with_domain <- unique(relevant_paragraphs$Section[
-          relevant_paragraphs$paragraph_id %in% domain_para_ids
-        ])
-        
-        relevant_paragraphs <- relevant_paragraphs[
-          relevant_paragraphs$Section %in% sections_with_domain,
-        ]
+        labeled_paragraphs$management_domain_lower <- trimws(tolower(labeled_paragraphs$management_domain))
+        labeled_paragraphs <- labeled_paragraphs[labeled_paragraphs$management_domain_lower == domain_clean, ]
       }
       
       # Filter by search
       search_para_ids <- search_matching_paragraphs()
       if (!is.null(search_para_ids) && length(search_para_ids) > 0) {
-        relevant_paragraphs <- relevant_paragraphs[
-          relevant_paragraphs$paragraph_id %in% search_para_ids,
-        ]
+        labeled_paragraphs <- labeled_paragraphs[labeled_paragraphs$paragraph_id %in% search_para_ids, ]
       }
       
-      domain_paragraphs <- relevant_paragraphs$paragraph_id
+      validate(need(nrow(labeled_paragraphs) > 0, "No clause type data available."))
       
-    } else if (!is.null(domain_clean)) {
-      label_data_normalized <- label_data
-      label_data_normalized$label_value <- trimws(tolower(label_data_normalized$label_value))
+      # 📊 Aggregate counts by unique Section-legislation_id combinations
+      labeled_paragraphs$section_key <- paste(labeled_paragraphs$Section, labeled_paragraphs$legislation_id)
+      clause_domain_counts <- labeled_paragraphs %>%
+        filter(!is.na(clause_type) & !is.na(management_domain) & !is.na(Section)) %>%
+        group_by(clause_type, management_domain) %>%
+        summarise(section_count = n_distinct(section_key), .groups = "drop")
       
-      domain_paragraphs <- label_data_normalized$paragraph_id[
-        label_data_normalized$label_type == "Management Domain" &
-          label_data_normalized$label_value == domain_clean
-      ]
+      validate(need(nrow(clause_domain_counts) > 0, "No clause type co-occurrence data available."))
       
-      # Filter by search
-      search_para_ids <- search_matching_paragraphs()
-      if (!is.null(search_para_ids) && length(search_para_ids) > 0) {
-        domain_paragraphs <- intersect(domain_paragraphs, search_para_ids)
+      # 📈 Calculate percentages within each management domain
+      percent_data <- clause_domain_counts %>%
+        group_by(management_domain) %>%
+        mutate(
+          total = sum(section_count),
+          percent = 100 * section_count / total
+        ) %>%
+        ungroup()
+      
+      # 🧮 Order management domains by total section count (largest to smallest)
+      domain_order <- percent_data %>%
+        group_by(management_domain) %>%
+        summarise(total = sum(section_count), .groups = "drop") %>%
+        arrange(desc(total))
+      
+      percent_data$management_domain <- factor(percent_data$management_domain, 
+                                                levels = rev(domain_order$management_domain))
+      
+      # Get number of clause types for color palette
+      n_clause_types <- length(unique(percent_data$clause_type))
+      
+      # 🎨 Generate colors from RColorBrewer Set2
+      if (n_clause_types <= 8) {
+        clause_colors <- RColorBrewer::brewer.pal(max(3, n_clause_types), "Set2")[1:n_clause_types]
+      } else {
+        clause_colors <- colorRampPalette(RColorBrewer::brewer.pal(8, "Set2"))(n_clause_types)
       }
-    } else {
-      leg_ids <- filtered_legislation()$legislation_id
-      domain_paragraphs <- paragraph_data$paragraph_id[
-        paragraph_data$legislation_id %in% leg_ids
-      ]
+      names(clause_colors) <- unique(percent_data$clause_type)
       
-      # Filter by search
-      search_para_ids <- search_matching_paragraphs()
-      if (!is.null(search_para_ids) && length(search_para_ids) > 0) {
-        domain_paragraphs <- intersect(domain_paragraphs, search_para_ids)
-      }
-    }
-    
-    validate(need(length(domain_paragraphs) > 0, "No paragraphs found."))
-    
-    label_data_plot <- label_data %>%
-      mutate(label_value = trimws(tolower(label_value)))
-    
-    co_labels <- label_data_plot %>%
-      filter(paragraph_id %in% domain_paragraphs,
-             label_type %in% c("Management Domain", "Clause Type")) %>%
-      select(paragraph_id, label_type, label_value)
-    
-    validate(need(nrow(co_labels) > 0, "No label data available."))
-    
-    # Pivot to wide format with renamed columns to avoid backtick issues
-    co_occurrence <- co_labels %>%
-      group_by(paragraph_id, label_type) %>%
-      summarise(label_value = paste(unique(label_value), collapse = ";"), .groups = "drop") %>%
-      pivot_wider(names_from = label_type, values_from = label_value, values_fill = "") %>%
-      rename(ManagementDomain = `Management Domain`, ClauseType = `Clause Type`) %>%
-      filter(ManagementDomain != "", ClauseType != "")
-    
-    # Split multi-labels and count co-occurrences
-    co_counts <- co_occurrence %>%
-      separate_rows(ManagementDomain, sep = ";") %>%
-      separate_rows(ClauseType, sep = ";") %>%
-      count(ManagementDomain, ClauseType, name = "Count")
-    
-    validate(need(nrow(co_counts) > 0, "No clause type co-occurrence data available."))
-    
-    ggplot(co_counts, aes(x = ManagementDomain, y = ClauseType, fill = Count)) +
-      geom_tile(color = "white") +
-      scale_fill_gradient(low = "lightblue", high = "#2c3e50") +
-      labs(title = "Clause Type Co-occurrence by Management Domain",
-           x = "Management Domain", y = "Clause Type", fill = "Count") +
-      theme_minimal() +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1),
-            axis.text.y = element_text(size = 10))
-  })
-  
+      # Create hover text
+      percent_data$hover_text <- paste0(
+        "Management Domain: ", percent_data$management_domain, "<br>",
+        "Clause Type: ", percent_data$clause_type, "<br>",
+        "Sections: ", percent_data$section_count, "<br>",
+        "Percentage: ", round(percent_data$percent, 1), "%"
+      )
+      
+      # 🎨 Create ggplot stacked percentage bar chart
+      p <- ggplot(percent_data, aes(x = management_domain, y = percent, 
+                                     fill = clause_type, text = hover_text)) +
+        geom_bar(stat = "identity", color = "white", linewidth = 0.3) +
+        coord_flip() +
+        scale_fill_manual(values = clause_colors, name = "Clause type") +
+        scale_y_continuous(labels = function(x) paste0(x, "%"), expand = c(0, 0)) +
+        labs(
+          x = NULL,
+          y = "Percentage of sections (%)"
+        ) +
+        theme_minimal() +
+        theme(
+          axis.text.y = element_text(size = 7, hjust = 1),
+          axis.text.x = element_text(size = 8, angle = 0),
+          axis.title.y = element_blank(),
+          axis.title.x = element_text(size = 10, margin = margin(t = 10)),
+          legend.position = "bottom",
+          legend.title = element_text(size = 10),
+          legend.text = element_text(size = 8),
+          panel.grid.major.y = element_blank(),
+          panel.grid.minor = element_blank(),
+          plot.margin = margin(t = 5, r = 10, b = 5, l = 5)
+        )
+      
+      # Convert to plotly with custom tooltip
+      ggplotly(p, tooltip = "text") %>%
+        layout(
+          legend = list(
+            orientation = "h",
+            x = 0.5,
+            xanchor = "center",
+            y = -0.2,
+            font = list(size = 9),
+            itemsizing = "constant",
+            tracegroupgap = 5,
+            itemwidth = 40
+          ),
+          margin = list(l = 10, r = 50, t = 30, b = 100),
+          xaxis = list(
+            title = list(standoff = 15),
+            tickmode = "linear",
+            dtick = 25,
+            tickfont = list(size = 9)
+          ),
+          yaxis = list(title = "")
+        )
+      
+    }, error = function(e) {
+      plot_ly() %>%
+        add_annotations(
+          text = paste("Error in clause plot:", e$message),
+          showarrow = FALSE,
+          font = list(size = 14)
+        ) %>%
+        layout(
+          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE)
+        )
+    })
+  })  
+ 
+
   # 📈 Keyword Frequency Plot----
-  output$keyword_plot <- renderPlot({
+  output$keyword_plot <- renderPlotly({  # Changed from renderPlot
     domain <- selected_domain()
     domain_clean <- if (!is.null(domain) && !is.na(domain)) trimws(tolower(domain)) else ""
     leg_id <- current_legislation_id()
@@ -1072,11 +1206,22 @@ server <- function(input, output, session) {
     keyword_counts <- keyword_counts[order(-keyword_counts$count), ]
     keyword_counts <- keyword_counts[1:min(10, nrow(keyword_counts)), ]
     
-    ggplot(keyword_counts, aes(x = reorder(keyword, count), y = count)) +
+    # Add tooltip text
+    keyword_counts$tooltip_text <- paste0(
+      "Keyword: ", keyword_counts$keyword, "\n",
+      "Count: ", keyword_counts$count
+    )
+    
+    # Create ggplot with tooltip aesthetic
+    p <- ggplot(keyword_counts, aes(x = reorder(keyword, count), y = count,
+                                    text = tooltip_text)) +
       geom_bar(stat = "identity", fill = "#2c3e50") +
       coord_flip() +
       theme_minimal() +
       labs(x = "Keyword", y = "Count")
+    
+    # Convert to plotly
+    ggplotly(p, tooltip = "text")
   })
   
   onStop(function() {
