@@ -123,6 +123,48 @@
             color: white;
         }
         
+        /* === Sticky Icon Panel === */
+        .sticky-icon {
+            position: fixed;
+            background-color: #f9f9f9;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            text-align: center;
+            z-index: 1001;
+            width: 120px;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .sticky-icon.alternate {
+            top: 180px;
+            right: 20px;
+        }
+        
+        .sticky-icon img {
+            width: 60px;
+            height: auto;
+            display: block;
+            margin: 0 auto 8px auto;
+        }
+        
+        .sticky-icon span {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .sticky-icon a {
+            text-decoration: none;
+        }
+        
+        .sticky-icon a:hover span {
+            color: #1a252f;
+        }
+        
         .usage-section {
             background: white;
             padding: 2rem;
@@ -327,6 +369,14 @@
         </div>
     </div>
     
+    <!-- Floating Icon -->
+    <div class="sticky-icon">
+        <a href="https://ennsjoe.shinyapps.io/lapse_dashboard/" target="_blank">
+            <img src="assets/dashboard_icon.png" alt="Interactive App">
+            <span>Interactive App</span>
+        </a>
+    </div>
+    
     <div class="container">
         <!-- Introduction Section -->
         <div class="intro-section">
@@ -459,16 +509,12 @@
     <script>
         // Function to download Excel file
         function downloadExcel() {
-            // Alert user - you'll need to update this with the actual file path
-            alert('Excel download functionality to be implemented. Please specify the location of your Excel compendium file.');
-            
-            // Example implementation once you have the file:
-            // const link = document.createElement('a');
-            // link.href = 'path/to/your/LAPSE-Compendium.xlsx';
-            // link.download = 'LAPSE-Compendium.xlsx';
-            // document.body.appendChild(link);
-            // link.click();
-            // document.body.removeChild(link);
+            const link = document.createElement('a');
+            link.href = 'Legislative_Implements_Enhanced.xlsx';
+            link.download = 'Legislative_Implements_Enhanced.xlsx';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
