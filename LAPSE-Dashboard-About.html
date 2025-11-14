@@ -510,8 +510,8 @@
         // Function to download Excel file
         function downloadExcel() {
             const link = document.createElement('a');
-            link.href = 'Legislative_Implements_Enhanced.xlsx';
-            link.download = 'Legislative_Implements_Enhanced.xlsx';
+            link.href = 'output/LAPSE_full_compendium.xlsx';
+            link.download = 'output/LAPSE_full_compendium.xlsx';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
