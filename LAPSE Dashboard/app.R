@@ -237,7 +237,7 @@ ui <- fluidPage(
   
   # About page button
   div(
-    style = "margin-bottom: 20px; text-align: center;",
+    style = "margin-bottom: 20px; text-align: left;",
     tags$a(
       href = "https://ennsjoe.github.io/salmon_management_domains_compendium/LAPSE-Dashboard-About.html",
       target = "_blank",
