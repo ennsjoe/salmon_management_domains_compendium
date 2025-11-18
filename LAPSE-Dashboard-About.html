@@ -288,16 +288,41 @@
         .iframe-wrapper {
             position: relative;
             width: 100%;
-            height: 800px;
+            height: 1200px; /* Increased from 800px */
             border: 2px solid #ddd;
             border-radius: 5px;
-            overflow: hidden;
+            overflow: auto; /* Changed from hidden to auto */
+        }
+        
+        .iframe-wrapper {
+          position: relative;
+          width: 100%;
+          height: 1200px; /* Increased from 800px */
+          border: 2px solid #ddd;
+          border-radius: 5px;
+          overflow: auto; /* Changed from hidden to auto */
         }
         
         .iframe-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+          width: 125%; /* Increase width to compensate for scale */
+          height: 125%; /* Increase height to compensate for scale */
+          border: none;
+          transform: scale(0.8); /* Scale down to 80% */
+          transform-origin: top left; /* Scale from top-left corner */
+        }
+        
+        /* Optional: add scrollbar styling */
+        .iframe-wrapper::-webkit-scrollbar {
+          width: 8px;
+        }
+        
+        .iframe-wrapper::-webkit-scrollbar-track {
+          background: #f1f1f1;
+        }
+        
+        .iframe-wrapper::-webkit-scrollbar-thumb {
+          background: #668899;
+          border-radius: 4px;
         }
         
         .footer {
@@ -330,34 +355,34 @@
         }
         
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .header p {
-                font-size: 1rem;
-            }
-            
-            .container {
-                padding: 1rem;
-            }
-            
-            .intro-section, .usage-section, .app-container {
-                padding: 1.5rem;
-            }
-            
-            .iframe-wrapper {
-                height: 600px;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
+          .header h1 {
+            font-size: 1.8rem;
+          }
+          
+          .header p {
+            font-size: 1rem;
+          }
+          
+          .container {
+            padding: 1rem;
+          }
+          
+          .intro-section, .usage-section, .app-container {
+            padding: 1.5rem;
+          }
+          
+          .iframe-wrapper {
+            height: 800px; /* Keep smaller height for mobile */
+          }
+          
+          .action-buttons {
+            flex-direction: column;
+          }
+          
+          .btn {
+            width: 100%;
+            justify-content: center;
+          }
         }
     </style>
 </head>
