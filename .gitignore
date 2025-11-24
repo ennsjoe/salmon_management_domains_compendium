@@ -13,9 +13,11 @@ data/*.xlsx
 # Ignore Excel files and udpipe model files
 *.udpipe
 
-
 # Ignore Journal Article Files
 figures/
 
 # Ignore web app workaround folder
 web_app_workaround/
+
+archive/
+
