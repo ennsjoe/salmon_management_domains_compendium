@@ -607,13 +607,9 @@ classification_summary <- data.table(
   )
 )
 
-## ============================================================================
 ## SECTION 8: EXPORT TO EXCEL
-## ============================================================================
 
-cat("\nStep 8: Creating Excel workbook...\n")
-
-output_file <- file.path(here(), "Legislative_Implements_Enhanced.xlsx")
+output_file <- file.path(here("output"), "Legislative_Implementations.xlsx")
 
 ## Check if file is open and create backup name if needed ----
 if (file.exists(output_file)) {
