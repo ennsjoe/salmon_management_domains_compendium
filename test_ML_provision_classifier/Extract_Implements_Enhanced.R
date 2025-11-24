@@ -6,8 +6,7 @@
 #   Enhanced version using advanced NLP techniques including dependency parsing,
 #   part-of-speech tagging, context windows, and machine learning to extract
 #   implements from legislation with improved accuracy.
-# Dependencies: DBI, RSQLite, data.table, here, openxlsx, stringr, udpipe, 
-#               quanteda, quanteda.textstats, caret, randomForest
+# Dependencies: DBI, RSQLite, data.table, here, openxlsx, stringr
 # Outputs:
 #   "Legislative_Implements_Enhanced.xlsx" in the project root directory
 ################################################################################
@@ -19,9 +18,6 @@ library(RSQLite)
 library(data.table)
 library(openxlsx)
 library(stringr)
-library(udpipe)
-library(quanteda)
-library(quanteda.textstats)
 library(beepr)
 
 cat("=====================================\n")
@@ -319,22 +315,7 @@ provision_patterns <- list(
   )
 )
 
-## ============================================================================
-## SECTION 2: ADVANCED NLP SETUP
-## ============================================================================
 
-cat("Step 2: Setting up advanced NLP models...\n")
-
-## Download and load English language model for udpipe ----
-cat("  - Loading linguistic model for dependency parsing...\n")
-model_path <- file.path(here(), "english-ewt-ud-2.5-191206.udpipe")
-
-if (!file.exists(model_path)) {
-  cat("  - Downloading English language model (this may take a moment)...\n")
-  udpipe_download_model(language = "english-ewt", model_dir = here())
-}
-
-ud_model <- udpipe_load_model(file = model_path)
 
 ## ============================================================================
 ## SECTION 3: ENHANCED EXTRACTION FUNCTIONS
@@ -376,18 +357,7 @@ extract_implements_enhanced <- function(paragraph_text) {
     
     # Check if implement type is mentioned
     if (grepl(pattern, text_lower, perl = TRUE)) {
-      # Check for context boost words nearby (within 10 words)
-      context <- extract_context_window(text_lower, pattern, window_size = 10)
-      
-      has_boost <- FALSE
-      if (!is.na(context) && length(impl_info$context_boost) > 0) {
-        boost_pattern <- paste0("\\b(", paste(impl_info$context_boost, collapse = "|"), ")\\b")
-        has_boost <- grepl(boost_pattern, context, perl = TRUE)
-      }
-      
-      # Add confidence indicator
-      confidence <- if (has_boost) "high" else "medium"
-      implements_found <- c(implements_found, paste0(impl_name, "[", confidence, "]"))
+      implements_found <- c(implements_found, impl_name)
     }
   }
   
@@ -443,62 +413,69 @@ extract_provision_type <- function(paragraph_text) {
   }
 }
 
-## Function: Dependency parsing analysis (for grammatical relationships) ----
-analyze_dependencies <- function(text_sample, ud_model) {
-  if (is.na(text_sample) || nchar(text_sample) > 5000) return(NULL)
-  
-  tryCatch({
-    annotation <- udpipe_annotate(ud_model, x = text_sample)
-    annotation_df <- as.data.frame(annotation)
-    return(annotation_df)
-  }, error = function(e) {
-    return(NULL)
-  })
-}
 
-## Function: Extract subject-verb-object relationships ----
-extract_svo_relationships <- function(annotation_df) {
-  if (is.null(annotation_df) || nrow(annotation_df) == 0) return(NA_character_)
+
+## Function: Classify as Legal Tool or Not Legal Tool ----
+## This function determines if a paragraph describes a legal tool/implement
+## based on co-occurrence of key elements
+classify_legal_tool <- function(implement_type, responsible_official, provision_type) {
+  # Initialize classification
+  has_implement <- !is.na(implement_type) && implement_type != ""
+  has_official <- !is.na(responsible_official) && responsible_official != ""
+  has_provision <- !is.na(provision_type) && provision_type != ""
   
-  relationships <- character()
+  # Classification logic:
+  # LEGAL TOOL if:
+  # 1. Has implement AND has provision type (mandate/authorization)
+  # 2. Has implement AND has responsible official
+  # 3. Has all three elements (strongest indicator)
   
-  # Find verbs
-  verbs <- annotation_df[annotation_df$upos == "VERB", ]
+  # NOT LEGAL TOOL if:
+  # 1. Has implement only (no context of creation/authority)
+  # 2. No implement mentioned
   
-  if (nrow(verbs) > 0) {
-    for (i in 1:min(3, nrow(verbs))) {  # Analyze up to 3 verbs
-      verb <- verbs[i, ]
-      verb_lemma <- verb$lemma
+  if (!has_implement) {
+    return("Not Legal Tool")
+  }
+  
+  # Check for high-confidence legal tool indicators
+  if (has_implement && (has_official || has_provision)) {
+    # Additional check: is the provision type about creation/authorization?
+    if (has_provision) {
+      creation_provisions <- c("establishment", "designation", "authorization", 
+                               "mandatory", "discretionary", "requirement")
+      provision_lower <- tolower(provision_type)
+      has_creation <- any(sapply(creation_provisions, function(x) grepl(x, provision_lower)))
       
-      # Find subject
-      subjects <- annotation_df[annotation_df$head_token_id == verb$token_id & 
-                                  annotation_df$dep_rel %in% c("nsubj", "nsubj:pass"), ]
-      
-      # Find object
-      objects <- annotation_df[annotation_df$head_token_id == verb$token_id & 
-                                 annotation_df$dep_rel %in% c("obj", "dobj", "iobj"), ]
-      
-      if (nrow(subjects) > 0 && nrow(objects) > 0) {
-        relationship <- paste(subjects$lemma[1], verb_lemma, objects$lemma[1], sep = " -> ")
-        relationships <- c(relationships, relationship)
+      if (has_creation) {
+        return("Legal Tool")
       }
+    }
+    
+    # If has official, likely a legal tool
+    if (has_official) {
+      return("Legal Tool")
     }
   }
   
-  if (length(relationships) > 0) {
-    return(paste(relationships, collapse = "; "))
-  } else {
-    return(NA_character_)
+  # Check confidence level from implement_type
+  if (has_implement && grepl("\\[high\\]", implement_type)) {
+    return("Legal Tool")
   }
+  
+  # Default to "Not Legal Tool" for weak matches
+  return("Not Legal Tool")
 }
+
+
 
 ## ============================================================================
 ## SECTION 4: APPLY ENHANCED EXTRACTION
 ## ============================================================================
 
-cat("\nStep 4: Applying enhanced extraction to paragraphs...\n")
+cat("\nStep 4: Applying enhanced extraction to ALL paragraphs...\n")
 
-## Apply basic extraction ----
+## Apply basic extraction to ALL paragraphs (not just those with implements) ----
 cat("  - Extracting implement types with context...\n")
 act_paragraphs[, implement_type := sapply(Paragraph, extract_implements_enhanced)]
 
@@ -508,40 +485,31 @@ act_paragraphs[, responsible_official := sapply(Paragraph, extract_officials_enh
 cat("  - Extracting provision types...\n")
 act_paragraphs[, provision_type := sapply(Paragraph, extract_provision_type)]
 
-## Filter to rows with implements ----
-implements_data <- act_paragraphs[!is.na(implement_type)]
+cat("\nStep 4b: Classifying ALL paragraphs as Legal Tool or Not Legal Tool...\n")
 
-cat(sprintf("  - Found %d paragraphs containing implements\n", nrow(implements_data)))
+## Apply classification function to ALL paragraphs ----
+act_paragraphs[, legal_tool_classification := mapply(
+  classify_legal_tool, 
+  implement_type, 
+  responsible_official, 
+  provision_type
+)]
 
-## Advanced linguistic analysis on sample ----
-cat("\nStep 5: Performing advanced linguistic analysis on sample...\n")
+cat(sprintf("  - Initial classification of %d paragraphs complete\n", nrow(act_paragraphs)))
+cat(sprintf("  - Potential Legal Tools: %d\n", sum(act_paragraphs$legal_tool_classification == "Legal Tool")))
+cat(sprintf("  - Not Legal Tools: %d\n", sum(act_paragraphs$legal_tool_classification == "Not Legal Tool")))
 
-# Analyze a sample for demonstration (first 100 with implements, or fewer if not available)
-sample_size <- min(100, nrow(implements_data))
-if (sample_size > 0) {
-  cat(sprintf("  - Analyzing %d sample paragraphs with dependency parsing...\n", sample_size))
-  
-  implements_data[, grammar_analysis := NA_character_]
-  
-  for (i in 1:sample_size) {
-    if (i %% 20 == 0) {
-      cat(sprintf("    Processing paragraph %d of %d...\n", i, sample_size))
-    }
-    
-    text <- implements_data$Paragraph[i]
-    if (!is.na(text) && nchar(text) > 0 && nchar(text) < 5000) {
-      annotation <- analyze_dependencies(text, ud_model)
-      if (!is.null(annotation) && nrow(annotation) > 0) {
-        svo <- extract_svo_relationships(annotation)
-        if (!is.na(svo)) {
-          implements_data[i, grammar_analysis := svo]
-        }
-      }
-    }
-  }
-  
-  cat(sprintf("  - Completed dependency analysis on %d paragraphs\n", sample_size))
-}
+## Create two datasets: Legal Tools and Not Legal Tools ----
+legal_tools_data <- act_paragraphs[legal_tool_classification == "Legal Tool"]
+not_legal_tools_data <- act_paragraphs[legal_tool_classification == "Not Legal Tool" & !is.na(implement_type)]
+
+cat(sprintf("\n  - Legal Tools dataset: %d paragraphs\n", nrow(legal_tools_data)))
+cat(sprintf("  - Not Legal Tools (with implement keywords): %d paragraphs\n", nrow(not_legal_tools_data)))
+
+## Use legal_tools_data as the primary implements_data for output ----
+implements_data <- legal_tools_data
+
+cat(sprintf("\n  - Legal Tools dataset ready: %d paragraphs\n", nrow(implements_data)))
 
 ## ============================================================================
 ## SECTION 6: MERGE WITH METADATA AND PREPARE OUTPUT
@@ -549,26 +517,52 @@ if (sample_size > 0) {
 
 cat("\nStep 6: Merging with legislation metadata...\n")
 
+## Merge Legal Tools data ----
 implements_data <- merge(
   implements_data[, .(paragraph_id, legislation_id, Section, Heading, Paragraph, 
-                     implement_type, responsible_official, provision_type, grammar_analysis)],
+                     implement_type, responsible_official, provision_type, 
+                     legal_tool_classification)],
   acts_only[, .(legislation_id, act_name, jurisdiction)],
   by = "legislation_id",
   all.x = TRUE
 )
 
-## Clean confidence indicators for summary ----
-implements_data[, implement_type_clean := gsub("\\[.*?\\]", "", implement_type)]
+## Merge Not Legal Tools data (for comparison/export) ----
+not_legal_tools_data <- merge(
+  not_legal_tools_data[, .(paragraph_id, legislation_id, Section, Heading, Paragraph, 
+                          implement_type, responsible_official, provision_type, 
+                          legal_tool_classification)],
+  acts_only[, .(legislation_id, act_name, jurisdiction)],
+  by = "legislation_id",
+  all.x = TRUE
+)
+
+## Clean confidence indicators from implement_type for output ----
+implements_data[, implement_type := gsub("\\[.*?\\]", "", implement_type)]
+not_legal_tools_data[, implement_type := gsub("\\[.*?\\]", "", implement_type)]
+
+## Create clean version for summaries ----
+implements_data[, implement_type_clean := implement_type]
+not_legal_tools_data[, implement_type_clean := implement_type]
 
 ## Reorder columns ----
 setcolorder(implements_data, c(
+  "legal_tool_classification",
   "act_name", "jurisdiction", "Section", "Heading", 
   "implement_type", "responsible_official", "provision_type", 
-  "grammar_analysis", "Paragraph"
+  "Paragraph"
+))
+
+setcolorder(not_legal_tools_data, c(
+  "legal_tool_classification",
+  "act_name", "jurisdiction", "Section", "Heading", 
+  "implement_type", "responsible_official", "provision_type", 
+  "Paragraph"
 ))
 
 ## Sort ----
 implements_data <- implements_data[order(act_name, Section)]
+not_legal_tools_data <- not_legal_tools_data[order(act_name, Section)]
 
 ## ============================================================================
 ## SECTION 7: CREATE ENHANCED SUMMARIES
@@ -598,6 +592,21 @@ co_occurrence <- implements_data[!is.na(responsible_official),
                                   by = .(implement_type_clean, responsible_official)][order(-N)]
 setnames(co_occurrence, c("Implement Type", "Responsible Official", "Co-occurrences"))
 
+## Classification summary ----
+classification_summary <- data.table(
+  Classification = c("Legal Tool", "Not Legal Tool", "Total"),
+  Count = c(
+    nrow(implements_data),
+    nrow(not_legal_tools_data),
+    nrow(implements_data) + nrow(not_legal_tools_data)
+  ),
+  Percentage = c(
+    round(100 * nrow(implements_data) / (nrow(implements_data) + nrow(not_legal_tools_data)), 1),
+    round(100 * nrow(not_legal_tools_data) / (nrow(implements_data) + nrow(not_legal_tools_data)), 1),
+    100.0
+  )
+)
+
 ## ============================================================================
 ## SECTION 8: EXPORT TO EXCEL
 ## ============================================================================
@@ -606,11 +615,30 @@ cat("\nStep 8: Creating Excel workbook...\n")
 
 output_file <- file.path(here(), "Legislative_Implements_Enhanced.xlsx")
 
+## Check if file is open and create backup name if needed ----
+if (file.exists(output_file)) {
+  test_write <- try(file.create(output_file), silent = TRUE)
+  if (inherits(test_write, "try-error") || !test_write) {
+    timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
+    output_file <- file.path(here(), paste0("Legislative_Implements_Enhanced_", timestamp, ".xlsx"))
+    cat(sprintf("  ⚠️  Original file is open or locked. Saving to: %s\n", basename(output_file)))
+  } else {
+    # Clean up test file
+    if (file.exists(output_file)) file.remove(output_file)
+  }
+}
+
 wb <- createWorkbook()
 
-## Main data sheet ----
-addWorksheet(wb, "Implements (Enhanced)")
-writeDataTable(wb, "Implements (Enhanced)", implements_data)
+## Main data sheets ----
+addWorksheet(wb, "Legal Tools")
+writeDataTable(wb, "Legal Tools", implements_data)
+
+addWorksheet(wb, "Not Legal Tools")
+writeDataTable(wb, "Not Legal Tools", not_legal_tools_data)
+
+addWorksheet(wb, "Classification Summary")
+writeDataTable(wb, "Classification Summary", classification_summary)
 
 ## Summary sheets ----
 addWorksheet(wb, "Summary by Implement Type")
@@ -629,8 +657,11 @@ addWorksheet(wb, "Implement-Official Co-occur")
 writeDataTable(wb, "Implement-Official Co-occur", co_occurrence)
 
 ## Format columns ----
-setColWidths(wb, "Implements (Enhanced)", cols = 1:9, 
-             widths = c(35, 12, 10, 30, 30, 25, 25, 40, 70))
+setColWidths(wb, "Legal Tools", cols = 1:9, 
+             widths = c(15, 35, 12, 10, 30, 30, 25, 25, 70))
+setColWidths(wb, "Not Legal Tools", cols = 1:9, 
+             widths = c(15, 35, 12, 10, 30, 30, 25, 25, 70))
+setColWidths(wb, "Classification Summary", cols = 1:3, widths = c(20, 12, 12))
 setColWidths(wb, "Summary by Implement Type", cols = 1:2, widths = c(30, 10))
 setColWidths(wb, "Summary by Official", cols = 1:2, widths = c(30, 10))
 setColWidths(wb, "Summary by Provision Type", cols = 1:2, widths = c(30, 10))
@@ -650,19 +681,26 @@ cat("\n=====================================\n")
 cat("SUMMARY STATISTICS\n")
 cat("=====================================\n\n")
 
-cat(sprintf("Total paragraphs with implements: %d\n", nrow(implements_data)))
+cat("CLASSIFICATION RESULTS:\n")
+print(classification_summary)
+
+cat(sprintf("\n\nLEGAL TOOLS DETAILS:\n"))
+cat(sprintf("Total Legal Tool paragraphs: %d\n", nrow(implements_data)))
 cat(sprintf("Unique Acts: %d\n", length(unique(implements_data$act_name))))
 cat(sprintf("Unique implement types found: %d\n", nrow(summary_by_implement)))
-cat(sprintf("Paragraphs with grammatical analysis: %d\n", 
-            sum(!is.na(implements_data$grammar_analysis))))
+cat(sprintf("Paragraphs with implement + (official OR provision)\n"))
 
-cat("\nTop 10 Implement Types:\n")
+cat("\n\nNOT LEGAL TOOLS DETAILS:\n")
+cat(sprintf("Total Not Legal Tool paragraphs: %d\n", nrow(not_legal_tools_data)))
+cat(sprintf("Paragraphs with implement keywords but lacking official/provision context\n"))
+
+cat("\nTop 10 Implement Types (Legal Tools):\n")
 print(head(summary_by_implement, 10))
 
-cat("\nTop 10 Responsible Officials:\n")
+cat("\nTop 10 Responsible Officials (Legal Tools):\n")
 print(head(summary_by_official, 10))
 
-cat("\nTop 10 Provision Types:\n")
+cat("\nTop 10 Provision Types (Legal Tools):\n")
 print(head(summary_by_provision, 10))
 
 cat("\nTop 5 Implement-Official Combinations:\n")
