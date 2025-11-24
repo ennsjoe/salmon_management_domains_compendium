@@ -371,7 +371,7 @@ The meaning and context behind keywords, especially single words, can cause mis-
 
 Management domains can overlap within sections and clauses. For example the provincial Land-based Finfish Waste Control Regulation (Environmental Management Act) states in Section 2 that: “The owner of a land-based finfish facility is exempt from section 6 (2) and (3) of the Environmental Management Act with respect to the discharge of wastes from the land-based finfish facility if the owner…” This clause matched appropriately with both the “Aquaculture and Hatcheries” and “Pollution” management domains. Because the matching process allows for multiple keywords to be matched per clause, this method allows for an assessment of co-occurrences and connections between management domains.
 
-## Clause typing for legislative context
+## Clause type categorization for legislative context
 
 The process of parsing legislation by clause and section, then matching categories by keywords also allows for other possible categorizations. Similar to management domains and IUCN threats, the nature of the clauses was also matched in terms of the “clause type.” Clauses, in general, fit into groupings by their context and the nature of their intent. For this exercise, the categories and keywords were developed solely by the researchers through a subjective process; however, the keywords are listed in Appendix III allowing for the work to be transparent and repeatable.
 
@@ -417,6 +417,8 @@ if (!file.exists(db_path)) {
 
 
 ```
+
+
 
 ## COSEWIC current threat assessments in BC
 

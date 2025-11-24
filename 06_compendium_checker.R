@@ -5,8 +5,10 @@
 # Description:
 #   Queries the legislation database and exports an Excel file containing
 #   paragraph-level metadata, semantic labels, scope values, and matched keywords.
-#   Modified to aggregate paragraphs by section and expand Management Domain/IUCN
+#   Modified to aggregate paragraphs by section and expand Management Domain/IUCN/Scope
 #   into separate rows. Handles Excel's 32,767 character limit by chunking.
+#   Governance-based management domains have blank IUCN values.
+#   Separates keywords into management_domain_keywords and clause_type_keywords.
 ################################################################################
 
 ## Load Libraries ----
@@ -26,15 +28,45 @@ tryCatch({
   legislation_table <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
   paragraph_table <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
   paragraph_label_table <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
+  
+  # Load management domain threat table if it exists
+  if("management_domain_threat_table" %in% dbListTables(conn)) {
+    management_domain_threat <- as.data.table(dbReadTable(conn, "management_domain_threat_table"))
+    cat("✅ Loaded management_domain_threat_table from database\n")
+  } else {
+    management_domain_threat <- NULL
+    cat("⚠️  management_domain_threat_table not found in database\n")
+  }
 }, finally = {
   dbDisconnect(conn)
   cat("✅ Database connection closed.\n")
 })
 
+## Identify Governance-Only Management Domains ----
+if(!is.null(management_domain_threat)) {
+  # Get threat-based domains from the authoritative table
+  threat_based_domains <- unique(management_domain_threat$management_domain)
+  
+  # Get all management domains from labels
+  all_mgmt_domains <- unique(paragraph_label_table[
+    label_type == "Management Domain" & !is.na(label_value),
+    label_value
+  ])
+  
+  # Governance-only domains are those NOT in the threat table
+  governance_only_domains <- setdiff(all_mgmt_domains, threat_based_domains)
+  
+  cat("Governance-only domains:", paste(governance_only_domains, collapse = ", "), "\n")
+  cat("Threat-based domains:", paste(threat_based_domains, collapse = ", "), "\n")
+} else {
+  governance_only_domains <- character(0)
+  cat("⚠️  Cannot identify governance domains without management_domain_threat_table\n")
+}
+
 ## Merge Paragraphs with Legislation Metadata ----
 paragraphs_with_legislation <- merge(
   paragraph_table[, .(paragraph_id, legislation_id, Section, Heading, Paragraph)],
-  legislation_table[, .(legislation_id, act_name, legislation_name)],
+  legislation_table[, .(legislation_id, jurisdiction, act_name, legislation_name)],
   by = "legislation_id",
   all.x = TRUE
 )
@@ -51,33 +83,46 @@ paragraphs_with_labels <- merge(
   allow.cartesian = TRUE
 )
 
-## Extract and Aggregate Scope ----
+## Extract Scope (will be split into separate rows later) ----
 scope_labels <- paragraph_label_table[
   !is.na(scope),
   .(paragraph_id, scope)
 ]
-scope_labels <- scope_labels[, .(scope_col = paste(unique(scope), collapse = "; ")), by = paragraph_id]
 
-## Extract and Aggregate Keywords ----
-keyword_labels <- paragraph_label_table[
-  !is.na(keyword),
+## Extract and Aggregate Keywords by Type ----
+# Management Domain Keywords
+mgmt_domain_keyword_labels <- paragraph_label_table[
+  label_type == "Management Domain" & !is.na(keyword),
   .(paragraph_id, keyword)
 ]
-keyword_labels <- keyword_labels[, .(keywords_col = paste(unique(keyword), collapse = "; ")), by = paragraph_id]
+mgmt_domain_keyword_labels <- mgmt_domain_keyword_labels[, 
+                                                         .(management_domain_keywords = paste(unique(keyword), collapse = "; ")), 
+                                                         by = paragraph_id
+]
 
-## Merge keywords and scope to paragraph data ----
-paragraphs_with_meta <- merge(paragraphs_with_legislation, scope_labels, by = "paragraph_id", all.x = TRUE)
-paragraphs_with_meta <- merge(paragraphs_with_meta, keyword_labels, by = "paragraph_id", all.x = TRUE)
+# Clause Type Keywords
+clause_type_keyword_labels <- paragraph_label_table[
+  label_type == "Clause Type" & !is.na(keyword),
+  .(paragraph_id, keyword)
+]
+clause_type_keyword_labels <- clause_type_keyword_labels[, 
+                                                         .(clause_type_keywords = paste(unique(keyword), collapse = "; ")), 
+                                                         by = paragraph_id
+]
 
-## Aggregate keywords and scope by section ----
+## Merge keywords to paragraph data ----
+paragraphs_with_meta <- merge(paragraphs_with_legislation, mgmt_domain_keyword_labels, by = "paragraph_id", all.x = TRUE)
+paragraphs_with_meta <- merge(paragraphs_with_meta, clause_type_keyword_labels, by = "paragraph_id", all.x = TRUE)
+
+## Aggregate keywords by section ----
 meta_aggregated <- paragraphs_with_meta[, .(
-  scope_col = paste(unique(na.omit(scope_col)), collapse = "; "),
-  keywords_col = paste(unique(na.omit(keywords_col)), collapse = "; ")
-), by = .(act_name, legislation_name, Section, Heading)]
+  management_domain_keywords = paste(unique(na.omit(management_domain_keywords)), collapse = "; "),
+  clause_type_keywords = paste(unique(na.omit(clause_type_keywords)), collapse = "; ")
+), by = .(jurisdiction, act_name, legislation_name, Section, Heading)]
 
 # Replace empty strings with NA
-meta_aggregated[scope_col == "", scope_col := NA]
-meta_aggregated[keywords_col == "", keywords_col := NA]
+meta_aggregated[management_domain_keywords == "", management_domain_keywords := NA]
+meta_aggregated[clause_type_keywords == "", clause_type_keywords := NA]
 
 ## Function to chunk paragraphs if they exceed Excel's limit ----
 chunk_paragraphs <- function(paragraphs, max_chars = 30000) {
@@ -112,10 +157,21 @@ chunk_paragraphs <- function(paragraphs, max_chars = 30000) {
 }
 
 ## Step 1: Aggregate Paragraphs by Section with Chunking ----
-# First, get all unique labels per section
+# First, get all unique labels per section (including scope)
 section_labels <- unique(paragraphs_with_labels[, .(
-  act_name, legislation_name, Section, Heading, label_type, label_value
+  jurisdiction, act_name, legislation_name, Section, Heading, label_type, label_value
 )])
+
+# Get unique scope values per section
+section_scope <- unique(scope_labels[paragraph_id %in% paragraphs_with_legislation$paragraph_id, .(
+  paragraph_id, scope
+)])
+section_scope <- merge(
+  section_scope,
+  paragraphs_with_legislation[, .(paragraph_id, jurisdiction, act_name, legislation_name, Section, Heading)],
+  by = "paragraph_id"
+)
+section_scope <- unique(section_scope[, .(jurisdiction, act_name, legislation_name, Section, Heading, scope)])
 
 # Aggregate paragraphs with chunking
 paragraphs_aggregated <- paragraphs_with_legislation[, {
@@ -125,21 +181,21 @@ paragraphs_aggregated <- paragraphs_with_legislation[, {
     chunk_id = seq_along(chunks),
     total_chunks = length(chunks)
   )
-}, by = .(act_name, legislation_name, Section, Heading)]
+}, by = .(jurisdiction, act_name, legislation_name, Section, Heading)]
 
 # Convert list columns to regular columns
 paragraphs_aggregated <- paragraphs_aggregated[, .(
   Paragraph = unlist(Paragraph),
   chunk_id = unlist(chunk_id),
   total_chunks = unlist(total_chunks)
-), by = .(act_name, legislation_name, Section, Heading)]
+), by = .(jurisdiction, act_name, legislation_name, Section, Heading)]
 
 ## Step 2: Merge Labels Back ----
 # Merge the section-level labels with each chunk
 paragraphs_with_all_labels <- merge(
   paragraphs_aggregated,
   section_labels,
-  by = c("act_name", "legislation_name", "Section", "Heading"),
+  by = c("jurisdiction", "act_name", "legislation_name", "Section", "Heading"),
   all.x = TRUE,
   allow.cartesian = TRUE
 )
@@ -149,28 +205,36 @@ paragraphs_with_all_labels <- merge(
 clause_type_labels <- paragraphs_with_all_labels[
   label_type == "Clause Type" & !is.na(label_value),
   .(Clause_Type = paste(unique(label_value), collapse = "; ")),
-  by = .(act_name, legislation_name, Section, Heading, chunk_id)
+  by = .(jurisdiction, act_name, legislation_name, Section, Heading, chunk_id)
 ]
 
-# Keep Management Domain and IUCN separate (one row per value)
+# Keep Management Domain and IUCN separate (one row per combination)
 mgmt_iucn_labels <- unique(paragraphs_with_all_labels[
   label_type %in% c("Management Domain", "IUCN") & !is.na(label_value),
-  .(act_name, legislation_name, Section, Heading, Paragraph, chunk_id, total_chunks, label_type, label_value)
+  .(jurisdiction, act_name, legislation_name, Section, Heading, Paragraph, chunk_id, total_chunks, label_type, label_value)
 ])
 
 # Reshape to wide format
 if(nrow(mgmt_iucn_labels) > 0) {
   mgmt_iucn_wide <- dcast(
     mgmt_iucn_labels,
-    act_name + legislation_name + Section + Heading + Paragraph + chunk_id + total_chunks ~ label_type,
+    jurisdiction + act_name + legislation_name + Section + Heading + Paragraph + chunk_id + total_chunks ~ label_type,
     value.var = "label_value",
     fun.aggregate = function(x) if(length(x) > 0) x[1] else NA_character_
   )
+  
+  # CRITICAL: Set IUCN to NA for governance-only management domains
+  if("Management Domain" %in% names(mgmt_iucn_wide) && "IUCN" %in% names(mgmt_iucn_wide) && length(governance_only_domains) > 0) {
+    rows_to_clear <- mgmt_iucn_wide$`Management Domain` %in% governance_only_domains
+    mgmt_iucn_wide[rows_to_clear, IUCN := NA_character_]
+    cat("✅ Set IUCN to NA for", sum(rows_to_clear), "governance-only rows\n")
+  }
+  
   compendium_data <- copy(mgmt_iucn_wide)
 } else {
   # If no Management Domain or IUCN labels exist
   compendium_data <- unique(paragraphs_aggregated)
-  compendium_data[, Management_Domain := NA_character_]
+  compendium_data[, `Management Domain` := NA_character_]
   compendium_data[, IUCN := NA_character_]
 }
 
@@ -178,15 +242,24 @@ if(nrow(mgmt_iucn_labels) > 0) {
 compendium_data <- merge(
   compendium_data,
   clause_type_labels,
-  by = c("act_name", "legislation_name", "Section", "Heading", "chunk_id"),
+  by = c("jurisdiction", "act_name", "legislation_name", "Section", "Heading", "chunk_id"),
   all.x = TRUE
 )
 
-# Merge with aggregated scope and keywords
+# Merge with scope (each scope value gets its own row)
+compendium_data <- merge(
+  compendium_data,
+  section_scope,
+  by = c("jurisdiction", "act_name", "legislation_name", "Section", "Heading"),
+  all.x = TRUE,
+  allow.cartesian = TRUE
+)
+
+# Merge with aggregated keywords
 compendium_data <- merge(
   compendium_data,
   meta_aggregated,
-  by = c("act_name", "legislation_name", "Section", "Heading"),
+  by = c("jurisdiction", "act_name", "legislation_name", "Section", "Heading"),
   all.x = TRUE
 )
 
@@ -200,52 +273,45 @@ compendium_data[, Section := ifelse(
 # Remove helper columns
 compendium_data[, c("chunk_id", "total_chunks") := NULL]
 
-# Rename to final desired names
-setnames(compendium_data, "scope_col", "Scope", skip_absent = TRUE)
-setnames(compendium_data, "keywords_col", "Keywords", skip_absent = TRUE)
-setnames(compendium_data, "Clause_Type", "Clause Type", skip_absent = TRUE)
+# Rename columns to final desired names (lowercase with underscores)
+setnames(compendium_data, old = c("Section", "Heading", "Paragraph", "Management Domain", "IUCN", "Clause_Type", "scope"),
+         new = c("section", "heading", "aggregate_paragraph", "management_domain", "iucn_threat", "clause_type", "scope"),
+         skip_absent = TRUE)
 
-# Ensure Management Domain and IUCN exist
-if(!"Management Domain" %in% names(compendium_data)) {
-  compendium_data[, `Management Domain` := NA_character_]
-}
-if(!"IUCN" %in% names(compendium_data)) {
-  compendium_data[, IUCN := NA_character_]
+# Ensure all required columns exist
+required_cols <- c("jurisdiction", "management_domain", "iucn_threat", "clause_type", "scope", "management_domain_keywords", "clause_type_keywords")
+for(col in required_cols) {
+  if(!col %in% names(compendium_data)) {
+    compendium_data[, (col) := NA_character_]
+  }
 }
 
 # Reorder columns
-desired_order <- c("act_name", "legislation_name", "Section", "Heading", "Paragraph",
-                   "Management Domain", "IUCN", "Clause Type", "Scope", "Keywords")
+desired_order <- c("jurisdiction", "act_name", "legislation_name", "section", "heading", "aggregate_paragraph",
+                   "management_domain", "iucn_threat", "clause_type", "scope", 
+                   "management_domain_keywords", "clause_type_keywords")
 existing_order <- intersect(desired_order, names(compendium_data))
 setcolorder(compendium_data, existing_order)
 
 cat("✅ Final columns:", paste(names(compendium_data), collapse = ", "), "\n")
 
-## Sort by legislation and section ----
-setorder(compendium_data, act_name, legislation_name, Section)
+## Sort by jurisdiction, legislation and section ----
+setorder(compendium_data, jurisdiction, act_name, legislation_name, section)
 
 ## Export to Excel in Output Directory ----
-output_file <- file.path(here("output"), "Compendium Checker.xlsx")
+output_file <- file.path(here("output"), "LAPSE_full_compendium.xlsx")
 wb <- createWorkbook()
 addWorksheet(wb, "Compendium")
 
-# Write data with formatting
+# Write data with default formatting
 writeDataTable(wb, "Compendium", compendium_data)
 
-# Set column widths for better readability
-setColWidths(wb, "Compendium", cols = 1:ncol(compendium_data), widths = "auto")
-setColWidths(wb, "Compendium", cols = 5, widths = 60)  # Paragraph column wider
-
-# Enable text wrap for Paragraph column
-paragraphStyle <- createStyle(wrapText = TRUE, valign = "top")
-addStyle(wb, "Compendium", paragraphStyle, rows = 2:(nrow(compendium_data) + 1), cols = 5, gridExpand = TRUE)
-
 saveWorkbook(wb, output_file, overwrite = TRUE)
-cat("✅ Excel file 'Compendium Checker.xlsx' has been saved to the output directory.\n")
+cat("✅ Excel file 'LAPSE_full_compendium.xlsx' has been saved to the output directory.\n")
 cat(sprintf("   Total rows: %d\n", nrow(compendium_data)))
 
 # Check for any remaining character limit issues
-char_counts <- nchar(compendium_data$Paragraph)
+char_counts <- nchar(compendium_data$aggregate_paragraph)
 if(any(char_counts > 32767)) {
   cat("⚠️  Warning: Some cells still exceed Excel's limit. Consider further chunking.\n")
 } else {

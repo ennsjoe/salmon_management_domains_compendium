@@ -123,6 +123,48 @@
             color: white;
         }
         
+        /* === Sticky Icon Panel === */
+        .sticky-icon {
+            position: fixed;
+            background-color: #f9f9f9;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            text-align: center;
+            z-index: 1001;
+            width: 120px;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .sticky-icon.alternate {
+            top: 180px;
+            right: 20px;
+        }
+        
+        .sticky-icon img {
+            width: 60px;
+            height: auto;
+            display: block;
+            margin: 0 auto 8px auto;
+        }
+        
+        .sticky-icon span {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .sticky-icon a {
+            text-decoration: none;
+        }
+        
+        .sticky-icon a:hover span {
+            color: #1a252f;
+        }
+        
         .usage-section {
             background: white;
             padding: 2rem;
@@ -246,16 +288,41 @@
         .iframe-wrapper {
             position: relative;
             width: 100%;
-            height: 800px;
+            height: 1200px; /* Increased from 800px */
             border: 2px solid #ddd;
             border-radius: 5px;
-            overflow: hidden;
+            overflow: auto; /* Changed from hidden to auto */
+        }
+        
+        .iframe-wrapper {
+          position: relative;
+          width: 100%;
+          height: 1200px; /* Increased from 800px */
+          border: 2px solid #ddd;
+          border-radius: 5px;
+          overflow: auto; /* Changed from hidden to auto */
         }
         
         .iframe-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+          width: 125%; /* Increase width to compensate for scale */
+          height: 125%; /* Increase height to compensate for scale */
+          border: none;
+          transform: scale(0.8); /* Scale down to 80% */
+          transform-origin: top left; /* Scale from top-left corner */
+        }
+        
+        /* Optional: add scrollbar styling */
+        .iframe-wrapper::-webkit-scrollbar {
+          width: 8px;
+        }
+        
+        .iframe-wrapper::-webkit-scrollbar-track {
+          background: #f1f1f1;
+        }
+        
+        .iframe-wrapper::-webkit-scrollbar-thumb {
+          background: #668899;
+          border-radius: 4px;
         }
         
         .footer {
@@ -288,34 +355,34 @@
         }
         
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .header p {
-                font-size: 1rem;
-            }
-            
-            .container {
-                padding: 1rem;
-            }
-            
-            .intro-section, .usage-section, .app-container {
-                padding: 1.5rem;
-            }
-            
-            .iframe-wrapper {
-                height: 600px;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
+          .header h1 {
+            font-size: 1.8rem;
+          }
+          
+          .header p {
+            font-size: 1rem;
+          }
+          
+          .container {
+            padding: 1rem;
+          }
+          
+          .intro-section, .usage-section, .app-container {
+            padding: 1.5rem;
+          }
+          
+          .iframe-wrapper {
+            height: 800px; /* Keep smaller height for mobile */
+          }
+          
+          .action-buttons {
+            flex-direction: column;
+          }
+          
+          .btn {
+            width: 100%;
+            justify-content: center;
+          }
         }
     </style>
 </head>
@@ -325,6 +392,14 @@
             <h1>LAPSE Dashboard</h1>
             <p>Legislation Applicable to Pacific Salmon and Ecosystems - Interactive Explorer</p>
         </div>
+    </div>
+    
+    <!-- Floating Icon -->
+    <div class="sticky-icon">
+        <a href="https://ennsjoe.shinyapps.io/lapse_dashboard/" target="_blank">
+            <img src="assets/dashboard_icon.png" alt="Interactive App">
+            <span>Interactive App</span>
+        </a>
     </div>
     
     <div class="container">
@@ -459,16 +534,12 @@
     <script>
         // Function to download Excel file
         function downloadExcel() {
-            // Alert user - you'll need to update this with the actual file path
-            alert('Excel download functionality to be implemented. Please specify the location of your Excel compendium file.');
-            
-            // Example implementation once you have the file:
-            // const link = document.createElement('a');
-            // link.href = 'path/to/your/LAPSE-Compendium.xlsx';
-            // link.download = 'LAPSE-Compendium.xlsx';
-            // document.body.appendChild(link);
-            // link.click();
-            // document.body.removeChild(link);
+            const link = document.createElement('a');
+            link.href = 'output/LAPSE_full_compendium.xlsx';
+            link.download = 'output/LAPSE_full_compendium.xlsx';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>

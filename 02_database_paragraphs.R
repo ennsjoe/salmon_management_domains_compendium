@@ -31,7 +31,6 @@ library(beepr)
 ## Define the folders dynamically using `here()` ----
 html_dirs <- here("data", "legislation_html")
 
-
 ## Read all HTML files from the directory ----
 html_files <- unlist(lapply(html_dirs, function(dir) {
   list.files(path = dir, pattern = "\\.html$", full.names = TRUE, recursive = TRUE)

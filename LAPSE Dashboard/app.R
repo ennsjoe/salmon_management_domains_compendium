@@ -235,32 +235,21 @@ ui <- fluidPage(
   
   titlePanel("Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE)"),
   
-  # Instructional text and About link side by side
+  # About page button
   div(
-    style = "display: flex; gap: 20px; margin-bottom: 20px;",
-    
-    # Instructional text (left side)
-    div(
-      style = "flex: 1; text-align: left; padding: 10px; background-color: #e8f4f8; border-radius: 5px; color: #2c3e50;",
-      p(
-        style = "margin: 0; font-size: 16px;",
-        icon("thumbtack"),
-        " Select a management domain to filter by specific topic, or just explore legislation relevant to Pacific salmon conservation."
-      )
-    ),
-    
-    # Information link (right side)
-    div(
-      style = "text-align: left; padding: 10px; background-color: #f0f0f0; border-radius: 5px;",
-      tags$a(
-        href = "https://ennsjoe.github.io/salmon_management_domains_compendium/LAPSE-Technical-Brief.html",
-        target = "_blank",
-        style = "color: #996666; font-weight: 600; text-decoration: none; font-size: 16px;",
-        icon("info-circle"),
-        " About: LAPSE Technical Brief"
-      )
+    style = "margin-bottom: 20px; text-align: left;",
+    tags$a(
+      href = "https://ennsjoe.github.io/salmon_management_domains_compendium/LAPSE-Dashboard-About.html",
+      target = "_blank",
+      style = "display: inline-block; padding: 12px 24px; background-color: #996666; color: white; font-weight: 600; text-decoration: none; font-size: 16px; border-radius: 5px; transition: background-color 0.3s;",
+      onmouseover = "this.style.backgroundColor='#aa7777'",
+      onmouseout = "this.style.backgroundColor='#996666'",
+      icon("info-circle"),
+      " About LAPSE Dashboard"
     )
   ),
+  
+  
   
   fluidRow(
     # Sidebar: Management Domains
@@ -940,7 +929,7 @@ server <- function(input, output, session) {
       domain <- selected_domain()
       domain_clean <- if (!is.null(domain) && !is.na(domain)) trimws(tolower(domain)) else ""
       leg_id <- current_legislation_id()
-     
+      
       df <- label_data[label_data$label_type == "IUCN", ]
       
       if (nzchar(domain_clean)) {
@@ -1015,11 +1004,11 @@ server <- function(input, output, session) {
       
       # 🎯 Extract Clause Type and Management Domain labels
       clause_labels <- label_data[label_data$label_type == "Clause Type", 
-                                   c("paragraph_id", "label_value")]
+                                  c("paragraph_id", "label_value")]
       names(clause_labels) <- c("paragraph_id", "clause_type")
       
       domain_labels <- label_data[label_data$label_type == "Management Domain", 
-                                   c("paragraph_id", "label_value")]
+                                  c("paragraph_id", "label_value")]
       names(domain_labels) <- c("paragraph_id", "management_domain")
       
       # 🔗 Merge clause and domain labels
@@ -1082,7 +1071,7 @@ server <- function(input, output, session) {
         arrange(desc(total))
       
       percent_data$management_domain <- factor(percent_data$management_domain, 
-                                                levels = rev(domain_order$management_domain))
+                                               levels = rev(domain_order$management_domain))
       
       # Get number of clause types for color palette
       n_clause_types <- length(unique(percent_data$clause_type))
@@ -1105,7 +1094,7 @@ server <- function(input, output, session) {
       
       # 🎨 Create ggplot stacked percentage bar chart
       p <- ggplot(percent_data, aes(x = management_domain, y = percent, 
-                                     fill = clause_type, text = hover_text)) +
+                                    fill = clause_type, text = hover_text)) +
         geom_bar(stat = "identity", color = "white", linewidth = 0.3) +
         coord_flip() +
         scale_fill_manual(values = clause_colors, name = "Clause type") +
@@ -1164,8 +1153,8 @@ server <- function(input, output, session) {
         )
     })
   })  
- 
-
+  
+  
   # 📈 Keyword Frequency Plot----
   output$keyword_plot <- renderPlotly({  # Changed from renderPlot
     domain <- selected_domain()

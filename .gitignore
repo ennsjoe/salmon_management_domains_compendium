@@ -7,11 +7,15 @@
 output/legislation.db
 output/legislation_html/
 legislation_html/
+data/*.xlsx
+*.xlsx
 
 # Ignore Excel files and udpipe model files
-*.xlsx
 *.udpipe
 
+
+# Ignore Journal Article Files
+figures/
+
+# Ignore web app workaround folder
 web_app_workaround/
-
-
