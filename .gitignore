@@ -8,6 +8,7 @@ output/legislation.db
 output/legislation_html/
 legislation_html/
 data/*.xlsx
+*.xlsx
 
 # Ignore Excel files and udpipe model files
 *.udpipe
