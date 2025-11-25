@@ -12,6 +12,7 @@
 # Dependencies: DBI, RSQLite, data.table, here, openxlsx, stringr
 # Outputs:
 #   "legislative_implementations.csv" in the output directory
+#   "legislative_implementations" table in the SQLite database
 ################################################################################
 
 ## Load Libraries ----
@@ -74,7 +75,8 @@ paragraph_table <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
 legislation_table <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
 paragraph_label_table <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
 
-dbDisconnect(conn)
+## Keep connection open for later write operation
+## dbDisconnect(conn) -- moved to end of script
 
 ## ============================================================================
 ## SECTION 0: PRE-FILTER BY MANAGEMENT DOMAIN AND CLAUSE TYPE
@@ -100,7 +102,8 @@ cat("\n  FILTER 2: Clause Type\n")
 included_clause_types <- c(
   "Designation",
   "Instruction",
-  "Licence, Permitting, & Exemptions"
+  "Licence, Permitting, & Exemptions",
+  "Authorization & Mandate"
 )
 
 cat(sprintf("    - Including Clause Types: %s\n", 
@@ -155,8 +158,12 @@ if (nrow(act_paragraphs) == 0) {
 
 cat("Step 1: Defining enhanced pattern dictionaries...\n")
 
-## Implement Types (Enhanced with variants) ----
+## Implement Types ----
+## Includes: regulatory instruments, planning documents, spatial designations,
+##           authorization mechanisms, reporting requirements, AND action verbs
+##           (establishment, designation, authorization, requirement)
 implement_patterns <- list(
+  # --- Regulatory Instruments ---
   regulation = list(
     pattern = "\\b(regulation|regulations|regulatory)\\b",
     context_boost = c("make", "issue", "prescribe", "establish"),
@@ -177,6 +184,8 @@ implement_patterns <- list(
     context_boost = c("make", "pass", "adopt"),
     authority_link = TRUE
   ),
+  
+  # --- Planning Documents ---
   plan = list(
     pattern = "\\b(plan|plans|planning)\\b(?!\\s+of)",
     context_boost = c("prepare", "develop", "establish", "adopt", "approve"),
@@ -217,6 +226,8 @@ implement_patterns <- list(
     context_boost = c("establish", "adopt", "prescribe"),
     authority_link = TRUE
   ),
+  
+  # --- Spatial Designations ---
   designation = list(
     pattern = "\\b(designat(e|ion|ions|ed|ing)|designated area|designated areas)\\b",
     context_boost = c("make", "establish"),
@@ -242,6 +253,8 @@ implement_patterns <- list(
     context_boost = c("establish", "create", "designate"),
     authority_link = TRUE
   ),
+  
+  # --- Authorization Mechanisms ---
   agreement = list(
     pattern = "\\b(agreement|agreements)\\b",
     context_boost = c("enter into", "negotiate", "conclude", "sign"),
@@ -272,11 +285,18 @@ implement_patterns <- list(
     context_boost = c("issue", "grant"),
     authority_link = TRUE
   ),
+  exemption = list(
+    pattern = "\\b(exemption|exemptions|exempt|exempted|exempting)\\b",
+    context_boost = c("grant", "issue", "provide", "allow"),
+    authority_link = TRUE
+  ),
   notice = list(
     pattern = "\\b(notice|notices)\\b",
     context_boost = c("give", "serve", "publish"),
     authority_link = TRUE
   ),
+  
+  # --- Reporting Requirements ---
   report = list(
     pattern = "\\b(report|reports|reporting)\\b",
     context_boost = c("prepare", "submit", "publish", "provide"),
@@ -295,6 +315,28 @@ implement_patterns <- list(
   study = list(
     pattern = "\\b(stud(y|ies))\\b",
     context_boost = c("conduct", "undertake", "commission"),
+    authority_link = TRUE
+  ),
+  
+  # --- Action Verbs (formerly in discretion_patterns) ---
+  establishment = list(
+    pattern = "\\b(establish|establishes|established|create|creates|created)\\b",
+    context_boost = c("shall", "may", "must"),
+    authority_link = TRUE
+  ),
+  appointment = list(
+    pattern = "\\b(appoint|appoints|appointed|appointing)\\b",
+    context_boost = c("shall", "may", "must"),
+    authority_link = TRUE
+  ),
+  empowerment = list(
+    pattern = "\\b(authorize|authorizes|authorized|empower|empowers|empowered)\\b",
+    context_boost = c("shall", "may", "must"),
+    authority_link = TRUE
+  ),
+  requirement = list(
+    pattern = "\\b(require|requires|required|obligation|duty)\\b",
+    context_boost = c("shall", "may", "must"),
     authority_link = TRUE
   )
 )
@@ -374,46 +416,17 @@ official_patterns <- list(
 )
 
 ## Discretionary Language ----
+## NOW ONLY contains mandatory vs discretionary indicators
+## Excludes: prohibited, definition (not relevant to implementations)
+## Moved to implement_patterns: establishment, designation, authorization, requirement
 discretion_patterns <- list(
   mandatory = list(
     pattern = "\\b(shall|must|is required to|are required to)\\b",
-    strength = "mandatory",
-    keywords = c("shall", "must", "required")
+    strength = "mandatory"
   ),
   discretionary = list(
     pattern = "\\b(may|can|is authorized to|are authorized to)\\b",
-    strength = "discretionary",
-    keywords = c("may", "can", "authorized")
-  ),
-  prohibited = list(
-    pattern = "\\b(shall not|must not|may not|prohibited|forbidden)\\b",
-    strength = "mandatory",
-    keywords = c("not", "prohibited", "forbidden")
-  ),
-  definition = list(
-    pattern = "\\b(means|includes|refers to|definition|defined as)\\b",
-    strength = "declaratory",
-    keywords = c("means", "includes", "definition")
-  ),
-  establishment = list(
-    pattern = "\\b(establish|establishes|established|create|creates|created)\\b",
-    strength = "constitutive",
-    keywords = c("establish", "create")
-  ),
-  designation = list(
-    pattern = "\\b(designate|designates|designated|appoint|appoints|appointed)\\b",
-    strength = "constitutive",
-    keywords = c("designate", "appoint")
-  ),
-  authorization = list(
-    pattern = "\\b(authorize|authorizes|authorized|empower|empowers|empowered)\\b",
-    strength = "enabling",
-    keywords = c("authorize", "empower")
-  ),
-  requirement = list(
-    pattern = "\\b(require|requires|required|obligation|duty)\\b",
-    strength = "mandatory",
-    keywords = c("require", "obligation", "duty")
+    strength = "discretionary"
   )
 )
 
@@ -491,6 +504,7 @@ extract_officials_enhanced <- function(paragraph_text, paragraph_id = NULL) {
 }
 
 ## Function: Enhanced discretion type detection ----
+## Now only extracts mandatory or discretionary
 extract_discretion_type <- function(paragraph_text) {
   if (is.na(paragraph_text) || paragraph_text == "") return(NA_character_)
   
@@ -524,7 +538,7 @@ classify_legal_tool <- function(implement_type, responsible_official, discretion
   
   # Classification logic:
   # LEGAL TOOL if:
-  # 1. Has implement AND has discretion type (mandate/authorization)
+  # 1. Has implement AND has discretion type (mandatory/discretionary)
   # 2. Has implement AND has responsible official
   # 3. Has all three elements (strongest indicator)
   
@@ -538,22 +552,7 @@ classify_legal_tool <- function(implement_type, responsible_official, discretion
   
   # Check for high-confidence legal tool indicators
   if (has_implement && (has_official || has_discretion)) {
-    # Additional check: is the discretion type about creation/authorization?
-    if (has_discretion) {
-      creation_discretions <- c("establishment", "designation", "authorization", 
-                                "mandatory", "discretionary", "requirement")
-      discretion_lower <- tolower(discretion_type)
-      has_creation <- any(sapply(creation_discretions, function(x) grepl(x, discretion_lower)))
-      
-      if (has_creation) {
-        return("Legal Tool")
-      }
-    }
-    
-    # If has official, likely a legal tool
-    if (has_official) {
-      return("Legal Tool")
-    }
+    return("Legal Tool")
   }
   
   # Check confidence level from implement_type
@@ -578,7 +577,7 @@ act_paragraphs[, implement_type := sapply(Paragraph, extract_implements_enhanced
 cat("  - Extracting responsible officials...\n")
 act_paragraphs[, responsible_official := sapply(Paragraph, extract_officials_enhanced)]
 
-cat("  - Extracting discretion types...\n")
+cat("  - Extracting discretion types (mandatory/discretionary only)...\n")
 act_paragraphs[, discretion_type := sapply(Paragraph, extract_discretion_type)]
 
 cat("\nStep 3b: Classifying paragraphs as Legal Tool or Not Legal Tool...\n")
@@ -705,7 +704,7 @@ classification_summary <- data.table(
 )
 
 ## ============================================================================
-## SECTION 6: EXPORT TO CSV
+## SECTION 6: EXPORT TO CSV AND DATABASE
 ## ============================================================================
 
 cat("\nStep 6: Exporting results...\n")
@@ -717,13 +716,26 @@ main_output <- implements_data[, .(
   Paragraph
 )]
 
-## Output path
+## --- Export to CSV ---
 output_file <- file.path(here("output"), "legislative_implementations.csv")
 
 ## Write CSV (fast and robust)
 data.table::fwrite(main_output, output_file, sep = ",", na = "", quote = TRUE)
 
-cat(sprintf("\n✅ CSV file saved to: %s\n", output_file))
+cat(sprintf("\n  CSV file saved to: %s\n", output_file))
+
+## --- Export to SQLite Database ---
+cat("\n  Writing to SQLite database...\n")
+
+## Write table to database (overwrite if exists)
+dbWriteTable(conn, "legislative_implementations", main_output, overwrite = TRUE)
+
+cat(sprintf("  Table 'legislative_implementations' saved to database: %s\n", db_path))
+cat(sprintf("  Rows written: %d\n", nrow(main_output)))
+
+## Disconnect from database ----
+dbDisconnect(conn)
+cat("  Database connection closed.\n")
 
 ## ============================================================================
 ## SECTION 7: PRINT SUMMARY STATISTICS
@@ -745,6 +757,11 @@ for (ct in included_clause_types) {
   cat(sprintf("  - %s\n", ct))
 }
 
+cat("\nDISCRETION TYPES (mandatory/discretionary only):\n")
+for (dt in names(discretion_patterns)) {
+  cat(sprintf("  - %s\n", dt))
+}
+
 cat("\nCLASSIFICATION:\n")
 print(classification_summary)
 
@@ -754,14 +771,15 @@ print(head(summary_by_implement, 10))
 cat("\nTop 10 Responsible Officials:\n")
 print(head(summary_by_official, 10))
 
-cat("\nTop 10 Discretion Types:\n")
-print(head(summary_by_discretion, 10))
+cat("\nDiscretion Type Summary:\n")
+print(summary_by_discretion)
 
 cat("\nTop 5 Implement-Official Combinations:\n")
 print(head(co_occurrence, 5))
 
 cat("\n=====================================\n")
 cat("Analysis complete!\n")
+cat("Output saved to CSV and SQLite database.\n")
 cat("=====================================\n")
 
 ## Notify Completion ----
