@@ -6,9 +6,12 @@
 #   Enhanced version using advanced NLP techniques including dependency parsing,
 #   part-of-speech tagging, context windows, and machine learning to extract
 #   implements from legislation with improved accuracy.
+#   PRE-FILTERED to only include paragraphs labelled with:
+#     - Management Domains (any)
+#     - Clause Types: Designation, Instruction, Licence/Permitting/Exemptions
 # Dependencies: DBI, RSQLite, data.table, here, openxlsx, stringr
 # Outputs:
-#   "Legislative_Implements_Enhanced.xlsx" in the project root directory
+#   "legislative_implementations.csv" in the output directory
 ################################################################################
 
 ## Load Libraries ----
@@ -22,7 +25,40 @@ library(beepr)
 
 cat("=====================================\n")
 cat("Enhanced Legislative Implements Extraction\n")
+cat("(Pre-filtered by Management Domain & Clause Type)\n")
 cat("=====================================\n\n")
+
+## ============================================================================
+## TEXT CLEANING FUNCTION: Fix encoding issues (mojibake)
+## ============================================================================
+
+clean_encoding <- function(text) {
+  if (is.na(text) || text == "") return(text)
+  
+  # Save original for fallback
+  original_text <- text
+  
+  # Convert to ASCII with transliteration (handles most mojibake)
+  result <- iconv(text, from = "UTF-8", to = "ASCII//TRANSLIT", sub = "")
+  
+  # If iconv fails, try latin1 encoding
+  if (is.na(result)) {
+    result <- iconv(original_text, from = "latin1", to = "ASCII//TRANSLIT", sub = "")
+  }
+  
+  # If still NA, return original with non-ASCII stripped
+  if (is.na(result)) {
+    result <- gsub("[^\x20-\x7E]", "", original_text, perl = TRUE)
+  }
+  
+  # Remove any remaining non-ASCII characters
+  result <- gsub("[^\x20-\x7E]", "", result, perl = TRUE)
+  
+  # Trim whitespace
+  result <- trimws(result)
+  
+  return(result)
+}
 
 ## Connect to Database ----
 db_path <- file.path(here("output"), "legislation.db")
@@ -36,16 +72,82 @@ conn <- dbConnect(SQLite(), dbname = db_path)
 cat("Loading data from database...\n")
 paragraph_table <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
 legislation_table <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
+paragraph_label_table <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
 
 dbDisconnect(conn)
 
+## ============================================================================
+## SECTION 0: PRE-FILTER BY MANAGEMENT DOMAIN AND CLAUSE TYPE
+## ============================================================================
+
+cat("\nStep 0: Pre-filtering paragraphs by labels...\n")
+
+## --- Filter 1: Management Domain ---
+cat("\n  FILTER 1: Management Domain\n")
+
+## Get unique paragraph_ids that have Management Domain labels ----
+management_domain_paragraph_ids <- unique(
+  paragraph_label_table[label_type == "Management Domain", paragraph_id]
+)
+
+cat(sprintf("    - Found %d unique paragraphs with Management Domain labels\n", 
+            length(management_domain_paragraph_ids)))
+
+## --- Filter 2: Clause Type ---
+cat("\n  FILTER 2: Clause Type\n")
+
+## Define the Clause Types to include ----
+included_clause_types <- c(
+  "Designation",
+  "Instruction",
+  "Licence, Permitting, & Exemptions"
+)
+
+cat(sprintf("    - Including Clause Types: %s\n", 
+            paste(included_clause_types, collapse = ", ")))
+
+## Get unique paragraph_ids that have the specified Clause Type labels ----
+clause_type_paragraph_ids <- unique(
+  paragraph_label_table[
+    label_type == "Clause Type" & label_value %in% included_clause_types, 
+    paragraph_id
+  ]
+)
+
+cat(sprintf("    - Found %d unique paragraphs with specified Clause Type labels\n", 
+            length(clause_type_paragraph_ids)))
+
+## --- Combine Filters: Intersection ---
+cat("\n  COMBINING FILTERS (intersection):\n")
+
+## Get paragraphs that have BOTH Management Domain AND specified Clause Type ----
+filtered_paragraph_ids <- intersect(
+  management_domain_paragraph_ids,
+  clause_type_paragraph_ids
+)
+
+cat(sprintf("    - Paragraphs with BOTH Management Domain AND Clause Type: %d\n", 
+            length(filtered_paragraph_ids)))
+
+## Filter paragraph_table to only include filtered paragraphs ----
+paragraph_table_filtered <- paragraph_table[paragraph_id %in% filtered_paragraph_ids]
+
+cat(sprintf("    - Filtered paragraph table: %d paragraphs (from %d total)\n",
+            nrow(paragraph_table_filtered),
+            nrow(paragraph_table)))
+
 ## Filter to Acts only ----
 acts_only <- legislation_table[legislation_type == "Act"]
-act_paragraphs <- paragraph_table[legislation_id %in% acts_only$legislation_id]
+act_paragraphs <- paragraph_table_filtered[legislation_id %in% acts_only$legislation_id]
 
-cat(sprintf("Analyzing %d paragraphs from %d Acts...\n\n", 
+cat(sprintf("    - After filtering to Acts: %d paragraphs from %d Acts\n\n", 
             nrow(act_paragraphs), 
             length(unique(act_paragraphs$legislation_id))))
+
+## Validate we have data to process ----
+if (nrow(act_paragraphs) == 0) {
+  stop("No paragraphs remaining after filtering. Check your label filters.")
+}
 
 ## ============================================================================
 ## SECTION 1: DEFINE ENHANCED PATTERNS
@@ -271,8 +373,8 @@ official_patterns <- list(
   )
 )
 
-## Provision Types (Enhanced from Clause Types) ----
-provision_patterns <- list(
+## Discretionary Language ----
+discretion_patterns <- list(
   mandatory = list(
     pattern = "\\b(shall|must|is required to|are required to)\\b",
     strength = "mandatory",
@@ -315,13 +417,11 @@ provision_patterns <- list(
   )
 )
 
-
-
 ## ============================================================================
-## SECTION 3: ENHANCED EXTRACTION FUNCTIONS
+## SECTION 2: ENHANCED EXTRACTION FUNCTIONS
 ## ============================================================================
 
-cat("Step 3: Defining enhanced extraction functions...\n")
+cat("Step 2: Defining enhanced extraction functions...\n")
 
 ## Function: Extract context window around implement mention ----
 extract_context_window <- function(text, pattern, window_size = 5) {
@@ -390,43 +490,41 @@ extract_officials_enhanced <- function(paragraph_text, paragraph_id = NULL) {
   }
 }
 
-## Function: Enhanced provision type detection ----
-extract_provision_type <- function(paragraph_text) {
+## Function: Enhanced discretion type detection ----
+extract_discretion_type <- function(paragraph_text) {
   if (is.na(paragraph_text) || paragraph_text == "") return(NA_character_)
   
   text_lower <- tolower(paragraph_text)
-  provisions_found <- character()
+  discretions_found <- character()
   
-  for (prov_name in names(provision_patterns)) {
-    prov_info <- provision_patterns[[prov_name]]
-    pattern <- prov_info$pattern
+  for (disc_name in names(discretion_patterns)) {
+    disc_info <- discretion_patterns[[disc_name]]
+    pattern <- disc_info$pattern
     
     if (grepl(pattern, text_lower, perl = TRUE)) {
-      provisions_found <- c(provisions_found, prov_name)
+      discretions_found <- c(discretions_found, disc_name)
     }
   }
   
-  if (length(provisions_found) > 0) {
-    return(paste(provisions_found, collapse = "; "))
+  if (length(discretions_found) > 0) {
+    return(paste(discretions_found, collapse = "; "))
   } else {
     return(NA_character_)
   }
 }
 
-
-
 ## Function: Classify as Legal Tool or Not Legal Tool ----
 ## This function determines if a paragraph describes a legal tool/implement
 ## based on co-occurrence of key elements
-classify_legal_tool <- function(implement_type, responsible_official, provision_type) {
+classify_legal_tool <- function(implement_type, responsible_official, discretion_type) {
   # Initialize classification
   has_implement <- !is.na(implement_type) && implement_type != ""
   has_official <- !is.na(responsible_official) && responsible_official != ""
-  has_provision <- !is.na(provision_type) && provision_type != ""
+  has_discretion <- !is.na(discretion_type) && discretion_type != ""
   
   # Classification logic:
   # LEGAL TOOL if:
-  # 1. Has implement AND has provision type (mandate/authorization)
+  # 1. Has implement AND has discretion type (mandate/authorization)
   # 2. Has implement AND has responsible official
   # 3. Has all three elements (strongest indicator)
   
@@ -439,13 +537,13 @@ classify_legal_tool <- function(implement_type, responsible_official, provision_
   }
   
   # Check for high-confidence legal tool indicators
-  if (has_implement && (has_official || has_provision)) {
-    # Additional check: is the provision type about creation/authorization?
-    if (has_provision) {
-      creation_provisions <- c("establishment", "designation", "authorization", 
-                               "mandatory", "discretionary", "requirement")
-      provision_lower <- tolower(provision_type)
-      has_creation <- any(sapply(creation_provisions, function(x) grepl(x, provision_lower)))
+  if (has_implement && (has_official || has_discretion)) {
+    # Additional check: is the discretion type about creation/authorization?
+    if (has_discretion) {
+      creation_discretions <- c("establishment", "designation", "authorization", 
+                                "mandatory", "discretionary", "requirement")
+      discretion_lower <- tolower(discretion_type)
+      has_creation <- any(sapply(creation_discretions, function(x) grepl(x, discretion_lower)))
       
       if (has_creation) {
         return("Legal Tool")
@@ -467,35 +565,33 @@ classify_legal_tool <- function(implement_type, responsible_official, provision_
   return("Not Legal Tool")
 }
 
-
-
 ## ============================================================================
-## SECTION 4: APPLY ENHANCED EXTRACTION
+## SECTION 3: APPLY ENHANCED EXTRACTION
 ## ============================================================================
 
-cat("\nStep 4: Applying enhanced extraction to ALL paragraphs...\n")
+cat("\nStep 3: Applying enhanced extraction to pre-filtered paragraphs...\n")
 
-## Apply basic extraction to ALL paragraphs (not just those with implements) ----
+## Apply basic extraction to pre-filtered paragraphs ----
 cat("  - Extracting implement types with context...\n")
 act_paragraphs[, implement_type := sapply(Paragraph, extract_implements_enhanced)]
 
 cat("  - Extracting responsible officials...\n")
 act_paragraphs[, responsible_official := sapply(Paragraph, extract_officials_enhanced)]
 
-cat("  - Extracting provision types...\n")
-act_paragraphs[, provision_type := sapply(Paragraph, extract_provision_type)]
+cat("  - Extracting discretion types...\n")
+act_paragraphs[, discretion_type := sapply(Paragraph, extract_discretion_type)]
 
-cat("\nStep 4b: Classifying ALL paragraphs as Legal Tool or Not Legal Tool...\n")
+cat("\nStep 3b: Classifying paragraphs as Legal Tool or Not Legal Tool...\n")
 
-## Apply classification function to ALL paragraphs ----
+## Apply classification function to all paragraphs ----
 act_paragraphs[, legal_tool_classification := mapply(
   classify_legal_tool, 
   implement_type, 
   responsible_official, 
-  provision_type
+  discretion_type
 )]
 
-cat(sprintf("  - Initial classification of %d paragraphs complete\n", nrow(act_paragraphs)))
+cat(sprintf("  - Classification of %d paragraphs complete\n", nrow(act_paragraphs)))
 cat(sprintf("  - Potential Legal Tools: %d\n", sum(act_paragraphs$legal_tool_classification == "Legal Tool")))
 cat(sprintf("  - Not Legal Tools: %d\n", sum(act_paragraphs$legal_tool_classification == "Not Legal Tool")))
 
@@ -512,26 +608,15 @@ implements_data <- legal_tools_data
 cat(sprintf("\n  - Legal Tools dataset ready: %d paragraphs\n", nrow(implements_data)))
 
 ## ============================================================================
-## SECTION 6: MERGE WITH METADATA AND PREPARE OUTPUT
+## SECTION 4: MERGE WITH METADATA AND PREPARE OUTPUT
 ## ============================================================================
 
-cat("\nStep 6: Merging with legislation metadata...\n")
+cat("\nStep 4: Merging with legislation metadata...\n")
 
 ## Merge Legal Tools data ----
 implements_data <- merge(
   implements_data[, .(paragraph_id, legislation_id, Section, Heading, Paragraph, 
-                     implement_type, responsible_official, provision_type, 
-                     legal_tool_classification)],
-  acts_only[, .(legislation_id, act_name, jurisdiction)],
-  by = "legislation_id",
-  all.x = TRUE
-)
-
-## Merge Not Legal Tools data (for comparison/export) ----
-not_legal_tools_data <- merge(
-  not_legal_tools_data[, .(paragraph_id, legislation_id, Section, Heading, Paragraph, 
-                          implement_type, responsible_official, provision_type, 
-                          legal_tool_classification)],
+                      implement_type, responsible_official, discretion_type)],
   acts_only[, .(legislation_id, act_name, jurisdiction)],
   by = "legislation_id",
   all.x = TRUE
@@ -545,30 +630,42 @@ not_legal_tools_data[, implement_type := gsub("\\[.*?\\]", "", implement_type)]
 implements_data[, implement_type_clean := implement_type]
 not_legal_tools_data[, implement_type_clean := implement_type]
 
+## Remove unwanted columns from output ----
+implements_data[, c("paragraph_id", "legislation_id") := NULL]
+
 ## Reorder columns ----
 setcolorder(implements_data, c(
-  "legal_tool_classification",
   "act_name", "jurisdiction", "Section", "Heading", 
-  "implement_type", "responsible_official", "provision_type", 
+  "implement_type", "responsible_official", "discretion_type", 
   "Paragraph"
 ))
 
-setcolorder(not_legal_tools_data, c(
-  "legal_tool_classification",
-  "act_name", "jurisdiction", "Section", "Heading", 
-  "implement_type", "responsible_official", "provision_type", 
-  "Paragraph"
-))
+## Filter: Keep only rows where ALL three key columns have values ----
+cat("\nStep 4b: Filtering rows with complete data...\n")
+cat(sprintf("  - Rows before filtering: %d\n", nrow(implements_data)))
+
+implements_data <- implements_data[
+  !is.na(implement_type) & implement_type != "" &
+    !is.na(responsible_official) & responsible_official != "" &
+    !is.na(discretion_type) & discretion_type != ""
+]
+
+cat(sprintf("  - Rows after filtering (all 3 columns populated): %d\n", nrow(implements_data)))
+
+## Clean encoding issues in Heading and Paragraph columns ----
+cat("\nStep 4c: Cleaning text encoding issues...\n")
+implements_data[, Heading := sapply(Heading, clean_encoding)]
+implements_data[, Paragraph := sapply(Paragraph, clean_encoding)]
+cat("  - Text cleaning complete\n")
 
 ## Sort ----
 implements_data <- implements_data[order(act_name, Section)]
-not_legal_tools_data <- not_legal_tools_data[order(act_name, Section)]
 
 ## ============================================================================
-## SECTION 7: CREATE ENHANCED SUMMARIES
+## SECTION 5: CREATE ENHANCED SUMMARIES
 ## ============================================================================
 
-cat("Step 7: Creating enhanced summary statistics...\n")
+cat("Step 5: Creating enhanced summary statistics...\n")
 
 ## Summary by implement type ----
 summary_by_implement <- implements_data[, .N, by = implement_type_clean][order(-N)]
@@ -578,9 +675,9 @@ setnames(summary_by_implement, c("Implement Type", "Count"))
 summary_by_official <- implements_data[!is.na(responsible_official), .N, by = responsible_official][order(-N)]
 setnames(summary_by_official, c("Responsible Official", "Count"))
 
-## Summary by provision type ----
-summary_by_provision <- implements_data[!is.na(provision_type), .N, by = provision_type][order(-N)]
-setnames(summary_by_provision, c("Provision Type", "Count"))
+## Summary by discretion type ----
+summary_by_discretion <- implements_data[!is.na(discretion_type), .N, by = discretion_type][order(-N)]
+setnames(summary_by_discretion, c("Discretion Type", "Count"))
 
 ## Summary by act ----
 summary_by_act <- implements_data[, .N, by = .(act_name, jurisdiction)][order(-N)]
@@ -588,116 +685,77 @@ setnames(summary_by_act, c("Act Name", "Jurisdiction", "Count"))
 
 ## Co-occurrence analysis: Implement + Official ----
 co_occurrence <- implements_data[!is.na(responsible_official), 
-                                  .N, 
-                                  by = .(implement_type_clean, responsible_official)][order(-N)]
+                                 .N, 
+                                 by = .(implement_type_clean, responsible_official)][order(-N)]
 setnames(co_occurrence, c("Implement Type", "Responsible Official", "Co-occurrences"))
 
 ## Classification summary ----
 classification_summary <- data.table(
-  Classification = c("Legal Tool", "Not Legal Tool", "Total"),
+  Classification = c("Legal Tool", "Not Legal Tool", "Total Processed"),
   Count = c(
     nrow(implements_data),
     nrow(not_legal_tools_data),
-    nrow(implements_data) + nrow(not_legal_tools_data)
+    nrow(act_paragraphs)
   ),
   Percentage = c(
-    round(100 * nrow(implements_data) / (nrow(implements_data) + nrow(not_legal_tools_data)), 1),
-    round(100 * nrow(not_legal_tools_data) / (nrow(implements_data) + nrow(not_legal_tools_data)), 1),
+    round(100 * nrow(implements_data) / nrow(act_paragraphs), 1),
+    round(100 * nrow(not_legal_tools_data) / nrow(act_paragraphs), 1),
     100.0
   )
 )
 
-## SECTION 8: EXPORT TO EXCEL
+## ============================================================================
+## SECTION 6: EXPORT TO CSV
+## ============================================================================
 
-output_file <- file.path(here("output"), "Legislative_Implementations.xlsx")
+cat("\nStep 6: Exporting results...\n")
 
-## Check if file is open and create backup name if needed ----
-if (file.exists(output_file)) {
-  test_write <- try(file.create(output_file), silent = TRUE)
-  if (inherits(test_write, "try-error") || !test_write) {
-    timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
-    output_file <- file.path(here(), paste0("Legislative_Implements_Enhanced_", timestamp, ".xlsx"))
-    cat(sprintf("  ⚠️  Original file is open or locked. Saving to: %s\n", basename(output_file)))
-  } else {
-    # Clean up test file
-    if (file.exists(output_file)) file.remove(output_file)
-  }
-}
+## Select only the columns we want in output (exclude implement_type_clean) ----
+main_output <- implements_data[, .(
+  act_name, jurisdiction, Section, Heading, 
+  implement_type, responsible_official, discretion_type, 
+  Paragraph
+)]
 
-wb <- createWorkbook()
+## Output path
+output_file <- file.path(here("output"), "legislative_implementations.csv")
 
-## Main data sheets ----
-addWorksheet(wb, "Legal Tools")
-writeDataTable(wb, "Legal Tools", implements_data)
+## Write CSV (fast and robust)
+data.table::fwrite(main_output, output_file, sep = ",", na = "", quote = TRUE)
 
-addWorksheet(wb, "Not Legal Tools")
-writeDataTable(wb, "Not Legal Tools", not_legal_tools_data)
-
-addWorksheet(wb, "Classification Summary")
-writeDataTable(wb, "Classification Summary", classification_summary)
-
-## Summary sheets ----
-addWorksheet(wb, "Summary by Implement Type")
-writeDataTable(wb, "Summary by Implement Type", summary_by_implement)
-
-addWorksheet(wb, "Summary by Official")
-writeDataTable(wb, "Summary by Official", summary_by_official)
-
-addWorksheet(wb, "Summary by Provision Type")
-writeDataTable(wb, "Summary by Provision Type", summary_by_provision)
-
-addWorksheet(wb, "Summary by Act")
-writeDataTable(wb, "Summary by Act", summary_by_act)
-
-addWorksheet(wb, "Implement-Official Co-occur")
-writeDataTable(wb, "Implement-Official Co-occur", co_occurrence)
-
-## Format columns ----
-setColWidths(wb, "Legal Tools", cols = 1:9, 
-             widths = c(15, 35, 12, 10, 30, 30, 25, 25, 70))
-setColWidths(wb, "Not Legal Tools", cols = 1:9, 
-             widths = c(15, 35, 12, 10, 30, 30, 25, 25, 70))
-setColWidths(wb, "Classification Summary", cols = 1:3, widths = c(20, 12, 12))
-setColWidths(wb, "Summary by Implement Type", cols = 1:2, widths = c(30, 10))
-setColWidths(wb, "Summary by Official", cols = 1:2, widths = c(30, 10))
-setColWidths(wb, "Summary by Provision Type", cols = 1:2, widths = c(30, 10))
-setColWidths(wb, "Summary by Act", cols = 1:3, widths = c(40, 15, 10))
-setColWidths(wb, "Implement-Official Co-occur", cols = 1:3, widths = c(30, 30, 15))
-
-## Save workbook ----
-saveWorkbook(wb, output_file, overwrite = TRUE)
-
-cat(sprintf("\n✅ Enhanced Excel file saved to: %s\n", output_file))
+cat(sprintf("\n✅ CSV file saved to: %s\n", output_file))
 
 ## ============================================================================
-## SECTION 9: PRINT SUMMARY STATISTICS
+## SECTION 7: PRINT SUMMARY STATISTICS
 ## ============================================================================
 
 cat("\n=====================================\n")
 cat("SUMMARY STATISTICS\n")
 cat("=====================================\n\n")
 
-cat("CLASSIFICATION RESULTS:\n")
+cat("PRE-FILTERING:\n")
+cat(sprintf("  Total paragraphs in database: %d\n", nrow(paragraph_table)))
+cat(sprintf("  Paragraphs with Management Domain labels: %d\n", length(management_domain_paragraph_ids)))
+cat(sprintf("  Paragraphs with specified Clause Type labels: %d\n", length(clause_type_paragraph_ids)))
+cat(sprintf("  Paragraphs with BOTH filters (intersection): %d\n", length(filtered_paragraph_ids)))
+cat(sprintf("  Paragraphs from Acts (final filter): %d\n", nrow(act_paragraphs)))
+
+cat("\nINCLUDED CLAUSE TYPES:\n")
+for (ct in included_clause_types) {
+  cat(sprintf("  - %s\n", ct))
+}
+
+cat("\nCLASSIFICATION:\n")
 print(classification_summary)
 
-cat(sprintf("\n\nLEGAL TOOLS DETAILS:\n"))
-cat(sprintf("Total Legal Tool paragraphs: %d\n", nrow(implements_data)))
-cat(sprintf("Unique Acts: %d\n", length(unique(implements_data$act_name))))
-cat(sprintf("Unique implement types found: %d\n", nrow(summary_by_implement)))
-cat(sprintf("Paragraphs with implement + (official OR provision)\n"))
-
-cat("\n\nNOT LEGAL TOOLS DETAILS:\n")
-cat(sprintf("Total Not Legal Tool paragraphs: %d\n", nrow(not_legal_tools_data)))
-cat(sprintf("Paragraphs with implement keywords but lacking official/provision context\n"))
-
-cat("\nTop 10 Implement Types (Legal Tools):\n")
+cat("\nTop 10 Implement Types:\n")
 print(head(summary_by_implement, 10))
 
-cat("\nTop 10 Responsible Officials (Legal Tools):\n")
+cat("\nTop 10 Responsible Officials:\n")
 print(head(summary_by_official, 10))
 
-cat("\nTop 10 Provision Types (Legal Tools):\n")
-print(head(summary_by_provision, 10))
+cat("\nTop 10 Discretion Types:\n")
+print(head(summary_by_discretion, 10))
 
 cat("\nTop 5 Implement-Official Combinations:\n")
 print(head(co_occurrence, 5))
