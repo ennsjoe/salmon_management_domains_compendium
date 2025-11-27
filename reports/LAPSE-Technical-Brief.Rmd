@@ -56,8 +56,13 @@ section_counts <- paragraphs[!is.na(Section), .(
   section_count = uniqueN(Section)
 ), by = legislation_id]
 
-# 🔗 Merge with legislation metadata to get act_name and jurisdiction
-section_counts <- merge(section_counts, legislation[, .(legislation_id, act_name, legislation_name, jurisdiction)], by = "legislation_id", all.x = TRUE)
+# 🔗 Merge with legislation metadata - FILTER TO ACTS ONLY
+section_counts <- merge(
+  section_counts, 
+  legislation[legislation_type == "Act", .(legislation_id, act_name, jurisdiction)], 
+  by = "legislation_id", 
+  all.x = FALSE
+)
 
 # 🔗 Merge with agencies to get agency-act pairs
 sankey_data <- merge(agencies, section_counts, by = "act_name", all.x = TRUE)
@@ -418,13 +423,12 @@ if (!file.exists(db_path)) {
 
 ```
 
-## Implementation instruments, context boost, and discretionary language
+## Implementations, context boost, and discretionary language
 
-Sections and clauses are often referred to as "tools" in practice. A list of "tools" in terms of salmon management topics would be desirable, but this raises a number of broader questions. Any clause could be a tool depending on one's objectives. However, by classifying paragraphs by clause type allows for further filtering to identify clauses where the implementation of the statute creates a product (e.g. a Water Sustainability Plan established under the provincial Water Sustainability Act). To achieve this we developed a filtering process to list "implementation instruments" defined by clauses that authorize or instruct an official to create or establish a product such as a licence, land designation, or plan 
+Sections and clauses are often referred to as "tools" in practice. A list of "tools" in terms of salmon management topics would be desirable, but this raises a number of broader questions. Any clause could be a tool depending on one's objectives. However, by classifying paragraphs by clause type allows for further filtering to identify clauses where the implementation of the statute creates a product (e.g. a Water Sustainability Plan established under the provincial Water Sustainability Act). To achieve this we developed a filtering process to list "implementations" defined by clauses that authorize or instruct an official to create or establish a product such as a licence, land designation, or plan.
 
-Only acts were included as the legislative unit, because regulations and orders themselves are the implementation instruments of the act clauses. Further analysis of regulations and orders, would also be helpful; however, we limited this exercise to acts. As well, only paragraphs labelled under management domain classification were included, as other clauses would be less relevant to salmon management. Clause types included in the assessment were:
+Only acts were included as the legislative unit, because regulations and orders themselves are the implementations of the act clauses. Further analysis of regulations and orders would also be helpful; however, we limited this exercise to acts. As well, only paragraphs labelled under management domain classification were included, as other clauses would be less relevant to salmon management. Clause types included in the assessment were:
 <ul>
-<li>Authorization & Mandate</li>
 <li>Designation</li>
 <li>Instruction; and</li>
 <li>Licence, Permitting, & Exemptions</li>
@@ -439,7 +443,7 @@ Legislative clauses that authorize, mandate, or enable the creation of implement
 
 Three categories of information were extracted from each paragraph using regular expression pattern matching. Implementation types were identified using 27 pattern definitions encompassing regulatory instruments (e.g., regulation, order, bylaw), planning documents (e.g., plan, strategy, program, policy), spatial designations (e.g., reserve, sanctuary, park, protected area), authorization mechanisms (e.g., permit, licence, approval, certificate), and reporting requirements (e.g., report, assessment, review). Responsible officials were identified using 14 pattern definitions capturing governance actors at various hierarchical levels, including Governor in Council, Minister, Deputy Minister, Director, Board, Commission, and Officer. Discretionary language was classified using eight pattern definitions distinguishing mandatory provisions (shall, must, required), discretionary provisions (may, can, authorized), prohibitions (shall not, prohibited), and constitutive provisions (establish, designate, authorize).
 
-Paragraphs were classified based on co-occurrence of extracted elements. A paragraph was classified as an implementation instrument if it contained an implementation type together with a responsible official, and discretionary language indicative of creation or authorization (establishment, designation, authorization, mandatory, discretionary, or requirement). Paragraphs containing implementation keywords without accompanying authority context were classified as not relevant, as these typically represent references to existing instruments rather than provisions for their creation. Only paragraphs with complete data across all three extraction categories (implementation type, responsible official, and discretion type) were retained in the final output.
+Paragraphs were classified based on co-occurrence of extracted elements. A paragraph was classified as an implementation if it contained an implementation type together with a responsible official, and discretionary language indicative of creation or authorization (establishment, designation, authorization, mandatory, discretionary, or requirement). Paragraphs containing implementation keywords without accompanying authority context were classified as not relevant, as these typically represent references to existing implementations rather than provisions for their creation. Only paragraphs with complete data across all three extraction categories (implementation type, responsible official, and discretion type) were retained in the final output.
 
 ## COSEWIC current threat assessments in BC
 
