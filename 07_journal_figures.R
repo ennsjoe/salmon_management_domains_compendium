@@ -426,12 +426,12 @@ if (!is.null(agencies_table)) {
     by = legislation_id
   ]
   
-  # Merge with legislation metadata
+  # Merge with legislation metadata - FILTER TO ACTS ONLY
   section_counts <- merge(
     section_counts,
-    legislation_table[, .(legislation_id, act_name, legislation_name, jurisdiction)],
+    legislation_table[legislation_type == "Act", .(legislation_id, act_name, jurisdiction)],
     by = "legislation_id",
-    all.x = TRUE
+    all.x = FALSE
   )
   
   # Merge with agencies
