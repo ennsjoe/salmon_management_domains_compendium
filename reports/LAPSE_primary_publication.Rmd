@@ -7,6 +7,8 @@ output:
     reference_docx: "template.docx"
     number_sections: false
     fig_caption: true
+bibliography: LAPSE_primary_publication_references.bib
+csl: canadian-journal-of-fisheries-and-aquatic-sciences.csl
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
@@ -15,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # The decentralized, multi-sector patchwork of Pacific salmon governance in Canada
 
-Eurocentric colonial stewardship of natural resources in Canada is administered through a decentralized, multi-sector array of federal, provincial, territorial, and municipal constitutional authority (Ray et al 2021; Campbell and Thomas 2002). Stemming from the Constitution Act, legislative control over fisheries and ecological stewardship has been a reactionary process of assigning authority through two orders of government (federal and provincial) for new environmental issues as they arise, which creates a complex and overlapping governance distribution (Becklumb 2013). The dual roles, from the adaption of British Common Law to the Canadian situation, can lead to confusion around management prerogatives (Thompson 1974) and jurisdictional authority is rarely the responsibility of one level of government (Campbell and Thomas 2002) or one department (Figures 1 and 2).
+Eurocentric colonial stewardship of natural resources in Canada is administered through a decentralized, multi-sector array of federal, provincial, territorial, and municipal constitutional authority [@ray2021] (Ray et al 2021; Campbell and Thomas 2002). Stemming from the Constitution Act, legislative control over fisheries and ecological stewardship has been a reactionary process of assigning authority through two orders of government (federal and provincial) for new environmental issues as they arise, which creates a complex and overlapping governance distribution (Becklumb 2013). The dual roles, from the adaption of British Common Law to the Canadian situation, can lead to confusion around management prerogatives (Thompson 1974) and jurisdictional authority is rarely the responsibility of one level of government (Campbell and Thomas 2002) or one department (Figures 1 and 2).
 
 !! Figure 1 & 2
 
@@ -73,7 +75,7 @@ Legislation presented on Canadian and British Columbian government websites, and
 
 The number of statutes per se is not generally indicative of overall quality or potential effectiveness of any legal framework (Ray et al 2021).
 
-# Keyword development 
+# Keyword development
 
 • The interpretation of legislation, finding a more objective way
 
@@ -95,12 +97,9 @@ However, using keyword lists allows for the subjectivity to be acknowledged, and
 
 The meaning and context behind keywords, especially single words, can cause mis-categorization in unexpected ways. For example, the word “stock” is an important keyword for salmon management (the Fisheries management domain). However, as a single word, “stock” can also refer to business holdings, freight cars, and cattle, which do not fit the Fisheries management domain. Revision of “stock” as a keyword is important for the accuracy of categorization. Outputs were reviewed iteratively, and keyword revision was a continuous process to: • find more relevant bigram or trigram alternatives (, • remove keywords where sections are already matched with other, more applicable keywords, and • search for more specific word variations (plural, past tense, etc.)
 
-# International Union for Conservation of Nature (IUCN) threat categories 
+# International Union for Conservation of Nature (IUCN) threat categories
 
-• Salmon biology, why salmon management can be difficult (geography etc.). How human activities influence salmon habitat 
-• Intro to IUCN threats. Why use. 
-• IUCN threats are designed for biodiversity. Salmon are managed for diversity. IUCN threats are used in the COSEWIC RPA process 
-• Examples
+• Salmon biology, why salmon management can be difficult (geography etc.). How human activities influence salmon habitat • Intro to IUCN threats. Why use. • IUCN threats are designed for biodiversity. Salmon are managed for diversity. IUCN threats are used in the COSEWIC RPA process • Examples
 
 Management decisions and activities related to salmon are often in response to identifiable threats to salmon health and population status. Human systems can be categorized as direct threats to biodiversity more specifically for conservation strategies (Salafsky et al 2024). The International Union for Conservation of Nature (IUCN) and Conservation Measures Partnership (CMP) has developed a hierarchical grouping of threats used globally by conservation practitioners. IUCN direct threat categories are widely used to assess threats as part of IUCN red list assessments, as well as, in status assessments for Pacific salmon populations conducted by the Committee for the Status of Endangered Wildlife in Canada (COSEWIC). For this study, the IUCN - CMP Direct Threats Classification 4.0 was used to categorize legislation by direct threats to salmon conservation. Level 2 threat classification was used as the finest resolution that could be applied consistently.
 
@@ -122,11 +121,9 @@ Scope categories were assigned to clauses and sections parallel to management do
 
 More federal legislation sections matched with salmon harvest categories than provincial, as shown in Figures 4 and 5 above. Pacific salmon-specific language (1 - Salmon scope) also matched more federal statutes, specifically, the British Columbia Sport Fishing Regulations, 1996; National Parks of Canada Fishing Regulations; and Pacific Fishery Regulations 1993 (Figure 7).
 
-# Legislative factors: clause types 
+# Legislative factors: clause types
 
-• The keyword matching process allows for assessment of other categories as well 
-• Can interrogate a measure of context to the clauses (ie. Prohibitions vs exemptions). 
-• Useful for looking up licencing sections
+• The keyword matching process allows for assessment of other categories as well • Can interrogate a measure of context to the clauses (ie. Prohibitions vs exemptions). • Useful for looking up licencing sections
 
 The process of parsing legislation by clause and section, then matching categories by keywords also allows for other possible categorizations. Similar to management domains and IUCN threats, the nature of the clauses was also matched in terms of the “clause type.” Clauses, in general, fit into groupings by their context and the nature of their intent. For this exercise, the categories and keywords were developed solely by the researchers through a subjective process; however, the keywords are listed in Appendix III allowing for the work to be transparent and repeatable.
 
@@ -134,7 +131,7 @@ Clause Type Categories: • Administration, Application, & Structure • Authori
 
 Independent of management domain and IUCN threat category matching, the clause types (contextual nature of clauses) were assessed by matching “clause type keywords” (Appendix III) to clauses. The tally below shows the clause, section, and statute count for the clause type categories for clauses that were also matched to management domain categories.
 
-# Recovery potential assessments (RPA) and threat ranking case studies 
+# Recovery potential assessments (RPA) and threat ranking case studies
 
 The Committee on the Status of Endangered Wildlife in Canada (COSEWIC) assesses the current status of aquatic species, including Pacific salmon stocks, as part of the Species at Risk Act (SARA) process (Arbeider et al 2020). Salmon populations are grouped into genetically and ecologically distinct Diagnostic Units (DU) for the purpose of assessment. When a DU is classified as Threatened, Endangered or Extirpated, a Recovery Potential Assessment (RPA) process is initiated, which calculates risk incorporating the same IUCN-CMP threat classification used in this legislative assessment.
 
@@ -160,10 +157,9 @@ Interior area: • Chinook: CK-16, SOUTH THOMPSON-BESSETTE CREEK_SU_1.2 “Dams 
 
 The clause type matches for Dams and Water Management / Use was much more evenly distributed (Figure 16) likely due to the large number of clause matches in total for that IUCN threat category. Interpretation & Purpose matched the most clauses (includes Definition sections), while Administration, Application, & Structure matched the fewest clauses followed by Prohibition, Restriction, or Limitation.
 
-# Co-occurrence of management domains 
+# Co-occurrence of management domains
 
-• Multiple keywords are assigned to one clause. Example: pollution and aquaculture 
-• Analyzing co-occurrence can create insights for related threats.
+• Multiple keywords are assigned to one clause. Example: pollution and aquaculture • Analyzing co-occurrence can create insights for related threats.
 
 Management domains can overlap within sections and clauses. For example the provincial Land-based Finfish Waste Control Regulation (Environmental Management Act) states in Section 2 that: “The owner of a land-based finfish facility is exempt from section 6 (2) and (3) of the Environmental Management Act with respect to the discharge of wastes from the land-based finfish facility if the owner…” This clause matched appropriately with both the “Aquaculture and Hatcheries” and “Pollution” management domains. Because the matching process allows for multiple keywords to be matched per clause, this method allows for an assessment of co-occurrences and connections between management domains.
 
@@ -171,10 +167,9 @@ The LAPSE keyword matching process allows that multiple management domains (and 
 
 Domain co-occurrence within sections allows for an interesting study of how management domains overlap (Figure 11). A frequent co-occurrence among management domains doesn’t necessarily represent a relationship in reality, simply the legal framing used to regulate these aspects. The Pollution management domain and Water Use and Watercourse Modifications are in the top four most matched to sections (Figure 4), and expectedly, these domains have the largest number of co-occurrences. Both domains relate generally to the impacts from anthropogenic industrialization and commercial development, which is reflected in the legal language.
 
-# Conclusions 
+# Conclusions
 
-• The LAPSE framework can be a useful way for practitioners to query relevant legislation for salmon management topics. 
-• Users can use keywords to search legislation already using CanLii, but using management domains and IUCN threats, we are able to link clauses to more specific salmon biological aspects • Not only does the process link legislation to specific salmon concerns, but this process is also linked to real-world salmon management through the WSP CU and RPA processes, which incorporates threat rankings by CU.
+• The LAPSE framework can be a useful way for practitioners to query relevant legislation for salmon management topics. • Users can use keywords to search legislation already using CanLii, but using management domains and IUCN threats, we are able to link clauses to more specific salmon biological aspects • Not only does the process link legislation to specific salmon concerns, but this process is also linked to real-world salmon management through the WSP CU and RPA processes, which incorporates threat rankings by CU.
 
 Pacific salmon management projects (e.g. monitoring, restoration, enhancement, etc.) and decision processes often consider policies, methodologies, and literature, but the federal and provincial legislation that regulates human activities is not often reviewed. Legislative language can be vague and illusive, and the administrative structure of salmon jurisdiction in British Columbia is a decentralized and overlapping mosaic. The disconnect between legislative and natural resource language can lead to ineffective compliance with social values. The Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE) process developed through this study attempts to bridge the language gap to equip practitioners with fuller knowledge of the legal landscape available.
 
@@ -183,7 +178,9 @@ The LAPSE tool provides a novel approach of linking legal language with salmon m
 While this process and tool are relatively new and untested, further development could lead to a better integration of salmon management decisions and administrative responsibility.
 
 # References
+:::{#refs}
+:::
 
-# Supplementary material 
+# Supplementary material
 
 \*Links or downloads for the LAPSE tool materials (app etc.)

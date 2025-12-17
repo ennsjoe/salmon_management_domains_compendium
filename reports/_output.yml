@@ -1,0 +1,23 @@
+# _output.yml - Scientific Publication Settings
+
+word_document:
+  reference_docx: "template.docx"  # Optional: custom Word template
+  toc: false
+  number_sections: true
+  fig_caption: true
+  df_print: kable
+
+pdf_document:
+  latex_engine: xelatex
+  number_sections: true
+  fig_caption: true
+  toc: false
+  keep_tex: false
+  includes:
+    in_header: "preamble.tex"  # Optional: LaTeX customizations
+
+html_document:
+  toc: true
+  toc_float: true
+  number_sections: true
+  fig_caption: true
