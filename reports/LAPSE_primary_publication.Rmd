@@ -249,7 +249,9 @@ The decentralized overlapping patchwork of Pacific salmon legislation in Canada 
 
 Legislation presented on Canadian and British Columbian government websites, and corresponding HTML code, is structured such that each clause is separated individually as a paragraph element. HTML code for paragraph elements is generally consistent across legislation, but section, subsection, and heading elements are not. As shown in Figure 3, “clause” in this study can also refer to subclauses, but also sections, subsections, and opening words (chapeau or umbrella) when they are stand-alone paragraph elements. HTML files were parsed using R and the “rvest” package to extract the text of each clause, then grouped by section and heading.
 
-The number of statutes per se is not generally indicative of overall quality or potential effectiveness of any legal framework [@ray2021].
+**The number of statutes per se is not generally indicative of overall quality or potential effectiveness of any legal framework [@ray2021].**
+
+**Policies are formal statements produced and supported by senior management (government) that describe how the government plans to conduct its work. This includes addressing legislative requirements and should reflect objectives [@marentette2020]. For simplicity, we use the term “legislation” to refer to both legislation and regulations. Notably, policies were not included in the analyses of legislation. All three tools serve essential purposes in governance. However, for this research, we focused on legislation rather than policy because protections established under legislation can establish new restrictions and cannot be changed without due process. This means that they are likely a better indicator of a jurisdiction’s longterm commitment to species at risk protection [@bogetti2025].**
 
 # Keyword development
 
@@ -263,15 +265,31 @@ The number of statutes per se is not generally indicative of overall quality or 
 
 • Why categories with more keywords match more clauses
 
-The management domain and IUCN threat matching process pivoted around an established list of keywords and phrases relevant to Pacific salmon management. Keywords act as a link between categorization and the legislative clauses. Keywords must be specific enough to match an IUCN threat, yet general enough to appear in the acts and regulations that span many decades of legislative language. The keywords originated from three sources: • IUCN - CMP Direct Threats Classification 4.0 examples and definitions • Word frequency analysis (unigrams, bigrams, and trigrams) of collected legislation • Iterative researcher input and revision
+The management domain and IUCN threat matching process pivoted around an established list of keywords and phrases relevant to Pacific salmon management. Keywords act as a link between categorization and the legislative clauses. Keywords must be specific enough to match an IUCN threat, yet general enough to appear in the acts and regulations that span many decades of legislative language. The keywords originated from three sources:
+
+• IUCN - CMP Direct Threats Classification 4.0 examples and definitions
+
+• Word frequency analysis (unigrams, bigrams, and trigrams) of collected legislation
+
+• Iterative researcher input and revision
 
 The keyword and keyphrase development process required an iterative researcher revision step because of the varied context of language. While the words used in the IUCN threat definitions may be specific to those threats, they may not be relevant to salmon management and may also have multiple meanings leading to an over-assignment of categories. For example, the word “landfill” is listed on the IUCN threat examples for “1.2 Commercial & Industrial Areas.” Much of the collected legislation deals with pollution, in which landfills are mentioned. However, for salmon habitat, the threat would come from water effluent, and pollution would be a more accurate designation. “Landfill” as a keyword adds many clauses that could be considered outside of the scope of this tool, and so “landfill” was removed from the keyword list.
 
-Conversely, the word “riparian” is very relevant to salmon habitat management in British Columbia, yet that word doesn’t appear in the IUCN threat examples. As well, “riparian” doesn’t appear in word frequency analyses of other legislation. “Riparian” was added as a keyword solely from the researchers’ discretion. Researcher subjectivity can influence the process on two fronts: • Legislation collection • Keyword and keyphrase list development
+Conversely, the word “riparian” is very relevant to salmon habitat management in British Columbia, yet that word doesn’t appear in the IUCN threat examples. As well, “riparian” doesn’t appear in word frequency analyses of other legislation. “Riparian” was added as a keyword solely from the researchers’ discretion. Researcher subjectivity can influence the process on two fronts:
+
+• Legislation collection
+
+• Keyword and keyphrase list development
 
 However, using keyword lists allows for the subjectivity to be acknowledged, and the keyword lists to be reported such that the process may be repeatable. The keyword list is shown in Appendix II.
 
-The meaning and context behind keywords, especially single words, can cause mis-categorization in unexpected ways. For example, the word “stock” is an important keyword for salmon management (the Fisheries management domain). However, as a single word, “stock” can also refer to business holdings, freight cars, and cattle, which do not fit the Fisheries management domain. Revision of “stock” as a keyword is important for the accuracy of categorization. Outputs were reviewed iteratively, and keyword revision was a continuous process to: • find more relevant bigram or trigram alternatives (, • remove keywords where sections are already matched with other, more applicable keywords, and • search for more specific word variations (plural, past tense, etc.)
+The meaning and context behind keywords, especially single words, can cause mis-categorization in unexpected ways. For example, the word “stock” is an important keyword for salmon management (the Fisheries management domain). However, as a single word, “stock” can also refer to business holdings, freight cars, and cattle, which do not fit the Fisheries management domain. Revision of “stock” as a keyword is important for the accuracy of categorization. Outputs were reviewed iteratively, and keyword revision was a continuous process to:
+
+• find more relevant bigram or trigram alternatives (,
+
+• remove keywords where sections are already matched with other, more applicable keywords, and
+
+• search for more specific word variations (plural, past tense, etc.)
 
 # International Union for Conservation of Nature (IUCN) threat categories
 
@@ -288,6 +306,18 @@ Management decisions and activities related to salmon are often in response to i
 Legislative clauses that influence Pacific salmon governance in British Columbia are not always associated with conservation threats. As well, some clauses may involve all threats. For example, statutes that outline species status or determine ecological reserves have relevance to how salmon are managed, but can’t be attributed to any one IUCN threat category. Pacific salmon life history also ranges over a broad geography of marine and freshwater habitat (including terrestrial watershed aspects), touching on almost every conservation threat available. Management domains were identified through this study as a clearer and more comprehensive alignment between regulatory administrative concern and conservation threat categories (Figure 1).
 
 IUCN Level 2 categories are more specific, and the categorization process matched to 25 categories (Figure 5) that parallel the management domain categories. Multiple IUCN threats comprise a management domain; however Water-Borne & Other Effluent Pollution (9.1) matched with the highest number of sections (as in the management domains) followed by Fishing, Harvesting & Controlling Aquatic Species (5.4). Eight IUCN threat categories make up the Water Use and Watercourse Modifications management domain, but Dams & Water Management / Use (7.2) has the majority of matches.
+
+**the description of threats is a key part of recovery planning under legislation designed to improve the status of imperilled species [@mccune2013].**
+
+**The classifications are designed to be comprehensive, consistent, and exclusive for the first and second levels [@salafsky2008].**
+
+**For the most part, direct threats are limited to human activities that can be countered with appropriate actions [@salafsky2008].**
+
+**Often a stress exists when the ecological attribute is outside its natural range of variation [@salafsky2008].**
+
+**First, they will help practitioners identify the direct threats occurring at a particular site or affecting a particular species and what actions might be appropriate to counter these threats [@salafsky2008].**
+
+**they will enable managers and decision makers to tally the frequency of threats or actions across projects at various organizational or spatial scales to help set priorities and allocate resources [@salafsky2008].**
 
 # Management domains and the LAPSE framework
 
