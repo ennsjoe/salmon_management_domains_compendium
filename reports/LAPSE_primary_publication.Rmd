@@ -7,6 +7,10 @@ output:
     reference_docx: "template.docx"
     number_sections: false
     fig_caption: true
+language:
+  label:
+    fig: "Fig. "
+    tab: "Table "
 bibliography: LAPSE_primary_publication_references.bib
 csl: canadian-journal-of-fisheries-and-aquatic-sciences.csl
 ---
@@ -50,150 +54,161 @@ dbDisconnect(conn)
 
 # The decentralized, multi-sector patchwork of Pacific salmon governance in Canada
 
-Eurocentric colonial stewardship of natural resources in Canada is administered through a decentralized, multi-sector array of federal, provincial, territorial, and municipal constitutional authority [@ray2021; @campbell2002]. Stemming from the Constitution Act, legislative control over fisheries and ecological stewardship has been a reactionary process of assigning authority through two orders of government (federal and provincial) for new environmental issues as they arise, which creates a complex and overlapping governance distribution [@becklumb2013]. The dual roles, from the adaption of British Common Law to the Canadian situation, can lead to confusion around management prerogatives [@thompson1974] and jurisdictional authority is rarely the responsibility of one level of government [@campbell2002] or one department (Figures 1 and 2).
+Eurocentric colonial stewardship of natural resources in Canada is administered through a decentralized, multi-sector array of federal, provincial, territorial, and municipal constitutional authority [@ray2021; @campbell2002]. Stemming from the Constitution Act, legislative control over fisheries and ecological stewardship has been a reactionary process of assigning authority through two orders of government (federal and provincial) for new environmental issues as they arise, which creates a complex and overlapping governance distribution [@becklumb2013]. The dual roles, from the adaption of British Common Law to the Canadian situation, can lead to confusion around management prerogatives [@thompson1974] and jurisdictional authority is rarely the responsibility of one level of government [@campbell2002] or one department (Figures \@ref(fig:fig-sankey-federal) and \@ref(fig:fig-sankey-provincial)).
 
-```{r fig-sankey-federal, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=10, fig.cap="Federal jurisdiction: Legislation to Agency relationships.", dpi=300}
+```{r fig-sankey-federal, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=10, fig.cap="Federal jurisdiction: Legislation to Agency relationships. Sections proportionally attributed across responsible agencies.", dpi=300}
 library(ggalluvial)
 
 if (!is.null(agencies_table)) {
-  # Compute unique section count per legislation_id
-
-section_counts <- paragraph_table[
-    !is.na(Section),
-    .(section_count = uniqueN(Section)),
-    by = legislation_id
-  ]
-  
-  # Merge with legislation metadata
-  section_counts <- merge(
-    section_counts,
-    legislation_table[, .(legislation_id, act_name, legislation_name, jurisdiction)],
-    by = "legislation_id",
-    all.x = TRUE
-  )
-  
-  # Aggregate by act_name to avoid duplicate joins
-  section_counts <- section_counts[
-    , .(section_count = sum(section_count)), by = .(act_name, jurisdiction)
-  ]
-  
-  # Merge with agencies
-  sankey_data <- merge(
-    agencies_table,
-    section_counts,
-    by = "act_name",
-    all.x = TRUE
-  )
-  
-  # Filter to Federal and aggregate
-  sankey_federal <- sankey_data[!is.na(section_count) & jurisdiction == "Federal"]
-  sankey_federal <- sankey_federal[, .(section_count = sum(section_count)), by = .(act_name, agency)]
-  
-  if (nrow(sankey_federal) > 0) {
-    # Order acts and agencies by total flow for better visualization
-    act_order <- sankey_federal[, .(total = sum(section_count)), by = act_name][order(-total)]
-    agency_order <- sankey_federal[, .(total = sum(section_count)), by = agency][order(-total)]
-    
-    sankey_federal[, act_name := factor(act_name, levels = act_order$act_name)]
-    sankey_federal[, agency := factor(agency, levels = agency_order$agency)]
-    
-    # Create alluvial plot
-    ggplot(sankey_federal,
-           aes(axis1 = act_name, axis2 = agency, y = section_count)) +
-      geom_alluvium(aes(fill = act_name), width = 1/12, color = "black", linewidth = 0.2) +
-      geom_stratum(width = 1/12, fill = "gray85", color = "black", linewidth = 0.3) +
-      geom_text(stat = "stratum", aes(label = after_stat(stratum)), size = 2.5, hjust = 0, nudge_x = 0.05) +
-      scale_x_discrete(limits = c("Legislation", "Agency"), expand = c(0.3, 0.1)) +
-      scale_fill_grey(start = 0.3, end = 0.8, guide = "none") +
-      labs(
-        y = "Number of Sections"
-      ) +
-      theme_minimal(base_size = 10) +
-      theme(
-        text = element_text(color = "black"),
-        axis.text.y = element_blank(),
-        axis.text.x = element_text(face = "bold", size = 12),
-        axis.title.x = element_blank(),
-        axis.title.y = element_text(face = "bold"),
-        axis.ticks = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        plot.background = element_rect(fill = "white", color = NA),
-        panel.background = element_rect(fill = "white", color = NA)
-      )
-  }
+ # Compute unique section count per legislation_id
+ section_counts <- paragraph_table[
+   !is.na(Section),
+   .(section_count = uniqueN(Section)),
+   by = legislation_id
+ ]
+ 
+ # Merge with legislation metadata
+ section_counts <- merge(
+   section_counts,
+   legislation_table[, .(legislation_id, act_name, legislation_name, jurisdiction)],
+   by = "legislation_id",
+   all.x = TRUE
+ )
+ 
+ # Aggregate by act_name to avoid duplicate joins
+ section_counts <- section_counts[
+   , .(section_count = sum(section_count)), by = .(act_name, jurisdiction)
+ ]
+ 
+ # Merge with agencies
+ sankey_data <- merge(
+   agencies_table,
+   section_counts,
+   by = "act_name",
+   all.x = TRUE
+ )
+ 
+ # Filter to Federal and aggregate
+ sankey_federal <- sankey_data[!is.na(section_count) & jurisdiction == "Federal"]
+ sankey_federal <- sankey_federal[, .(section_count = sum(section_count)), by = .(act_name, agency)]
+ 
+ # Proportionally attribute sections across agencies
+ sankey_federal[, n_agencies := .N, by = act_name]
+ sankey_federal[, section_count := section_count / n_agencies]
+ 
+ if (nrow(sankey_federal) > 0) {
+   # Order acts and agencies by total flow for better visualization
+   act_order <- sankey_federal[, .(total = sum(section_count)), by = act_name][order(-total)]
+   agency_order <- sankey_federal[, .(total = sum(section_count)), by = agency][order(-total)]
+   
+   sankey_federal[, act_name := factor(act_name, levels = act_order$act_name)]
+   sankey_federal[, agency := factor(agency, levels = agency_order$agency)]
+   
+   # Create alluvial plot - grey bands, colored sides
+   p <- ggplot(sankey_federal,
+          aes(axis1 = act_name, axis2 = agency, y = section_count)) +
+     geom_alluvium(fill = "gray80", width = 1/12, color = "gray60", linewidth = 0.2, alpha = 0.7) +
+     geom_stratum(width = 1/12, fill = "#996666", color = "black", linewidth = 0.3) +
+     geom_text(stat = "stratum", aes(label = after_stat(stratum)), size = 3.2, hjust = 0, nudge_x = 0.05) +
+     scale_x_discrete(limits = c("Legislation", "Agency"), expand = c(0.3, 0.1)) +
+     labs(
+       y = "Number of Sections (Proportionally Attributed)"
+     ) +
+     theme_minimal(base_size = 12) +
+     theme(
+       text = element_text(color = "black", size = 10),
+       axis.text.y = element_blank(),
+       axis.text.x = element_text(face = "bold", size = 14),
+       axis.title.x = element_blank(),
+       axis.title.y = element_text(face = "bold", size = 11),
+       axis.ticks = element_blank(),
+       panel.grid.major = element_blank(),
+       panel.grid.minor = element_blank(),
+       plot.background = element_rect(fill = "white", color = NA),
+       panel.background = element_rect(fill = "white", color = NA)
+     )
+   
+   # Explicitly print the plot
+   print(p)
+ }
 }
 ```
 
-```{r fig-sankey-provincial, echo=FALSE, message=FALSE, warning=FALSE, fig.width=14, fig.height=12, fig.cap="Provincial jurisdiction: Legislation to Agency relationships.", dpi=300}
+```{r fig-sankey-provincial, echo=FALSE, message=FALSE, warning=FALSE, fig.width=14, fig.height=12, fig.cap="Provincial jurisdiction: Legislation to Agency relationships. Sections proportionally attributed across responsible agencies.", dpi=300}
 library(ggalluvial)
 
 if (!is.null(agencies_table)) {
-  # Compute unique section count per legislation_id
-  section_counts <- paragraph_table[
-    !is.na(Section),
-    .(section_count = uniqueN(Section)),
-    by = legislation_id
-  ]
-  
-  # Merge with legislation metadata
-  section_counts <- merge(
-    section_counts,
-    legislation_table[, .(legislation_id, act_name, legislation_name, jurisdiction)],
-    by = "legislation_id",
-    all.x = TRUE
-  )
-  
-  # Aggregate by act_name to avoid duplicate joins
-  section_counts <- section_counts[
-    , .(section_count = sum(section_count)), by = .(act_name, jurisdiction)
-  ]
-  
-  # Merge with agencies
-  sankey_data <- merge(
-    agencies_table,
-    section_counts,
-    by = "act_name",
-    all.x = TRUE
-  )
-  
-  # Filter to Provincial and aggregate
-  sankey_provincial <- sankey_data[!is.na(section_count) & jurisdiction == "Provincial"]
-  sankey_provincial <- sankey_provincial[, .(section_count = sum(section_count)), by = .(act_name, agency)]
-  
-  if (nrow(sankey_provincial) > 0) {
-    # Order acts and agencies by total flow for better visualization
-    act_order <- sankey_provincial[, .(total = sum(section_count)), by = act_name][order(-total)]
-    agency_order <- sankey_provincial[, .(total = sum(section_count)), by = agency][order(-total)]
-    
-    sankey_provincial[, act_name := factor(act_name, levels = act_order$act_name)]
-    sankey_provincial[, agency := factor(agency, levels = agency_order$agency)]
-    
-    # Create alluvial plot
-    ggplot(sankey_provincial,
-           aes(axis1 = act_name, axis2 = agency, y = section_count)) +
-      geom_alluvium(aes(fill = act_name), width = 1/12, color = "black", linewidth = 0.2) +
-      geom_stratum(width = 1/12, fill = "gray85", color = "black", linewidth = 0.3) +
-      geom_text(stat = "stratum", aes(label = after_stat(stratum)), size = 2.2, hjust = 0, nudge_x = 0.05) +
-      scale_x_discrete(limits = c("Legislation", "Agency"), expand = c(0.3, 0.1)) +
-      scale_fill_grey(start = 0.3, end = 0.8, guide = "none") +
-      labs(
-        y = "Number of Sections"
-      ) +
-      theme_minimal(base_size = 10) +
-      theme(
-        text = element_text(color = "black"),
-        axis.text.y = element_blank(),
-        axis.text.x = element_text(face = "bold", size = 12),
-        axis.title.x = element_blank(),
-        axis.title.y = element_text(face = "bold"),
-        axis.ticks = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        plot.background = element_rect(fill = "white", color = NA),
-        panel.background = element_rect(fill = "white", color = NA)
-      )
-  }
+ # Compute unique section count per legislation_id
+ section_counts <- paragraph_table[
+   !is.na(Section),
+   .(section_count = uniqueN(Section)),
+   by = legislation_id
+ ]
+ 
+ # Merge with legislation metadata
+ section_counts <- merge(
+   section_counts,
+   legislation_table[, .(legislation_id, act_name, legislation_name, jurisdiction)],
+   by = "legislation_id",
+   all.x = TRUE
+ )
+ 
+ # Aggregate by act_name to avoid duplicate joins
+ section_counts <- section_counts[
+   , .(section_count = sum(section_count)), by = .(act_name, jurisdiction)
+ ]
+ 
+ # Merge with agencies
+ sankey_data <- merge(
+   agencies_table,
+   section_counts,
+   by = "act_name",
+   all.x = TRUE
+ )
+ 
+ # Filter to Provincial and aggregate
+ sankey_provincial <- sankey_data[!is.na(section_count) & jurisdiction == "Provincial"]
+ sankey_provincial <- sankey_provincial[, .(section_count = sum(section_count)), by = .(act_name, agency)]
+ 
+ # Proportionally attribute sections across agencies
+ sankey_provincial[, n_agencies := .N, by = act_name]
+ sankey_provincial[, section_count := section_count / n_agencies]
+ 
+ if (nrow(sankey_provincial) > 0) {
+   # Order acts and agencies by total flow for better visualization
+   act_order <- sankey_provincial[, .(total = sum(section_count)), by = act_name][order(-total)]
+   agency_order <- sankey_provincial[, .(total = sum(section_count)), by = agency][order(-total)]
+   
+   sankey_provincial[, act_name := factor(act_name, levels = act_order$act_name)]
+   sankey_provincial[, agency := factor(agency, levels = agency_order$agency)]
+   
+   # Create alluvial plot - grey bands, colored sides
+   p <- ggplot(sankey_provincial,
+          aes(axis1 = act_name, axis2 = agency, y = section_count)) +
+     geom_alluvium(fill = "gray80", width = 1/12, color = "gray60", linewidth = 0.2, alpha = 0.7) +
+     geom_stratum(width = 1/12, fill = "#668899", color = "black", linewidth = 0.3) +
+     geom_text(stat = "stratum", aes(label = after_stat(stratum)), size = 3.2, hjust = 0, nudge_x = 0.05) +
+     scale_x_discrete(limits = c("Legislation", "Agency"), expand = c(0.3, 0.1)) +
+     labs(
+       y = "Number of Sections (Proportionally Attributed)"
+     ) +
+     theme_minimal(base_size = 12) +
+     theme(
+       text = element_text(color = "black", size = 10),
+       axis.text.y = element_blank(),
+       axis.text.x = element_text(face = "bold", size = 14),
+       axis.title.x = element_blank(),
+       axis.title.y = element_text(face = "bold", size = 11),
+       axis.ticks = element_blank(),
+       panel.grid.major = element_blank(),
+       panel.grid.minor = element_blank(),
+       plot.background = element_rect(fill = "white", color = NA),
+       panel.background = element_rect(fill = "white", color = NA)
+     )
+   
+   # Explicitly print the plot
+   print(p)
+ }
 }
 ```
 
