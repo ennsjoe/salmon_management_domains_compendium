@@ -423,7 +423,7 @@ if (!file.exists(db_path)) {
 
 ```
 
-## Implementations, context boost, and discretionary language
+## Actionable clauses and discretionary language
 
 Sections and clauses are often referred to as "tools" in practice. A list of "tools" in terms of salmon management topics would be desirable, but this raises a number of broader questions. Any clause could be a tool depending on one's objectives. However, by classifying paragraphs by clause type allows for further filtering to identify clauses where the implementation of the statute creates a product (e.g. a Water Sustainability Plan established under the provincial Water Sustainability Act). To achieve this we developed a filtering process to list "implementations" defined by clauses that authorize or instruct an official to create or establish a product such as a licence, land designation, or plan.
 
