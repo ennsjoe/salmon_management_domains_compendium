@@ -266,7 +266,7 @@ if (file.exists(image_path)) {
 
 # A process for clause categorization
 
-Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the clauses within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable. Other researchers may repeat this process as future legislation and language changes. The process steps are: accumulate and review legislation (CanLii); parse legislation by clause (paragraph), section, and heading (R); match management domain and IUCN threat keywords to clauses (R); assign salmon-specific scope catgories (R); match clause type keywords to clauses (R).
+Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the clauses within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable if legislation changes. The process steps are: accumulate and review legislation (CanLii); parse legislation by clause (paragraph), section, and heading; match management domain and IUCN threat keywords to clauses; assign salmon-specific scope categories; match clause type keywords to clauses.
 
 ## Legislation accumulation and review
 
