@@ -2,8 +2,10 @@
 # Title: LAPSE Dashboard Web App
 # Authors: Joe Enns and Cory Lagasse
 # Date Created: 2025-08-26
+# Last Updated: 2025-01-XX
 # Purpose / Description: this script creates a Shiny web application to visualize 
 #   and interact with legislative data stored in a SQLite database.
+#   ENHANCED: Added disclaimer bar and data currency/provenance information
 # Dependencies: shiny, DBI, RSQLite, ggplot2, data.table
 # Database: legislation.db
 ################################################################################
@@ -44,6 +46,40 @@ legislation_data <- dbReadTable(conn, "LegislationMetadata")
 paragraph_data <- dbReadTable(conn, "LegislationParagraphs")
 clause_data <- dbReadTable(conn, "clause_type_keywords")
 
+# Load processing metadata for data provenance
+processing_metadata <- tryCatch({
+  message("Attempting to load processing_metadata table...")
+  meta <- dbReadTable(conn, "processing_metadata")
+  # Get the most recent run
+  if (nrow(meta) > 0) {
+    meta <- meta[which.max(meta$run_id), ]
+  }
+  meta
+}, error = function(e) {
+  message("Error loading processing_metadata table: ", e$message)
+  data.frame(
+    run_timestamp = "Unknown",
+    run_date = "Unknown",
+    total_files_processed = NA,
+    stringsAsFactors = FALSE
+  )
+})
+
+# Extract last run info for display
+last_run_date <- if (nrow(processing_metadata) > 0 && !is.null(processing_metadata$run_date)) {
+  processing_metadata$run_date[1]
+} else {
+  "Unknown"
+}
+
+last_run_timestamp <- if (nrow(processing_metadata) > 0 && !is.null(processing_metadata$run_timestamp)) {
+  processing_metadata$run_timestamp[1]
+} else {
+  "Unknown"
+}
+
+message("Debug - Last processing run: ", last_run_timestamp)
+
 # Load legislation URLs
 legislation_url <- tryCatch({
   message("Attempting to load legislation_url table...")
@@ -80,6 +116,22 @@ if (nrow(legislation_url) > 0) {
 } else {
   url_lookup <- character(0)
   message("Debug - No data in legislation_url, url_lookup is empty")
+}
+
+# Create lookup for current_to_date if column exists
+current_to_lookup <- character(0)
+if ("current_to_date" %in% names(legislation_data)) {
+  legislation_data_clean <- legislation_data[
+    !is.na(legislation_data$current_to_date) & 
+      legislation_data$current_to_date != "",
+  ]
+  if (nrow(legislation_data_clean) > 0) {
+    current_to_lookup <- setNames(
+      legislation_data_clean$current_to_date, 
+      legislation_data_clean$legislation_name
+    )
+  }
+  message("Debug - current_to_lookup created with length: ", length(current_to_lookup))
 }
 
 # Prepare UI choices
@@ -194,6 +246,77 @@ ui <- fluidPage(
       .section-content {
         border-top: 1px solid #e0e0e0;
       }
+      
+      /* === Disclaimer Bar Styles === */
+      .disclaimer-bar {
+        background-color: #fff3cd;
+        border: 1px solid #ffc107;
+        border-left: 4px solid #996666;
+        padding: 12px 20px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      
+      .disclaimer-bar .disclaimer-icon {
+        font-size: 1.3em;
+        color: #996666;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      
+      .disclaimer-bar .disclaimer-text {
+        font-size: 0.9em;
+        color: #664d03;
+        line-height: 1.5;
+      }
+      
+      .disclaimer-bar .disclaimer-text strong {
+        color: #996666;
+      }
+      
+      /* === Data Provenance Info Bar === */
+      .data-info-bar {
+        background-color: #e8f4f8;
+        border: 1px solid #668899;
+        border-left: 4px solid #668899;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        font-size: 0.85em;
+        color: #2c3e50;
+      }
+      
+      .data-info-bar .info-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      
+      .data-info-bar .info-item i {
+        color: #668899;
+      }
+      
+      .data-info-bar .info-item strong {
+        color: #668899;
+      }
+      
+      /* === Currency Badge in Section Headers === */
+      .currency-badge {
+        font-size: 0.75em;
+        background-color: #e0e0e0;
+        color: #555;
+        padding: 2px 8px;
+        border-radius: 10px;
+        margin-left: 10px;
+        font-weight: normal;
+      }
     "))
     ,
     tags$script(HTML("
@@ -234,6 +357,46 @@ ui <- fluidPage(
   ),
   
   titlePanel("Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE)"),
+  
+  # === DISCLAIMER BAR ===
+  div(
+    class = "disclaimer-bar",
+    tags$i(class = "fas fa-exclamation-triangle disclaimer-icon"),
+    div(
+      class = "disclaimer-text",
+      tags$strong("Disclaimer:"),
+      " None of the information presented in LAPSE qualifies as legal advice. ",
+      "The authors are aquatic biologists with limited legal training. ",
+      "This tool is intended for research and informational purposes only. ",
+      "Always consult official government sources and qualified legal professionals ",
+      "for authoritative legal interpretation."
+    )
+  ),
+  
+  # === DATA PROVENANCE INFO BAR ===
+  div(
+    class = "data-info-bar",
+    div(
+      class = "info-item",
+      tags$i(class = "fas fa-database"),
+      tags$strong("Data Last Processed:"),
+      span(last_run_timestamp)
+    ),
+    div(
+      class = "info-item",
+      tags$i(class = "fas fa-file-alt"),
+      tags$strong("Statutes in Database:"),
+      span(nrow(legislation_data))
+    ),
+    div(
+      class = "info-item",
+      tags$i(class = "fas fa-info-circle"),
+      span(
+        style = "font-style: italic;",
+        "Individual legislation currency dates shown in section headers when available"
+      )
+    )
+  ),
   
   # About page button
   div(
@@ -327,10 +490,11 @@ ui <- fluidPage(
                   )
                 )
             ),
-            # Add link button below dropdowns
+            # Add link button and currency info below dropdowns
             div(
-              style = "margin-top: 10px;",
-              uiOutput("legislation_link_button")
+              style = "margin-top: 10px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;",
+              uiOutput("legislation_link_button"),
+              uiOutput("legislation_currency_info")
             )
           ),
           hr(),
@@ -634,6 +798,44 @@ server <- function(input, output, session) {
     )
   })
   
+  # NEW: Render legislation currency info
+  output$legislation_currency_info <- renderUI({
+    leg_id <- current_legislation_id()
+    
+    if (is.null(leg_id) || length(leg_id) == 0) {
+      return(NULL)
+    }
+    
+    # Get legislation info
+    leg_info <- legislation_data[legislation_data$legislation_id == leg_id, ]
+    
+    if (nrow(leg_info) == 0) {
+      return(NULL)
+    }
+    
+    leg_name <- leg_info$legislation_name[1]
+    
+    # Check if current_to_date exists in the data
+    currency_date <- NULL
+    if ("current_to_date" %in% names(leg_info) && !is.na(leg_info$current_to_date[1]) && leg_info$current_to_date[1] != "") {
+      currency_date <- leg_info$current_to_date[1]
+    }
+    
+    if (is.null(currency_date)) {
+      return(NULL)
+    }
+    
+    # Create currency info badge
+    div(
+      style = "display: inline-flex; align-items: center; gap: 6px; background-color: #e8f4f8; padding: 6px 12px; border-radius: 4px; font-size: 0.85em; color: #2c3e50;",
+      tags$i(class = "fas fa-calendar-check", style = "color: #668899;"),
+      tags$span(
+        tags$strong("Current to: "),
+        currency_date
+      )
+    )
+  })
+  
   # ✅ Output section paragraphs with keyword highlighting and collapsible sections----
   output$section_paragraphs <- renderUI({
     leg_id <- current_legislation_id()
@@ -725,6 +927,18 @@ server <- function(input, output, session) {
                  "#999999")
         } else {
           "#999999"
+        }
+        
+        # Get currency date for this legislation if available
+        currency_badge <- NULL
+        if (nrow(leg_info) > 0 && "current_to_date" %in% names(leg_info)) {
+          currency_date <- leg_info$current_to_date[1]
+          if (!is.na(currency_date) && currency_date != "") {
+            currency_badge <- tags$span(
+              class = "currency-badge",
+              paste("Current to:", currency_date)
+            )
+          }
         }
         
         # Build section label with jurisdiction indicator
@@ -843,7 +1057,8 @@ server <- function(input, output, session) {
               style = "flex-grow: 1;",
               h5(
                 style = "margin: 0; display: inline-block;",
-                section_label
+                section_label,
+                currency_badge  # Add currency badge if available
               ),
               h6(
                 style = "margin: 5px 0 0 0; color: #555; font-style: italic;",
@@ -872,58 +1087,6 @@ server <- function(input, output, session) {
   })
   
   # 📈 IUCN Plot----
-  # output$iucn_plot <- renderPlot({
-  #   domain <- selected_domain()
-  #   domain_clean <- if (!is.null(domain) && !is.na(domain)) trimws(tolower(domain)) else ""
-  #   leg_id <- current_legislation_id()
-  # 
-  # 
-  # 
-  #   df <- label_data[label_data$label_type == "IUCN", ]
-  # 
-  #   if (nzchar(domain_clean)) {
-  #     domain_paragraphs <- label_data$paragraph_id[
-  #       label_data$label_type == "Management Domain" &
-  #         trimws(tolower(label_data$label_value)) == domain_clean
-  #     ]
-  #     df <- df[df$paragraph_id %in% domain_paragraphs, ]
-  #   }
-  # 
-  #   # Filter by search
-  #   search_para_ids <- search_matching_paragraphs()
-  #   if (!is.null(search_para_ids) && length(search_para_ids) > 0) {
-  #     df <- df[df$paragraph_id %in% search_para_ids, ]
-  #   }
-  # 
-  #   if (!is.null(leg_id)) {
-  #     df <- df[df$paragraph_id %in% paragraph_data$paragraph_id[
-  #       paragraph_data$legislation_id == leg_id
-  #     ], ]
-  #   } else {
-  #     leg_ids <- filtered_legislation()$legislation_id
-  #     if (length(leg_ids) > 0) {
-  #       df <- df[df$paragraph_id %in% paragraph_data$paragraph_id[
-  #         paragraph_data$legislation_id %in% leg_ids
-  #       ], ]
-  #     }
-  #   }
-  # 
-  #   validate(need(nrow(df) > 0, "No data available for IUCN plot."))
-  # 
-  #   iucn_counts <- df %>%
-  #     count(label_value) %>%
-  #     arrange(desc(n)) %>%
-  #     mutate(label_value = factor(label_value, levels = label_value))
-  # 
-  #   ggplot(iucn_counts, aes(x = label_value, y = n)) +
-  #     geom_bar(stat = "identity", fill = "#2c3e50") +
-  #     theme_minimal() +
-  #     labs(x = "", y = "Clause Count") +
-  #     theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  # })
-  # 
-  # 
-  
   output$iucn_plot <- renderPlotly({
     tryCatch({
       domain <- selected_domain()
@@ -993,6 +1156,7 @@ server <- function(input, output, session) {
       ggplotly(p)
     })
   })
+  
   # 📈 Clause Type Plot----
   output$clause_plot <- renderPlotly({
     tryCatch({
