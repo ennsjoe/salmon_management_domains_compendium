@@ -149,20 +149,55 @@ extract_current_to_date <- function(html_file, jurisdiction) {
       }
       
     } else if (jurisdiction == "Provincial") {
-      # Provincial format: <td class="currencysingle" colspan="4">This Act is current to May 20, 2025</td>
-      # Also try: This Regulation is current to...
+      # Provincial format examples:
+      # <div id="act:currency"><table>...<td class="currencysingle">This Act is current to May 20, 2025</td>
+      # <div id="reg:currency"><table>...<td class="currencysingle">This Regulation is current to...
+      # Note: The colon in id="act:currency" causes CSS selector issues, so we use attribute selectors
       
+      currency_text <- NA_character_
+      
+      # Try multiple selector approaches for provincial legislation
+      # Approach 1: Direct class selector (most common)
       currency_node <- html_file %>% html_node("td.currencysingle")
+      
+      # Approach 2: Use attribute selector for div with colon in ID
       if (is.null(currency_node)) {
-        # Try alternative selectors
+        currency_node <- html_file %>% html_node("div[id='act:currency'] td")
+      }
+      if (is.null(currency_node)) {
+        currency_node <- html_file %>% html_node("div[id='reg:currency'] td")
+      }
+      
+      # Approach 3: Try broader table search
+      if (is.null(currency_node)) {
         currency_node <- html_file %>% html_node("td.currency")
       }
       
+      # Extract text if node found
       if (!is.null(currency_node)) {
         currency_text <- html_text(currency_node, trim = TRUE)
+        # Normalize whitespace (collapse tabs, multiple spaces, etc.)
+        currency_text <- str_squish(currency_text)
+      }
+      
+      # Approach 4: Fallback - search all text content for the pattern
+      if (is.na(currency_text) || currency_text == "") {
+        # Get all text from the document and search for the currency pattern
+        all_text <- html_file %>% html_text()
+        all_text <- str_squish(all_text)
         
-        # Extract date in format "Month DD, YYYY" (e.g., "May 20, 2025")
-        date_match <- str_extract(currency_text, "(January|February|March|April|May|June|July|August|September|October|November|December)\\s+\\d{1,2},\\s+\\d{4}")
+        # Look for "current to" followed by a date
+        if (grepl("current to", all_text, ignore.case = TRUE)) {
+          currency_text <- all_text
+        }
+      }
+      
+      if (!is.na(currency_text) && currency_text != "") {
+        # Extract date in format "Month DD, YYYY" (e.g., "April 22, 2025")
+        date_match <- str_extract(
+          currency_text, 
+          "(January|February|March|April|May|June|July|August|September|October|November|December)\\s+\\d{1,2},\\s+\\d{4}"
+        )
         
         if (!is.na(date_match)) {
           # Convert to ISO format YYYY-MM-DD
