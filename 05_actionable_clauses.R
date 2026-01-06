@@ -9,7 +9,7 @@
 #   3. Have specific Clause Type labels (Designation, Instruction, etc.)
 #   4. Contain "responsible official" keywords (from actionable_clause_keywords)
 #   5. Contain "discretionary language" keywords (from actionable_clause_keywords)
-#   Then extracts implement types and creates output with metadata.
+#   Then extracts actionable types and creates output with metadata.
 # Dependencies: DBI, RSQLite, data.table, here, stringr, beepr
 # Outputs:
 #   "actionable_clauses.csv" in the output directory
@@ -75,12 +75,12 @@ cat(sprintf("  - Loaded %d paragraph labels\n", nrow(paragraph_label_table)))
 cat(sprintf("  - Loaded %d actionable clause keywords\n", nrow(actionable_keywords)))
 
 ## ============================================================================
-## DEFINE IMPLEMENT PATTERNS
+## DEFINE ACTIONABLE CLAUSE PATTERNS
 ## ============================================================================
 
-cat("\nDefining implement patterns...\n")
+cat("\nDefining actionable clause patterns...\n")
 
-implement_patterns <- list(
+actionable_patterns <- list(
   # --- Regulatory Instruments ---
   regulation = list(
     pattern = "\\b(regulation|regulations|regulatory)\\b"
@@ -94,6 +94,9 @@ implement_patterns <- list(
   bylaw = list(
     pattern = "\\b(bylaw|by-law|bylaws|by-laws)\\b"
   ),
+  authorization = list(
+    pattern = "\\b(authori[sz]ation|authori[sz]ations|authorize|authori[sz]ed|authori[sz]ing)\\b"
+    ),
   
   # --- Planning Documents ---
   plan = list(
@@ -397,29 +400,29 @@ if (nrow(actionable_paragraphs) == 0) {
 }
 
 ## ============================================================================
-## STEP 7: EXTRACT IMPLEMENT TYPES, OFFICIALS, AND DISCRETION
+## STEP 7: EXTRACT actionable TYPES, OFFICIALS, AND DISCRETION
 ## ============================================================================
 
-cat("\n--- STEP 7: Extracting implement types, officials, and discretion ---\n")
+cat("\n--- STEP 7: Extracting actionable types, officials, and discretion ---\n")
 
-## Function: Extract implement types ----
-extract_implement_types <- function(paragraph_text) {
+## Function: Extract actionable types ----
+extract_actionable_types <- function(paragraph_text) {
   if (is.na(paragraph_text) || paragraph_text == "") return(NA_character_)
   
   text_lower <- tolower(paragraph_text)
-  implements_found <- character()
+  actionables_found <- character()
   
-  for (impl_name in names(implement_patterns)) {
-    impl_info <- implement_patterns[[impl_name]]
+  for (impl_name in names(actionable_patterns)) {
+    impl_info <- actionable_patterns[[impl_name]]
     pattern <- impl_info$pattern
     
     if (grepl(pattern, text_lower, perl = TRUE)) {
-      implements_found <- c(implements_found, impl_name)
+      actionables_found <- c(actionables_found, impl_name)
     }
   }
   
-  if (length(implements_found) > 0) {
-    return(paste(implements_found, collapse = "; "))
+  if (length(actionables_found) > 0) {
+    return(paste(actionables_found, collapse = "; "))
   } else {
     return(NA_character_)
   }
@@ -475,8 +478,8 @@ discretionary_keywords_dt <- actionable_keywords[
   .(keyword, type)
 ]
 
-cat("  - Extracting implement types...\n")
-actionable_paragraphs[, implement_type := sapply(Paragraph, extract_implement_types)]
+cat("  - Extracting actionable types...\n")
+actionable_paragraphs[, actionable_type := sapply(Paragraph, extract_actionable_types)]
 
 cat("  - Extracting responsible officials...\n")
 actionable_paragraphs[, responsible_official := sapply(
@@ -501,7 +504,7 @@ cat("\n--- STEP 8: Merging with legislation metadata ---\n")
 ## Merge with legislation metadata ----
 actionable_output <- merge(
   actionable_paragraphs[, .(paragraph_id, legislation_id, Section, Heading, Paragraph, 
-                            implement_type, responsible_official, discretion_type)],
+                            actionable_type, responsible_official, discretion_type)],
   acts_only[, .(legislation_id, act_name, jurisdiction)],
   by = "legislation_id",
   all.x = TRUE
@@ -513,7 +516,7 @@ actionable_output[, c("paragraph_id", "legislation_id") := NULL]
 ## Reorder columns ----
 setcolorder(actionable_output, c(
   "act_name", "jurisdiction", "Section", "Heading", 
-  "implement_type", "responsible_official", "discretion_type", 
+  "actionable_type", "responsible_official", "discretion_type", 
   "Paragraph"
 ))
 
@@ -533,9 +536,9 @@ cat(sprintf("  - Final output rows: %d\n", nrow(actionable_output)))
 
 cat("\n--- STEP 9: Creating summary statistics ---\n")
 
-## Summary by implement type ----
-summary_by_implement <- actionable_output[!is.na(implement_type), .N, by = implement_type][order(-N)]
-setnames(summary_by_implement, c("Implement Type", "Count"))
+## Summary by actionable type ----
+summary_by_actionable <- actionable_output[!is.na(actionable_type), .N, by = actionable_type][order(-N)]
+setnames(summary_by_actionable, c("Actionable Clause Type", "Count"))
 
 ## Summary by official ----
 summary_by_official <- actionable_output[!is.na(responsible_official), .N, by = responsible_official][order(-N)]
@@ -594,8 +597,8 @@ for (ct in included_clause_types) {
   cat(sprintf("  - %s\n", ct))
 }
 
-cat("\nTop 10 Implement Types:\n")
-print(head(summary_by_implement, 10))
+cat("\nTop 10 Actionable Clause Types:\n")
+print(head(summary_by_actionable, 10))
 
 cat("\nTop 10 Responsible Officials:\n")
 print(head(summary_by_official, 10))

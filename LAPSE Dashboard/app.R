@@ -30,7 +30,7 @@ if (!file.exists(db_path)) {
   stop("Database file not found: ", db_path)
 }
 
-# 🔧 Connect to SQLite database
+# ðŸ”§ Connect to SQLite database
 conn <- dbConnect(RSQLite::SQLite(), dbname = db_path)
 
 # Disconnect when app stops
@@ -45,6 +45,26 @@ label_data <- dbReadTable(conn, "paragraph_label_table")
 legislation_data <- dbReadTable(conn, "LegislationMetadata")
 paragraph_data <- dbReadTable(conn, "LegislationParagraphs")
 clause_data <- dbReadTable(conn, "clause_type_keywords")
+
+# Load actionable clauses table
+actionable_clauses_data <- tryCatch({
+  message("Attempting to load actionable_clauses table...")
+  dbReadTable(conn, "actionable_clauses")
+}, error = function(e) {
+  message("Error loading actionable_clauses table: ", e$message)
+  data.frame(
+    act_name = character(),
+    jurisdiction = character(),
+    Section = character(),
+    Heading = character(),
+    actionable_type = character(),
+    responsible_official = character(),
+    discretion_type = character(),
+    Paragraph = character(),
+    stringsAsFactors = FALSE
+  )
+})
+message("Debug - actionable_clauses rows loaded: ", nrow(actionable_clauses_data))
 
 # Load processing metadata for data provenance
 processing_metadata <- tryCatch({
@@ -142,7 +162,7 @@ jurisdictions <- unique(legislation_data$jurisdiction)
 management_domains <- unique(label_data$label_value[label_data$label_type == "Management Domain"])
 jurisdictions <- unique(legislation_data$jurisdiction)
 
-# 💻 Define UI----
+# ðŸ’» Define UI----
 
 ui <- fluidPage(
   tags$head(
@@ -317,6 +337,49 @@ ui <- fluidPage(
         margin-left: 10px;
         font-weight: normal;
       }
+      
+      /* === Actionable Clauses Panel Styles === */
+      .actionable-clause-card {
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #fafafa;
+        transition: box-shadow 0.2s ease;
+      }
+      
+      .actionable-clause-card:hover {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+      
+      .actionable-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.85em;
+        margin-right: 5px;
+        margin-bottom: 5px;
+      }
+      
+      .actionable-badge i {
+        margin-right: 4px;
+      }
+      
+      .badge-official {
+        background-color: #e3f2fd;
+        color: #1976d2;
+      }
+      
+      .badge-type {
+        background-color: #f3e5f5;
+        color: #7b1fa2;
+      }
+      
+      .badge-discretion {
+        background-color: #fff3e0;
+        color: #f57c00;
+      }
     "))
     ,
     tags$script(HTML("
@@ -393,7 +456,7 @@ ui <- fluidPage(
       tags$i(class = "fas fa-info-circle"),
       span(
         style = "font-style: italic;",
-        "Individual legislation currency dates shown in section headers when available"
+        "Date stamps (Current To) are shown for individual statutes from time of download from government websites"
       )
     )
   ),
@@ -516,6 +579,18 @@ ui <- fluidPage(
             tabPanel("IUCN Threats",
                      br(),
                      plotlyOutput("iucn_plot", height = "400px")
+            ),
+            tabPanel("Actionable Clauses",
+                     br(),
+                     div(
+                       style = "font-size: 0.85em; color: #555; margin-bottom: 10px;",
+                       tags$i(class = "fas fa-info-circle"),
+                       " Implementation instruments from Acts filtered by current selections"
+                     ),
+                     div(
+                       style = "max-height: 500px; overflow-y: auto;",
+                       uiOutput("actionable_clauses_summary")
+                     )
             )
           )
       )
@@ -523,7 +598,7 @@ ui <- fluidPage(
   )
 )
 
-# ⚙️ Server----
+# âš™ï¸ Server----
 server <- function(input, output, session) {
   selected_domain <- reactiveVal(NULL)
   selected_act <- reactiveVal(NULL)
@@ -541,7 +616,7 @@ server <- function(input, output, session) {
     search_term("")
   })
   
-  # 🔼 Render domain buttons----
+  # ðŸ”¼ Render domain buttons----
   output$domain_buttons <- renderUI({
     tryCatch({
       selected <- selected_domain()
@@ -641,7 +716,7 @@ server <- function(input, output, session) {
     data
   })
   
-  # 🔼 Render act dropdown----
+  # ðŸ”¼ Render act dropdown----
   output$act_dropdown <- renderUI({
     acts_data <- filtered_legislation()
     acts_data <- acts_data[, c("act_name", "jurisdiction")]
@@ -686,7 +761,7 @@ server <- function(input, output, session) {
     selected_regulation(NULL)
   })
   
-  # 🔼 Render regulation dropdown----
+  # ðŸ”¼ Render regulation dropdown----
   output$regulation_dropdown <- renderUI({
     # Show disabled dropdown if no act is selected
     if (is.null(selected_act())) {
@@ -836,7 +911,7 @@ server <- function(input, output, session) {
     )
   })
   
-  # ✅ Output section paragraphs with keyword highlighting and collapsible sections----
+  # âœ… Output section paragraphs with keyword highlighting and collapsible sections----
   output$section_paragraphs <- renderUI({
     leg_id <- current_legislation_id()
     
@@ -1086,7 +1161,7 @@ server <- function(input, output, session) {
     )
   })
   
-  # 📈 IUCN Plot----
+  # ðŸ“ˆ IUCN Plot----
   output$iucn_plot <- renderPlotly({
     tryCatch({
       domain <- selected_domain()
@@ -1157,7 +1232,7 @@ server <- function(input, output, session) {
     })
   })
   
-  # 📈 Clause Type Plot----
+  # ðŸ“ˆ Clause Type Plot----
   output$clause_plot <- renderPlotly({
     tryCatch({
       
@@ -1166,7 +1241,7 @@ server <- function(input, output, session) {
       
       leg_id <- current_legislation_id()
       
-      # 🎯 Extract Clause Type and Management Domain labels
+      # ðŸŽ¯ Extract Clause Type and Management Domain labels
       clause_labels <- label_data[label_data$label_type == "Clause Type", 
                                   c("paragraph_id", "label_value")]
       names(clause_labels) <- c("paragraph_id", "clause_type")
@@ -1175,10 +1250,10 @@ server <- function(input, output, session) {
                                   c("paragraph_id", "label_value")]
       names(domain_labels) <- c("paragraph_id", "management_domain")
       
-      # 🔗 Merge clause and domain labels
+      # ðŸ”— Merge clause and domain labels
       labeled_paragraphs <- merge(clause_labels, domain_labels, by = "paragraph_id")
       
-      # 🔗 Add jurisdiction and section context
+      # ðŸ”— Add jurisdiction and section context
       paragraph_context <- merge(
         paragraph_data[, c("paragraph_id", "legislation_id", "Section")],
         legislation_data[, c("legislation_id", "jurisdiction")],
@@ -1210,7 +1285,7 @@ server <- function(input, output, session) {
       
       validate(need(nrow(labeled_paragraphs) > 0, "No clause type data available."))
       
-      # 📊 Aggregate counts by unique Section-legislation_id combinations
+      # ðŸ“Š Aggregate counts by unique Section-legislation_id combinations
       labeled_paragraphs$section_key <- paste(labeled_paragraphs$Section, labeled_paragraphs$legislation_id)
       clause_domain_counts <- labeled_paragraphs %>%
         filter(!is.na(clause_type) & !is.na(management_domain) & !is.na(Section)) %>%
@@ -1219,7 +1294,7 @@ server <- function(input, output, session) {
       
       validate(need(nrow(clause_domain_counts) > 0, "No clause type co-occurrence data available."))
       
-      # 📈 Calculate percentages within each management domain
+      # ðŸ“ˆ Calculate percentages within each management domain
       percent_data <- clause_domain_counts %>%
         group_by(management_domain) %>%
         mutate(
@@ -1228,7 +1303,7 @@ server <- function(input, output, session) {
         ) %>%
         ungroup()
       
-      # 🧮 Order management domains by total section count (largest to smallest)
+      # ðŸ§® Order management domains by total section count (largest to smallest)
       domain_order <- percent_data %>%
         group_by(management_domain) %>%
         summarise(total = sum(section_count), .groups = "drop") %>%
@@ -1240,7 +1315,7 @@ server <- function(input, output, session) {
       # Get number of clause types for color palette
       n_clause_types <- length(unique(percent_data$clause_type))
       
-      # 🎨 Generate colors from RColorBrewer Set2
+      # ðŸŽ¨ Generate colors from RColorBrewer Set2
       if (n_clause_types <= 8) {
         clause_colors <- RColorBrewer::brewer.pal(max(3, n_clause_types), "Set2")[1:n_clause_types]
       } else {
@@ -1256,7 +1331,7 @@ server <- function(input, output, session) {
         "Percentage: ", round(percent_data$percent, 1), "%"
       )
       
-      # 🎨 Create ggplot stacked percentage bar chart
+      # Create ggplot stacked percentage bar chart
       p <- ggplot(percent_data, aes(x = management_domain, y = percent, 
                                     fill = clause_type, text = hover_text)) +
         geom_bar(stat = "identity", color = "white", linewidth = 0.3) +
@@ -1319,7 +1394,7 @@ server <- function(input, output, session) {
   })  
   
   
-  # 📈 Keyword Frequency Plot----
+  # Keyword Frequency Plot----
   output$keyword_plot <- renderPlotly({  # Changed from renderPlot
     domain <- selected_domain()
     domain_clean <- if (!is.null(domain) && !is.na(domain)) trimws(tolower(domain)) else ""
@@ -1375,6 +1450,168 @@ server <- function(input, output, session) {
     
     # Convert to plotly
     ggplotly(p, tooltip = "text")
+  })
+  
+  # 📋 Actionable Clauses Summary----
+  output$actionable_clauses_summary <- renderUI({
+    tryCatch({
+      # Get current filters
+      domain <- selected_domain()
+      jurisdiction_filter <- input$jurisdiction_filter
+      act <- selected_act()
+      regulation <- selected_regulation()
+      search <- search_term()
+      
+      # Start with all actionable clauses
+      df <- actionable_clauses_data
+      
+      if (nrow(df) == 0) {
+        return(div(
+          style = "padding: 20px; text-align: center; color: #666;",
+          tags$i(class = "fas fa-database"),
+          " No actionable clauses data available."
+        ))
+      }
+      
+      # Filter by jurisdiction
+      if (!is.null(jurisdiction_filter) && jurisdiction_filter != "All") {
+        df <- df[df$jurisdiction == jurisdiction_filter, ]
+      }
+      
+      # Filter by act
+      if (!is.null(act) && act != "") {
+        df <- df[df$act_name == act, ]
+      }
+      
+      # Filter by search term (search in Paragraph text)
+      if (!is.null(search) && search != "") {
+        df <- df[grepl(search, df$Paragraph, ignore.case = TRUE) |
+                   grepl(search, df$Heading, ignore.case = TRUE), ]
+      }
+      
+      # Filter by domain - need to match paragraphs that have the domain label
+      if (!is.null(domain) && domain != "") {
+        # Get paragraph_ids that have this management domain
+        domain_para_ids <- label_data$paragraph_id[
+          label_data$label_type == "Management Domain" &
+            tolower(trimws(label_data$label_value)) == tolower(trimws(domain))
+        ]
+        
+        # Get legislation_ids and sections for these paragraphs
+        domain_paragraphs <- paragraph_data[paragraph_data$paragraph_id %in% domain_para_ids, ]
+        
+        # Match by act_name and Section
+        domain_leg_info <- merge(
+          domain_paragraphs[, c("legislation_id", "Section")],
+          legislation_data[, c("legislation_id", "act_name")],
+          by = "legislation_id"
+        )
+        
+        if (nrow(domain_leg_info) > 0) {
+          domain_leg_info$match_key <- paste(domain_leg_info$act_name, domain_leg_info$Section, sep = "_")
+          df$match_key <- paste(df$act_name, df$Section, sep = "_")
+          df <- df[df$match_key %in% domain_leg_info$match_key, ]
+          df$match_key <- NULL
+        } else {
+          df <- df[FALSE, ]  # Empty result
+        }
+      }
+      
+      if (nrow(df) == 0) {
+        return(div(
+          style = "padding: 20px; text-align: center; color: #666;",
+          tags$i(class = "fas fa-filter"),
+          " No actionable clauses match the current filters."
+        ))
+      }
+      
+      # Limit to reasonable number for display
+      df <- df[1:min(50, nrow(df)), ]
+      
+      # Create summary cards for each actionable clause
+      tagList(
+        div(
+          style = "margin-bottom: 10px; font-weight: bold; color: #2c3e50;",
+          sprintf("Showing %d actionable clause(s)", nrow(df))
+        ),
+        lapply(seq_len(nrow(df)), function(i) {
+          row <- df[i, ]
+          
+          # Determine jurisdiction color
+          jurisdiction_color <- switch(
+            as.character(row$jurisdiction),
+            "Federal" = "#996666",
+            "Provincial" = "#668899",
+            "#999999"
+          )
+          
+          # Safe NA checks
+          has_heading <- !is.null(row$Heading) && !is.na(row$Heading) && nchar(trimws(row$Heading)) > 0
+          has_official <- !is.null(row$responsible_official) && !is.na(row$responsible_official) && nchar(trimws(row$responsible_official)) > 0
+          has_type <- !is.null(row$actionable_type) && !is.na(row$actionable_type) && nchar(trimws(row$actionable_type)) > 0
+          has_discretion <- !is.null(row$discretion_type) && !is.na(row$discretion_type) && nchar(trimws(row$discretion_type)) > 0
+          
+          div(
+            style = sprintf(
+              "margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; border-left: 4px solid %s; background-color: #fafafa;",
+              jurisdiction_color
+            ),
+            
+            # Header with Act and Section
+            div(
+              style = "font-weight: bold; color: #2c3e50; margin-bottom: 5px;",
+              sprintf("%s - Section %s", row$act_name, row$Section)
+            ),
+            
+            # Heading (if available)
+            if (has_heading) {
+              div(
+                style = "font-style: italic; color: #555; margin-bottom: 8px; font-size: 0.9em;",
+                row$Heading
+              )
+            } else NULL,
+            
+            # Details in a compact format
+            div(
+              style = "display: flex; flex-wrap: wrap; gap: 8px; font-size: 0.85em;",
+              
+              # Responsible Official
+              if (has_official) {
+                span(
+                  style = "background-color: #e3f2fd; padding: 2px 8px; border-radius: 12px;",
+                  tags$i(class = "fas fa-user", style = "margin-right: 4px; color: #1976d2;"),
+                  row$responsible_official
+                )
+              } else NULL,
+              
+              # Actionable Type
+              if (has_type) {
+                span(
+                  style = "background-color: #f3e5f5; padding: 2px 8px; border-radius: 12px;",
+                  tags$i(class = "fas fa-gavel", style = "margin-right: 4px; color: #7b1fa2;"),
+                  row$actionable_type
+                )
+              } else NULL,
+              
+              # Discretion Type
+              if (has_discretion) {
+                span(
+                  style = "background-color: #fff3e0; padding: 2px 8px; border-radius: 12px;",
+                  tags$i(class = "fas fa-balance-scale", style = "margin-right: 4px; color: #f57c00;"),
+                  row$discretion_type
+                )
+              } else NULL
+            )
+          )
+        })
+      )
+    }, error = function(e) {
+      div(
+        style = "padding: 20px; text-align: center; color: #dc3545;",
+        tags$i(class = "fas fa-exclamation-triangle"),
+        sprintf(" Error loading actionable clauses: %s", e$message)
+      )
+    })
   })
   
   onStop(function() {
