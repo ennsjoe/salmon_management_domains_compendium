@@ -595,6 +595,29 @@ saveWorkbook(wb, output_file, overwrite = TRUE)
 cat("✅ Excel file 'LAPSE_full_compendium.xlsx' has been saved to the output directory.\n")
 cat(sprintf("   Total rows: %d\n", nrow(compendium_data)))
 
+## ============================================================================
+## EXPORT JSON VERSION OF THE COMPENDIUM
+## ============================================================================
+
+library(jsonlite)
+
+json_output_file <- file.path(here("output"), "LAPSE_compendium.json")
+
+# Convert data.table to a regular list for clean JSON structure
+compendium_list <- as.list(compendium_data)
+
+# Write JSON (pretty = TRUE for readability)
+write_json(
+  compendium_data,
+  path = json_output_file,
+  pretty = TRUE,
+  auto_unbox = TRUE,
+  na = "null"
+)
+
+cat("✅ JSON file 'LAPSE_compendium.json' has been saved to the output directory.\n")
+################################################################################
+
 # Summary statistics
 cat("\n--- Summary Statistics ---\n")
 cat(sprintf("   Paragraphs with Management Domain: %d\n", sum(!is.na(compendium_data$management_domain))))
