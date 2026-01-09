@@ -1,6 +1,6 @@
 ---
 title: "An interface between statutes and salmon: the Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE) framework"
-author: "Joe Enns, Cory Lagasse"
+author: "Joe Enns, Cory Lagasse, Daniel Gillis, Marina Wright"
 date: "`r Sys.Date()`"
 output:
   bookdown::word_document2:
@@ -231,11 +231,15 @@ In response to declines, commercial fisheries harvests have been substantially c
 
 By contrast, threats to salmon habitat require a much more coordinated and inter-jurisdictional approach to evaluate and address. Freshwater habitat, including water quantity (discharge and timing) and water quality (temperature and chemistry), are impacted by actions and conditions throughout the entire watershed. Local activities, such as forestry and urbanisation, act cumulatively and compound with climate changes to degrade salmon watersheds, threatening their ability to sustain salmon abundance and diversity [@moore2025]. Impacts from activities are often indirect, requiring monitoring and long-term studies to identify with confidence [@ulaski2025]. Regulation of threats to salmon freshwater habitat in British Columbia therefore requires the application of multiple acts and regulations across both federal and provincial jurisdiction, where the impacts from activities and the benefits of mitigation are uncertain and spread out over time and space.
 
-For example, regulation of forestry under the *Forestry Act*, water licensing under the Water Sustainability Act, environmental assessment of a mine under the Environmental Assessment Act, enforcement of activities that cause harm to salmon habitat under the *Fisheries Act* ....
+For example, regulation of forestry under the *Forestry Act*, water licensing under the Water Sustainability Act, environmental assessment of a mine under the Environmental Assessment Act, regulation of activities that cause harm to salmon habitat under the *Fisheries Act* ....
+
+-   **MW - Minor suggestions. The FFHPP regulates “Projects Near Water” based on the prohibition against causing Harmful Alteration, Disruption or Destruction of fish habitat or Death of Fish. Fisheries Officers may work with FFHPP biologist in enforcement when someone contravenes the Fisheries Act. As you know, also under the fisheries Act, is the prohibition on deleterious substances regulated by Environment Canada.**
 
 Amidst this uncertainty and complexity, multiple assessment frameworks have been developed to evaluate risks arising from anthropogenic activities and limiting factors for the survival and recovery of Pacific salmon populations [@chalifour2022; @salafsky2008; **RAMS citation?**]. While varied in their approaches, these frameworks generally aim to be comprehensive in assessing the wide range of threats that may impact Pacific salmon across their life cycle to inform status assessments, recovery planning, and conservation strategies. One of the most widely used risk assessment frameworks for Pacific salmon is the *International Union for Conservation of Nature* (IUCN) Direct Threats Classification [@salafsky2008], which is applied for Recovery Potential Assessments as part of *Species at Risk Act* listing processes and for COSEWIC status assessments [@arbeider2020; @dionne2023; @doutaz2023].
 
-Assuming there is agreement upon the most important threats, risk assessments are intended to guide the development of recovery plans and mitigation actions with the ultimate aim of reversing declines and improving conservation status. A key challenge is identifying actions that are impactful and feasible across the wide geographic range and diverse life history of Pacific salmon. In many cases, regulatory complexity, ambiguous responsibility, and dispersed authority become barriers to effective and timely action.
+Assuming there is agreement upon the most important threats, risk assessments are intended to guide the development of recovery plans and mitigation actions with the ultimate aim of reversing declines and improving conservation status. A key challenge is identifying actions that are **impactful** **(\*\*is that a word?)** and feasible across the wide geographic range and diverse life history of Pacific salmon. In many cases, regulatory complexity, ambiguous responsibility, unclear conservation objectives across jurisdictions and dispersed authority become barriers to effective and timely action.
+
+-   **MW - Option of adding “unclear standards of management”, or similar, to the list? Unclear environmental or conservation objectives across jurisdictions maybe.**
 
 ## Why study salmon legislation: purpose and objectives
 
@@ -276,6 +280,8 @@ Assessment of legislative context is prone to subjective interpretation. The inc
 ## Legislation accumulation and review
 
 We accumulated Canadian federal and British Columbian provincial legislation according to their relevance to salmon and habitat management. For this study, the term legislation refers to acts, regulations, codes, and orders. Policies are formal statements about how the government of the day plans to execute the legislative requirements [@marentette2020]. Legislation itself is a better indicator of a jurisdiction's long-term commitment to natural resource stewardship [@bogetti2025] because these policies are more prone to changes in the political, administrative, and budgetary landscape without due process or a parliamentary vote. Specific departmental policy frameworks and processes were not assessed within this exercise.
+
+-   **MW - That’s true, although many sections of the Water Sustainability Act aren’t built out and utilized.**
 
 Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were also not included explicitly. Although this other legislation is pivotal in the management of Pacific salmon, this regionally diverse administration was outside the scope of this legislative review in terms of feasibility and timelines.
 
@@ -360,6 +366,7 @@ if (file.exists(image_path)) {
 Legislation presented on Canadian and British Columbian government websites, and corresponding HTML code, is structured such that each clause is separated individually as a paragraph element. HTML code for paragraph elements is generally consistent across legislation, but section, subsection, and heading elements are not. As shown in Figure \@ref(fig:fig-legistics-paragraphing), “clause” in this study can also refer to subclauses, but also sections, subsections, and opening words (chapeau or umbrella) when they are stand-alone paragraph elements. HTML files were parsed using R and the “rvest” package to extract the text of each clause, then grouped by section and heading.
 
 -   **DG - Also needs a citation. Note to be consistent in the introduction of R package names. udpipe doesn’t have quotation marks, this one does. The formatting depends on the citation style, so it can be changed later, but a consistent starting point would be good.**
+-   **MW - Define the statute being the Fisheries Act into the figure or title? For some reason, the term statute is confusing me. I had to look up the definition to check if it included regulations or not. I wonder if it should be defined for readability earlier in the report or if people should just know this term.**
 
 ## Compendium development
 
@@ -448,7 +455,9 @@ ft
 
 \
 
-Management domains were identified within all the collected statutes. Pollution was the management domain with the highest section count (Figure \@ref(fig:section-count-by-management-domain)), split almost evenly between federal and provincial jurisdictions. Human Disturbance (research activities) and Climate Change and Natural Disasters had the fewest section count. Fisheries was in the top three for section count, with a majority of sections under federal jurisdiction. Water Use and Watercourse Modifications was in the top four for section count, with a majority of sections under provincial jurisdiction. This count indicates an underlying possibly dysfunctional relationship where salmon harvest is controlled federally while habitat aspects are governed provincially.
+Management domains were identified within all the collected statutes. Pollution was the management domain with the highest section count (Figure \@ref(fig:section-count-by-management-domain)), split almost evenly between federal and provincial jurisdictions. Human Disturbance (research **\*\*scientific?** activities) and Climate Change and Natural Disasters had the fewest section count. Fisheries was in the top three for section count, with a majority of sections under federal jurisdiction. Water Use and Watercourse Modifications was in the top four for section count, with a majority of sections under provincial jurisdiction. This count indicates an underlying possibly dysfunctional relationship where salmon harvest is controlled federally while habitat aspects are governed provincially.
+
+-   **MW - The Management Domain of Human Disturbance is just research activities? This seems less intuitive for me than the other management domains since human disturbance could refer to most of them.**
 
 ```{r section-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6, fig.cap="Count of sections matched by management domain, stacked by jurisdiction."}
 # Load required libraries
@@ -903,8 +912,6 @@ ggplot(summary_data, aes(
     panel.background = element_rect(fill = "white", color = NA)
   )
 ```
-
-\
 
 # Legislative factors: clause types
 
@@ -1399,7 +1406,28 @@ if (!file.exists(db_path)) {
 
 -   **add more description of Bessette Creek**
 
+-   **MW - This may be out of scope for your review but here is a report that outlines the burden of proof needed for the Gov of BC to deny an application for an irrigation well in the Bessette Watershed. Their refusal decision was appealed by the applicant. It may have some background info you are looking for. [Aquatic Report Catalogue](https://a100.gov.bc.ca/pub/acat/public/viewReport.do?reportId=59109)**
+
 -   **Comment on the most relevant legislation and why**
+
+-   **MW - In case this is helpful context:**
+
+    **Water Sustainability Act Sections for water use/licencing:\
+    **
+
+    **14 Powers respecting applications and decision maker initiatives**
+
+    **Decision point:**
+
+    **The decision maker may refuse an application, require additional information from the applicant, include special conditions, amend or grant the application.**
+
+    **15 EFN**
+
+    **Decision points:**
+
+    1.  **The decision maker must consider the environmental flow needs of the stream (as outlined in the EFN Policy).**
+
+    2.  **In some cases, the decision maker must determine the EFN and may require further assessment from the applicant or a QEP — typically when regulations apply (e.g., the stream is identified as a Sensitive Stream in regulation) or when the decision maker deems additional information necessary to properly assess the application.**
 
 # Co-occurrence of management domains
 
