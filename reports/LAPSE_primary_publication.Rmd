@@ -58,166 +58,234 @@ dbDisconnect(conn)
 
 Eurocentric colonial stewardship of natural resources in Canada is administered through a decentralized, multi-sector array of federal, provincial, and territorial constitutional authority [@ray2021; @campbell2002]. Stemming from the *Constitution Act*, legislative control over fisheries and ecological stewardship has been a reactionary process of assigning authority through two orders of government (federal and provincial) for new environmental issues as they arise, which creates a complex and overlapping governance distribution [@becklumb2013]. Provinces have jurisdiction over most wildlife within their borders; however, the federal government has jurisdiction over wildlife on federal land (e.g. national parks), as well as, migratory birds and aquatic species including marine mammals and fish [@becklumb2013; @kraus2021]. The dual roles – arising from the adaptation of British Common Law to the Canadian situation – can lead to confusion around management prerogatives [@thompson1974] and jurisdictional authority is rarely the responsibility of one level of government [@campbell2002].
 
-The patchwork of legislative authority is most prominent in Pacific salmon management due to their geographically widespread, anadromous life cycle that spans international boundaries and freshwater and marine ecosystems. While salmon and salmon fisheries are regulated federally, water use and watercourse management and the corresponding aquatic habitat is managed by the provinces. However, watercourse management is not strictly provincial jurisdiction. The federal government regulates fisheries and navigable waters in oceans, lakes, rivers, and streams even within provincial boundaries [@becklumb2013; @swerdfager2023]. Federal fisheries governance also includes the quality of fish-bearing waters, and both federal and provincial governments have authority to designate protected areas.
+The patchwork of legislative authority is most prominent in Pacific salmon management due to their geographically widespread, anadromous life cycle that spans international boundaries and freshwater and marine ecosystems. While salmon populations and salmon fisheries are regulated federally, water use and watercourse management and the corresponding aquatic habitat is managed by the provinces. However, watercourse management is not strictly provincial jurisdiction. The federal government regulates navigable waters in oceans, lakes, rivers, and streams even within provincial boundaries [@becklumb2013; @swerdfager2023]. Federal fisheries governance also includes the quality of fish-bearing waters, and both federal and provincial governments have authority to designate protected areas.
 
-```{r fig-sankey-federal, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=10, fig.cap="Federal jurisdiction: legislation to agency relationships. Sections proportionally attributed across responsible agencies.", dpi=300}
+Administrative concerns specific to natural resource stewardship are also often split between ministries at the federal and provincial level, which can further decentralize responsibility. Figures \@ref(fig:fig-sankey-federal) and \@ref(fig:fig-sankey-provincial) show a compilation of federal and provincial acts relevant to Pacific salmon management with assigned ministries. Relevant acts were compiled through a step-wise keyword search process using the Canadian Legal Information Institute (CanLII) website [@canadianlegalinformationinstitute2025]. The ministries were referenced from the federal *Table of Public Statutes and Responsible Ministers* [@departmentofjusticecanada2026] and the British Columbian provincial *Acts - Minsters' Responsibilities* [@provinceofbritishcolumbia2025]*.* The ministry and minister names shown may not necessarily represent the current cabinet names, which can be changed arbitrarily by the government of the day. The table represents the minister and ministry names as they are stated in the legislation and corresponding minister responsibility tables, which are less prone to short-term changes.
+
+```{r fig-sankey-federal, echo=FALSE, message=FALSE, warning=FALSE, fig.width=14, fig.height=12, dpi=300, fig.cap = "List of Canadian federal acts relevant to Pacific salmon and habitat governance with assigned ministries."}
+
 library(ggalluvial)
+library(stringr)
+library(ggrepel)
 
 if (!is.null(agencies_table)) {
- # Compute unique section count per legislation_id
- section_counts <- paragraph_table[
-   !is.na(Section),
-   .(section_count = uniqueN(Section)),
-   by = legislation_id
- ]
- 
- # Merge with legislation metadata
- section_counts <- merge(
-   section_counts,
-   legislation_table[, .(legislation_id, act_name, legislation_name, jurisdiction)],
-   by = "legislation_id",
-   all.x = TRUE
- )
- 
- # Aggregate by act_name to avoid duplicate joins
- section_counts <- section_counts[
-   , .(section_count = sum(section_count)), by = .(act_name, jurisdiction)
- ]
- 
- # Merge with agencies
- sankey_data <- merge(
-   agencies_table,
-   section_counts,
-   by = "act_name",
-   all.x = TRUE
- )
- 
- # Filter to Federal and aggregate
- sankey_federal <- sankey_data[!is.na(section_count) & jurisdiction == "Federal"]
- sankey_federal <- sankey_federal[, .(section_count = sum(section_count)), by = .(act_name, agency)]
- 
- # Proportionally attribute sections across agencies
- sankey_federal[, n_agencies := .N, by = act_name]
- sankey_federal[, section_count := section_count / n_agencies]
- 
- if (nrow(sankey_federal) > 0) {
-   # Order acts and agencies by total flow for better visualization
-   act_order <- sankey_federal[, .(total = sum(section_count)), by = act_name][order(-total)]
-   agency_order <- sankey_federal[, .(total = sum(section_count)), by = agency][order(-total)]
-   
-   sankey_federal[, act_name := factor(act_name, levels = act_order$act_name)]
-   sankey_federal[, agency := factor(agency, levels = agency_order$agency)]
-   
-   # Create alluvial plot - grey bands, colored sides
-   p <- ggplot(sankey_federal,
-          aes(axis1 = act_name, axis2 = agency, y = section_count)) +
-     geom_alluvium(fill = "gray80", width = 1/12, color = "gray60", linewidth = 0.2, alpha = 0.7) +
-     geom_stratum(width = 1/12, fill = "#996666", color = "black", linewidth = 0.3) +
-     geom_text(stat = "stratum", aes(label = after_stat(stratum)), size = 3.2, hjust = 0, nudge_x = 0.05) +
-     scale_x_discrete(limits = c("Legislation", "Agency"), expand = c(0.3, 0.1)) +
-     labs(
-       y = "Proportional Attribution"
-     ) +
-     theme_minimal(base_size = 12) +
-     theme(
-       text = element_text(color = "black", size = 10),
-       axis.text.y = element_blank(),
-       axis.text.x = element_text(face = "bold", size = 14),
-       axis.title.x = element_blank(),
-       axis.title.y = element_text(face = "bold", size = 11),
-       axis.ticks = element_blank(),
-       panel.grid.major = element_blank(),
-       panel.grid.minor = element_blank(),
-       plot.background = element_rect(fill = "white", color = NA),
-       panel.background = element_rect(fill = "white", color = NA)
-     )
-   
-   # Explicitly print the plot
-   print(p)
- }
+  # Compute unique section count per legislation_id
+  section_counts <- paragraph_table[
+    !is.na(Section),
+    .(section_count = uniqueN(Section)),
+    by = legislation_id
+  ]
+  
+  # Merge with legislation metadata
+  section_counts <- merge(
+    section_counts,
+    legislation_table[, .(legislation_id, act_name, legislation_name, jurisdiction)],
+    by = "legislation_id",
+    all.x = TRUE
+  )
+  
+  # Aggregate by act_name to avoid duplicate joins
+  section_counts <- section_counts[
+    , .(section_count = sum(section_count)), by = .(act_name, jurisdiction)
+  ]
+  
+  # Merge with agencies
+  sankey_data <- merge(
+    agencies_table,
+    section_counts,
+    by = "act_name",
+    all.x = TRUE
+  )
+  
+  # Filter to Federal and aggregate
+  sankey_federal <- sankey_data[!is.na(section_count) & jurisdiction == "Federal"]
+  sankey_federal <- sankey_federal[, .(section_count = sum(section_count)), by = .(act_name, agency)]
+  
+  # Proportionally attribute sections across agencies
+  sankey_federal[, n_agencies := .N, by = act_name]
+  sankey_federal[, section_count := section_count / n_agencies]
+  
+  # Set all counts to 1 to show equal-sized strata (connections only)
+  sankey_federal[, section_count := 1]
+  
+  if (nrow(sankey_federal) > 0) {
+    # Order acts and agencies alphabetically for consistent layout
+    act_order <- sankey_federal[, .(total = sum(section_count)), by = act_name][order(act_name)]
+    agency_order <- sankey_federal[, .(total = sum(section_count)), by = agency][order(agency)]
+    
+    sankey_federal[, act_name := factor(act_name, levels = act_order$act_name)]
+    sankey_federal[, agency := factor(agency, levels = agency_order$agency)]
+    
+    # Create alluvial plot - grey bands, colored sides
+    p <- ggplot(sankey_federal,
+           aes(axis1 = act_name, axis2 = agency, y = section_count)) +
+      geom_alluvium(fill = "gray80", width = 1/12, color = "gray60", linewidth = 0.2, alpha = 0.7) +
+      geom_stratum(width = 1/12, fill = "#996666", color = "black", linewidth = 0.3) +
+      # Legislation labels on the left - with ggrepel for no overlap
+      geom_text_repel(
+        stat = "stratum",
+        aes(label = after_stat(
+          ifelse(x == 1, str_wrap(as.character(stratum), width = 30), "")
+        )),
+        size = 3.2,
+        hjust = 1,
+        nudge_x = -0.15,
+        direction = "y",
+        segment.color = "gray60",
+        segment.size = 0.2,
+        min.segment.length = 0,
+        box.padding = 0.2,
+        point.padding = 0.1,
+        force = 1,
+        max.overlaps = Inf,
+        lineheight = 0.9,
+        family = "Times"
+      ) +
+      # Agency labels on the right - with ggrepel for no overlap
+      geom_text_repel(
+        stat = "stratum",
+        aes(label = after_stat(
+          ifelse(x == 2, str_wrap(as.character(stratum), width = 30), "")
+        )),
+        size = 3.2,
+        hjust = 0,
+        nudge_x = 0.15,
+        direction = "y",
+        segment.color = "gray60",
+        segment.size = 0.2,
+        min.segment.length = 0,
+        box.padding = 0.2,
+        point.padding = 0.1,
+        force = 1,
+        max.overlaps = Inf,
+        lineheight = 0.9,
+        family = "Times"
+      ) +
+      scale_x_discrete(limits = c("Legislation", "Ministry"), expand = c(0.35, 0.35)) +
+      theme_minimal(base_size = 12, base_family = "Times") +
+      theme(
+        text = element_text(color = "black", size = 10, family = "Times"),
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(face = "bold", size = 14),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "white", color = NA),
+        panel.background = element_rect(fill = "white", color = NA),
+        plot.margin = margin(t = 10, r = 120, b = 10, l = 120, unit = "pt")
+      )
+    
+    # Explicitly print the plot
+    print(p)
+  }
 }
 ```
 
-```{r fig-sankey-provincial, echo=FALSE, message=FALSE, warning=FALSE, fig.width=14, fig.height=12, fig.cap="Provincial jurisdiction: legislation to agency relationships. Sections proportionally attributed across responsible agencies.", dpi=300}
+```{r fig-sankey-provincial, echo=FALSE, message=FALSE, warning=FALSE, fig.width=14, fig.height=12, dpi=300, fig.cap="List of British Columbian provincial acts relevant to Pacific salmon and habitat governance with assigned ministries."}
+
 library(ggalluvial)
+library(stringr)
 
 if (!is.null(agencies_table)) {
- # Compute unique section count per legislation_id
- section_counts <- paragraph_table[
-   !is.na(Section),
-   .(section_count = uniqueN(Section)),
-   by = legislation_id
- ]
- 
- # Merge with legislation metadata
- section_counts <- merge(
-   section_counts,
-   legislation_table[, .(legislation_id, act_name, legislation_name, jurisdiction)],
-   by = "legislation_id",
-   all.x = TRUE
- )
- 
- # Aggregate by act_name to avoid duplicate joins
- section_counts <- section_counts[
-   , .(section_count = sum(section_count)), by = .(act_name, jurisdiction)
- ]
- 
- # Merge with agencies
- sankey_data <- merge(
-   agencies_table,
-   section_counts,
-   by = "act_name",
-   all.x = TRUE
- )
- 
- # Filter to Provincial and aggregate
- sankey_provincial <- sankey_data[!is.na(section_count) & jurisdiction == "Provincial"]
- sankey_provincial <- sankey_provincial[, .(section_count = sum(section_count)), by = .(act_name, agency)]
- 
- # Proportionally attribute sections across agencies
- sankey_provincial[, n_agencies := .N, by = act_name]
- sankey_provincial[, section_count := section_count / n_agencies]
- 
- if (nrow(sankey_provincial) > 0) {
-   # Order acts and agencies by total flow for better visualization
-   act_order <- sankey_provincial[, .(total = sum(section_count)), by = act_name][order(-total)]
-   agency_order <- sankey_provincial[, .(total = sum(section_count)), by = agency][order(-total)]
-   
-   sankey_provincial[, act_name := factor(act_name, levels = act_order$act_name)]
-   sankey_provincial[, agency := factor(agency, levels = agency_order$agency)]
-   
-   # Create alluvial plot - grey bands, colored sides
-   p <- ggplot(sankey_provincial,
-          aes(axis1 = act_name, axis2 = agency, y = section_count)) +
-     geom_alluvium(fill = "gray80", width = 1/12, color = "gray60", linewidth = 0.2, alpha = 0.7) +
-     geom_stratum(width = 1/12, fill = "#668899", color = "black", linewidth = 0.3) +
-     geom_text(stat = "stratum", aes(label = after_stat(stratum)), size = 3.2, hjust = 0, nudge_x = 0.05) +
-     scale_x_discrete(limits = c("Legislation", "Agency"), expand = c(0.3, 0.1)) +
-     labs(
-       y = "Proportional Attribution"
-     ) +
-     theme_minimal(base_size = 12) +
-     theme(
-       text = element_text(color = "black", size = 10),
-       axis.text.y = element_blank(),
-       axis.text.x = element_text(face = "bold", size = 14),
-       axis.title.x = element_blank(),
-       axis.title.y = element_text(face = "bold", size = 11),
-       axis.ticks = element_blank(),
-       panel.grid.major = element_blank(),
-       panel.grid.minor = element_blank(),
-       plot.background = element_rect(fill = "white", color = NA),
-       panel.background = element_rect(fill = "white", color = NA)
-     )
-   
-   # Explicitly print the plot
-   print(p)
- }
+  # Compute unique section count per legislation_id
+  section_counts <- paragraph_table[
+    !is.na(Section),
+    .(section_count = uniqueN(Section)),
+    by = legislation_id
+  ]
+  
+  # Merge with legislation metadata
+  section_counts <- merge(
+    section_counts,
+    legislation_table[, .(legislation_id, act_name, legislation_name, jurisdiction)],
+    by = "legislation_id",
+    all.x = TRUE
+  )
+  
+  # Aggregate by act_name to avoid duplicate joins
+  section_counts <- section_counts[
+    , .(section_count = sum(section_count)), by = .(act_name, jurisdiction)
+  ]
+  
+  # Merge with agencies
+  sankey_data <- merge(
+    agencies_table,
+    section_counts,
+    by = "act_name",
+    all.x = TRUE
+  )
+  
+  # Filter to Provincial and aggregate
+  sankey_provincial <- sankey_data[!is.na(section_count) & jurisdiction == "Provincial"]
+  sankey_provincial <- sankey_provincial[, .(section_count = sum(section_count)), by = .(act_name, agency)]
+  
+  # Proportionally attribute sections across agencies
+  sankey_provincial[, n_agencies := .N, by = act_name]
+  sankey_provincial[, section_count := section_count / n_agencies]
+  
+  # Set all counts to 1 to show equal-sized strata (connections only)
+  sankey_provincial[, section_count := 1]
+  
+  if (nrow(sankey_provincial) > 0) {
+    # Order acts and agencies alphabetically for consistent layout
+    act_order <- sankey_provincial[, .(total = sum(section_count)), by = act_name][order(act_name)]
+    agency_order <- sankey_provincial[, .(total = sum(section_count)), by = agency][order(agency)]
+    
+    sankey_provincial[, act_name := factor(act_name, levels = act_order$act_name)]
+    sankey_provincial[, agency := factor(agency, levels = agency_order$agency)]
+    
+    # Create alluvial plot - grey bands, colored sides
+    p <- ggplot(sankey_provincial,
+           aes(axis1 = act_name, axis2 = agency, y = section_count)) +
+      geom_alluvium(fill = "gray80", width = 1/12, color = "gray60", linewidth = 0.2, alpha = 0.7) +
+      geom_stratum(width = 1/12, fill = "#668899", color = "black", linewidth = 0.3) +
+      # Legislation labels on the left - wrapped
+      geom_text(
+        stat = "stratum",
+        aes(label = after_stat(
+          ifelse(x == 1, str_wrap(as.character(stratum), width = 30), "")
+        )),
+        size = 3.2,
+        hjust = 1,
+        nudge_x = -0.1,
+        lineheight = 0.9,
+        family = "Times"
+      ) +
+      # Agency labels on the right - wrapped
+      geom_text(
+        stat = "stratum",
+        aes(label = after_stat(
+          ifelse(x == 2, str_wrap(as.character(stratum), width = 30), "")
+        )),
+        size = 3.2,
+        hjust = 0,
+        nudge_x = 0.1,
+        lineheight = 0.9,
+        family = "Times"
+      ) +
+      scale_x_discrete(limits = c("Legislation", "Ministry"), expand = c(0.3, 0.3)) +
+      theme_minimal(base_size = 12, base_family = "Times") +
+      theme(
+        text = element_text(color = "black", size = 10, family = "Times"),
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(face = "bold", size = 14),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "white", color = NA),
+        panel.background = element_rect(fill = "white", color = NA),
+        plot.margin = margin(t = 10, r = 100, b = 10, l = 100, unit = "pt")
+      )
+    
+    # Explicitly print the plot
+    print(p)
+  }
 }
 ```
-
--   **need to format these charts better. Overlapping font. Maybe side-by-side charts? Or just one chart as an example? - Maybe alternate labels either side of boxes - maybe flip the charts to be horizontal? - Y-axis label too far away from graph - Italicize legislation names - Double check the current Minister names**
--   **How did we choose the legislation to be in these charts? We haven't introduced that idea yet. Maybe add more context to Figure captions**
 
 Acts and regulations in British Columbia might be designed to address one broad category of human activity, but this activity can cover many aspects of salmon management. For example, the provincial *Forest and Range Practices Act* is specific to forestry practices and planning, along with cattle ranging, but in terms of salmon threats, these activities impact many aspects including stream hydrology, water temperature, effluent, riparian habitat destruction, watercourse changes from road infrastructure [@ulaski2025], and the spread of invasive species. Projects that influence environmental factors can be subject to both provincial and federal environmental assessments during the planning stages [@becklumb2013]. Natural resource legislation and programs often operate on a sector-by-sector and individual resource basis where integrated stewardship relies on scale-appropriate planning and decision making [@ray2021]. Provinces generally decide when, or if, to regulate on matters of environmental concern [@campbell2002]. British Columbia is even more decentralized than other provinces, especially in terms of species at risk legislation, because British Columbia’s relevant provisions are spread over the greatest number of statutes and regulations [@bogetti2025].
 
@@ -1160,7 +1228,7 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_c
 
 ## Case Study: IUCN 10.1 Geological events
 
-One IUCN threat was assessed as “Extreme” through DFO Recovery Potential Assessment processes, which was “10.1 Geological Events” [@dfo2020; @dfo2022]. This threat was assigned to one sockeye and three Chinook conservation units (Table \@ref(tab:cu-extreme-threat-table)), all in the Fraser Interior area related to the “ongoing effects from Big Bar landslide” in 2018 [@dfo2020; @dfo2022]:
+One IUCN threat was assessed as “Extreme” through DFO Recovery Potential Assessment processes, which was “10.1 Geological Events” [doutaz2020; @dfo2022]. This threat was assigned to one sockeye and three Chinook conservation units (Table \@ref(tab:cu-extreme-threat-table)), all in the Fraser Interior area related to the “ongoing effects from Big Bar landslide” in 2018 [doutaz2020; @dfo2022]:
 
 -   **DG - Suggest using IUCN-CMP throughout if that’s what we’re starting with.**
 
@@ -1291,7 +1359,7 @@ if (!file.exists(db_path)) {
 
 ## Case Study: IUCN 7.2 Dams & Water Management / Use
 
-One IUCN threat was assessed as “Extreme-High” through DFO Recovery Potential Assessment processes, which was “7.2 Dams & Water Management / Use” [@dfo2020]. Water extraction, including groundwater, for irrigation and domestic purposes is listed as the most significant concern [@dfo2020]. This threat was assigned to one Chinook conservation unit in the Fraser Interior area (Table \@ref(tab:cu-extreme-high-threat-table)).
+One IUCN threat was assessed as “Extreme-High” through DFO Recovery Potential Assessment processes, which was “7.2 Dams & Water Management / Use” [doutaz2020]. Water extraction, including groundwater, for irrigation and domestic purposes is listed as the most significant concern [doutaz2020]. This threat was assigned to one Chinook conservation unit in the Fraser Interior area (Table \@ref(tab:cu-extreme-high-threat-table)).
 
 -   **DG - And 7.3 Other ecosystem modifications**
 
