@@ -60,6 +60,78 @@ Eurocentric colonial stewardship of natural resources in Canada is administered 
 
 The patchwork of legislative authority is most prominent in Pacific salmon management due to their geographically widespread, anadromous life cycle that spans international boundaries and freshwater and marine ecosystems. While salmon populations and salmon fisheries are regulated federally, water use and watercourse management and the corresponding aquatic habitat is managed by the provinces. However, watercourse management is not strictly provincial jurisdiction. The federal government regulates navigable waters in oceans, lakes, rivers, and streams even within provincial boundaries [@becklumb2013; @swerdfager2023]. Federal fisheries governance also includes the quality of fish-bearing waters, and both federal and provincial governments have authority to designate protected areas.
 
+Acts and regulations in British Columbia might be designed to address one broad category of human activity, but this activity can cover many aspects of salmon management. For example, the provincial *Forest and Range Practices Act* is specific to forestry practices and planning, along with cattle ranging, but in terms of salmon threats, these activities impact many aspects including stream hydrology, water temperature, effluent, riparian habitat destruction, watercourse changes from road infrastructure [@ulaski2025], and the spread of invasive species. Projects that influence environmental factors can be subject to both provincial and federal environmental assessments during the planning stages [@becklumb2013]. Natural resource legislation and programs often operate on a sector-by-sector and individual resource basis where integrated stewardship relies on scale-appropriate planning and decision making [@ray2021]. Provinces generally decide when, or if, to regulate on matters of environmental concern [@campbell2002]. British Columbia is even more decentralized than other provinces, especially in terms of species at risk legislation, because British Columbia’s relevant provisions are spread over the greatest number of statutes and regulations [@bogetti2025].
+
+## Complexity in addressing Pacific Salmon population declines
+
+Despite considerable attention towards policies and recovery programs for salmon conservation and governance (e.g. *Canada’s Policy for Conservation of Wild Pacific Salmon,* the *Pacific Salmon Strategy Initiative*), Pacific salmon populations are generally declining across Canada, while the number of populations monitored continues to drop [@price2017; @atkinson2024].
+
+The causes of Pacific salmon population declines in Canada are varied and have been the subject of numerous studies and reviews over the last few decades (e.g. the **Cohen Commission 2010, Report of the Standing Committee On Fisheries and Oceans 2021**,[@grant2019]).
+
+Decline in salmon populations are recognized as a consequence of human activity, including the loss or degradation of freshwater habitat [@bisson2009], unsustainable fisheries harvest, and climate change.
+
+-   **Get references**
+
+Commercial fisheries harvests have been substantially curtailed in recent decades in response to wild-origin salmon abundance declines [@delvalle2024] as Fisheries and Oceans Canada (DFO) aims to manage fisheries to preserve biodiversity in a manner consistent with the *Wild Salmon Policy* and the **Precautionary Approach**.
+
+**Fisheries, particularly commercial fisheries, are legislated under the distinct authority of the *Fisheries Act* where laws and regulations prescribe how, when, and where fisheries harvest may occur within Canadian waters (\*\*need to cite this statement...).**
+
+-   **Is this really true... Fisheries of Pacific salmon...** Maybe quote the legislation on this. Quite a definitive statement.
+
+**There is no ambiguity in jurisdiction or responsibility, at least for fisheries intercepting Pacific salmon within Canada, therefore fisheries harvest impacts can be adjusted relatively easily in response to declines or changing abundances.**
+
+Fisheries also result in direct mortality to salmon, therefore, impacts can be directly measured and managed using quantifiable targets, assuming adequate monitoring information is collected.
+
+By contrast, threats to salmon habitat require a much more coordinated and inter-jurisdictional approach to evaluate and address. Freshwater habitat, including water quantity (discharge and timing) and water quality (temperature and chemistry), are impacted by actions and conditions throughout the entire watershed. Local activities, such as forestry and urbanisation, act cumulatively and compound with climate changes to degrade salmon watersheds, threatening their ability to sustain salmon abundance and diversity [@moore2025]. Impacts from activities are often indirect, requiring monitoring and long-term studies to identify with confidence [@ulaski2025]. Regulation of threats to salmon freshwater habitat in British Columbia therefore requires the application of multiple acts and regulations across both federal and provincial jurisdiction, where the impacts from activities and the benefits of mitigation are uncertain and spread out over time and space.
+
+For example, regulation of forestry under the *Forestry Act*, water licensing under the Water Sustainability Act, environmental assessment of a mine under the Environmental Assessment Act, regulation of activities that cause harm to salmon habitat under the *Fisheries Act* ....
+
+-   **MW - Minor suggestions. The FFHPP regulates “Projects Near Water” based on the prohibition against causing Harmful Alteration, Disruption or Destruction of fish habitat or Death of Fish. Fisheries Officers may work with FFHPP biologist in enforcement when someone contravenes the Fisheries Act. As you know, also under the fisheries Act, is the prohibition on deleterious substances regulated by Environment Canada.**
+
+Amidst this uncertainty and complexity, multiple assessment frameworks have been developed to evaluate risks arising from anthropogenic activities and limiting factors for the survival and recovery of Pacific salmon populations [@chalifour2022; @salafsky2008; **RAMS citation?**]. While varied in their approaches, these frameworks generally aim to be comprehensive in assessing the wide range of threats that may impact Pacific salmon across their life cycle to inform status assessments, recovery planning, and conservation strategies. One of the most widely used risk assessment frameworks for Pacific salmon is the *International Union for Conservation of Nature* (IUCN) Direct Threats Classification [@salafsky2008], which is applied for Recovery Potential Assessments as part of *Species at Risk Act* listing processes and for COSEWIC status assessments [@arbeider2020; @dionne2023; @doutaz2023].
+
+Assuming there is agreement upon the most important threats, risk assessments are intended to guide the development of recovery plans and mitigation actions with the ultimate aim of reversing declines and improving conservation status. A key challenge is identifying actions that are **impactful** **(\*\*is that a word?)** and feasible across the wide geographic range and diverse life history of Pacific salmon. In many cases, regulatory complexity, ambiguous responsibility, unclear conservation objectives across jurisdictions and dispersed authority become barriers to effective and timely action.
+
+-   **MW - Option of adding “unclear standards of management”, or similar, to the list? Unclear environmental or conservation objectives across jurisdictions maybe.**
+
+## Why study salmon legislation: purpose and objectives
+
+The need for collaborative, coordinated action to address Pacific salmon declines is recognized by governments throughout policies, plans, and initiatives (e.g. the WSP, [the trilateral accord 2024](https://www.pac.dfo-mpo.gc.ca/fm-gp/salmon-saumon/docs/trilat-agreement-accord/index-eng.html)). Coordinated action requires adequate organizational capacity and systems for implementation to ensure that regulatory controls and mitigation activities address underlying threats to salmon and their habitat. However, linking threats and recovery actions to the relevant regulatory systems can be complex because salmon are often affected by multiple threats that each span across agencies and governmental jurisdiction.
+
+-   **Add examples of rebuilding plans, OK Chinook, WCVI Chinook, Fish stock provision rebuilding plans (DG)**
+
+In this study, we seek to decode the complexity between salmon threats and environmental legislation by creating an interface between regulatory language and anthropogenic threat categories. We describe and apply the Legislation Applicable to Pacific Salmon and their Ecosystems (LAPSE) database, a repository of federal and provincial legislation and regulations that apply to Pacific salmon in British Columbia. Using a novel method for parsing and classifying legislative clauses, we develop keyword relationships between IUCN threats classifications and XXXX clauses from XX acts and XX regulations. By creating an extensive, open-source, and easily accessible database linking legislation to salmon, we aim to facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia, while providing a framework to support systematic and critical reviews of strengths and shortcomings of regulations with respect to salmon threats.
+
+# International Union for Conservation of Nature (IUCN) threat categories
+
+Management decisions and activities related to salmon are often in response to identifiable threats to salmon health and population status. Legislated recovery planning also relies on a description of identified threats [@mccune2013]. Human systems can be categorized as direct threats to biodiversity more specifically for conservation strategies [@salafsky2008]. The *International Union for Conservation of Nature* (IUCN) and *Conservation Measures Partnership* (CMP) has developed a hierarchical grouping of threats used globally by conservation practitioners. IUCN direct threat categories are widely used to assess threats as part of IUCN red list assessments, as well as, in status assessments for Pacific salmon populations conducted by the *Committee for the Status of Endangered Wildlife in Canada* (COSEWIC). For this study, the *IUCN - CMP Direct Threats Classification 4.0* [@salafsky2025] was used to categorize legislation by direct threats to salmon conservation. **Level 2 threat classification** was used as the finest resolution that could be applied consistently.
+
+-   **DG - Not everyone will be familiar with the different threat levels in this framework. Before this sentence, a brief explanation of the threats hierarchy could help the unfamiliar reader. You could point the reader to the original publication of this framework ([The Society for Conservation Biology](https://conbio.onlinelibrary.wiley.com/doi/full/10.1111/j.1523-1739.2008.00937.x)), and/or summarize some key information from this paper, such as, “The threat classification hierarchically categorizes threats into three levels. Each level one category (e.g., Agriculture & Aquaculture) is further subdivided into several level two categories (e.g., Annual & Perennial Non-Timber Crops, Marine & Freshwater Aquaculture), and are subsequently into numerous level three and four categories.” Something like this could help the reader follow the sentence that explains why level two was chosen (consistent application).**
+
+Legislative clauses that influence Pacific salmon governance in British Columbia are not always associated with conservation threats. As well, some clauses may involve all threats. For example, statutes that outline species status or determine ecological reserves have relevance to how salmon are managed, but can’t be attributed to any one IUCN threat category. Pacific salmon life history also ranges over a broad geography of marine and freshwater habitat (including terrestrial watershed aspects), touching on almost every conservation threat available. We developed management domain categories through this study as a clearer and more comprehensive alignment between regulatory administrative concern and conservation threat categories (Figure \@ref(fig:fig-flowchart-image)).
+
+```{r fig-flowchart-image, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Flowchart showing alignment of IUCN Level 2 threat categories with Management Domain in relation to legislation and jurisdiction."}
+library(here)
+library(knitr)
+
+# Define image path
+image_path <- here("assets", "Management Domain Flowchart.png")
+
+# Render image only if it exists
+if (file.exists(image_path)) {
+  include_graphics(image_path)
+} else {
+  plot.new()
+  text(0.5, 0.5, paste("❌ Image file not found:", image_path))
+}
+```
+
+# A process for clause categorization
+
+Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the clauses within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable if legislation changes. The process steps are: accumulate and review legislation (CanLii); parse legislation by clause (paragraph), section, and heading; match management domain and IUCN threat keywords to clauses; assign salmon-specific scope categories; match clause type keywords to clauses.
+
+## Legislation accumulation and review
+
 Administrative concerns specific to natural resource stewardship are also often split between ministries at the federal and provincial level, which can further decentralize responsibility. Figures \@ref(fig:fig-sankey-federal) and \@ref(fig:fig-sankey-provincial) show a compilation of federal and provincial acts relevant to Pacific salmon management with assigned ministries. Relevant acts were compiled through a step-wise keyword search process using the Canadian Legal Information Institute (CanLII) website [@canadianlegalinformationinstitute2025]. The ministries were referenced from the federal *Table of Public Statutes and Responsible Ministers* [@departmentofjusticecanada2026] and the British Columbian provincial *Acts - Minsters' Responsibilities* [@provinceofbritishcolumbia2025]*.* The ministry and minister names shown may not necessarily represent the current cabinet names, which can be changed arbitrarily by the government of the day. The table represents the minister and ministry names as they are stated in the legislation and corresponding minister responsibility tables, which are less prone to short-term changes.
 
 ```{r fig-sankey-federal, echo=FALSE, message=FALSE, warning=FALSE, fig.width=14, fig.height=12, dpi=300, fig.cap = "List of Canadian federal acts relevant to Pacific salmon and habitat governance with assigned ministries."}
@@ -287,77 +359,6 @@ if (!is.null(agencies_table)) {
 }
 ```
 
-Acts and regulations in British Columbia might be designed to address one broad category of human activity, but this activity can cover many aspects of salmon management. For example, the provincial *Forest and Range Practices Act* is specific to forestry practices and planning, along with cattle ranging, but in terms of salmon threats, these activities impact many aspects including stream hydrology, water temperature, effluent, riparian habitat destruction, watercourse changes from road infrastructure [@ulaski2025], and the spread of invasive species. Projects that influence environmental factors can be subject to both provincial and federal environmental assessments during the planning stages [@becklumb2013]. Natural resource legislation and programs often operate on a sector-by-sector and individual resource basis where integrated stewardship relies on scale-appropriate planning and decision making [@ray2021]. Provinces generally decide when, or if, to regulate on matters of environmental concern [@campbell2002]. British Columbia is even more decentralized than other provinces, especially in terms of species at risk legislation, because British Columbia’s relevant provisions are spread over the greatest number of statutes and regulations [@bogetti2025].
-
-## Complexity in addressing Pacific Salmon population declines
-
-Despite considerable attention towards policies and recovery programs for salmon conservation and governance (e.g. *Canada’s Policy for Conservation of Wild Pacific Salmon,* the *Pacific Salmon Strategy Initiative*), Pacific salmon populations are generally declining across Canada, while the number of populations monitored continues to drop [@price2017; @atkinson2024].
-
-The causes of Pacific salmon population declines in Canada are varied and have been the subject of numerous studies and reviews over the last few decades (e.g. the **Cohen Commission 2010, Report of the Standing Committee On Fisheries and Oceans 2021**,[@grant2019]).
-
-Decline in salmon populations are recognized as a consequence of human activity, including the loss or degradation of freshwater habitat [@bisson2009], unsustainable fisheries harvest, and climate change.
-
--   **Get references**
-
-Commercial fisheries harvests have been substantially curtailed in recent decades in response to wild-origin salmon abundance declines [@delvalle2024] as Fisheries and Oceans Canada (DFO) aims to manage fisheries to preserve biodiversity in a manner consistent with the *Wild Salmon Policy* and the **Precautionary Approach**.
-
-**Fisheries, particularly commercial fisheries, are legislated under the distinct authority of the *Fisheries Act* where laws and regulations prescribe how, when, and where fisheries harvest may occur within Canadian waters (\*\*need to cite this statement...).**
-
--   **Is this really true... Fisheries of Pacific salmon...** Maybe quote the legislation on this. Quite a definitive statement.
-
-**There is no ambiguity in jurisdiction or responsibility, at least for fisheries intercepting Pacific salmon within Canada, therefore fisheries harvest impacts can be adjusted relatively easily in response to declines or changing abundances.**
-
-Fisheries also result in direct mortality to salmon, therefore, impacts can be directly measured and managed using quantifiable targets, assuming adequate monitoring information is collected.
-
-By contrast, threats to salmon habitat require a much more coordinated and inter-jurisdictional approach to evaluate and address. Freshwater habitat, including water quantity (discharge and timing) and water quality (temperature and chemistry), are impacted by actions and conditions throughout the entire watershed. Local activities, such as forestry and urbanisation, act cumulatively and compound with climate changes to degrade salmon watersheds, threatening their ability to sustain salmon abundance and diversity [@moore2025]. Impacts from activities are often indirect, requiring monitoring and long-term studies to identify with confidence [@ulaski2025]. Regulation of threats to salmon freshwater habitat in British Columbia therefore requires the application of multiple acts and regulations across both federal and provincial jurisdiction, where the impacts from activities and the benefits of mitigation are uncertain and spread out over time and space.
-
-For example, regulation of forestry under the *Forestry Act*, water licensing under the Water Sustainability Act, environmental assessment of a mine under the Environmental Assessment Act, regulation of activities that cause harm to salmon habitat under the *Fisheries Act* ....
-
--   **MW - Minor suggestions. The FFHPP regulates “Projects Near Water” based on the prohibition against causing Harmful Alteration, Disruption or Destruction of fish habitat or Death of Fish. Fisheries Officers may work with FFHPP biologist in enforcement when someone contravenes the Fisheries Act. As you know, also under the fisheries Act, is the prohibition on deleterious substances regulated by Environment Canada.**
-
-Amidst this uncertainty and complexity, multiple assessment frameworks have been developed to evaluate risks arising from anthropogenic activities and limiting factors for the survival and recovery of Pacific salmon populations [@chalifour2022; @salafsky2008; **RAMS citation?**]. While varied in their approaches, these frameworks generally aim to be comprehensive in assessing the wide range of threats that may impact Pacific salmon across their life cycle to inform status assessments, recovery planning, and conservation strategies. One of the most widely used risk assessment frameworks for Pacific salmon is the *International Union for Conservation of Nature* (IUCN) Direct Threats Classification [@salafsky2008], which is applied for Recovery Potential Assessments as part of *Species at Risk Act* listing processes and for COSEWIC status assessments [@arbeider2020; @dionne2023; @doutaz2023].
-
-Assuming there is agreement upon the most important threats, risk assessments are intended to guide the development of recovery plans and mitigation actions with the ultimate aim of reversing declines and improving conservation status. A key challenge is identifying actions that are **impactful** **(\*\*is that a word?)** and feasible across the wide geographic range and diverse life history of Pacific salmon. In many cases, regulatory complexity, ambiguous responsibility, unclear conservation objectives across jurisdictions and dispersed authority become barriers to effective and timely action.
-
--   **MW - Option of adding “unclear standards of management”, or similar, to the list? Unclear environmental or conservation objectives across jurisdictions maybe.**
-
-## Why study salmon legislation: purpose and objectives
-
-The need for collaborative, coordinated action to address Pacific salmon declines is recognized by governments throughout policies, plans, and initiatives (e.g. the WSP, [the trilateral accord 2024](https://www.pac.dfo-mpo.gc.ca/fm-gp/salmon-saumon/docs/trilat-agreement-accord/index-eng.html)). Coordinated action requires adequate organizational capacity and systems for implementation to ensure that regulatory controls and mitigation activities address underlying threats to salmon and their habitat. However, linking threats and recovery actions to the relevant regulatory systems can be complex because salmon are often affected by multiple threats that each span across agencies and governmental jurisdiction.
-
--   **Add examples of rebuilding plans, OK Chinook, WCVI Chinook, Fish stock provision rebuilding plans (DG)**
-
-In this study, we seek to decode the complexity between salmon threats and environmental legislation by creating an interface between regulatory language and anthropogenic threat categories. We describe and apply the Legislation Applicable to Pacific Salmon and their Ecosystems (LAPSE) database, a repository of federal and provincial legislation and regulations that apply to Pacific salmon in British Columbia. Using a novel method for parsing and classifying legislative clauses, we develop keyword relationships between IUCN threats classifications and XXXX clauses from XX acts and XX regulations. By creating an extensive, open-source, and easily accessible database linking legislation to salmon, we aim to facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia, while providing a framework to support systematic and critical reviews of strengths and shortcomings of regulations with respect to salmon threats.
-
-# International Union for Conservation of Nature (IUCN) threat categories
-
-Management decisions and activities related to salmon are often in response to identifiable threats to salmon health and population status. Legislated recovery planning also relies on a description of identified threats [@mccune2013]. Human systems can be categorized as direct threats to biodiversity more specifically for conservation strategies [@salafsky2008]. The *International Union for Conservation of Nature* (IUCN) and *Conservation Measures Partnership* (CMP) has developed a hierarchical grouping of threats used globally by conservation practitioners. IUCN direct threat categories are widely used to assess threats as part of IUCN red list assessments, as well as, in status assessments for Pacific salmon populations conducted by the *Committee for the Status of Endangered Wildlife in Canada* (COSEWIC). For this study, the *IUCN - CMP Direct Threats Classification 4.0* [@salafsky2025] was used to categorize legislation by direct threats to salmon conservation. **Level 2 threat classification** was used as the finest resolution that could be applied consistently.
-
--   **DG - Not everyone will be familiar with the different threat levels in this framework. Before this sentence, a brief explanation of the threats hierarchy could help the unfamiliar reader. You could point the reader to the original publication of this framework ([The Society for Conservation Biology](https://conbio.onlinelibrary.wiley.com/doi/full/10.1111/j.1523-1739.2008.00937.x)), and/or summarize some key information from this paper, such as, “The threat classification hierarchically categorizes threats into three levels. Each level one category (e.g., Agriculture & Aquaculture) is further subdivided into several level two categories (e.g., Annual & Perennial Non-Timber Crops, Marine & Freshwater Aquaculture), and are subsequently into numerous level three and four categories.” Something like this could help the reader follow the sentence that explains why level two was chosen (consistent application).**
-
-Legislative clauses that influence Pacific salmon governance in British Columbia are not always associated with conservation threats. As well, some clauses may involve all threats. For example, statutes that outline species status or determine ecological reserves have relevance to how salmon are managed, but can’t be attributed to any one IUCN threat category. Pacific salmon life history also ranges over a broad geography of marine and freshwater habitat (including terrestrial watershed aspects), touching on almost every conservation threat available. We developed management domain categories through this study as a clearer and more comprehensive alignment between regulatory administrative concern and conservation threat categories (Figure \@ref(fig:fig-flowchart-image)).
-
-```{r fig-flowchart-image, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Flowchart showing alignment of IUCN Level 2 threat categories with Management Domain in relation to legislation and jurisdiction."}
-library(here)
-library(knitr)
-
-# Define image path
-image_path <- here("assets", "Management Domain Flowchart.png")
-
-# Render image only if it exists
-if (file.exists(image_path)) {
-  include_graphics(image_path)
-} else {
-  plot.new()
-  text(0.5, 0.5, paste("❌ Image file not found:", image_path))
-}
-```
-
-# A process for clause categorization
-
-Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the clauses within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable if legislation changes. The process steps are: accumulate and review legislation (CanLii); parse legislation by clause (paragraph), section, and heading; match management domain and IUCN threat keywords to clauses; assign salmon-specific scope categories; match clause type keywords to clauses.
-
-## Legislation accumulation and review
 
 We accumulated Canadian federal and British Columbian provincial legislation according to their relevance to salmon and habitat management. For this study, the term legislation refers to acts, regulations, codes, and orders. Policies are formal statements about how the government of the day plans to execute the legislative requirements [@marentette2020]. Legislation itself is a better indicator of a jurisdiction's long-term commitment to natural resource stewardship [@bogetti2025] because these policies are more prone to changes in the political, administrative, and budgetary landscape without due process or a parliamentary vote. Specific departmental policy frameworks and processes were not assessed within this exercise.
 
