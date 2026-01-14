@@ -41,66 +41,71 @@ tryCatch({
   # Load management domain threat table if it exists
   if("management_domain_threat_table" %in% dbListTables(conn)) {
     management_domain_threat <- as.data.table(dbReadTable(conn, "management_domain_threat_table"))
-    cat("✅ Loaded management_domain_threat_table from database\n")
+    cat("âœ… Loaded management_domain_threat_table from database\n")
   } else {
     management_domain_threat <- NULL
-    cat("⚠️  management_domain_threat_table not found in database\n")
+    cat("âš ï¸  management_domain_threat_table not found in database\n")
   }
   
   # Load actionable clause keywords
   if("actionable_clause_keywords" %in% dbListTables(conn)) {
     actionable_keywords <- as.data.table(dbReadTable(conn, "actionable_clause_keywords"))
-    cat("✅ Loaded actionable_clause_keywords from database\n")
+    cat("âœ… Loaded actionable_clause_keywords from database\n")
   } else {
     actionable_keywords <- fread(file.path(here(), "actionable_clause_keywords.csv"))
-    cat("✅ Loaded actionable_clause_keywords from CSV\n")
+    cat("âœ… Loaded actionable_clause_keywords from CSV\n")
   }
   
 }, finally = {
   dbDisconnect(conn)
-  cat("✅ Database connection closed.\n")
+  cat("âœ… Database connection closed.\n")
 })
 
-## Load Reference CSVs ----
+## Load Reference Tables from Database ----
 
-# Agencies (join on act_name)
-agencies_file <- file.path(here(), "agencies.csv")
-if(file.exists(agencies_file)) {
-  agencies_table <- fread(agencies_file, encoding = "UTF-8")
-  # Explicitly set column names (handles BOM issues)
-  if(ncol(agencies_table) == 2) {
-    setnames(agencies_table, c("act_name", "agency"))
+# Reconnect to database to load reference tables
+conn <- dbConnect(SQLite(), dbname = db_path)
+
+# Load agencies table (join on act_name) - Many-to-many relationship allowed
+if("agencies" %in% dbListTables(conn)) {
+  agencies_table <- as.data.table(dbReadTable(conn, "agencies"))
+  cat("=== AGENCIES TABLE (from database) ===\n")
+  cat("Columns:", paste(names(agencies_table), collapse = ", "), "\n")
+  cat("Total records:", nrow(agencies_table), "\n")
+  if(nrow(agencies_table) > 0) {
+    # Trim whitespace from join columns
+    agencies_table[, act_name := trimws(act_name)]
+    agencies_table[, agency := trimws(agency)]
+    cat("First 5 act_names:\n")
+    print(head(agencies_table$act_name, 5))
   }
-  # Trim whitespace from values
-  agencies_table[, act_name := trimws(act_name)]
-  agencies_table[, agency := trimws(agency)]
-  cat("Agencies columns:", paste(names(agencies_table), collapse = ", "), "\n")
-  # Remove duplicates - keep first agency per act
-  agencies_table <- unique(agencies_table, by = "act_name")
-  cat("✅ Loaded agencies.csv with", nrow(agencies_table), "unique act records\n")
-  cat("Sample agencies:", paste(head(agencies_table$agency, 5), collapse = ", "), "\n")
 } else {
   agencies_table <- data.table(act_name = character(), agency = character())
-  cat("⚠️  agencies.csv not found at:", agencies_file, "\n")
+  cat("WARNING: agencies table not found in database\n")
 }
 
-# Legislation URLs (join on legislation_name)
-legislation_url_file <- file.path(here(), "legislation_url.csv")
-if(file.exists(legislation_url_file)) {
-  legislation_url_table <- fread(legislation_url_file, encoding = "UTF-8")
-  # Explicitly set column names (handles BOM issues)
-  if(ncol(legislation_url_table) == 2) {
-    setnames(legislation_url_table, c("legislation_name", "url"))
+# Load legislation_url table (join on legislation_name) - One-to-one relationship
+if("legislation_url" %in% dbListTables(conn)) {
+  legislation_url_table <- as.data.table(dbReadTable(conn, "legislation_url"))
+  cat("\n=== LEGISLATION URL TABLE (from database) ===\n")
+  cat("Columns:", paste(names(legislation_url_table), collapse = ", "), "\n")
+  cat("Total records:", nrow(legislation_url_table), "\n")
+  if(nrow(legislation_url_table) > 0) {
+    # Trim whitespace from join columns
+    legislation_url_table[, legislation_name := trimws(legislation_name)]
+    legislation_url_table[, url := trimws(url)]
+    cat("URLs with values:", sum(!is.na(legislation_url_table$url) & legislation_url_table$url != ""), "\n")
+    cat("First 5 legislation_names:\n")
+    print(head(legislation_url_table$legislation_name, 5))
   }
-  # Trim whitespace from values
-  legislation_url_table[, legislation_name := trimws(legislation_name)]
-  legislation_url_table[, url := trimws(url)]
-  cat("URL columns:", paste(names(legislation_url_table), collapse = ", "), "\n")
-  cat("✅ Loaded legislation_url.csv with", nrow(legislation_url_table), "records\n")
 } else {
   legislation_url_table <- data.table(legislation_name = character(), url = character())
-  cat("⚠️  legislation_url.csv not found at:", legislation_url_file, "\n")
+  cat("WARNING: legislation_url table not found in database\n")
 }
+
+dbDisconnect(conn)
+cat("\nDatabase connection closed after loading reference tables.\n")
+
 
 ## ============================================================================
 ## ACTIONABLE CLAUSE EXTRACTION FUNCTIONS
@@ -235,7 +240,7 @@ if(!is.null(management_domain_threat)) {
   cat("Threat-based domains:", paste(threat_based_domains, collapse = ", "), "\n")
 } else {
   governance_only_domains <- character(0)
-  cat("⚠️  Cannot identify governance domains without management_domain_threat_table\n")
+  cat("âš ï¸  Cannot identify governance domains without management_domain_threat_table\n")
 }
 
 ## Merge Paragraphs with Legislation Metadata ----
@@ -251,25 +256,71 @@ paragraphs_with_legislation[, act_name := trimws(act_name)]
 paragraphs_with_legislation[, legislation_name := trimws(legislation_name)]
 
 ## Add Agency column (joined on act_name) ----
+cat("\n=== AGENCY JOIN DIAGNOSTICS ===\n")
 cat("Unique act_names in paragraphs:", length(unique(paragraphs_with_legislation$act_name)), "\n")
 cat("Unique act_names in agencies:", length(unique(agencies_table$act_name)), "\n")
-cat("Sample act_names in paragraphs:", paste(head(unique(paragraphs_with_legislation$act_name), 5), collapse = ", "), "\n")
-cat("Sample act_names in agencies:", paste(head(unique(agencies_table$act_name), 5), collapse = ", "), "\n")
+
+# Print first 5 from each for visual comparison
+cat("\nFirst 5 act_names in PARAGRAPHS (with quotes to show exact values):\n")
+for(i in 1:min(5, length(unique(paragraphs_with_legislation$act_name)))) {
+  val <- unique(paragraphs_with_legislation$act_name)[i]
+  cat(sprintf("  [%d] '%s' (nchar=%d)\n", i, val, nchar(val)))
+}
+
+cat("\nFirst 5 act_names in AGENCIES (with quotes to show exact values):\n")
+for(i in 1:min(5, length(unique(agencies_table$act_name)))) {
+  val <- unique(agencies_table$act_name)[i]
+  cat(sprintf("  [%d] '%s' (nchar=%d)\n", i, val, nchar(val)))
+}
 
 # Check for matches
 matching_acts <- intersect(unique(paragraphs_with_legislation$act_name), unique(agencies_table$act_name))
-cat("Matching act_names between tables:", length(matching_acts), "\n")
+cat("\nMatching act_names between tables:", length(matching_acts), "\n")
+if(length(matching_acts) > 0) {
+  cat("First few matches:", paste(head(matching_acts, 3), collapse = ", "), "\n")
+} else {
+  cat("WARNING: No matches found! Check for encoding or formatting differences.\n")
+  # Try to find near-matches
+  para_acts <- unique(paragraphs_with_legislation$act_name)
+  agency_acts <- unique(agencies_table$act_name)
+  for(pa in head(para_acts, 3)) {
+    for(aa in head(agency_acts, 3)) {
+      if(tolower(trimws(pa)) == tolower(trimws(aa))) {
+        cat(sprintf("  Potential case mismatch: '%s' vs '%s'\n", pa, aa))
+      }
+    }
+  }
+}
 
 paragraphs_with_legislation <- merge(
   paragraphs_with_legislation,
   agencies_table[, .(act_name, agency)],
   by = "act_name",
-  all.x = TRUE
+  all.x = TRUE,
+  allow.cartesian = TRUE  # One act can have multiple agencies
 )
 
 cat("Paragraphs with agency after join:", sum(!is.na(paragraphs_with_legislation$agency)), "\n")
+cat("Total rows after agency join:", nrow(paragraphs_with_legislation), "\n")
 
 ## Add URL column (joined on legislation_name) ----
+cat("\n=== URL JOIN DIAGNOSTICS ===\n")
+cat("Unique legislation_names in paragraphs:", length(unique(paragraphs_with_legislation$legislation_name)), "\n")
+cat("Unique legislation_names in URL table:", length(unique(legislation_url_table$legislation_name)), "\n")
+
+# Check for matches
+matching_leg <- intersect(unique(paragraphs_with_legislation$legislation_name), unique(legislation_url_table$legislation_name))
+cat("Matching legislation_names:", length(matching_leg), "\n")
+if(length(matching_leg) > 0) {
+  cat("First few matches:", paste(head(matching_leg, 3), collapse = ", "), "\n")
+} else {
+  cat("WARNING: No URL matches found!\n")
+  cat("First 3 legislation_names in paragraphs:\n")
+  print(head(unique(paragraphs_with_legislation$legislation_name), 3))
+  cat("First 3 legislation_names in URL table:\n")
+  print(head(unique(legislation_url_table$legislation_name), 3))
+}
+
 paragraphs_with_legislation <- merge(
   paragraphs_with_legislation,
   legislation_url_table[, .(legislation_name, url)],
@@ -277,6 +328,7 @@ paragraphs_with_legislation <- merge(
   all.x = TRUE
 )
 
+cat("Paragraphs with URL after join:", sum(!is.na(paragraphs_with_legislation$url) & paragraphs_with_legislation$url != ""), "\n")
 cat("Total paragraphs after joining with metadata:", nrow(paragraphs_with_legislation), "\n")
 
 ## Extract Actionable Clause Information at Paragraph Level ----
@@ -402,23 +454,28 @@ first_non_na <- function(x) {
   if(length(x) > 0) return(x[1]) else return(NA_character_)
 }
 
+# Aggregate actionable fields and URL (not agency - agency creates duplicate rows)
 actionable_aggregated <- paragraphs_with_legislation[, .(
   actionable_type = paste(unique(na.omit(actionable_type)), collapse = "; "),
   responsible_official = paste(unique(na.omit(responsible_official)), collapse = "; "),
   discretion_type = paste(unique(na.omit(discretion_type)), collapse = "; "),
-  agency = first_non_na(agency),
   url = first_non_na(url)
 ), by = .(jurisdiction, act_name, legislation_name, Section, Heading)]
 
-# Debug: Check agency values in actionable_aggregated
-cat("Rows in actionable_aggregated with agency:", sum(!is.na(actionable_aggregated$agency)), "\n")
-cat("Sample agencies in actionable_aggregated:", paste(head(unique(na.omit(actionable_aggregated$agency)), 5), collapse = ", "), "\n")
+# Create separate agency table - keep ALL agencies per section (creates duplicate rows later)
+section_agencies <- unique(paragraphs_with_legislation[
+  !is.na(agency) & agency != "",
+  .(jurisdiction, act_name, legislation_name, Section, Heading, agency)
+])
 
-# Replace empty strings with NA
+# Debug: Check agency values
+cat("Unique section-agency combinations:", nrow(section_agencies), "\n")
+cat("Sample agencies:", paste(head(unique(section_agencies$agency), 5), collapse = ", "), "\n")
+
+# Replace empty strings with NA in actionable_aggregated
 actionable_aggregated[actionable_type == "", actionable_type := NA]
 actionable_aggregated[responsible_official == "", responsible_official := NA]
 actionable_aggregated[discretion_type == "", discretion_type := NA]
-actionable_aggregated[is.na(agency) | agency == "", agency := NA_character_]
 actionable_aggregated[is.na(url) | url == "", url := NA_character_]
 
 # Aggregate paragraphs with chunking
@@ -474,7 +531,7 @@ if(nrow(mgmt_iucn_labels) > 0) {
   if("Management Domain" %in% names(mgmt_iucn_wide) && "IUCN" %in% names(mgmt_iucn_wide) && length(governance_only_domains) > 0) {
     rows_to_clear <- mgmt_iucn_wide$`Management Domain` %in% governance_only_domains
     mgmt_iucn_wide[rows_to_clear, IUCN := NA_character_]
-    cat("✅ Set IUCN to NA for", sum(rows_to_clear), "governance-only rows\n")
+    cat("âœ… Set IUCN to NA for", sum(rows_to_clear), "governance-only rows\n")
   }
   
   compendium_data <- copy(mgmt_iucn_wide)
@@ -505,7 +562,7 @@ if(nrow(missing_only) > 0) {
   missing_only[, `Management Domain` := NA_character_]
   missing_only[, IUCN := NA_character_]
   compendium_data <- rbindlist(list(compendium_data, missing_only), fill = TRUE)
-  cat("✅ Added", nrow(missing_only), "sections without Management Domain/IUCN labels\n")
+  cat("âœ… Added", nrow(missing_only), "sections without Management Domain/IUCN labels\n")
 }
 
 # Merge with Clause Type
@@ -533,13 +590,26 @@ compendium_data <- merge(
   all.x = TRUE
 )
 
-# Merge with actionable clause info and agency/url
+# Merge with actionable clause info (url included, agency separate)
 compendium_data <- merge(
   compendium_data,
   actionable_aggregated,
   by = c("jurisdiction", "act_name", "legislation_name", "Section", "Heading"),
   all.x = TRUE
 )
+
+# Merge with agencies - creates duplicate rows for each agency per section
+# Use all.x = TRUE to keep rows without agencies, allow.cartesian for many-to-many
+compendium_data <- merge(
+  compendium_data,
+  section_agencies,
+  by = c("jurisdiction", "act_name", "legislation_name", "Section", "Heading"),
+  all.x = TRUE,
+  allow.cartesian = TRUE
+)
+
+cat("Rows after agency join:", nrow(compendium_data), "\n")
+cat("Rows with agency:", sum(!is.na(compendium_data$agency)), "\n")
 
 # Update Section column in place (don't create new column)
 compendium_data[, Section := ifelse(
@@ -575,7 +645,7 @@ desired_order <- c("jurisdiction", "agency", "act_name", "legislation_name", "ur
 existing_order <- intersect(desired_order, names(compendium_data))
 setcolorder(compendium_data, existing_order)
 
-cat("✅ Final columns:", paste(names(compendium_data), collapse = ", "), "\n")
+cat("âœ… Final columns:", paste(names(compendium_data), collapse = ", "), "\n")
 
 ## Sort by jurisdiction, legislation and section ----
 setorder(compendium_data, jurisdiction, act_name, legislation_name, section)
@@ -592,7 +662,7 @@ writeDataTable(wb, "Compendium", compendium_data)
 setColWidths(wb, "Compendium", cols = 1:ncol(compendium_data), widths = "auto")
 
 saveWorkbook(wb, output_file, overwrite = TRUE)
-cat("✅ Excel file 'LAPSE_full_compendium.xlsx' has been saved to the output directory.\n")
+cat("âœ… Excel file 'LAPSE_full_compendium.xlsx' has been saved to the output directory.\n")
 cat(sprintf("   Total rows: %d\n", nrow(compendium_data)))
 
 ## ============================================================================
@@ -615,7 +685,7 @@ write_json(
   na = "null"
 )
 
-cat("✅ JSON file 'LAPSE_compendium.json' has been saved to the output directory.\n")
+cat("âœ… JSON file 'LAPSE_compendium.json' has been saved to the output directory.\n")
 ################################################################################
 
 # Summary statistics
@@ -631,9 +701,9 @@ cat(sprintf("   Paragraphs with URLs: %d\n", sum(!is.na(compendium_data$url) & c
 # Check for any remaining character limit issues
 char_counts <- nchar(compendium_data$aggregate_paragraph)
 if(any(char_counts > 32767, na.rm = TRUE)) {
-  cat("⚠️  Warning: Some cells still exceed Excel's limit. Consider further chunking.\n")
+  cat("âš ï¸  Warning: Some cells still exceed Excel's limit. Consider further chunking.\n")
 } else {
-  cat("✅ All cells are within Excel's character limit.\n")
+  cat("âœ… All cells are within Excel's character limit.\n")
 }
 
 # Beep when done

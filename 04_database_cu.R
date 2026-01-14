@@ -37,12 +37,43 @@ actionable_clause_keywords_path <- here("data", "actionable_clause_keywords.csv"
 
 ## Read CSV files ----
 ## Note: Using file= explicitly to handle paths with spaces
+## Also cleaning BOM characters and non-printable chars from key columns
 cat("Reading CSV files...\n")
-agencies <- fread(file = agencies_path, colClasses = "character")
-cu_ranking <- fread(file = cu_ranking_path, colClasses = "character")
-legislation_url <- fread(file = legislation_url_path, colClasses = "character")
-actionable_clause_keywords <- fread(file = actionable_clause_keywords_path, colClasses = "character")
-cat("✓ CSV files loaded\n")
+
+# Helper function to read CSV with BOM handling
+read_csv_clean <- function(filepath) {
+  dt <- fread(file = filepath, encoding = "UTF-8")
+  # Clean BOM from first column name if present
+  old_names <- names(dt)
+  new_names <- gsub("^\ufeff", "", old_names)
+  new_names <- gsub("^\xef\xbb\xbf", "", new_names)
+  if(!identical(old_names, new_names)) {
+    setnames(dt, new_names)
+  }
+  return(dt)
+}
+
+agencies <- read_csv_clean(agencies_path)
+# Clean join column
+if("act_name" %in% names(agencies)) {
+  agencies[, act_name := trimws(gsub("[^[:print:]]", "", act_name))]
+}
+cat("  agencies:", nrow(agencies), "rows\n")
+
+cu_ranking <- read_csv_clean(cu_ranking_path)
+cat("  cu_ranking:", nrow(cu_ranking), "rows\n")
+
+legislation_url <- read_csv_clean(legislation_url_path)
+# Clean join column
+if("legislation_name" %in% names(legislation_url)) {
+  legislation_url[, legislation_name := trimws(gsub("[^[:print:]]", "", legislation_name))]
+}
+cat("  legislation_url:", nrow(legislation_url), "rows\n")
+
+actionable_clause_keywords <- read_csv_clean(actionable_clause_keywords_path)
+cat("  actionable_clause_keywords:", nrow(actionable_clause_keywords), "rows\n")
+
+cat("CSV files loaded\n")
 
 ## Connect to SQLite database ----
 output_dir <- here("output")
