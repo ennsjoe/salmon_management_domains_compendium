@@ -37,12 +37,10 @@ Governance Administration,fisheries officer,4 - Governance
 Governance Administration,fisheries officers,4 - Governance
 Spatial Designation,fishing zone,4 - Governance
 Spatial Designation,forest region,4 - Governance
-Governance Administration,governance,4 - Governance
-Governance Administration,government,4 - Governance
-Governance Administration,jurisdiction,4 - Governance
 Spatial Designation,habitat conservation,4 - Governance
 Restoration,habitat protection,3 - Habitat
 Spatial Designation,internal waters,4 - Governance
+Governance Administration,jurisdiction,4 - Governance
 Spatial Designation,land use,4 - Governance
 Spatial Designation,management unit,4 - Governance
 Spatial Designation,natural environment,4 - Governance
@@ -57,6 +55,8 @@ Spatial Designation,private land,4 - Governance
 Species Status and Assessment,qualified environmental professional,4 - Governance
 Restoration,reclaim,3 - Habitat
 Restoration,reclamation,3 - Habitat
+Spatial Designation,region,4 - Governance
+Spatial Designation,regions,4 - Governance
 Restoration,rehabilitate,3 - Habitat
 Restoration,rehabilitated,3 - Habitat
 Restoration,remediation,3 - Habitat
@@ -74,12 +74,10 @@ Spatial Designation,tidal,4 - Governance
 Governance Administration,water agencies,4 - Governance
 Governance Administration,water agency,4 - Governance
 Spatial Designation,water district,4 - Governance
+Spatial Designation,waters,4 - Governance
 Spatial Designation,wilderness area,4 - Governance
 Spatial Designation,wildlife habitat,4 - Governance
 Spatial Designation,wildlife management area,4 - Governance
 Species Status and Assessment,wildlife species,4 - Governance
-Spatial Designation,waters,4 - Governance
 Spatial Designation,zone,4 - Governance
-Spatial Designation,region,4 - Governance
-Spatial Designation,regions,4 - Governance
 Spatial Designation,zones,4 - Governance
