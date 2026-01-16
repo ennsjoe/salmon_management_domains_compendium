@@ -1,149 +1,409 @@
 ################################################################################
-# Title: Compendium Checker Export (Expanded Version)
-# Author: Copilot (Modified)
-# Date: 2025-08-27
-# Last Updated: 2025-01-XX
-# Description:
-#   Queries the legislation database and exports an Excel file containing
-#   paragraph-level metadata, semantic labels, scope values, and matched keywords.
-#   Modified to aggregate paragraphs by section. Management Domain/IUCN/Scope/Agency
-#   values are concatenated with "; " when multiple values exist for a section.
-#   Handles Excel's 32,767 character limit by chunking.
-#   Governance-based management domains have blank IUCN values.
-#   Separates keywords into management_domain_keywords and clause_type_keywords.
-#
-# ENHANCEMENTS (v2):
-#   1. Includes ALL paragraphs, even those with no assigned management domain
-#   2. Adds agency column (joined to act_name via agencies.csv) - multiple agencies concatenated with "; "
-#   3. Adds URL column (joined to legislation_name via legislation_url.csv)
-#   4. Adds actionable_type, responsible_official, and discretion_type columns
-#      (extracted from Paragraph text using actionable clause keywords)
+# Title: Actionable Clauses Extraction
+# Authors: Joe Enns, Cory Lagasse
+# Date Created: 2025-01-XX
+# Purpose / Description:
+#   Extracts actionable clauses from legislation by filtering paragraphs that:
+#   1. Are from Acts (not regulations)
+#   2. Have Management Domain labels
+#   3. Have specific Clause Type labels (Designation, Instruction, etc.)
+#   4. Contain "responsible official" keywords (from actionable_clause_keywords)
+#   5. Contain "discretionary language" keywords (from actionable_clause_keywords)
+#   Then extracts actionable types and creates output with metadata.
+# Dependencies: DBI, RSQLite, data.table, here, stringr, beepr
+# Outputs:
+#   "actionable_clauses.csv" in the output directory
+#   "actionable_clauses" table in the SQLite database
 ################################################################################
 
 ## Load Libraries ----
+library(here)
 library(DBI)
 library(RSQLite)
 library(data.table)
-library(here)
-library(openxlsx)
-library(beepr)
 library(stringr)
+library(beepr)
+
+cat("=====================================\n")
+cat("Actionable Clauses Extraction\n")
+cat("=====================================\n\n")
+
+## ============================================================================
+## TEXT CLEANING FUNCTION: Fix encoding issues (mojibake)
+## ============================================================================
+
+clean_encoding <- function(text) {
+  if (is.na(text) || text == "") return(text)
+  
+  original_text <- text
+  result <- iconv(text, from = "UTF-8", to = "ASCII//TRANSLIT", sub = "")
+  
+  if (is.na(result)) {
+    result <- iconv(original_text, from = "latin1", to = "ASCII//TRANSLIT", sub = "")
+  }
+  
+  if (is.na(result)) {
+    result <- gsub("[^\x20-\x7E]", "", original_text, perl = TRUE)
+  }
+  
+  result <- gsub("[^\x20-\x7E]", "", result, perl = TRUE)
+  result <- trimws(result)
+  
+  return(result)
+}
 
 ## Connect to Database ----
 db_path <- file.path(here("output"), "legislation.db")
+if (!file.exists(db_path)) {
+  stop("Database file not found at: ", db_path)
+}
+
 conn <- dbConnect(SQLite(), dbname = db_path)
 
 ## Load Tables ----
-tryCatch({
-  legislation_table <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
-  paragraph_table <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
-  paragraph_label_table <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
-  
-  # Load management domain threat table if it exists
-  if("management_domain_threat_table" %in% dbListTables(conn)) {
-    management_domain_threat <- as.data.table(dbReadTable(conn, "management_domain_threat_table"))
-    cat("Ã¢Å“â€¦ Loaded management_domain_threat_table from database\n")
-  } else {
-    management_domain_threat <- NULL
-    cat("Ã¢Å¡Â Ã¯Â¸Â  management_domain_threat_table not found in database\n")
-  }
-  
-  # Load actionable clause keywords
-  if("actionable_clause_keywords" %in% dbListTables(conn)) {
-    actionable_keywords <- as.data.table(dbReadTable(conn, "actionable_clause_keywords"))
-    cat("Ã¢Å“â€¦ Loaded actionable_clause_keywords from database\n")
-  } else {
-    actionable_keywords <- fread(file.path(here(), "actionable_clause_keywords.csv"))
-    cat("Ã¢Å“â€¦ Loaded actionable_clause_keywords from CSV\n")
-  }
-  
-}, finally = {
-  dbDisconnect(conn)
-  cat("Ã¢Å“â€¦ Database connection closed.\n")
-})
+cat("Loading data from database...\n")
+paragraph_table <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
+legislation_table <- as.data.table(dbReadTable(conn, "LegislationMetadata"))
+paragraph_label_table <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
+actionable_keywords <- as.data.table(dbReadTable(conn, "actionable_clause_keywords"))
 
-## Load Reference Tables from Database ----
+## Keep connection open for later write operation
 
-# Reconnect to database to load reference tables
-conn <- dbConnect(SQLite(), dbname = db_path)
-
-# Load agencies table (join on act_name) - Many-to-many relationship allowed
-if("agencies" %in% dbListTables(conn)) {
-  agencies_table <- as.data.table(dbReadTable(conn, "agencies"))
-  cat("=== AGENCIES TABLE (from database) ===\n")
-  cat("Columns:", paste(names(agencies_table), collapse = ", "), "\n")
-  cat("Total records:", nrow(agencies_table), "\n")
-  if(nrow(agencies_table) > 0) {
-    # Trim whitespace from join columns
-    agencies_table[, act_name := trimws(act_name)]
-    agencies_table[, agency := trimws(agency)]
-    cat("First 5 act_names:\n")
-    print(head(agencies_table$act_name, 5))
-  }
-} else {
-  agencies_table <- data.table(act_name = character(), agency = character())
-  cat("WARNING: agencies table not found in database\n")
-}
-
-# Load legislation_url table (join on legislation_name) - One-to-one relationship
-if("legislation_url" %in% dbListTables(conn)) {
-  legislation_url_table <- as.data.table(dbReadTable(conn, "legislation_url"))
-  cat("\n=== LEGISLATION URL TABLE (from database) ===\n")
-  cat("Columns:", paste(names(legislation_url_table), collapse = ", "), "\n")
-  cat("Total records:", nrow(legislation_url_table), "\n")
-  if(nrow(legislation_url_table) > 0) {
-    # Trim whitespace from join columns
-    legislation_url_table[, legislation_name := trimws(legislation_name)]
-    legislation_url_table[, url := trimws(url)]
-    cat("URLs with values:", sum(!is.na(legislation_url_table$url) & legislation_url_table$url != ""), "\n")
-    cat("First 5 legislation_names:\n")
-    print(head(legislation_url_table$legislation_name, 5))
-  }
-} else {
-  legislation_url_table <- data.table(legislation_name = character(), url = character())
-  cat("WARNING: legislation_url table not found in database\n")
-}
-
-dbDisconnect(conn)
-cat("\nDatabase connection closed after loading reference tables.\n")
-
+cat(sprintf("  - Loaded %d paragraphs\n", nrow(paragraph_table)))
+cat(sprintf("  - Loaded %d legislation records\n", nrow(legislation_table)))
+cat(sprintf("  - Loaded %d paragraph labels\n", nrow(paragraph_label_table)))
+cat(sprintf("  - Loaded %d actionable clause keywords\n", nrow(actionable_keywords)))
 
 ## ============================================================================
-## ACTIONABLE CLAUSE EXTRACTION FUNCTIONS
+## DEFINE ACTIONABLE CLAUSE PATTERNS
 ## ============================================================================
 
-## Define actionable patterns (same as 05_actionable_clauses.R) ----
+cat("\nDefining actionable clause patterns...\n")
+
 actionable_patterns <- list(
-  regulation = "\\b(regulation|regulations|regulatory)\\b",
-  order = "\\b(order|orders)\\b(?!\\s+in\\s+council)",
-  order_in_council = "\\b(order in council|orders in council|lieutenant governor in council|governor in council)\\b",
-  bylaw = "\\b(bylaw|by-law|bylaws|by-laws)\\b",
-  authorization = "\\b(authori[sz]ation|authori[sz]ations|authorize|authori[sz]ed|authori[sz]ing)\\b",
-  plan = "\\b(plan|plans|planning)\\b(?!\\s+of)",
-  strategy = "\\b(strateg(y|ies))\\b",
-  program = "\\b(program|programme|programs|programmes)\\b",
-  policy = "\\b(polic(y|ies))\\b",
-  framework = "\\b(framework|frameworks)\\b",
-  guideline = "\\b(guideline|guidelines)\\b",
-  standard = "\\b(standard|standards)\\b",
-  code = "\\b(code|codes)\\b(?!\\s+of)",
-  designation = "\\b(designat(e|ion|ions|ed|ing)|designated area|designated areas)\\b",
-  reserve = "\\b(reserve|reserves)\\b",
-  sanctuary = "\\b(sanctuar(y|ies))\\b",
-  park = "\\b(park|parks)\\b",
-  protected_area = "\\b(protected area|conservation area|management area|special area)\\b",
-  agreement = "\\b(agreement|agreements)\\b",
-  permit = "\\b(permit|permits)\\b",
-  licence = "\\b(licen[cs]e|licen[cs]es)\\b",
-  approval = "\\b(approval|approvals)\\b",
-  certificate = "\\b(certificate|certificates)\\b",
-  exemption = "\\b(exemption|exemptions|exempt|exempted|exempting)\\b",
-  notice = "\\b(notice|notices)\\b",
-  report = "\\b(report|reports|reporting)\\b",
-  assessment = "\\b(assessment|assessments)\\b",
-  review = "\\b(review|reviews)\\b",
-  study = "\\b(stud(y|ies))\\b"
+  # --- Regulatory Instruments ---
+  regulation = list(
+    pattern = "\\b(regulation|regulations|regulatory)\\b"
+  ),
+  order = list(
+    pattern = "\\b(order|orders)\\b(?!\\s+in\\s+council)"
+  ),
+  order_in_council = list(
+    pattern = "\\b(order in council|orders in council|lieutenant governor in council|governor in council)\\b"
+  ),
+  bylaw = list(
+    pattern = "\\b(bylaw|by-law|bylaws|by-laws)\\b"
+  ),
+  authorization = list(
+    pattern = "\\b(authori[sz]ation|authori[sz]ations|authorize|authori[sz]ed|authori[sz]ing)\\b"
+    ),
+  
+  # --- Planning Documents ---
+  plan = list(
+    pattern = "\\b(plan|plans|planning)\\b(?!\\s+of)"
+  ),
+  strategy = list(
+    pattern = "\\b(strateg(y|ies))\\b"
+  ),
+  program = list(
+    pattern = "\\b(program|programme|programs|programmes)\\b"
+  ),
+  policy = list(
+    pattern = "\\b(polic(y|ies))\\b"
+  ),
+  framework = list(
+    pattern = "\\b(framework|frameworks)\\b"
+  ),
+  guideline = list(
+    pattern = "\\b(guideline|guidelines)\\b"
+  ),
+  standard = list(
+    pattern = "\\b(standard|standards)\\b"
+  ),
+  code = list(
+    pattern = "\\b(code|codes)\\b(?!\\s+of)"
+  ),
+  
+  # --- Spatial Designations ---
+  designation = list(
+    pattern = "\\b(designat(e|ion|ions|ed|ing)|designated area|designated areas)\\b"
+  ),
+  reserve = list(
+    pattern = "\\b(reserve|reserves)\\b"
+  ),
+  sanctuary = list(
+    pattern = "\\b(sanctuar(y|ies))\\b"
+  ),
+  park = list(
+    pattern = "\\b(park|parks)\\b"
+  ),
+  protected_area = list(
+    pattern = "\\b(protected area|conservation area|management area|special area)\\b"
+  ),
+  
+  # --- Authorization Mechanisms ---
+  agreement = list(
+    pattern = "\\b(agreement|agreements)\\b"
+  ),
+  permit = list(
+    pattern = "\\b(permit|permits)\\b"
+  ),
+  licence = list(
+    pattern = "\\b(licen[cs]e|licen[cs]es)\\b"
+  ),
+  authorization = list(
+    pattern = "\\b(authori[sz]ation|authori[sz]ations)\\b"
+  ),
+  approval = list(
+    pattern = "\\b(approval|approvals)\\b"
+  ),
+  certificate = list(
+    pattern = "\\b(certificate|certificates)\\b"
+  ),
+  exemption = list(
+    pattern = "\\b(exemption|exemptions|exempt|exempted|exempting)\\b"
+  ),
+  notice = list(
+    pattern = "\\b(notice|notices)\\b"
+  ),
+  
+  # --- Reporting Requirements ---
+  report = list(
+    pattern = "\\b(report|reports|reporting)\\b"
+  ),
+  assessment = list(
+    pattern = "\\b(assessment|assessments)\\b"
+  ),
+  review = list(
+    pattern = "\\b(review|reviews)\\b"
+  ),
+  study = list(
+    pattern = "\\b(stud(y|ies))\\b"
+  )
 )
+
+## ============================================================================
+## STEP 1: FILTER BY ACTS ONLY
+## ============================================================================
+
+cat("\n--- STEP 1: Filter by Acts only ---\n")
+
+acts_only <- legislation_table[legislation_type == "Act"]
+act_paragraphs <- paragraph_table[legislation_id %in% acts_only$legislation_id]
+
+cat(sprintf("  - Acts: %d\n", nrow(acts_only)))
+cat(sprintf("  - Paragraphs from Acts: %d\n", nrow(act_paragraphs)))
+
+## ============================================================================
+## STEP 2: FILTER BY MANAGEMENT DOMAIN
+## ============================================================================
+
+cat("\n--- STEP 2: Filter by Management Domain labels ---\n")
+
+management_domain_paragraph_ids <- unique(
+  paragraph_label_table[label_type == "Management Domain", paragraph_id]
+)
+
+cat(sprintf("  - Paragraphs with Management Domain labels: %d\n", 
+            length(management_domain_paragraph_ids)))
+
+## ============================================================================
+## STEP 3: FILTER BY CLAUSE TYPE
+## ============================================================================
+
+cat("\n--- STEP 3: Filter by Clause Type labels ---\n")
+
+included_clause_types <- c(
+  "Designation",
+  "Instruction",
+  "Licence, Permitting, & Exemptions",
+  "Authorization & Mandate"
+)
+
+cat(sprintf("  - Including Clause Types: %s\n", 
+            paste(included_clause_types, collapse = ", ")))
+
+clause_type_paragraph_ids <- unique(
+  paragraph_label_table[
+    label_type == "Clause Type" & label_value %in% included_clause_types, 
+    paragraph_id
+  ]
+)
+
+cat(sprintf("  - Paragraphs with specified Clause Type labels: %d\n", 
+            length(clause_type_paragraph_ids)))
+
+## ============================================================================
+## STEP 4: COMBINE FILTERS (INTERSECTION)
+## ============================================================================
+
+cat("\n--- STEP 4: Combine filters (intersection) ---\n")
+
+filtered_paragraph_ids <- intersect(
+  act_paragraphs$paragraph_id,
+  intersect(management_domain_paragraph_ids, clause_type_paragraph_ids)
+)
+
+cat(sprintf("  - Paragraphs after combining filters: %d\n", 
+            length(filtered_paragraph_ids)))
+
+filtered_paragraphs <- act_paragraphs[paragraph_id %in% filtered_paragraph_ids]
+
+## Exclude paragraphs where Heading contains "definition" ----
+cat("  - Excluding paragraphs with 'definition' in Heading...\n")
+rows_before <- nrow(filtered_paragraphs)
+filtered_paragraphs <- filtered_paragraphs[
+  is.na(Heading) | !grepl("definition", Heading, ignore.case = TRUE)
+]
+cat(sprintf("  - Removed %d paragraphs with 'definition' in Heading\n", 
+            rows_before - nrow(filtered_paragraphs)))
+cat(sprintf("  - Paragraphs remaining: %d\n", nrow(filtered_paragraphs)))
+
+## ============================================================================
+## STEP 5: FILTER BY RESPONSIBLE OFFICIAL KEYWORDS
+## ============================================================================
+
+cat("\n--- STEP 5: Filter by 'responsible official' keywords ---\n")
+
+official_keywords <- actionable_keywords[
+  actionable_clause_category == "responsible official", 
+  keyword
+]
+
+cat(sprintf("  - Responsible official keywords: %d\n", length(official_keywords)))
+
+official_pattern <- paste0("\\b(", paste(official_keywords, collapse = "|"), ")\\b")
+
+filtered_paragraphs[, has_official := grepl(official_pattern, Paragraph, ignore.case = TRUE)]
+
+paragraphs_with_official <- filtered_paragraphs[has_official == TRUE]
+
+cat(sprintf("  - Paragraphs with responsible official keywords: %d\n", 
+            nrow(paragraphs_with_official)))
+
+## ============================================================================
+## STEP 6: FILTER BY DISCRETIONARY LANGUAGE KEYWORDS
+## ============================================================================
+
+cat("\n--- STEP 6: Filter by 'discretionary language' keywords ---\n")
+
+discretionary_keywords <- actionable_keywords[
+  actionable_clause_category == "discretionary language", 
+  keyword
+]
+
+cat(sprintf("  - Discretionary language keywords: %d\n", length(discretionary_keywords)))
+cat(sprintf("    Keywords: %s\n", paste(discretionary_keywords, collapse = ", ")))
+
+discretionary_pattern <- paste0("\\b(", paste(discretionary_keywords, collapse = "|"), ")\\b")
+
+paragraphs_with_official[, has_discretionary := grepl(discretionary_pattern, Paragraph, ignore.case = TRUE)]
+
+actionable_paragraphs <- paragraphs_with_official[has_discretionary == TRUE]
+
+cat(sprintf("  - Paragraphs with BOTH official AND discretionary keywords: %d\n", 
+            nrow(actionable_paragraphs)))
+
+## ============================================================================
+## STEP 6b: FILTER BY WORD ORDER (Official BEFORE Discretionary Verb, within 5 words)
+## ============================================================================
+
+cat("\n--- STEP 6b: Filter by word order (official before discretionary verb, within 5 words) ---\n")
+
+## Function: Count words between two character positions in text
+count_words_between <- function(text, start_pos, end_pos) {
+  if (start_pos >= end_pos) return(Inf)
+  
+  # Extract substring between the two positions
+  between_text <- substr(text, start_pos, end_pos - 1)
+  
+  # Count words by splitting on whitespace
+  words <- unlist(strsplit(trimws(between_text), "\\s+"))
+  
+  # Return word count (subtract 1 because we don't count the keyword itself)
+  return(length(words) - 1)
+}
+
+## Function: Check if any official keyword appears before any discretionary keyword within 5 words
+check_official_before_discretionary <- function(paragraph_text, official_kws, discretionary_kws, max_words = 5) {
+  if (is.na(paragraph_text) || paragraph_text == "") return(FALSE)
+  
+  text_lower <- tolower(paragraph_text)
+  
+  # Find positions and lengths of all official keywords
+  official_matches <- list()
+  for (kw in official_kws) {
+    kw_lower <- tolower(kw)
+    matches <- gregexpr(paste0("\\b", kw_lower, "\\b"), text_lower, perl = TRUE)[[1]]
+    if (matches[1] != -1) {
+      for (pos in matches) {
+        official_matches <- append(official_matches, list(list(
+          pos = pos,
+          end_pos = pos + nchar(kw_lower)
+        )))
+      }
+    }
+  }
+  
+  # Find positions of all discretionary keywords
+  discretionary_positions <- integer()
+  for (kw in discretionary_kws) {
+    matches <- gregexpr(paste0("\\b", tolower(kw), "\\b"), text_lower, perl = TRUE)[[1]]
+    if (matches[1] != -1) {
+      discretionary_positions <- c(discretionary_positions, matches)
+    }
+  }
+  
+  # Check if no matches found
+  if (length(official_matches) == 0 || length(discretionary_positions) == 0) {
+    return(FALSE)
+  }
+  
+  # Check if any official keyword appears before any discretionary keyword within max_words
+  for (official in official_matches) {
+    for (disc_pos in discretionary_positions) {
+      # Check if discretionary comes after official
+      if (disc_pos > official$end_pos) {
+        # Count words between end of official and start of discretionary
+        words_between <- count_words_between(text_lower, official$end_pos, disc_pos)
+        
+        if (words_between <= max_words) {
+          return(TRUE)
+        }
+      }
+    }
+  }
+  
+  return(FALSE)
+}
+
+cat("  - Checking word order for each paragraph...\n")
+
+actionable_paragraphs[, official_before_verb := sapply(
+  Paragraph,
+  check_official_before_discretionary,
+  official_kws = official_keywords,
+  discretionary_kws = discretionary_keywords
+)]
+
+rows_before_order_filter <- nrow(actionable_paragraphs)
+actionable_paragraphs <- actionable_paragraphs[official_before_verb == TRUE]
+
+cat(sprintf("  - Removed %d paragraphs where verb not within 5 words after official\n", 
+            rows_before_order_filter - nrow(actionable_paragraphs)))
+cat(sprintf("  - Paragraphs remaining (official before verb, within 5 words): %d\n", 
+            nrow(actionable_paragraphs)))
+
+## Validate we have data to process ----
+if (nrow(actionable_paragraphs) == 0) {
+  stop("No paragraphs remaining after filtering. Check your keyword filters.")
+}
+
+## ============================================================================
+## STEP 7: EXTRACT actionable TYPES, OFFICIALS, AND DISCRETION
+## ============================================================================
+
+cat("\n--- STEP 7: Extracting actionable types, officials, and discretion ---\n")
 
 ## Function: Extract actionable types ----
 extract_actionable_types <- function(paragraph_text) {
@@ -153,7 +413,9 @@ extract_actionable_types <- function(paragraph_text) {
   actionables_found <- character()
   
   for (impl_name in names(actionable_patterns)) {
-    pattern <- actionable_patterns[[impl_name]]
+    impl_info <- actionable_patterns[[impl_name]]
+    pattern <- impl_info$pattern
+    
     if (grepl(pattern, text_lower, perl = TRUE)) {
       actionables_found <- c(actionables_found, impl_name)
     }
@@ -210,608 +472,147 @@ extract_discretion_type <- function(paragraph_text, disc_keywords_dt) {
   }
 }
 
-## Prepare keyword lists for extraction ----
-official_keywords <- actionable_keywords[
-  actionable_clause_category == "responsible official",
-  unique(keyword)
-]
-
+# Get discretionary keywords with type
 discretionary_keywords_dt <- actionable_keywords[
   actionable_clause_category == "discretionary language",
   .(keyword, type)
 ]
 
-cat("Loaded", length(official_keywords), "official keywords and", 
-    nrow(discretionary_keywords_dt), "discretionary language keywords\n")
+cat("  - Extracting actionable types...\n")
+actionable_paragraphs[, actionable_type := sapply(Paragraph, extract_actionable_types)]
+
+cat("  - Extracting responsible officials...\n")
+actionable_paragraphs[, responsible_official := sapply(
+  Paragraph, 
+  extract_officials, 
+  official_kws = official_keywords
+)]
+
+cat("  - Extracting discretion types...\n")
+actionable_paragraphs[, discretion_type := sapply(
+  Paragraph, 
+  extract_discretion_type, 
+  disc_keywords_dt = discretionary_keywords_dt
+)]
 
 ## ============================================================================
-## MAIN PROCESSING
+## STEP 8: MERGE WITH METADATA AND PREPARE OUTPUT
 ## ============================================================================
 
-## Identify Governance-Only Management Domains ----
-if(!is.null(management_domain_threat)) {
-  threat_based_domains <- unique(management_domain_threat$management_domain)
-  all_mgmt_domains <- unique(paragraph_label_table[
-    label_type == "Management Domain" & !is.na(label_value),
-    label_value
-  ])
-  governance_only_domains <- setdiff(all_mgmt_domains, threat_based_domains)
-  
-  cat("Governance-only domains:", paste(governance_only_domains, collapse = ", "), "\n")
-  cat("Threat-based domains:", paste(threat_based_domains, collapse = ", "), "\n")
-} else {
-  governance_only_domains <- character(0)
-  cat("Ã¢Å¡Â Ã¯Â¸Â  Cannot identify governance domains without management_domain_threat_table\n")
-}
+cat("\n--- STEP 8: Merging with legislation metadata ---\n")
 
-## Merge Paragraphs with Legislation Metadata ----
-paragraphs_with_legislation <- merge(
-  paragraph_table[, .(paragraph_id, legislation_id, Section, Heading, Paragraph)],
-  legislation_table[, .(legislation_id, jurisdiction, act_name, legislation_name)],
+## Merge with legislation metadata ----
+actionable_output <- merge(
+  actionable_paragraphs[, .(paragraph_id, legislation_id, Section, Heading, Paragraph, 
+                            actionable_type, responsible_official, discretion_type)],
+  acts_only[, .(legislation_id, act_name, jurisdiction)],
   by = "legislation_id",
   all.x = TRUE
 )
 
-# Trim whitespace from join columns to ensure clean matches
-paragraphs_with_legislation[, act_name := trimws(act_name)]
-paragraphs_with_legislation[, legislation_name := trimws(legislation_name)]
-
-## Add Agency column (joined on act_name) ----
-cat("\n=== AGENCY JOIN DIAGNOSTICS ===\n")
-cat("Unique act_names in paragraphs:", length(unique(paragraphs_with_legislation$act_name)), "\n")
-cat("Unique act_names in agencies:", length(unique(agencies_table$act_name)), "\n")
-
-# Print first 5 from each for visual comparison
-cat("\nFirst 5 act_names in PARAGRAPHS (with quotes to show exact values):\n")
-for(i in 1:min(5, length(unique(paragraphs_with_legislation$act_name)))) {
-  val <- unique(paragraphs_with_legislation$act_name)[i]
-  cat(sprintf("  [%d] '%s' (nchar=%d)\n", i, val, nchar(val)))
-}
-
-cat("\nFirst 5 act_names in AGENCIES (with quotes to show exact values):\n")
-for(i in 1:min(5, length(unique(agencies_table$act_name)))) {
-  val <- unique(agencies_table$act_name)[i]
-  cat(sprintf("  [%d] '%s' (nchar=%d)\n", i, val, nchar(val)))
-}
-
-# Check for matches
-matching_acts <- intersect(unique(paragraphs_with_legislation$act_name), unique(agencies_table$act_name))
-cat("\nMatching act_names between tables:", length(matching_acts), "\n")
-if(length(matching_acts) > 0) {
-  cat("First few matches:", paste(head(matching_acts, 3), collapse = ", "), "\n")
-} else {
-  cat("WARNING: No matches found! Check for encoding or formatting differences.\n")
-  # Try to find near-matches
-  para_acts <- unique(paragraphs_with_legislation$act_name)
-  agency_acts <- unique(agencies_table$act_name)
-  for(pa in head(para_acts, 3)) {
-    for(aa in head(agency_acts, 3)) {
-      if(tolower(trimws(pa)) == tolower(trimws(aa))) {
-        cat(sprintf("  Potential case mismatch: '%s' vs '%s'\n", pa, aa))
-      }
-    }
-  }
-}
-
-paragraphs_with_legislation <- merge(
-  paragraphs_with_legislation,
-  agencies_table[, .(act_name, agency)],
-  by = "act_name",
-  all.x = TRUE,
-  allow.cartesian = TRUE  # One act can have multiple agencies
-)
-
-cat("Paragraphs with agency after join:", sum(!is.na(paragraphs_with_legislation$agency)), "\n")
-cat("Total rows after agency join:", nrow(paragraphs_with_legislation), "\n")
-
-## Add URL column (joined on legislation_name) ----
-cat("\n=== URL JOIN DIAGNOSTICS ===\n")
-cat("Unique legislation_names in paragraphs:", length(unique(paragraphs_with_legislation$legislation_name)), "\n")
-cat("Unique legislation_names in URL table:", length(unique(legislation_url_table$legislation_name)), "\n")
-
-# Check for matches
-matching_leg <- intersect(unique(paragraphs_with_legislation$legislation_name), unique(legislation_url_table$legislation_name))
-cat("Matching legislation_names:", length(matching_leg), "\n")
-if(length(matching_leg) > 0) {
-  cat("First few matches:", paste(head(matching_leg, 3), collapse = ", "), "\n")
-} else {
-  cat("WARNING: No URL matches found!\n")
-  cat("First 3 legislation_names in paragraphs:\n")
-  print(head(unique(paragraphs_with_legislation$legislation_name), 3))
-  cat("First 3 legislation_names in URL table:\n")
-  print(head(unique(legislation_url_table$legislation_name), 3))
-}
-
-paragraphs_with_legislation <- merge(
-  paragraphs_with_legislation,
-  legislation_url_table[, .(legislation_name, url)],
-  by = "legislation_name",
-  all.x = TRUE
-)
-
-cat("Paragraphs with URL after join:", sum(!is.na(paragraphs_with_legislation$url) & paragraphs_with_legislation$url != ""), "\n")
-cat("Total paragraphs after joining with metadata:", nrow(paragraphs_with_legislation), "\n")
-
-## Extract Actionable Clause Information at Paragraph Level ----
-cat("Extracting actionable types from paragraphs...\n")
-
-# Vectorized extraction - much faster than sapply
-extract_actionable_types_vectorized <- function(texts) {
-  results <- rep(NA_character_, length(texts))
-  texts_lower <- tolower(texts)
-  
-  for (i in seq_along(texts)) {
-    if (is.na(texts[i]) || texts[i] == "") next
-    
-    actionables_found <- character()
-    for (impl_name in names(actionable_patterns)) {
-      pattern <- actionable_patterns[[impl_name]]
-      if (grepl(pattern, texts_lower[i], perl = TRUE)) {
-        actionables_found <- c(actionables_found, impl_name)
-      }
-    }
-    
-    if (length(actionables_found) > 0) {
-      results[i] <- paste(actionables_found, collapse = "; ")
-    }
-  }
-  return(results)
-}
-
-# Process in batches to show progress
-batch_size <- 10000
-n_rows <- nrow(paragraphs_with_legislation)
-n_batches <- ceiling(n_rows / batch_size)
-
-paragraphs_with_legislation[, actionable_type := NA_character_]
-
-for (b in seq_len(n_batches)) {
-  start_idx <- (b - 1) * batch_size + 1
-  end_idx <- min(b * batch_size, n_rows)
-  
-  paragraphs_with_legislation[start_idx:end_idx, 
-                              actionable_type := extract_actionable_types_vectorized(Paragraph)]
-  
-  cat(sprintf("\r  Actionable types: batch %d/%d (rows %d-%d)", b, n_batches, start_idx, end_idx))
-}
-cat("\n")
-
-cat("Extracting responsible officials from paragraphs...\n")
-
-# Vectorized extraction for officials
-extract_officials_vectorized <- function(texts, official_kws) {
-  results <- rep(NA_character_, length(texts))
-  
-  for (i in seq_along(texts)) {
-    if (is.na(texts[i]) || texts[i] == "") next
-    
-    officials_found <- character()
-    for (kw in official_kws) {
-      pattern <- paste0("\\b", kw, "\\b")
-      if (grepl(pattern, texts[i], ignore.case = TRUE)) {
-        officials_found <- c(officials_found, kw)
-      }
-    }
-    
-    if (length(officials_found) > 0) {
-      results[i] <- paste(unique(officials_found), collapse = "; ")
-    }
-  }
-  return(results)
-}
-
-paragraphs_with_legislation[, responsible_official := NA_character_]
-
-for (b in seq_len(n_batches)) {
-  start_idx <- (b - 1) * batch_size + 1
-  end_idx <- min(b * batch_size, n_rows)
-  
-  paragraphs_with_legislation[start_idx:end_idx, 
-                              responsible_official := extract_officials_vectorized(Paragraph, official_keywords)]
-  
-  cat(sprintf("\r  Responsible officials: batch %d/%d (rows %d-%d)", b, n_batches, start_idx, end_idx))
-}
-cat("\n")
-
-cat("Extracting discretion types from paragraphs...\n")
-
-# Vectorized extraction for discretion types
-extract_discretion_vectorized <- function(texts, disc_keywords_dt) {
-  results <- rep(NA_character_, length(texts))
-  
-  for (i in seq_along(texts)) {
-    if (is.na(texts[i]) || texts[i] == "") next
-    
-    text_lower <- tolower(texts[i])
-    discretions_found <- character()
-    
-    for (j in seq_len(nrow(disc_keywords_dt))) {
-      kw <- disc_keywords_dt$keyword[j]
-      dtype <- disc_keywords_dt$type[j]
-      pattern <- paste0("\\b", tolower(kw), "\\b")
-      
-      if (grepl(pattern, text_lower, perl = TRUE)) {
-        discretions_found <- c(discretions_found, dtype)
-      }
-    }
-    
-    if (length(discretions_found) > 0) {
-      results[i] <- paste(unique(discretions_found), collapse = "; ")
-    }
-  }
-  return(results)
-}
-
-paragraphs_with_legislation[, discretion_type := NA_character_]
-
-for (b in seq_len(n_batches)) {
-  start_idx <- (b - 1) * batch_size + 1
-  end_idx <- min(b * batch_size, n_rows)
-  
-  paragraphs_with_legislation[start_idx:end_idx, 
-                              discretion_type := extract_discretion_vectorized(Paragraph, discretionary_keywords_dt)]
-  
-  cat(sprintf("\r  Discretion types: batch %d/%d (rows %d-%d)", b, n_batches, start_idx, end_idx))
-}
-cat("\n")
-
-## Merge with Labels (all.x = TRUE to keep ALL paragraphs) ----
-paragraphs_with_labels <- merge(
-  paragraphs_with_legislation,
-  paragraph_label_table[
-    label_type %in% c("Management Domain", "IUCN", "Clause Type") & !is.na(label_value),
-    .(paragraph_id, label_type, label_value)
-  ],
-  by = "paragraph_id",
-  all.x = TRUE,  # Keep ALL paragraphs, even those without labels
-  allow.cartesian = TRUE
-)
-
-## Extract Scope (will be split into separate rows later) ----
-scope_labels <- paragraph_label_table[
-  !is.na(scope),
-  .(paragraph_id, scope)
-]
-
-## Extract and Aggregate Keywords by Type ----
-# Management Domain Keywords
-mgmt_domain_keyword_labels <- paragraph_label_table[
-  label_type == "Management Domain" & !is.na(keyword),
-  .(paragraph_id, keyword)
-]
-mgmt_domain_keyword_labels <- mgmt_domain_keyword_labels[, 
-                                                         .(management_domain_keywords = paste(unique(keyword), collapse = "; ")), 
-                                                         by = paragraph_id
-]
-
-# Clause Type Keywords
-clause_type_keyword_labels <- paragraph_label_table[
-  label_type == "Clause Type" & !is.na(keyword),
-  .(paragraph_id, keyword)
-]
-clause_type_keyword_labels <- clause_type_keyword_labels[, 
-                                                         .(clause_type_keywords = paste(unique(keyword), collapse = "; ")), 
-                                                         by = paragraph_id
-]
-
-## Merge keywords to paragraph data ----
-paragraphs_with_meta <- merge(paragraphs_with_legislation, mgmt_domain_keyword_labels, by = "paragraph_id", all.x = TRUE)
-paragraphs_with_meta <- merge(paragraphs_with_meta, clause_type_keyword_labels, by = "paragraph_id", all.x = TRUE)
-
-## Aggregate keywords by section ----
-meta_aggregated <- paragraphs_with_meta[, .(
-  management_domain_keywords = paste(unique(na.omit(management_domain_keywords)), collapse = "; "),
-  clause_type_keywords = paste(unique(na.omit(clause_type_keywords)), collapse = "; ")
-), by = .(jurisdiction, act_name, legislation_name, Section, Heading)]
-
-# Replace empty strings with NA
-meta_aggregated[management_domain_keywords == "", management_domain_keywords := NA]
-meta_aggregated[clause_type_keywords == "", clause_type_keywords := NA]
-
-## Function to chunk paragraphs if they exceed Excel's limit ----
-chunk_paragraphs <- function(paragraphs, max_chars = 30000) {
-  if (sum(nchar(paragraphs)) + length(paragraphs) * 2 <= max_chars) {
-    return(list(paste(paragraphs, collapse = "\n\n")))
-  }
-  
-  chunks <- list()
-  current_chunk <- character(0)
-  current_length <- 0
-  
-  for (p in paragraphs) {
-    p_length <- nchar(p)
-    if (current_length + p_length + 2 > max_chars && length(current_chunk) > 0) {
-      chunks[[length(chunks) + 1]] <- paste(current_chunk, collapse = "\n\n")
-      current_chunk <- character(0)
-      current_length <- 0
-    }
-    current_chunk <- c(current_chunk, p)
-    current_length <- current_length + p_length + 2
-  }
-  
-  if (length(current_chunk) > 0) {
-    chunks[[length(chunks) + 1]] <- paste(current_chunk, collapse = "\n\n")
-  }
-  
-  return(chunks)
-}
-
-## Step 1: Aggregate Paragraphs by Section with Chunking ----
-# Get all unique labels per section (including scope)
-section_labels <- unique(paragraphs_with_labels[, .(
-  jurisdiction, act_name, legislation_name, Section, Heading, label_type, label_value
-)])
-
-# Get unique scope values per section - concatenate multiple scopes into one cell
-section_scope <- unique(scope_labels[paragraph_id %in% paragraphs_with_legislation$paragraph_id, .(
-  paragraph_id, scope
-)])
-section_scope <- merge(
-  section_scope,
-  paragraphs_with_legislation[, .(paragraph_id, jurisdiction, act_name, legislation_name, Section, Heading)],
-  by = "paragraph_id"
-)
-section_scope <- section_scope[, 
-                               .(scope = paste(unique(scope), collapse = "; ")),
-                               by = .(jurisdiction, act_name, legislation_name, Section, Heading)
-]
-
-# Aggregate actionable clause info by section (take unique values)
-# Helper function to get first non-NA value safely
-first_non_na <- function(x) {
-  x <- x[!is.na(x) & x != ""]
-  if(length(x) > 0) return(x[1]) else return(NA_character_)
-}
-
-# Aggregate actionable fields and URL (not agency - agency creates duplicate rows)
-actionable_aggregated <- paragraphs_with_legislation[, .(
-  actionable_type = paste(unique(na.omit(actionable_type)), collapse = "; "),
-  responsible_official = paste(unique(na.omit(responsible_official)), collapse = "; "),
-  discretion_type = paste(unique(na.omit(discretion_type)), collapse = "; "),
-  url = first_non_na(url)
-), by = .(jurisdiction, act_name, legislation_name, Section, Heading)]
-
-# Aggregate agencies per section - concatenate multiple agencies into one cell
-section_agencies <- paragraphs_with_legislation[
-  !is.na(agency) & agency != "",
-  .(agency = paste(unique(agency), collapse = "; ")),
-  by = .(jurisdiction, act_name, legislation_name, Section, Heading)
-]
-
-# Debug: Check agency values
-cat("Sections with agencies:", nrow(section_agencies), "\n")
-cat("Sample agencies:", paste(head(unique(section_agencies$agency), 5), collapse = " | "), "\n")
-
-# Replace empty strings with NA in actionable_aggregated
-actionable_aggregated[actionable_type == "", actionable_type := NA]
-actionable_aggregated[responsible_official == "", responsible_official := NA]
-actionable_aggregated[discretion_type == "", discretion_type := NA]
-actionable_aggregated[is.na(url) | url == "", url := NA_character_]
-
-# Aggregate paragraphs with chunking
-paragraphs_aggregated <- paragraphs_with_legislation[, {
-  chunks <- chunk_paragraphs(unique(Paragraph))
-  list(
-    Paragraph = chunks,
-    chunk_id = seq_along(chunks),
-    total_chunks = length(chunks)
-  )
-}, by = .(jurisdiction, act_name, legislation_name, Section, Heading)]
-
-# Convert list columns to regular columns
-paragraphs_aggregated <- paragraphs_aggregated[, .(
-  Paragraph = unlist(Paragraph),
-  chunk_id = unlist(chunk_id),
-  total_chunks = unlist(total_chunks)
-), by = .(jurisdiction, act_name, legislation_name, Section, Heading)]
-
-## Step 2: Merge Labels Back (using left join to keep ALL sections) ----
-paragraphs_with_all_labels <- merge(
-  paragraphs_aggregated,
-  section_labels,
-  by = c("jurisdiction", "act_name", "legislation_name", "Section", "Heading"),
-  all.x = TRUE,  # Keep ALL paragraphs
-  allow.cartesian = TRUE
-)
-
-## Step 3: Reshape Labels ----
-# Separate Clause Type (will be aggregated)
-clause_type_labels <- paragraphs_with_all_labels[
-  label_type == "Clause Type" & !is.na(label_value),
-  .(Clause_Type = paste(unique(label_value), collapse = "; ")),
-  by = .(jurisdiction, act_name, legislation_name, Section, Heading, chunk_id)
-]
-
-# Keep Management Domain and IUCN separate (one row per combination)
-mgmt_iucn_labels <- unique(paragraphs_with_all_labels[
-  label_type %in% c("Management Domain", "IUCN") & !is.na(label_value),
-  .(jurisdiction, act_name, legislation_name, Section, Heading, Paragraph, chunk_id, total_chunks, label_type, label_value)
-])
-
-# Reshape to wide format if we have Management Domain/IUCN labels
-if(nrow(mgmt_iucn_labels) > 0) {
-  mgmt_iucn_wide <- dcast(
-    mgmt_iucn_labels,
-    jurisdiction + act_name + legislation_name + Section + Heading + Paragraph + chunk_id + total_chunks ~ label_type,
-    value.var = "label_value",
-    fun.aggregate = function(x) if(length(x) > 0) x[1] else NA_character_
-  )
-  
-  # CRITICAL: Set IUCN to NA for governance-only management domains
-  if("Management Domain" %in% names(mgmt_iucn_wide) && "IUCN" %in% names(mgmt_iucn_wide) && length(governance_only_domains) > 0) {
-    rows_to_clear <- mgmt_iucn_wide$`Management Domain` %in% governance_only_domains
-    mgmt_iucn_wide[rows_to_clear, IUCN := NA_character_]
-    cat("Ã¢Å“â€¦ Set IUCN to NA for", sum(rows_to_clear), "governance-only rows\n")
-  }
-  
-  compendium_data <- copy(mgmt_iucn_wide)
-} else {
-  compendium_data <- unique(paragraphs_aggregated)
-  compendium_data[, `Management Domain` := NA_character_]
-  compendium_data[, IUCN := NA_character_]
-}
-
-# For paragraphs without any Management Domain/IUCN labels, add them back
-# Get sections that exist in paragraphs_aggregated but not in compendium_data
-all_sections <- unique(paragraphs_aggregated[, .(jurisdiction, act_name, legislation_name, Section, Heading, Paragraph, chunk_id, total_chunks)])
-existing_sections <- unique(compendium_data[, .(jurisdiction, act_name, legislation_name, Section, Heading, chunk_id)])
-
-# Find missing sections (those without Management Domain/IUCN labels)
-missing_sections <- merge(
-  all_sections,
-  existing_sections,
-  by = c("jurisdiction", "act_name", "legislation_name", "Section", "Heading", "chunk_id"),
-  all.x = TRUE
-)
-
-# Add indicator for which rows are missing
-setnames(missing_sections, old = names(missing_sections), new = names(missing_sections))
-missing_only <- all_sections[!existing_sections, on = c("jurisdiction", "act_name", "legislation_name", "Section", "Heading", "chunk_id")]
-
-if(nrow(missing_only) > 0) {
-  missing_only[, `Management Domain` := NA_character_]
-  missing_only[, IUCN := NA_character_]
-  compendium_data <- rbindlist(list(compendium_data, missing_only), fill = TRUE)
-  cat("Ã¢Å“â€¦ Added", nrow(missing_only), "sections without Management Domain/IUCN labels\n")
-}
-
-# Merge with Clause Type
-compendium_data <- merge(
-  compendium_data,
-  clause_type_labels,
-  by = c("jurisdiction", "act_name", "legislation_name", "Section", "Heading", "chunk_id"),
-  all.x = TRUE
-)
-
-# Merge with scope (now concatenated into one cell per section)
-compendium_data <- merge(
-  compendium_data,
-  section_scope,
-  by = c("jurisdiction", "act_name", "legislation_name", "Section", "Heading"),
-  all.x = TRUE
-)
-
-# Merge with aggregated keywords
-compendium_data <- merge(
-  compendium_data,
-  meta_aggregated,
-  by = c("jurisdiction", "act_name", "legislation_name", "Section", "Heading"),
-  all.x = TRUE
-)
-
-# Merge with actionable clause info (url included, agency separate)
-compendium_data <- merge(
-  compendium_data,
-  actionable_aggregated,
-  by = c("jurisdiction", "act_name", "legislation_name", "Section", "Heading"),
-  all.x = TRUE
-)
-
-# Merge with agencies - now one row per section with concatenated agencies
-compendium_data <- merge(
-  compendium_data,
-  section_agencies,
-  by = c("jurisdiction", "act_name", "legislation_name", "Section", "Heading"),
-  all.x = TRUE
-)
-
-cat("Rows after agency join:", nrow(compendium_data), "\n")
-cat("Rows with agency:", sum(!is.na(compendium_data$agency)), "\n")
-
-# Update Section column in place (don't create new column)
-compendium_data[, Section := ifelse(
-  total_chunks > 1,
-  paste0(Section, " (Part ", chunk_id, " of ", total_chunks, ")"),
-  Section
-)]
-
-# Remove helper columns
-compendium_data[, c("chunk_id", "total_chunks") := NULL]
-
-# Rename columns to final desired names (lowercase with underscores)
-setnames(compendium_data, old = c("Section", "Heading", "Paragraph", "Management Domain", "IUCN", "Clause_Type", "scope"),
-         new = c("section", "heading", "aggregate_paragraph", "management_domain", "iucn_threat", "clause_type", "scope"),
-         skip_absent = TRUE)
-
-# Ensure all required columns exist
-required_cols <- c("jurisdiction", "agency", "url", "management_domain", "iucn_threat", 
-                   "clause_type", "scope", "management_domain_keywords", "clause_type_keywords",
-                   "actionable_type", "responsible_official", "discretion_type")
-for(col in required_cols) {
-  if(!col %in% names(compendium_data)) {
-    compendium_data[, (col) := NA_character_]
-  }
-}
-
-# Reorder columns
-desired_order <- c("jurisdiction", "agency", "act_name", "legislation_name", "url",
-                   "section", "heading", "aggregate_paragraph",
-                   "management_domain", "iucn_threat", "clause_type", "scope", 
-                   "management_domain_keywords", "clause_type_keywords",
-                   "actionable_type", "responsible_official", "discretion_type")
-existing_order <- intersect(desired_order, names(compendium_data))
-setcolorder(compendium_data, existing_order)
-
-cat("Ã¢Å“â€¦ Final columns:", paste(names(compendium_data), collapse = ", "), "\n")
-
-## Sort by jurisdiction, legislation and section ----
-setorder(compendium_data, jurisdiction, act_name, legislation_name, section)
-
-## Export to Excel in Output Directory ----
-output_file <- file.path(here("output"), "LAPSE_full_compendium.xlsx")
-wb <- createWorkbook()
-addWorksheet(wb, "Compendium")
-
-# Write data with default formatting
-writeDataTable(wb, "Compendium", compendium_data)
-
-# Auto-size columns for better readability (with max width)
-setColWidths(wb, "Compendium", cols = 1:ncol(compendium_data), widths = "auto")
-
-saveWorkbook(wb, output_file, overwrite = TRUE)
-cat("Ã¢Å“â€¦ Excel file 'LAPSE_full_compendium.xlsx' has been saved to the output directory.\n")
-cat(sprintf("   Total rows: %d\n", nrow(compendium_data)))
+## Remove unwanted columns from output ----
+actionable_output[, c("paragraph_id", "legislation_id") := NULL]
+
+## Reorder columns ----
+setcolorder(actionable_output, c(
+  "act_name", "jurisdiction", "Section", "Heading", 
+  "actionable_type", "responsible_official", "discretion_type", 
+  "Paragraph"
+))
+
+## Clean encoding issues in Heading and Paragraph columns ----
+cat("  - Cleaning text encoding issues...\n")
+actionable_output[, Heading := sapply(Heading, clean_encoding)]
+actionable_output[, Paragraph := sapply(Paragraph, clean_encoding)]
+
+## Sort ----
+actionable_output <- actionable_output[order(act_name, Section)]
+
+cat(sprintf("  - Final output rows: %d\n", nrow(actionable_output)))
 
 ## ============================================================================
-## EXPORT JSON VERSION OF THE COMPENDIUM
+## STEP 9: CREATE SUMMARIES
 ## ============================================================================
 
-library(jsonlite)
+cat("\n--- STEP 9: Creating summary statistics ---\n")
 
-json_output_file <- file.path(here("output"), "LAPSE_compendium.json")
+## Summary by actionable type ----
+summary_by_actionable <- actionable_output[!is.na(actionable_type), .N, by = actionable_type][order(-N)]
+setnames(summary_by_actionable, c("Actionable Clause Type", "Count"))
 
-# Convert data.table to a regular list for clean JSON structure
-compendium_list <- as.list(compendium_data)
+## Summary by official ----
+summary_by_official <- actionable_output[!is.na(responsible_official), .N, by = responsible_official][order(-N)]
+setnames(summary_by_official, c("Responsible Official", "Count"))
 
-# Write JSON (pretty = TRUE for readability)
-write_json(
-  compendium_data,
-  path = json_output_file,
-  pretty = TRUE,
-  auto_unbox = TRUE,
-  na = "null"
-)
+## Summary by discretion type ----
+summary_by_discretion <- actionable_output[!is.na(discretion_type), .N, by = discretion_type][order(-N)]
+setnames(summary_by_discretion, c("Discretion Type", "Count"))
 
-cat("Ã¢Å“â€¦ JSON file 'LAPSE_compendium.json' has been saved to the output directory.\n")
-################################################################################
+## Summary by act ----
+summary_by_act <- actionable_output[, .N, by = .(act_name, jurisdiction)][order(-N)]
+setnames(summary_by_act, c("Act Name", "Jurisdiction", "Count"))
 
-# Summary statistics
-cat("\n--- Summary Statistics ---\n")
-cat(sprintf("   Paragraphs with Management Domain: %d\n", sum(!is.na(compendium_data$management_domain))))
-cat(sprintf("   Paragraphs without Management Domain: %d\n", sum(is.na(compendium_data$management_domain))))
-cat(sprintf("   Paragraphs with Actionable Type: %d\n", sum(!is.na(compendium_data$actionable_type))))
-cat(sprintf("   Paragraphs with Responsible Official: %d\n", sum(!is.na(compendium_data$responsible_official))))
-cat(sprintf("   Paragraphs with Discretion Type: %d\n", sum(!is.na(compendium_data$discretion_type))))
-cat(sprintf("   Unique agencies: %d\n", length(unique(na.omit(compendium_data$agency)))))
-cat(sprintf("   Paragraphs with URLs: %d\n", sum(!is.na(compendium_data$url) & compendium_data$url != "")))
+## ============================================================================
+## STEP 10: EXPORT TO CSV AND DATABASE
+## ============================================================================
 
-# Check for any remaining character limit issues
-char_counts <- nchar(compendium_data$aggregate_paragraph)
-if(any(char_counts > 32767, na.rm = TRUE)) {
-  cat("Ã¢Å¡Â Ã¯Â¸Â  Warning: Some cells still exceed Excel's limit. Consider further chunking.\n")
-} else {
-  cat("Ã¢Å“â€¦ All cells are within Excel's character limit.\n")
+cat("\n--- STEP 10: Exporting results ---\n")
+
+## --- Export to CSV ---
+output_file <- file.path(here("output"), "actionable_clauses.csv")
+data.table::fwrite(actionable_output, output_file, sep = ",", na = "", quote = TRUE)
+cat(sprintf("  - CSV file saved to: %s\n", output_file))
+
+## --- Export to SQLite Database ---
+cat("  - Writing to SQLite database...\n")
+dbWriteTable(conn, "actionable_clauses", actionable_output, overwrite = TRUE)
+cat(sprintf("  - Table 'actionable_clauses' saved to database\n"))
+cat(sprintf("  - Rows written: %d\n", nrow(actionable_output)))
+
+## Disconnect from database ----
+dbDisconnect(conn)
+cat("  - Database connection closed.\n")
+
+## ============================================================================
+## SUMMARY
+## ============================================================================
+
+cat("\n=====================================\n")
+cat("SUMMARY\n")
+cat("=====================================\n\n")
+
+cat("FILTERING PIPELINE:\n")
+cat(sprintf("  1. Total paragraphs in database:     %d\n", nrow(paragraph_table)))
+cat(sprintf("  2. Paragraphs from Acts:             %d\n", nrow(act_paragraphs)))
+cat(sprintf("  3. With Management Domain labels:    %d\n", length(management_domain_paragraph_ids)))
+cat(sprintf("  4. With specified Clause Types:      %d\n", length(clause_type_paragraph_ids)))
+cat(sprintf("  5. Combined filter (intersection):   %d\n", length(filtered_paragraph_ids)))
+cat(sprintf("  6. Excluding 'definition' headings:  (see above)\n"))
+cat(sprintf("  7. With responsible official:        %d\n", nrow(paragraphs_with_official)))
+cat(sprintf("  8. With discretionary language:      %d\n", rows_before_order_filter))
+cat(sprintf("  9. Official before verb (within 5 words): %d\n", nrow(actionable_paragraphs)))
+
+cat("\nINCLUDED CLAUSE TYPES:\n")
+for (ct in included_clause_types) {
+  cat(sprintf("  - %s\n", ct))
 }
 
-# Beep when done
+cat("\nTop 10 Actionable Clause Types:\n")
+print(head(summary_by_actionable, 10))
+
+cat("\nTop 10 Responsible Officials:\n")
+print(head(summary_by_official, 10))
+
+cat("\nDiscretion Type Summary:\n")
+print(summary_by_discretion)
+
+cat("\nTop 10 Acts by Actionable Clause Count:\n")
+print(head(summary_by_act, 10))
+
+cat("\n=====================================\n")
+cat("Analysis complete!\n")
+cat(sprintf("Output saved to: %s\n", output_file))
+cat("=====================================\n")
+
+## Notify Completion ----
 beep(sound = 1)
