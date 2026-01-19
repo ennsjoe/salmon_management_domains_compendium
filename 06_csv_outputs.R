@@ -39,7 +39,7 @@ conn <- dbConnect(SQLite(), dbname = db_path)
 cat("✓ Connected to database\n")
 
 ## Create output directory for CSVs ----
-csv_output_dir <- file.path(here("output"), "csv")
+csv_output_dir <- file.path(here("output"), "app_csv")
 if (!dir.exists(csv_output_dir)) {
   dir.create(csv_output_dir, recursive = TRUE)
   cat("✓ Created output directory:", csv_output_dir, "\n")
