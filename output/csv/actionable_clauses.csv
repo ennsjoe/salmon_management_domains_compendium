@@ -1,0 +1,1233 @@
+paragraph_id,actionable_type,responsible_official,discretion_type
+184,,Commission; Committee,discretionary
+213,designation,Commission,discretionary
+215,designation; agreement,Commission,discretionary
+216,reserve; approval,Commission,discretionary
+225,designation; reserve,Commission,discretionary
+134,regulation; plan,Commission,mandatory
+305,notice,Chief; Officer,mandatory
+311,,Chief; Officer,discretionary
+318,,Chief; Commission; Officer,discretionary
+321,,Commission,discretionary
+355,agreement; exemption; report,Commission,discretionary; mandatory
+418,reserve,Commission,mandatory
+516,,Board,mandatory
+147,order_in_council,governor; Lieutenant,mandatory
+148,,Minister,mandatory
+154,,Minister,mandatory
+571,regulation; order,Chief; Commission; Officer,discretionary
+574,regulation; order,Chief; Officer,discretionary
+579,order; notice,Chief; Office; Officer,discretionary
+590,regulation; order; authorization; authorization,Chief; Commission; Officer,discretionary
+597,notice,Chief; Officer,mandatory
+598,notice,Chief; Officer,discretionary
+667,regulation; order_in_council,governor; Lieutenant,discretionary
+672,regulation; order_in_council,governor; Lieutenant,discretionary
+686,regulation; order_in_council,governor; Lieutenant,discretionary
+689,regulation; order_in_council,governor; Lieutenant,discretionary; mandatory
+692,regulation; order_in_council,governor; Lieutenant,discretionary
+771,reserve,Commission,discretionary
+176,order_in_council,Chief; Commission; governor; Lieutenant; Officer,discretionary
+178,,Chief; Commission; Officer,discretionary
+1974,order,Chief,discretionary
+1987,order,Chief,discretionary
+2055,order,Minister,discretionary
+2280,designation,Chief; inspector,discretionary; mandatory
+2282,agreement,Minister,discretionary
+2290,,Chief; Minister,discretionary
+2298,,Chief; Minister,mandatory
+2307,,Chief,discretionary
+2310,,Chief,discretionary
+2318,,Chief; inspector,discretionary
+2505,regulation; order_in_council,governor; Lieutenant,discretionary
+3491,regulation; order_in_council,governor; Lieutenant,discretionary
+3650,regulation; order_in_council,governor; Lieutenant,discretionary
+3659,regulation; order_in_council,governor; Lieutenant; Minister,discretionary
+3661,regulation; order_in_council,governor; Lieutenant,discretionary
+3827,assessment; review,Minister,mandatory
+3830,designation,Minister; Office,mandatory
+3831,,Minister; Office,discretionary
+3834,,Minister,discretionary
+3980,,Board,discretionary
+5200,regulation; policy; protected_area; agreement,Minister; ministers,mandatory
+5201,report,Minister; parliament,mandatory
+5202,plan; protected_area; review,Advisory; Committee; Minister,mandatory
+5203,policy; protected_area; review,Advisory; Minister,discretionary
+5214,regulation; order_in_council,governor,discretionary
+5237,designation; park; protected_area,Agency; agency; Minister,discretionary
+5241,regulation; code; designation,Minister,discretionary
+5243,designation,Minister,discretionary
+5244,designation; protected_area; certificate,Minister; Officer,mandatory
+5248,code; protected_area,Officer,discretionary
+5251,protected_area,Officer,discretionary
+5258,protected_area,Officer,discretionary
+5263,protected_area,Officer,discretionary; mandatory
+5151,order; order_in_council; protected_area,governor,discretionary
+5156,order; order_in_council; protected_area,governor,discretionary
+5158,order; order_in_council; reserve,governor,discretionary
+5159,order; order_in_council,governor,discretionary
+5162,order; order_in_council; reserve,governor,discretionary
+5169,designation,Committee,discretionary
+5192,study,Minister,discretionary
+5194,plan; protected_area; agreement,Minister; ministers; parliament,mandatory
+5195,plan; protected_area; review,Minister; parliament,mandatory
+5464,plan; park,Minister; parliament,mandatory
+5466,regulation; plan; policy; park; agreement,Minister,mandatory
+5471,regulation; order_in_council; park,governor,discretionary
+5472,authorization; authorization,Minister,discretionary
+5473,authorization; authorization,Minister,discretionary
+5479,order_in_council; plan; park,governor; Minister,mandatory
+5549,regulation; code; designation; park,Agency; agency; Minister,discretionary
+5789,order; order_in_council; park,governor,discretionary
+5821,order_in_council; authorization; reserve; park; agreement; authorization,governor; Minister,discretionary
+5822,regulation; order_in_council; reserve; park; agreement,governor,discretionary
+5829,regulation; authorization; designation; reserve; park; permit; authorization,Agency; agency; Board; inspector; Minister; Officer,discretionary
+5830,regulation; designation; reserve; park; licence,Agency; agency; Board; inspector; Minister; Officer,discretionary
+5836,reserve; park; licence,Minister,discretionary
+5839,regulation; authorization; designation; reserve; park; permit; authorization,Agency; agency; Board; inspector; Minister; Officer,discretionary
+5840,regulation; designation; reserve; park; licence,Agency; agency; Board; inspector; Minister; Officer,discretionary
+5867,order_in_council,governor,discretionary
+5442,order; order_in_council; park,governor,discretionary
+5444,order; order_in_council; reserve; park,governor; Province,discretionary
+5448,order; order_in_council; reserve; park,governor,discretionary
+5450,designation; reserve; park; agreement; report,Committee; parliament,discretionary; mandatory
+8007,order; authorization; authorization,Committee,discretionary; mandatory
+8057,regulation; order_in_council,governor,discretionary
+8080,regulation,Minister,discretionary
+8084,,Chief; Officer,discretionary
+8087,regulation,Chief; Officer,discretionary
+8100,order,Chief; Officer,discretionary
+8101,order,Chief; Officer,discretionary
+8113,order,Chief; Officer,discretionary
+8114,order,Chief; Officer,mandatory
+8115,order,Chief; Officer,discretionary; mandatory
+8116,order,Chief; Officer,discretionary
+8117,order; authorization; authorization,Chief; Officer,discretionary
+8120,order,Chief; Commission; Officer; Regulator,discretionary
+8135,authorization; authorization,Chief; Officer,discretionary
+8147,,Chief; Officer,mandatory
+8153,authorization; authorization,Minister,discretionary
+8154,authorization; authorization,Minister,mandatory
+8183,authorization; authorization,Commission; Regulator,mandatory
+8200,authorization; authorization,Board; Minister,discretionary
+8201,regulation,Board; Minister,mandatory
+7838,designation,Chief; Officer; Regulator,discretionary
+8258,,Chief; Committee; Officer,mandatory
+7854,,Commission; Regulator,discretionary; mandatory
+8338,order; agreement,Minister,mandatory
+8351,,Minister,mandatory
+8363,regulation; order_in_council; agreement,governor,discretionary
+8375,notice,Commission; Regulator,mandatory
+8391,,Minister; Regulator,mandatory
+8413,,Minister; Regulator,mandatory
+8422,agreement,Chairperson; Chief,mandatory
+7882,authorization; designation; authorization; assessment,Minister,mandatory
+7897,authorization; authorization,Commission; Regulator,mandatory
+7899,regulation; order_in_council; authorization; authorization,governor; Minister,discretionary
+7900,regulation; order_in_council; authorization; authorization,governor; Minister,discretionary
+7903,authorization; permit; authorization,Commission; Regulator,mandatory
+7965,regulation; order; authorization; licence; authorization; approval,Commission; Regulator,discretionary; mandatory
+8430,,Committee; Minister,discretionary
+8438,regulation,Chief; Officer,discretionary
+8446,designation; certificate,Chief; Officer; Regulator,mandatory
+8447,regulation,Chief; Officer,discretionary; mandatory
+8449,regulation; order,Chief; Officer,discretionary
+8453,order,Chief; Officer,discretionary
+8454,order,Chief; Officer,discretionary; mandatory
+8455,order; notice; review,Chief; Commission; Officer; Regulator,discretionary; mandatory
+7997,order_in_council; designation,Committee; governor; Office,discretionary; mandatory
+7999,order_in_council,Committee; governor,mandatory
+8646,regulation; order; authorization; authorization; exemption,Minister,discretionary
+8649,exemption,Department; Minister,discretionary
+8652,regulation; order,Minister,discretionary; mandatory
+9334,regulation; bylaw,Officer; parliament,discretionary
+9409,regulation,Board,discretionary
+9460,standard; exemption,Minister,discretionary
+10148,regulation,Minister,mandatory
+10156,regulation,Minister,mandatory
+10179,regulation; plan,Minister,discretionary
+10181,regulation; plan,Minister,discretionary; mandatory
+9508,review,commissioner; Minister,discretionary
+9520,,Advisory; Minister,discretionary
+9590,,Minister,discretionary
+9602,,Minister; Officer,discretionary; mandatory
+9702,,Minister,discretionary
+9706,,Minister,discretionary
+9713,regulation; order_in_council,governor; Minister,discretionary
+9900,,Minister,discretionary
+9955,,Minister,discretionary
+9956,,Board; Minister,discretionary
+8771,,Minister,discretionary
+8775,,Department; Minister,mandatory
+8850,regulation; order_in_council,governor; Minister,discretionary
+10196,regulation; designation,Minister,discretionary
+10198,designation,Minister,mandatory
+8911,,Chief,discretionary
+9166,authorization; authorization,Minister,discretionary
+10294,order_in_council; agreement; approval,governor; Minister,discretionary
+10315,order_in_council; authorization; plan; program; designation; protected_area; authorization,Agency; agency; governor; Minister,discretionary
+10319,order_in_council; authorization; plan; program; designation; protected_area; authorization,Agency; agency; governor; Minister,discretionary
+10320,program,Agency; agency; Minister,discretionary
+10325,plan; program; protected_area,Agency; agency,mandatory
+10326,protected_area; agreement,Agency; agency; Minister,discretionary
+10337,plan,Agency; agency; Minister,mandatory
+10338,order; plan; protected_area; agreement,Agency; agency; Minister,discretionary
+10348,order_in_council; authorization; authorization,Agency; agency; governor; Minister,discretionary; mandatory
+10376,regulation; order_in_council; protected_area,governor,discretionary
+10406,,Advisory; Minister,discretionary
+10261,order_in_council; program; agreement; approval,governor; Minister,discretionary
+10273,order_in_council; program; agreement,governor; Minister,mandatory
+10442,,Advisory; Minister,discretionary
+10433,authorization; authorization,Agency; agency; Minister; Officer; parliament,discretionary
+10482,order_in_council,governor,discretionary
+10484,,Minister,discretionary
+10485,,Department; Minister,discretionary
+11338,order_in_council,governor,discretionary
+11594,,Commission,mandatory
+11660,certificate; report,Commission,mandatory
+11661,order; approval; exemption,Commission,mandatory
+11663,regulation; order_in_council,governor; Minister,discretionary
+11847,order; permit; approval; certificate; exemption,Commission,mandatory
+11849,regulation; order; order_in_council,governor; Minister,discretionary
+12088,order_in_council,governor,discretionary
+12389,order,Chief; Commission; Officer,mandatory
+11059,report,Minister; parliament; Regulator,discretionary
+11103,order; authorization; authorization,Commission,discretionary
+11122,regulation; order; exemption,Commission,discretionary
+12590,regulation; order; order_in_council,governor; Minister,discretionary
+13242,regulation; order_in_council,governor; ministers,discretionary
+13255,,Minister,mandatory
+13258,,Minister,mandatory
+13259,,Minister,mandatory
+13261,,Minister,discretionary
+13265,,Minister,discretionary
+13266,notice,Minister,mandatory
+13297,,Minister,discretionary
+13300,order; assessment,ministers,mandatory
+13301,order,ministers,mandatory
+13308,,Minister; ministers,discretionary
+13323,notice,Minister; ministers,discretionary
+13335,,Minister,mandatory
+13340,,Minister,mandatory
+13341,,Minister,discretionary
+13345,,Minister,discretionary
+13386,regulation; order_in_council,governor; Minister,discretionary
+13399,regulation,Minister,discretionary
+13517,regulation; authorization; permit; authorization,Minister,discretionary
+13525,permit,Minister,discretionary
+13554,order; order_in_council; designation; report,governor; Officer,discretionary; mandatory
+13556,,Minister,mandatory
+13624,regulation; order_in_council,Agency; agency; Committee; Department; governor; Minister; Province,discretionary; mandatory
+13648,regulation; order_in_council,Agency; agency; Committee; Department; governor; Minister; Province,discretionary; mandatory
+13926,regulation; authorization; permit; authorization,Minister,discretionary
+13927,permit,Minister,mandatory
+13928,authorization; permit; authorization,Minister,discretionary
+13929,order_in_council; agreement; approval,governor; Minister,discretionary
+13935,,Minister,discretionary; mandatory
+13975,guideline,Minister,discretionary
+13976,,Agency; agency; Committee; Department; Minister; Province,discretionary; mandatory
+14097,guideline,Minister,mandatory
+14102,regulation; order_in_council,governor; Minister,discretionary
+14235,,Officer,mandatory
+14307,order; code; notice,Minister,discretionary
+14335,,Officer,discretionary
+14347,,Minister,discretionary; mandatory
+14369,regulation; order,Commission; Officer,discretionary
+14451,review,Chief; Minister; Officer,mandatory
+14457,review,Officer,discretionary
+14475,order; review,Officer,discretionary
+14668,regulation; authorization; authorization,Minister,discretionary
+14884,,Minister,discretionary
+14889,,Minister,discretionary
+14894,order_in_council,governor; Minister; ministers,mandatory
+14895,,Minister,discretionary
+14896,notice,Minister,mandatory
+14904,report,Minister,mandatory
+14917,,Agency; agency; Committee; Department; Minister; Province,discretionary; mandatory
+12732,plan; study,Agency; agency; Department; Institution; Minister,discretionary
+12733,study,ministers,mandatory
+12734,study,ministers,mandatory
+12740,guideline; notice; report,Minister,discretionary
+12769,,Agency; agency; Committee; Department; Minister; Province,discretionary; mandatory
+12538,framework,ministers,mandatory
+12791,,Minister,mandatory
+12801,,Agency; agency; Committee; Department; Minister; Province,discretionary; mandatory
+12804,guideline,Minister,discretionary; mandatory
+12549,regulation,Advisory; Committee; Minister,mandatory
+12832,plan; notice,Minister,discretionary; mandatory
+12836,,Agency; agency; Committee; Department; Minister; Province,discretionary; mandatory
+12845,,Minister,mandatory
+12848,,Minister,mandatory
+12851,,Minister,mandatory
+12852,,Minister,discretionary; mandatory
+12853,,Minister,mandatory
+12855,,Minister,discretionary
+12859,,Minister,mandatory
+12861,,Minister,discretionary
+12862,notice,Minister,mandatory
+12872,,Minister,discretionary
+12897,,Agency; agency; Committee; Department; Minister; ministers; Province,discretionary; mandatory
+12904,,Minister,discretionary
+12925,,Minister; ministers,discretionary
+12940,plan; report,ministers,mandatory
+12945,,Minister,mandatory
+12946,order; review,Minister; ministers; parliament,mandatory
+12947,,Minister; ministers,discretionary; mandatory
+12964,assessment; review,Minister; ministers,discretionary; mandatory
+12972,,ministers,mandatory
+12989,order,ministers,mandatory
+13029,,Minister,discretionary
+13033,order; assessment,ministers,mandatory
+13034,order,ministers,mandatory
+13039,,Minister; ministers,discretionary
+13054,notice,Minister; ministers,discretionary
+13066,,Minister,mandatory
+13074,,Minister,mandatory
+13075,,Minister,discretionary
+13079,,Minister,discretionary
+13085,,Minister,mandatory
+13113,order; order_in_council,governor; ministers,discretionary
+13114,regulation,ministers,mandatory
+13115,,ministers,discretionary; mandatory
+13116,regulation; order; order_in_council,governor; ministers,discretionary
+13135,regulation; order_in_council,governor; ministers,discretionary
+13223,regulation,Minister,discretionary
+15175,order; authorization; authorization; notice,Minister,discretionary; mandatory
+15190,order,Minister,discretionary
+15205,order,Minister,discretionary
+15207,order,Minister,discretionary
+15209,,Minister,discretionary
+15212,order,Minister,discretionary
+15228,order; order_in_council; exemption,governor; Minister,discretionary
+15240,regulation; order_in_council; designation,governor,discretionary
+15294,order,Minister,discretionary
+15303,regulation; order; order_in_council,governor; Minister,discretionary
+15663,,Minister; Officer,discretionary; mandatory
+15680,order; code,Officer,discretionary
+15691,regulation; designation; agreement,Board; Officer,discretionary
+15692,,Officer,discretionary
+15693,agreement,Officer,mandatory
+15694,regulation; agreement,Officer,discretionary
+15695,order; code,Officer,discretionary
+15701,,Minister,discretionary
+15708,agreement,Minister,discretionary
+15709,,Agency; agency; Minister,discretionary
+15619,regulation,Board; Officer,discretionary
+15632,authorization; authorization,Board; Officer,discretionary
+15636,regulation,Officer,discretionary; mandatory
+15642,designation; agreement,Officer,discretionary
+15646,authorization; code; authorization,Board; Officer,discretionary
+15651,regulation,Officer,discretionary
+15658,authorization; code; authorization,Officer,discretionary
+20204,,Commission; Department; Minister,mandatory
+20206,order_in_council,Department; governor; Minister; Office; Officer,discretionary
+20219,,Commission; Department; Minister,mandatory
+20221,order_in_council,Department; governor; Minister; Office; Officer,discretionary
+20237,regulation; order; order_in_council; guideline; approval,governor; Minister,discretionary
+20267,,inspector,discretionary
+20271,authorization; authorization,inspector,discretionary
+20278,,inspector,discretionary
+20285,regulation; standard; approval,inspector,mandatory
+20294,order; notice,inspector,discretionary
+20299,order; authorization; authorization,inspector,discretionary
+20335,order,Commission; Minister,discretionary
+20667,agreement,Minister,discretionary
+20636,regulation,Minister,discretionary; mandatory
+21728,order_in_council; notice,governor; Lieutenant,discretionary
+21838,order_in_council,governor; Lieutenant,discretionary
+21848,order_in_council,governor; Lieutenant,discretionary
+21873,order_in_council,commissioner; governor; Lieutenant; Office,discretionary
+21910,order; order_in_council,governor; inspector; Lieutenant,discretionary
+21545,,commissioner,discretionary; mandatory
+21595,order_in_council,commissioner; governor; Lieutenant,discretionary
+21620,approval,Comptroller,discretionary
+22114,,Officer,discretionary
+22132,,Officer,discretionary; mandatory
+22135,designation,Officer,discretionary; mandatory
+22026,order,Minister,discretionary
+22028,regulation,Officer,discretionary
+22324,regulation; order_in_council; plan; designation,governor; Lieutenant,discretionary
+22080,permit,Officer,discretionary; mandatory
+22085,order; report,Officer,discretionary
+22553,order; order_in_council,governor; Lieutenant,discretionary
+22556,order; order_in_council; reserve,governor; Lieutenant,discretionary
+22558,order; order_in_council; reserve,governor; Lieutenant,discretionary
+22564,regulation; authorization; reserve; permit; authorization,Minister,discretionary
+22571,regulation; reserve; permit,Minister,discretionary
+22572,regulation,Minister,discretionary
+22574,designation,Minister,discretionary
+22575,designation,Minister,discretionary
+22587,certificate,Minister,discretionary; mandatory
+22639,reserve,Minister,discretionary
+22947,designation,Minister,mandatory
+22948,,Minister,mandatory
+24021,regulation; certificate,Minister,discretionary
+24084,regulation; certificate,Minister,discretionary
+22918,,Committee; Minister,discretionary
+22923,,Minister,discretionary
+23512,,Minister,discretionary
+22925,agreement,Minister,discretionary
+24952,order,Minister; Regulator,discretionary
+24954,,Auditor; Regulator,mandatory
+25958,regulation; order_in_council; permit,governor; Lieutenant,discretionary; mandatory
+25959,regulation; order_in_council; permit,governor; Lieutenant,discretionary; mandatory
+26003,regulation; order_in_council; authorization; authorization,governor; Lieutenant; Minister,discretionary
+26014,regulation; order_in_council; authorization; authorization,governor; Lieutenant; Minister,discretionary
+24961,report,Advisory; Board; Committee,discretionary
+24962,,Advisory; Committee; Minister; Regulator,discretionary
+26076,regulation,Board,discretionary
+24978,report,Auditor; Board; Minister; Regulator,mandatory
+24891,order,Minister,discretionary
+25115,authorization; permit; authorization,Regulator,discretionary; mandatory
+25132,permit,Regulator,discretionary
+25137,authorization; permit; authorization,Regulator,mandatory
+25186,authorization; authorization; approval,Regulator,discretionary
+25221,regulation; order; permit; exemption,Regulator,discretionary
+25270,certificate,Regulator,discretionary; mandatory
+25271,certificate,Regulator,discretionary
+25354,regulation,Regulator,discretionary
+25389,,Regulator,discretionary
+25390,designation,Regulator,discretionary
+25410,,Regulator,discretionary
+25434,,Regulator,mandatory
+25436,regulation,Regulator,mandatory
+25439,regulation; permit,Regulator,discretionary
+25452,,Board,discretionary
+25555,order,Regulator,discretionary
+25559,,Regulator,discretionary
+25566,,Regulator,discretionary; mandatory
+24919,order_in_council,Chief; commissioner; governor; Lieutenant; Officer; Regulator,discretionary
+24920,order,commissioner; Minister,discretionary
+24921,,Board; commissioner,discretionary
+24945,regulation; order_in_council; approval,governor; Lieutenant; Regulator,discretionary
+25880,,Regulator,discretionary; mandatory
+25881,certificate,commissioner; Regulator,discretionary
+25882,certificate,Minister,discretionary
+26566,,Committee,mandatory
+26582,regulation; order; order_in_council,Committee; governor; Lieutenant,discretionary
+26819,,Advisory; Committee,discretionary
+26829,assessment,Commission; Minister,discretionary
+26830,,Minister,discretionary
+26831,order; assessment,Chief; Minister; Officer,discretionary
+26853,assessment,Chief; Officer,mandatory
+26860,assessment; review,Chief; Officer,discretionary
+26863,assessment,Chief; Officer,mandatory
+26876,certificate; assessment,Chief; ministers; Officer,mandatory
+26886,assessment,Chief; Officer,mandatory
+26893,notice,ministers,mandatory
+26894,,ministers,mandatory
+26897,certificate; assessment,ministers,mandatory
+26898,assessment,Chief; ministers; Officer,mandatory
+26627,order_in_council; assessment,Chief; governor; Lieutenant; Officer,discretionary
+26900,certificate; assessment,Minister,mandatory
+26914,order; certificate,Minister,discretionary
+26917,assessment,Chief; Officer,mandatory
+26918,assessment,Chief; Minister; Officer,mandatory
+26921,certificate; notice; assessment,Chief; Officer,mandatory
+26922,order; certificate; exemption; assessment,Chief; Officer,discretionary
+26928,assessment,Chief; Officer,mandatory
+26929,assessment,Agency; agency; Board; Chief; Officer,mandatory
+26930,order; certificate; exemption; assessment,Chief; Officer,discretionary
+26961,order; approval; certificate; assessment,Agency; agency; Board; ministers,discretionary
+27003,report; assessment,Chief; Officer,mandatory
+27006,agreement; assessment,Minister,discretionary
+27015,order; certificate; assessment,Minister,discretionary
+27035,order; certificate; assessment,Chief; Minister; Officer,discretionary
+27036,certificate; assessment,Chief; Officer,discretionary; mandatory
+27046,assessment,Chief; Officer,discretionary
+27047,assessment,Chief; Officer,discretionary
+27064,agreement; assessment,Chief; Officer,discretionary
+27079,order; certificate; exemption; assessment,Chief; Officer,discretionary
+27086,certificate; assessment,Chief; Officer,discretionary
+27095,order; agreement; certificate; exemption; assessment,Minister,discretionary
+27096,order; agreement; certificate; exemption; assessment,Minister,discretionary
+27136,certificate; assessment,Chief; Officer,discretionary; mandatory
+27185,,Minister; Office,discretionary
+27193,order; certificate; exemption; assessment,Chief; Officer,discretionary
+27196,order; certificate; exemption; report; assessment,Auditor,mandatory
+27199,order; certificate; exemption; report; assessment,Auditor,mandatory
+29276,designation,Chief; Officer,discretionary
+29284,,Officer,discretionary
+29295,,Officer,discretionary
+29307,,Officer,discretionary
+29310,,Officer,discretionary
+29418,regulation; order; plan; permit; licence; approval,Officer,discretionary
+29427,,Officer,discretionary; mandatory
+29478,certificate,Officer,discretionary; mandatory
+29679,designation; agreement,Chief; Minister; Officer,discretionary
+29684,,Minister,discretionary
+29698,order_in_council,governor; Lieutenant,discretionary
+29699,order_in_council; permit,governor; Lieutenant,discretionary
+29778,regulation; order_in_council,governor; Lieutenant,discretionary
+27793,order; plan; permit; licence; approval,Minister,discretionary
+27833,order_in_council; authorization; permit; authorization,governor; Lieutenant,discretionary; mandatory
+27883,plan; approval,Minister,mandatory
+27887,notice,Minister,discretionary
+27890,regulation; plan,Minister,discretionary
+27891,plan,Minister,discretionary
+27892,order; plan,Minister,discretionary
+27969,plan; review,Minister,discretionary
+27970,regulation; plan; certificate,Minister,discretionary
+27979,order_in_council; designation,Board; governor; Lieutenant,discretionary
+27991,order_in_council,governor; Lieutenant,discretionary
+27992,bylaw,Board,discretionary
+27998,bylaw,Board,discretionary
+27999,,Board,mandatory
+28011,bylaw,Minister,discretionary; mandatory
+28022,,Minister,discretionary
+28025,report,Minister,discretionary
+28034,bylaw; authorization; authorization,Minister,discretionary; mandatory
+28051,order; order_in_council; bylaw; plan; permit; approval,governor; Lieutenant,discretionary
+28329,,Minister,discretionary
+28460,authorization; agreement; authorization,Minister,discretionary
+28461,regulation,Minister,discretionary
+28478,,Minister,discretionary
+28481,order; authorization; authorization,Minister; Officer,discretionary
+28484,,Minister; Officer,discretionary
+28486,,Minister,discretionary; mandatory
+28500,,Minister; Office,discretionary
+28537,regulation; order_in_council,governor; Lieutenant,discretionary
+28566,order_in_council; exemption,governor; Lieutenant,discretionary
+28569,regulation,Minister,discretionary
+28601,exemption,Minister,discretionary
+28603,regulation,Minister,discretionary
+28807,regulation; assessment,Minister,discretionary; mandatory
+28812,order,Minister,discretionary
+28817,order; plan,Minister,discretionary
+28823,order,Minister,discretionary
+28836,order,Minister,discretionary
+28853,,Minister,discretionary
+28873,order; order_in_council; plan,governor; Lieutenant; Minister,discretionary
+28934,order; authorization; plan; permit; authorization,Minister,discretionary
+29158,,Advisory; Committee; Minister,discretionary
+29159,,Advisory; Committee; Minister,discretionary
+29163,,Advisory; Board; Committee; Minister,mandatory
+29164,report,Assembly; Minister,mandatory
+30251,order_in_council; designation,governor; Lieutenant,discretionary
+30538,licence,Officer,discretionary
+30539,licence,Officer,discretionary
+30692,,inspector,discretionary
+30698,,inspector,discretionary
+30702,notice,inspector,mandatory
+30818,agreement,Minister,discretionary
+30833,,Minister,discretionary
+30870,certificate,Minister,discretionary; mandatory
+30914,order,Minister,discretionary
+30932,regulation; order_in_council,governor; Lieutenant,discretionary
+30489,permit,Officer,discretionary
+31014,regulation; order_in_council; exemption,governor; Lieutenant,discretionary
+31716,agreement,Agency; agency; Department; Minister,discretionary
+31717,licence,Minister,discretionary
+31727,licence; certificate,Minister; Officer,mandatory
+31730,authorization; authorization,Minister,discretionary
+31734,authorization; authorization,Minister,discretionary; mandatory
+31749,permit,Officer,discretionary
+31753,order,Minister; Officer,discretionary
+31756,notice,Minister,discretionary
+31769,authorization; plan; authorization,Department; Minister,discretionary
+31806,standard,Agency; agency; Department; Minister,discretionary
+31829,regulation,Minister,discretionary
+31856,designation,Minister,discretionary
+31857,designation,Minister,mandatory
+31862,regulation; order_in_council; designation,governor; Minister,discretionary
+31869,order; plan,Minister,mandatory
+31874,authorization; authorization,Minister,mandatory
+31942,order; report,inspector; Officer,discretionary
+31952,,inspector; Officer,discretionary
+31957,,inspector; Officer,discretionary
+32051,,Minister,discretionary
+32074,report,Minister; parliament,mandatory
+32126,authorization; authorization,Officer,discretionary
+32130,regulation,Minister,discretionary
+32132,regulation; order_in_council; exemption,governor,discretionary
+32136,regulation,Minister,discretionary
+32148,regulation; licence,Minister,mandatory
+32149,regulation; licence,Minister,discretionary
+32170,regulation,Officer,discretionary
+32175,,Officer,discretionary
+32183,,Officer,discretionary
+32189,,Officer,discretionary; mandatory
+32195,,Officer,discretionary
+32197,,Officer,discretionary
+31668,designation,Minister; Officer; parliament,discretionary
+31669,designation; certificate,Minister; Officer; parliament,discretionary; mandatory
+31670,designation; certificate,Officer; parliament,mandatory
+31676,,Officer,discretionary
+32198,regulation,Officer,discretionary
+32199,,Commission; Officer,discretionary
+32202,authorization; authorization,Officer,discretionary
+32213,authorization; authorization,Minister,discretionary
+32215,regulation; order_in_council; authorization; authorization,governor; Province,discretionary
+31677,,Minister,mandatory
+31678,,Minister,mandatory
+31680,plan,Minister,mandatory
+31681,order; plan,Minister,discretionary
+32237,designation,Officer,discretionary; mandatory
+32239,guideline; report,Minister,discretionary; mandatory
+31686,authorization; licence; authorization,Minister,discretionary
+31687,licence,Minister; Province,discretionary
+32269,order,Officer,discretionary; mandatory
+32365,,inspector; Officer,discretionary
+32369,regulation; notice,inspector; Officer,mandatory
+31689,regulation; order_in_council; licence,governor; Minister,discretionary
+32433,,inspector; Officer,discretionary
+32434,,inspector; Officer,discretionary
+32469,regulation; order_in_council,governor,discretionary
+32471,,Officer,discretionary
+31696,order,Minister,discretionary; mandatory
+31710,order,Minister,discretionary
+32506,order,Advisory; Minister,discretionary
+33016,order,Minister,discretionary
+33026,order; authorization; authorization,Minister,discretionary
+33046,regulation,Minister,discretionary; mandatory
+32956,,Minister,discretionary
+33890,order_in_council,governor; Lieutenant,discretionary
+33905,,Board,discretionary; mandatory
+33909,order_in_council,Auditor; Board; governor; Lieutenant,mandatory
+34379,,Officer,discretionary; mandatory
+33992,,Minister,discretionary
+34226,agreement,Officer,discretionary; mandatory
+34735,,Minister,discretionary
+34849,agreement,Minister,discretionary
+37035,,Minister,discretionary
+37252,,Minister,discretionary; mandatory
+37322,authorization; permit; authorization,Minister,mandatory
+37366,authorization; permit; authorization,Minister,discretionary
+37370,authorization; permit; authorization,Minister,discretionary
+37376,,Minister,discretionary
+37381,permit,Minister,mandatory
+37478,certificate,Minister,discretionary
+37611,,commissioner,discretionary
+37759,,Minister,discretionary
+37961,agreement,Minister,discretionary
+37962,agreement,Minister,mandatory
+37999,regulation; order_in_council; agreement,governor; Lieutenant,discretionary
+38021,designation,Minister,discretionary
+38349,regulation; order_in_council,governor; Lieutenant,discretionary
+38369,order; plan; designation; permit; licence,Minister,discretionary
+38378,authorization; plan; designation; permit; licence; authorization,Minister,mandatory
+38409,order; authorization; designation; agreement; licence; authorization,Minister,discretionary
+38487,regulation; order_in_council; designation,governor; Lieutenant,discretionary
+38490,regulation; order_in_council; designation,governor; Lieutenant,discretionary
+38929,regulation; agreement; permit; licence,Minister,discretionary
+35129,licence,Minister,mandatory
+35326,licence,Minister,discretionary
+35352,agreement,Minister,discretionary
+35371,agreement,Minister,mandatory
+35372,,Minister,discretionary
+35376,agreement,Minister,discretionary
+35380,agreement,Minister,mandatory
+35381,plan; agreement,Minister,mandatory
+35382,reserve,Minister,discretionary
+35421,order; agreement,Minister,discretionary
+35429,regulation; agreement,Minister,discretionary
+35441,agreement,Minister,discretionary
+35444,agreement,Minister,discretionary
+35446,regulation; agreement,Minister,discretionary
+35497,regulation; licence,Minister,discretionary
+35505,regulation; licence,Minister,discretionary
+35647,regulation; licence,Minister,discretionary
+35827,authorization; permit; licence; authorization,Minister,discretionary
+36131,licence,Minister,mandatory
+36132,,Minister,discretionary
+36143,order_in_council; licence,governor; Lieutenant; Minister,discretionary
+36144,order_in_council,governor; Lieutenant,discretionary
+36145,,Minister,discretionary; mandatory
+34777,order_in_council; designation,governor; Lieutenant,discretionary
+36285,agreement; licence; notice,Chief,discretionary
+36295,agreement; licence; notice,Minister,mandatory
+36702,regulation,Minister,discretionary
+36857,,Minister,mandatory
+40889,designation; agreement,Minister,discretionary
+40890,designation; agreement,Minister,discretionary
+40955,,Board,discretionary
+41028,regulation; order_in_council,governor; Lieutenant,discretionary
+41029,,Board,mandatory
+41032,,Board,discretionary
+41034,,Board,discretionary
+41092,,Commission; Minister,discretionary
+41145,regulation; order_in_council,governor; Lieutenant,discretionary
+41154,,Minister,discretionary
+39714,exemption,Minister,discretionary
+41155,regulation; order_in_council,governor; Lieutenant,discretionary
+41160,regulation; order_in_council,governor; Lieutenant,discretionary
+41161,regulation; order_in_council; authorization; authorization,governor; Lieutenant; Minister,discretionary
+41166,,Minister,discretionary
+41167,regulation; order_in_council,governor; Lieutenant,discretionary
+41172,,Minister,discretionary
+41206,regulation; order_in_council,governor; Lieutenant,discretionary
+41216,regulation; order_in_council; plan,governor; Lieutenant,discretionary
+41223,regulation; order_in_council,governor; Lieutenant,discretionary
+41226,regulation; order_in_council,governor; Lieutenant,discretionary
+41235,regulation; order_in_council; licence,governor; Lieutenant,discretionary
+41258,regulation; order_in_council,governor; Lieutenant,discretionary
+41266,regulation; order_in_council; authorization; designation; authorization,governor; Lieutenant; Minister,discretionary
+41267,regulation; order_in_council,governor; Lieutenant,discretionary
+41268,regulation; order_in_council,governor; Lieutenant,discretionary
+41306,regulation; order_in_council,governor; Lieutenant,discretionary
+41307,regulation; order_in_council,governor; Lieutenant,discretionary
+41308,regulation; authorization; agreement; authorization,Minister,mandatory
+41317,regulation; order_in_council,Board; governor; Lieutenant,discretionary
+41318,regulation; order_in_council,governor; Lieutenant,discretionary
+41331,regulation; order_in_council,governor; Lieutenant,discretionary
+41332,regulation; order_in_council,governor; Lieutenant,discretionary
+41372,regulation; order_in_council,governor; Lieutenant,discretionary
+41395,regulation; order_in_council; framework,governor; Lieutenant,discretionary
+39276,order; plan,Chief,discretionary
+39290,plan,Chief,mandatory
+39291,authorization; plan; authorization; notice,Chief,discretionary; mandatory
+39292,plan; notice,Chief,mandatory
+39293,plan; notice,Chief,mandatory
+39294,plan; notice,Chief,mandatory
+39306,notice,Chief,mandatory
+39307,,Chief,mandatory
+39328,order; plan,Chief,discretionary
+39331,plan; report,Chief,mandatory
+39332,order; plan; report,Chief,discretionary; mandatory
+39339,order; plan; agreement; notice,Chief,mandatory
+39345,plan,Chief,mandatory
+39352,,Chief,mandatory
+39353,plan,Chief,mandatory
+39417,plan,Minister,discretionary
+39418,plan,Minister,discretionary
+39424,authorization; plan; permit; authorization,Minister,discretionary
+39427,plan,Minister,discretionary
+39466,plan; exemption,Minister,discretionary
+39792,plan; licence,Minister,discretionary
+41642,regulation; order_in_council,governor; Lieutenant,discretionary
+41683,regulation; plan; approval; review,Board; Minister,discretionary
+39842,exemption,Minister,discretionary
+39871,exemption,Minister,discretionary
+39942,authorization; authorization,Minister,discretionary
+39946,authorization; authorization,Minister,discretionary
+39999,order,Minister,discretionary
+40066,authorization; plan; agreement; authorization,Minister,discretionary
+40069,,Minister,mandatory
+40115,plan,Minister,mandatory
+40118,regulation; plan; standard; approval,Minister,mandatory
+40119,regulation; order; order_in_council; plan; standard; approval,governor; Lieutenant; Minister,discretionary; mandatory
+40120,plan; approval,Advisory; Committee; Minister,discretionary
+40121,plan,Minister,mandatory
+40128,plan,Minister,mandatory
+40129,order; plan,Minister,mandatory
+40130,plan; agreement,Minister,discretionary
+40133,order; plan; agreement; approval,Minister,discretionary; mandatory
+40134,plan,Minister,mandatory
+40141,plan; review,Minister,discretionary
+40144,plan,Minister,discretionary
+40229,order,Minister,discretionary
+40253,,Minister,discretionary
+40259,authorization; authorization,Minister,discretionary
+40306,order,Minister,discretionary
+40307,order; notice,Minister,mandatory
+43864,order_in_council,Chairperson; governor; Office,mandatory
+43865,order_in_council; approval,Chairperson; governor; Minister; Office,mandatory
+43866,order_in_council,governor; Lieutenant; Province,mandatory
+43870,order_in_council,Chairperson; governor,discretionary
+44141,order; order_in_council; reserve,governor; Lieutenant,discretionary
+44159,,Minister,mandatory
+44165,,Minister,discretionary
+45199,,Auditor,mandatory
+45259,order_in_council; approval,governor; Lieutenant,discretionary
+45292,order_in_council; plan; agreement,governor; Lieutenant,discretionary
+45056,order_in_council,governor; Lieutenant,mandatory
+45070,order_in_council,Committee; governor; Lieutenant,discretionary; mandatory
+45929,agreement; assessment,Minister,discretionary
+45940,,Advisory; Chairperson; Minister,mandatory
+45429,designation; assessment,Agency; agency,discretionary; mandatory
+46019,order; review,Officer,discretionary
+45432,designation,Agency; agency,mandatory
+46081,assessment,Agency; agency; Minister,mandatory
+46083,authorization; authorization,Agency; agency; Minister; Officer,discretionary
+46106,,Agency; agency; Committee,discretionary; mandatory
+46109,,Advisory; Agency; agency; Committee,discretionary
+45450,designation; assessment,Agency; agency,discretionary; mandatory
+46119,,Minister,discretionary
+46121,order_in_council,Agency; agency; governor; Office; Officer,discretionary
+45452,designation; notice; assessment,Agency; agency; Minister; parliament,mandatory
+46142,,Agency; agency,discretionary
+45460,,Agency; agency,discretionary
+46151,designation; assessment; study,Agency; agency,discretionary
+46156,designation; assessment; review; study,Agency; agency; Minister,discretionary; mandatory
+46162,designation; assessment,Agency; agency,mandatory
+45520,designation,Agency; agency; Minister,discretionary
+45521,order_in_council; designation,Agency; agency; governor; Minister,discretionary
+45525,designation; report; assessment,Agency; agency,discretionary
+45528,designation; assessment,Minister,discretionary
+45555,designation; agreement; assessment,Agency; agency; Minister,discretionary; mandatory
+45569,designation; review,Minister,discretionary
+45570,order_in_council; designation; review,governor; Minister,discretionary
+45588,designation; agreement; assessment; review,Minister,discretionary
+45591,review,Board; Minister,mandatory
+45593,assessment; review,Minister,mandatory
+45597,designation; notice; assessment; review,Agency; agency; Minister,mandatory
+45605,designation; notice; review,Agency; agency; Chairperson,mandatory
+45610,designation; agreement; assessment; review,Commission; Minister,discretionary
+45611,designation; agreement; assessment; review,commissioner; Minister; Regulator,discretionary
+45612,designation; notice; assessment; review,Agency; agency; Chairperson; Commission; Minister,mandatory
+45618,designation; notice; assessment; review,Agency; agency; Chairperson; commissioner; Minister; Regulator,mandatory
+45630,review,Commission,discretionary
+45631,review,Regulator,discretionary
+45701,order_in_council; designation; report,governor; Minister,discretionary; mandatory
+45716,order_in_council; report,governor; Minister,mandatory
+45719,designation,Minister,discretionary
+45720,order_in_council; designation,governor; Minister,discretionary
+45401,order; order_in_council,governor,discretionary
+45411,regulation; order; designation,Minister,discretionary
+45412,order,Minister,discretionary
+45801,authorization; authorization; assessment,Agency; agency; Committee; Minister,discretionary
+45803,,Minister,discretionary
+45806,agreement; assessment,Committee; Minister,discretionary
+45807,agreement,Committee; Minister,mandatory
+46350,,Committee; Minister,discretionary
+46356,,Committee,mandatory
+46401,,inspector,discretionary
+46422,regulation,inspector,discretionary
+46640,regulation; order_in_council,governor; Lieutenant,discretionary
+46313,,Minister,discretionary
+47867,order; order_in_council,governor; Minister,discretionary
+48006,authorization; permit; authorization,Dominion; Province,discretionary
+48013,approval,Commission,mandatory
+48018,approval,Commission,discretionary; mandatory
+48019,approval,Commission,discretionary; mandatory
+48030,,Commission; commissioner,discretionary; mandatory
+48031,,Commission,discretionary; mandatory
+48032,,Commission,discretionary; mandatory
+48668,,Minister,discretionary
+48673,order,Minister,discretionary
+49183,,Minister,discretionary; mandatory
+49184,,Minister,discretionary; mandatory
+49202,,Minister,discretionary
+49208,,commissioner,mandatory
+48681,regulation,Minister,discretionary
+48689,,Minister,discretionary
+48695,,Minister,discretionary
+48711,order; order_in_council; reserve,governor; Lieutenant,discretionary
+48719,,Minister,discretionary
+48723,designation,Minister,discretionary
+48727,order; order_in_council,governor; Lieutenant,discretionary; mandatory
+48728,order,Minister,discretionary; mandatory
+48729,order,Minister,discretionary; mandatory
+48734,,Minister,discretionary
+48736,,Minister,discretionary
+48738,,Minister,mandatory
+48740,,Minister,discretionary
+48757,order_in_council,governor; Lieutenant,discretionary
+48795,,Minister,discretionary
+48796,licence,Minister,discretionary
+48808,,Minister,discretionary; mandatory
+48837,,Minister,discretionary
+48884,,Minister,discretionary
+48914,notice,Minister,discretionary
+48922,notice,Minister,discretionary; mandatory
+48936,authorization; authorization,Minister,discretionary
+48949,certificate; notice,Minister,discretionary
+48955,regulation; order_in_council; designation,governor; Lieutenant,discretionary
+48959,,Department,discretionary
+48973,,Minister,discretionary
+48987,authorization; authorization,Minister,discretionary
+49045,order; order_in_council; designation,governor; Lieutenant; Minister,discretionary
+49046,,Minister,mandatory
+49058,regulation; designation,Minister,discretionary
+49066,regulation; order_in_council,governor; Lieutenant; Minister,discretionary
+49158,order_in_council,governor; Lieutenant,discretionary
+49159,,Minister,discretionary; mandatory
+49161,,Minister,discretionary
+49169,regulation,Minister,discretionary
+49339,agreement,Minister,discretionary
+50573,regulation; order_in_council,governor; Lieutenant,discretionary; mandatory
+50575,,Minister,discretionary
+50578,regulation; code,Chief; Committee; inspector,discretionary
+50579,,Chief; inspector,mandatory
+50580,,Chief; inspector,mandatory
+50598,designation,inspector,mandatory
+50605,regulation; order; code; permit,inspector,discretionary
+50610,order,inspector,mandatory
+50619,order,inspector,discretionary
+50629,notice,Minister,discretionary
+50478,designation,Auditor; Chief; Minister,mandatory
+50489,,Auditor; Chief,discretionary
+50490,,Auditor; Chief,discretionary
+50501,order,Auditor; Chief,discretionary
+50513,designation,Chief; inspector; Minister,mandatory
+50665,order; report,inspector,mandatory
+50672,code,Committee; Minister,mandatory
+50674,code,Committee,discretionary; mandatory
+50675,code; approval,inspector,discretionary; mandatory
+50681,regulation; order; code; permit,inspector,discretionary
+50746,approval,inspector,discretionary; mandatory
+50749,regulation,Chief; inspector,discretionary
+50515,,Chief; inspector,discretionary
+50516,,Chief; inspector,discretionary
+50529,designation,Chief; Minister; Officer,mandatory
+50530,,Chief; inspector; Officer,discretionary
+50531,permit; approval; review,Advisory; Chief; Committee; Officer,mandatory
+52905,regulation; designation,Minister,discretionary
+52906,designation,Minister,discretionary
+52912,designation,Minister,discretionary
+52913,,Minister; Officer,discretionary
+53501,authorization; designation; protected_area; authorization,Province,discretionary; mandatory
+53535,,Officer,discretionary
+53544,,Board; Commission; Officer,discretionary
+53545,order,Board; Commission; Officer,discretionary
+53556,order,Commission; Officer,discretionary
+56158,regulation; park,Board,mandatory
+56218,park,Conservancy,mandatory
+56261,authorization; park; permit; authorization,Conservancy; Minister,discretionary; mandatory
+56266,reserve; park,Minister,discretionary
+56281,certificate,Minister,discretionary; mandatory
+56032,park,Minister,mandatory
+56400,authorization; park; permit; authorization,Conservancy; Minister,discretionary
+56404,park; permit,Minister,discretionary
+56040,,Minister,discretionary
+56041,park,Minister,discretionary
+56045,park,Minister,discretionary
+56062,order_in_council,governor; Lieutenant,discretionary
+56066,order_in_council; park,governor; Lieutenant,discretionary; mandatory
+56075,order; order_in_council; park,governor; Lieutenant,discretionary
+56077,order; order_in_council,Conservancy; governor; Lieutenant,discretionary
+56088,order; order_in_council; authorization; authorization,governor; Lieutenant; Minister,discretionary
+56090,order_in_council; park,Conservancy; governor; Lieutenant,discretionary
+56774,order_in_council,Chief; governor; Office; Officer,discretionary; mandatory
+56776,order_in_council; approval,Chief; governor; Minister; Office; Officer,discretionary
+56780,regulation,Chief; Officer,discretionary
+56796,,Agency; agency; Office,mandatory
+56838,,Agency; agency; Minister,discretionary
+56839,program; park; report,Agency; agency; Chief; Minister; Officer; parliament,mandatory
+56840,plan; park,Chief; Minister; Officer; parliament,mandatory
+56745,regulation; program; park,Agency; agency; Minister,discretionary; mandatory
+56746,,Agency; agency; Minister; Officer,discretionary; mandatory
+56753,plan; park,Agency; agency,mandatory
+56762,regulation; order; order_in_council; program; park,governor; parliament,discretionary
+56763,regulation; order; order_in_council,governor; parliament,discretionary
+57785,,Minister,discretionary
+57787,,Minister,mandatory
+57789,,Minister,mandatory
+57800,review,Minister,mandatory
+57804,,Minister,discretionary; mandatory
+57806,,Minister,mandatory
+57807,,Minister,mandatory
+57813,regulation; permit,Minister,mandatory
+57814,regulation,Minister,mandatory
+57815,review,Minister,mandatory
+57816,review,Minister,mandatory
+57817,review,Agency; agency; Department; Minister,mandatory
+57820,review,Minister,mandatory
+57821,review,Minister,discretionary
+57823,review,Minister,discretionary
+57824,review,Minister,discretionary
+57836,regulation; permit; review,Minister,mandatory
+57837,regulation; review,Minister,mandatory
+57842,,Minister,mandatory
+57848,policy,Minister,mandatory
+57849,regulation,Minister,discretionary
+57851,,Minister,discretionary
+57856,,Minister,discretionary
+57857,,Minister,mandatory
+57858,,Minister,mandatory
+57865,,Minister,discretionary
+57877,,Minister,discretionary
+57878,,Minister,discretionary
+57883,order; order_in_council; agreement,governor,discretionary
+57909,order; order_in_council,governor,discretionary
+57912,authorization; authorization,Minister,discretionary
+57923,authorization; authorization,Minister,discretionary
+57943,review,Minister,mandatory
+57951,regulation; authorization; authorization,Minister,discretionary
+57952,authorization; authorization,Minister,mandatory
+57960,regulation; review,Minister,mandatory
+58097,,inspector,discretionary
+58101,,inspector,discretionary
+58112,authorization; authorization,inspector,mandatory
+58123,regulation,inspector,mandatory
+58124,,inspector,discretionary; mandatory
+58125,,Minister,discretionary
+58127,notice,Minister,discretionary
+58148,,Minister,discretionary
+58160,,Minister,discretionary
+58172,regulation,inspector,discretionary
+58173,regulation,inspector; Minister,discretionary
+58200,order; authorization; authorization; notice,inspector; Minister,discretionary
+58265,regulation; order_in_council; agreement,governor,discretionary
+58267,regulation; order,Minister,discretionary; mandatory
+57752,regulation,Minister,mandatory
+57753,regulation; permit,Minister,mandatory
+57757,,Minister,mandatory
+57766,,Minister,mandatory
+57772,policy,Minister,mandatory
+57773,regulation,Minister,discretionary
+58309,,inspector,discretionary
+57775,regulation,Minister,mandatory
+57779,regulation,Minister,discretionary
+57780,regulation,Minister,mandatory
+57781,,Minister,mandatory
+57784,,Minister,mandatory
+59522,,Auditor,mandatory
+59590,authorization; authorization,Minister,discretionary
+59785,,Minister,mandatory
+59786,,Minister,discretionary
+59465,,Minister,mandatory
+59469,designation,Minister,discretionary
+61451,,Board; Office,mandatory
+61506,regulation; order_in_council,governor; Lieutenant,discretionary
+61529,,Board; Office,mandatory
+60501,,Board; Office,discretionary
+60510,regulation; bylaw,Board,discretionary
+60516,regulation; order_in_council,Board; governor; Lieutenant,discretionary
+60517,,Board; Minister; Office,discretionary
+60518,regulation,Board; Committee; Office,mandatory
+60521,,Board,mandatory
+60535,regulation,Board; Office,discretionary; mandatory
+60536,bylaw; authorization; authorization,Board,discretionary
+60562,,Board,discretionary
+60565,bylaw; authorization; authorization; review,Board; Committee,discretionary
+60567,authorization; authorization,Board; Committee,discretionary
+60654,bylaw; authorization; authorization,Board; Committee,discretionary
+60319,,Advisory; Committee; Minister,discretionary
+60329,,Minister,discretionary
+60883,regulation,Committee,discretionary
+60997,regulation; order; authorization; authorization,Board; Committee,discretionary
+60998,,Committee,discretionary
+61018,regulation; review,Board; Committee; Officer,discretionary
+64383,order; certificate,Minister,discretionary; mandatory
+64384,certificate,Minister,discretionary
+64196,approval; certificate,Minister,mandatory
+64213,plan,Minister,discretionary; mandatory
+64390,order; authorization; permit; authorization,Minister,discretionary
+64397,,Minister,discretionary
+64401,permit; notice,Minister,discretionary
+64413,order; certificate,Minister,discretionary
+64422,regulation; certificate,Minister,discretionary
+64425,order; certificate,Minister,discretionary; mandatory
+64426,certificate,Minister,discretionary; mandatory
+64232,regulation; order; plan,Minister,discretionary; mandatory
+64237,order; plan,Minister,discretionary; mandatory
+64238,plan; approval,Minister,discretionary; mandatory
+64241,regulation; order; plan; exemption,Minister,discretionary; mandatory
+64495,,commissioner; inspector,discretionary
+64504,order,commissioner; Minister,discretionary
+64247,approval,Minister,mandatory
+64180,,Minister,discretionary; mandatory
+64286,,Minister,discretionary
+64300,plan; approval; certificate,Minister,discretionary; mandatory
+64666,agreement; permit; licence,Minister,discretionary
+64673,permit; licence,Minister,discretionary
+64679,permit; licence,Minister,mandatory
+64721,permit; licence; notice,Minister,discretionary
+64723,permit; licence,Minister,mandatory
+64725,permit; licence; notice,Minister,mandatory
+64729,permit; licence,Minister,discretionary
+64734,regulation; permit; licence,Minister,discretionary
+64741,order,Minister,discretionary
+64744,,Minister,mandatory
+64864,order; authorization; permit; licence; authorization,Minister; Officer,discretionary
+64867,order; authorization; permit; licence; authorization; notice,Minister; Officer,discretionary; mandatory
+64894,regulation,Minister,discretionary
+65805,regulation; order_in_council,governor; Lieutenant,discretionary
+65812,,Minister,discretionary
+66187,agreement,Minister,discretionary
+66194,agreement,Minister,discretionary
+66720,,Minister,discretionary; mandatory
+66734,,Minister,mandatory
+66737,report,Minister; parliament,mandatory
+66200,program; agreement,Minister,discretionary
+66216,,Minister,discretionary
+66225,regulation; guideline,Minister,discretionary
+66236,regulation; park,Agency; agency; Minister,discretionary
+66242,report; assessment,Minister,mandatory
+66244,order; order_in_council,governor; Minister,discretionary
+66250,,Minister,mandatory
+66253,authorization; agreement; authorization,Board,discretionary
+66257,regulation; park,Agency; agency; Minister,discretionary
+66259,order_in_council,governor; Minister,mandatory
+66273,order; order_in_council,governor; Minister; Province,discretionary
+66277,authorization; agreement; authorization,Board,discretionary
+66285,authorization; agreement; authorization,Board,discretionary
+66291,strategy,Minister,mandatory
+66293,plan; strategy,Minister,mandatory
+66297,authorization; agreement; authorization,Board,discretionary
+66300,authorization; strategy; agreement; authorization,Board,discretionary; mandatory
+66302,strategy,Minister,mandatory
+66315,strategy,Minister,mandatory
+66316,strategy,Minister,mandatory
+66320,plan; strategy,Minister,discretionary
+66326,authorization; agreement; authorization,Board,discretionary
+66329,authorization; plan; agreement; authorization,Board,discretionary; mandatory
+66345,plan,Minister,discretionary
+66346,regulation; plan,Minister,mandatory
+66348,regulation; authorization; agreement; authorization,Board; Minister,discretionary; mandatory
+66355,plan; report,Minister,mandatory
+66356,guideline; standard,Minister,discretionary
+66364,plan; strategy; sanctuary; park; protected_area,Minister,mandatory
+66367,plan; strategy,Minister,mandatory
+66370,order; order_in_council; sanctuary,governor; Minister,discretionary
+66371,plan; strategy,Minister,mandatory
+66376,order; authorization; agreement; authorization,Board; Minister,discretionary; mandatory
+66378,regulation; order_in_council,governor; Minister,discretionary
+66379,plan; strategy,Minister,mandatory
+66383,regulation; authorization; agreement; authorization,Board; Minister,discretionary; mandatory
+66384,,Minister; Province,mandatory
+66390,order; order_in_council,governor; Minister,discretionary
+66398,agreement,Minister,discretionary
+66399,plan; strategy; report,Minister,mandatory
+66407,plan,Minister,discretionary; mandatory
+66411,authorization; agreement; authorization,Board,discretionary
+66414,authorization; plan; agreement; authorization,Board,discretionary; mandatory
+66417,plan,Minister,mandatory
+66418,plan,Minister,mandatory
+66422,plan,Minister,discretionary
+66423,regulation; order_in_council; plan,governor; Minister,discretionary
+66425,regulation; authorization; agreement; authorization,Board; Minister,discretionary; mandatory
+66432,authorization; agreement; permit; authorization,Minister,discretionary
+66442,authorization; agreement; permit; authorization,Board; Minister,discretionary; mandatory
+66456,order; authorization; agreement; permit; licence; authorization,Minister; parliament,discretionary
+66457,,Minister,discretionary
+66459,regulation; order; order_in_council; authorization; agreement; permit; licence; authorization,governor; Minister; parliament,discretionary
+66171,park,Agency; agency; Minister; ministers; Province,discretionary
+66172,agreement; report,Minister,mandatory
+66477,order; order_in_council,governor; Minister,discretionary
+66177,park,Agency; agency; Minister,discretionary
+69271,plan; reserve; notice,Commission,mandatory
+71220,,inspector,discretionary
+71221,order; authorization; authorization,inspector,discretionary; mandatory
+71223,,Minister,discretionary; mandatory
+71157,designation; permit; exemption,Minister,discretionary
+71162,designation,inspector; Minister,discretionary
+71164,designation; certificate,inspector,mandatory
+71172,standard,inspector,mandatory
+71544,,Board; Chief; Officer,discretionary
+71546,authorization; authorization,Board; Chief; Officer,discretionary
+71555,order_in_council,Auditor; governor; Lieutenant,mandatory
+71568,,Board; Officer,discretionary
+71642,authorization; authorization,Minister,mandatory
+71686,order; order_in_council,governor; Lieutenant; Minister,discretionary
+71689,order; order_in_council,governor; Lieutenant; Minister,discretionary
+71690,order,Minister,mandatory
+71706,order_in_council,governor; Lieutenant,discretionary
+72005,designation; certificate,inspector; Minister,mandatory
+72041,,inspector,discretionary
+72045,,inspector,discretionary
+72050,,inspector,discretionary
+72063,authorization; authorization,Board; Minister,discretionary
+72077,notice,Minister,discretionary
+72132,regulation; order_in_council,governor,discretionary
+72145,,Minister,discretionary
+72149,review,Minister,mandatory
+72150,,Minister,mandatory
+72156,,Minister,mandatory
+72164,regulation; order,Minister,discretionary; mandatory
+72165,order; authorization; authorization,Minister,discretionary; mandatory
+72190,,Minister,discretionary
+72000,notice,Minister,discretionary
+78614,regulation; order; agreement,Minister,discretionary; mandatory
+79193,designation; reserve,Commission,discretionary
+79559,,Minister,discretionary
+79597,,Minister,discretionary
+79711,,Committee,discretionary
+79809,order; designation,Minister,discretionary
+79811,designation,Minister,discretionary
+80008,park; protected_area,Minister,discretionary
+78600,plan; reserve; notice,Commission,mandatory
+81933,authorization; agreement; licence; authorization; approval,Agency; agency; Minister,discretionary; mandatory
+85047,licence,Comptroller,mandatory
+85029,regulation; authorization; permit; authorization; approval,Comptroller,mandatory
+85383,authorization; authorization; approval,Comptroller,discretionary
+86512,certificate,Comptroller,discretionary; mandatory
+86707,,Comptroller; Officer,discretionary
+86719,,Advisory; Board; Minister,discretionary
+86881,regulation; order_in_council,governor; Lieutenant,discretionary
+86932,regulation; order_in_council; authorization; authorization,governor; Lieutenant,discretionary
+86941,regulation; order_in_council; authorization; authorization; approval,governor; Lieutenant,discretionary
+86957,regulation; order_in_council,governor; Lieutenant,discretionary
+86963,regulation; order_in_council,governor; Lieutenant,discretionary
+87002,regulation; order_in_council,governor; Lieutenant,discretionary
+87009,regulation; order_in_council,governor; Lieutenant,discretionary
+87023,regulation; order_in_council; plan,governor; Lieutenant,discretionary
+87058,regulation; order_in_council; authorization; plan; authorization,governor; Lieutenant,discretionary
+87083,regulation; order_in_council,governor; Lieutenant,discretionary
+87112,regulation; order_in_council,governor; Lieutenant,discretionary
+85538,authorization; licence; authorization,Comptroller,discretionary
+85617,authorization; permit; authorization; approval,Comptroller,discretionary
+85628,authorization; permit; authorization; approval,Comptroller,discretionary
+85644,permit; licence,Comptroller,discretionary
+85677,authorization; authorization,Comptroller,discretionary
+85711,order; authorization; authorization,Comptroller,discretionary
+85736,order_in_council; reserve,governor; Lieutenant,discretionary
+85753,order_in_council; agreement,governor; Lieutenant,discretionary; mandatory
+85772,authorization; licence; authorization,Comptroller,discretionary; mandatory
+85773,regulation; order_in_council,governor; Lieutenant,discretionary
+85800,authorization; permit; authorization; approval,Comptroller,mandatory
+85822,order; authorization; authorization,Comptroller,discretionary
+86040,order; authorization; authorization,Comptroller,discretionary
+86108,order; plan; designation,Minister,discretionary
+86122,order; plan,Minister,discretionary
+86184,order; plan,Minister,discretionary
+86224,regulation; order; plan,Minister,discretionary
+86225,regulation; order; order_in_council; plan,governor; Lieutenant; Minister,discretionary
+86229,regulation; order_in_council; plan,governor; Lieutenant,discretionary
+86230,plan,Minister,mandatory
+86269,regulation; order_in_council; plan,governor; Lieutenant,discretionary
+86303,order; plan,Minister,discretionary
+86312,regulation; order,Comptroller,mandatory
+86316,order,Comptroller,discretionary
+86323,order,Minister,discretionary
+86324,order,Minister,discretionary
+85375,authorization; licence; authorization,Comptroller,discretionary
+86341,order; authorization; authorization,Comptroller,discretionary
+86344,authorization; authorization,Comptroller,discretionary
+87949,,inspector; Minister,mandatory
+87950,regulation,Minister,discretionary; mandatory
+87952,agreement,Minister,discretionary
+87883,,Minister,discretionary
+87889,notice,inspector,discretionary
+87891,regulation; order_in_council,governor; Lieutenant,discretionary
+87912,notice,inspector,discretionary
+87913,,inspector,mandatory
+89912,order_in_council,governor; Lieutenant; Minister,discretionary
+89925,regulation,Minister,discretionary
+88887,regulation; order_in_council; designation; park; protected_area,Conservancy; governor; Lieutenant; Minister,discretionary
+88890,regulation; designation; protected_area,Minister,discretionary
+88891,regulation; designation; sanctuary; protected_area,Minister,discretionary
+89247,order; plan; licence,Minister,discretionary
+89249,regulation; order_in_council,governor; Lieutenant,discretionary
+89265,regulation; order_in_council,governor; Lieutenant,discretionary
+88892,regulation; order_in_council; designation,governor; Lieutenant,discretionary
+88893,regulation; order_in_council; designation,governor; Lieutenant,discretionary
+88894,regulation; designation,Minister,discretionary
+88897,regulation,Minister,discretionary
+88903,regulation,Minister,discretionary
+88914,regulation,Minister,discretionary
+88917,regulation,Minister,discretionary
+88930,regulation,Minister,discretionary
+88931,regulation; exemption,Minister,discretionary
+89407,,Officer,discretionary
+89429,,Officer,discretionary
+89529,regulation,Officer,discretionary
+89530,,Officer,discretionary
+89531,,Officer,discretionary
+89535,,Officer,mandatory
+89547,,Officer,discretionary
+89548,order,Officer,discretionary
+89556,order,Officer,discretionary
+89558,regulation,Officer,discretionary; mandatory
+89560,permit,Officer,mandatory
+89561,,Officer,discretionary
+89562,,Officer,discretionary
+89564,,Officer,discretionary
+89568,,Commission; Officer,discretionary
+89571,,Officer,discretionary
+89586,,Officer,discretionary
+89587,,Officer,discretionary
+89604,,Officer,discretionary
+89612,,Officer,discretionary
+89693,,Officer,discretionary
+89694,,Minister; Officer,discretionary
+89723,,Officer,discretionary
+89727,,Officer,discretionary
+91061,authorization; authorization,Minister; Officer,discretionary
+91774,certificate,Board,discretionary; mandatory
+91987,order; order_in_council,governor,discretionary
+91156,authorization; authorization,Minister,discretionary
+91288,,Minister,discretionary
+91036,,Minister,discretionary
+91037,,Minister,discretionary

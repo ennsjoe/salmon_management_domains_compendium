@@ -96,7 +96,7 @@ actionable_patterns <- list(
   ),
   authorization = list(
     pattern = "\\b(authori[sz]ation|authori[sz]ations|authorize|authori[sz]ed|authori[sz]ing)\\b"
-    ),
+  ),
   
   # --- Planning Documents ---
   plan = list(
@@ -511,11 +511,11 @@ actionable_output <- merge(
 )
 
 ## Remove unwanted columns from output ----
-actionable_output[, c("paragraph_id", "legislation_id") := NULL]
+actionable_output[, c("legislation_id") := NULL]
 
 ## Reorder columns ----
 setcolorder(actionable_output, c(
-  "act_name", "jurisdiction", "Section", "Heading", 
+  "paragraph_id", "act_name", "jurisdiction", "Section", "Heading", 
   "actionable_type", "responsible_official", "discretion_type", 
   "Paragraph"
 ))
