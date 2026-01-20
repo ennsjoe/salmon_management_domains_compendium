@@ -720,6 +720,7 @@ paragraph_id,actionable_type,responsible_official,discretion_type
 40259,authorization; authorization,Minister,discretionary
 40306,order,Minister,discretionary
 40307,order; notice,Minister,mandatory
+43763,regulation; order_in_council,governor; Lieutenant,discretionary
 43864,order_in_council,Chairperson; governor; Office,mandatory
 43865,order_in_council; approval,Chairperson; governor; Minister; Office,mandatory
 43866,order_in_council,governor; Lieutenant; Province,mandatory

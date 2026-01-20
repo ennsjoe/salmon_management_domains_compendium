@@ -76,19 +76,17 @@ Threats to salmon habitat require a much more coordinated, inter-jurisdictional 
 
 -   **Marina - I revised the paragraph to hopefully summarize what you'd suggested in your comment. My original paragraph was vague and unfinished. We don't really mention specific gov't branches and structures since they can change arbitrarily. Hopefully, this still covers what you were recommending.**
 
-Several assessment frameworks have been developed amidst this uncertainty and complexity to evaluate anthropogenic activities and limiting factors for the survival and recovery of Pacific salmon populations [@chalifour2022; @salafsky2008; @dfo2021]. These frameworks are varied in their approaches, but aim to be comprehensive in assessing the wide range of concerns that may impact salmon across their life cycle to inform status assessments, recovery planning, and conservation strategies. One widely used risk assessment frameworks for Pacific salmon is the *International Union for Conservation of Nature* (IUCN) *Direct Threats Classification* [@salafsky2008], which is applied for Recovery Potential Assessments as part of *Species at Risk Act* listing processes and for
+Several assessment frameworks have been developed amidst this uncertainty and complexity to evaluate anthropogenic activities and limiting factors for the survival and recovery of Pacific salmon populations [@chalifour2022; @salafsky2008; @dfo2021]. These frameworks are varied in their approaches, but aim to be comprehensive in assessing the wide range of concerns that may impact salmon across their life cycle to inform status assessments, recovery planning, and conservation strategies. One widely used risk assessment framework for Pacific salmon is the *International Union for Conservation of Nature* (IUCN) *Direct Threats Classification* [@salafsky2008], which is applied for Recovery Potential Assessments as part of *Species at Risk Act* listing processes and for Committee on the Status of Endangered Wildlife in Canada (COSEWIC**)** status assessments [@arbeider2020; @dionne2023; @doutaz2023].
 
-**COSEWIC** status assessments [@arbeider2020; @dionne2023; @doutaz2023].
-
-Assuming there is agreement upon the most important threats, risk assessments are intended to guide the development of recovery plans and mitigation actions with the ultimate aim of reversing declines and improving conservation status.
-
-A key challenge is identifying actions that are **impactful** **(\*\*is that a word?)** and feasible across the wide geographic range and diverse life history of Pacific salmon. In many cases, regulatory complexity, ambiguous responsibility, unclear conservation objectives across jurisdictions and dispersed authority become barriers to effective and timely action.
-
--   **MW - Option of adding “unclear standards of management”, or similar, to the list? Unclear environmental or conservation objectives across jurisdictions maybe.**
+Risk assessments are intended to guide the development of recovery plans and mitigation actions with the ultimate aim of reversing declines and improving conservation status, assuming there is agreement upon the most important threats. A key challenge is identifying actions that are impactful and feasible across the wide geographic range and diverse life history of Pacific salmon. In many cases, dispersed authority, regulatory complexities, ambiguous responsibilities, ill-defined standards of management, and unclear conservation objectives across jurisdictions become barriers to effective and timely action.
 
 ## Why study salmon legislation: purpose and objectives
 
-The need for collaborative, coordinated action to address Pacific salmon declines is recognized by governments throughout policies, plans, and initiatives (e.g. the WSP, [the trilateral accord 2024](https://www.pac.dfo-mpo.gc.ca/fm-gp/salmon-saumon/docs/trilat-agreement-accord/index-eng.html)). Coordinated action requires adequate organizational capacity and systems for implementation to ensure that regulatory controls and mitigation activities address underlying threats to salmon and their habitat. However, linking threats and recovery actions to the relevant regulatory systems can be complex because salmon are often affected by multiple threats that each span across agencies and governmental jurisdiction.
+The need for collaborative, coordinated action to address Pacific salmon declines is recognized by governments throughout policies, plans, and initiatives (**e.g. the WSP, [the trilateral accord 2024](https://www.pac.dfo-mpo.gc.ca/fm-gp/salmon-saumon/docs/trilat-agreement-accord/index-eng.html)**).
+
+Coordinated action requires adequate organizational capacity and systems for implementation to ensure that regulatory controls and mitigation activities address underlying threats to salmon and their habitat.
+
+However, linking threats and recovery actions to the relevant regulatory systems can be complex because salmon are often affected by multiple threats that each span across agencies and governmental jurisdiction.
 
 -   **Add examples of rebuilding plans, OK Chinook, WCVI Chinook, Fish stock provision rebuilding plans (DG)**
 
