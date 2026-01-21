@@ -90,11 +90,15 @@ In this study, we seek to decode the complexity between threats to salmon and co
 
 Stewardship decisions and activities related to salmon are often in response to identifiable threats to salmon health and population status.
 
-Legislated recovery planning also relies on a description of identified threats [@mccune2013]. Human systems can be categorized as direct threats to biodiversity more specifically for conservation strategies [@salafsky2008].
+Legislated recovery planning also relies on a description of identified threats [@mccune2013].
 
-The *International Union for Conservation of Nature* (IUCN) and *Conservation Measures Partnership* (CMP) has developed a hierarchical grouping of threats used globally by conservation practitioners.
+Human systems can be categorized as direct threats to biodiversity more specifically for conservation strategies [@salafsky2008].
 
-IUCN direct threat categories are used to assess threats as part of IUCN red list assessments, as well as, in status assessments for Pacific salmon populations conducted by the *Committee for the Status of Endangered Wildlife in Canada* (COSEWIC).
+\*\*describe the IUCN threat levels and categories -
+
+The *International Union for Conservation of Nature* (IUCN) and *Conservation Measures Partnership* (CMP) has developed a hierarchical grouping of threats used globally by conservation practitioners. **already mentioned**
+
+IUCN direct threat categories are used to assess threats as part of IUCN red list assessments, as well as, in status assessments for Pacific salmon populations conducted by the *Committee for the Status of Endangered Wildlife in Canada* (COSEWIC). **already mentioned**
 
 For this study, the *IUCN - CMP Direct Threats Classification 4.0* [@salafsky2025] was used to categorize legislation by direct threats to salmon conservation.
 
