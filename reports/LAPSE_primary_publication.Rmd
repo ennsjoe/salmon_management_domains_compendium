@@ -84,15 +84,83 @@ Rebuilding plans have been developed under the *Fisheries Act* Fish Stock Provis
 
 ## Why study salmon legislation: purpose and objectives
 
-The need for collaborative, coordinated action to address Pacific salmon declines is recognized by governments throughout policies, plans, and initiatives including the *Wild Salmon Policy* [@dfo2005] and the *Trilateral declaration on the urgent need to address wild Pacific salmon populations in British Columbia* [@dfo2024]. Coordinated action requires adequate organizational capacity and systems for implementation to ensure that regulatory controls and mitigation activities address underlying threats to salmon and their habitat. However, linking threats and recovery actions to the relevant regulatory systems can be complex because salmon are often affected by multiple threats that each span across agencies and governmental jurisdiction.
+The need for collaborative, coordinated action to address Pacific salmon declines is recognized by governments throughout policies, plans, and initiatives including the *Wild Salmon Policy* [@dfo2005] and the *Trilateral declaration on the urgent need to address wild Pacific salmon populations in British Columbia* [@dfo2024]. Coordinated action requires adequate organizational capacity and systems for implementation to ensure that regulatory controls and mitigation activities address underlying threats to salmon and their habitat. However, linking threats and recovery actions to the relevant regulatory systems can be complex because salmon are often affected by multiple threats that each span across agencies and governmental jurisdiction. In this study, we seek to decode the complexity between threats to salmon and corresponding environmental legislation by creating an interface between regulatory language and anthropogenic threat categories.
 
--   need to introduce managment domains here
+Laws formally codify societal values and expectations [@swerdfager2023] by governing human activity. Salmon population management administered through legislative authority, therefore, relies on a tertiary system where laws control human activity, which impacts the quantity and quality of salmon habitat, which affects the capacity of the habitat to produce salmon. Because this system of control pivots around human activity, we focused this study and tools around human activity as well, employing the hierarchical categorization structure developed by the *International Union for Conservation of Nature* (IUCN) and *Conservation Measures Partnership* (CMP). However, not all aspects of salmon management are specific to threats from human activity. Topics such as species status, spatial designation (parks), and overall governance administration may not connect to a direct human threat, or may encompass all the threats. In order to capture all these threat and non-threat related categories in our legislation-salmonscape interface, we created a "management domain" schema that we define as "discrete areas of administrative concern."
 
-In this study, we seek to decode the complexity between threats to salmon and corresponding environmental legislation by creating an interface between regulatory language and anthropogenic threat categories. We describe and apply the *Legislation Applicable to Pacific Salmon and their Ecosystems* (LAPSE) database, a repository of federal and provincial legislation and regulations relevant to Pacific salmon in British Columbia. Using a novel method for parsing and classifying legislative clauses, we develop keyword relationships between IUCN threats classifications at the clause (paragraph) level for Canadian federal and British Columbian acts and regulations. By creating an extensive, open-source, and accessible database linking legislation to salmon, we aim to facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia, while providing a framework to support systematic and critical reviews of strengths and shortcomings of regulations with respect to salmon threats.
+We developed the *Legislation Applicable to Pacific Salmon and their Ecosystems* (LAPSE) process and database that parses Canadian federal and British Columbian acts and regulations relevant to Pacific salmon, then uses keyword phrase relationships to match clauses (paragraphs) to our management domains and corresponding IUCN threat categories. By creating an extensive, open-source, and accessible database linking legislation to salmon, we aim to facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia, while providing a framework to support systematic and critical reviews of strengths and shortcomings of regulations with respect to salmon threats.
 
-# International Union for Conservation of Nature (IUCN) threat categories
+# Management domains and International Union for Conservation of Nature (IUCN) threat categories
+
+@salafsky[2008] recognized that using a common language or a standard lexicon is essential for conservation science. Threats are used as a fundamental conservation concept, and can be defined as "current or future human activities or altered natural phenomena that affect one or more ecosystems or species of interest" [@salafsky2024]. The IUCN and the CMP began developing classifications of direct threats in the early 2000s.
+
+**hierarchical (creates a logical way of grouping items that are related to one another to facilitate use of the classification and meaningful analyses at different levels); comprehensive (contains all possible items, at least at higher levels of the hierarchy; consistent (ensures that entries at a given level of the classification are of the same type); expandable (enables new items to be added to the classification if they are discovered); exclusive (allows any given item to only be placed in one cell within the hierarchy); and scalable (permits the same terms to be used at all geographic scales). [@salafsky2008]**
+
+**hierarchical fashion with 3 different levels (the equivalent of families, genera, and species in [@salafsky2008]**
+
+**the Linnaean system). Each first-level entry (e.g., threat [1] residential and commercial development) is subdivided into several second-level entries (e.g., threat [1.1] housing and urban areas, [1.2] commercial and industrial areas, and [1.3] tourism and recreation areas), and these are in turn subdivided into numerous third-level entries. [@salafsky2008]**
+
+**The classifications are designed to be comprehensive, consistent, and exclusive for the first and second levels. The third level, by contrast, is at a much finer scale and thus only contains some illustrative examples rather than comprehensive listings of threats and actions at this level. [@salafsky2008]**
 
 **One widely used risk assessment framework for Pacific salmon is the *International Union for Conservation of Nature* (IUCN) *Direct Threats Classification*[@salafsky2008], which is applied for Recovery Potential Assessments as part of *Species at Risk Act* listing processes and for Committee on the Status of Endangered Wildlife in Canada (COSEWIC) status assessments [@arbeider2020; @dionne2023; @doutaz2023].**
+
+```{r management-domain-threat-table}
+library(flextable)
+
+# Query tables from the database
+conn <- dbConnect(SQLite(), dbname = db_path)
+threat_table <- as.data.table(dbReadTable(conn, "management_domain_threat_table"))
+label_table <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
+dbDisconnect(conn)
+
+# Get unique IUCN L2 values that matched paragraphs
+matched_iucn <- unique(label_table[label_type == "IUCN" & !is.na(label_value), .(iucn_l2 = label_value)])
+
+# Get unique Management Domains that matched paragraphs (for governance domains with NA IUCN)
+matched_domains <- unique(label_table[label_type == "Management Domain" & !is.na(label_value), .(management_domain = label_value)])
+
+# Filter threat table to only rows with matched IUCN values OR matched governance domains (NA IUCN)
+threat_table_filtered <- threat_table[
+  iucn_l2 %in% matched_iucn$iucn_l2 | 
+  (iucn_l2 == "NA" & management_domain %in% matched_domains$management_domain)
+]
+
+# Clean up IUCN columns
+threat_table_filtered[iucn_l1 == "NA", iucn_l1 := NA]
+threat_table_filtered[iucn_l2 == "NA", iucn_l2 := NA]
+
+# Remove numbering prefix from IUCN levels
+threat_table_filtered[, iucn_l1_clean := gsub("^[0-9]+\\.\\s*", "", iucn_l1)]
+threat_table_filtered[, iucn_l2_clean := gsub("^[0-9]+\\.[0-9]+\\s*", "", iucn_l2)]
+
+# Replace NA with em-dash for display
+threat_table_filtered[is.na(iucn_l1_clean), iucn_l1_clean := "—"]
+threat_table_filtered[is.na(iucn_l2_clean), iucn_l2_clean := "—"]
+
+# Order by management domain and IUCN levels
+setorder(threat_table_filtered, management_domain, iucn_l1, iucn_l2)
+
+# Select columns for display
+display_table <- threat_table_filtered[, .(
+  `Management Domain` = management_domain,
+  `IUCN Level 1` = iucn_l1_clean,
+  `IUCN Level 2` = iucn_l2_clean
+)]
+
+# Create flextable with row grouping
+ft <- flextable(display_table) |>
+  merge_v(j = "Management Domain") |>
+  merge_v(j = "IUCN Level 1") |>
+  valign(valign = "top") |>
+  width(j = 1, width = 1.8) |>
+  width(j = 2, width = 2.0) |>
+  width(j = 3, width = 2.2) |>
+  theme_booktabs() |>
+  bold(part = "header") |>
+  hline(part = "body", border = officer::fp_border(color = "gray80"))
+
+ft
+```
 
 Stewardship decisions and activities related to salmon are often in response to identifiable threats to salmon health and population status.
 
