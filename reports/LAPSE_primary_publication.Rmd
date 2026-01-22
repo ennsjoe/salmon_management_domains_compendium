@@ -7,6 +7,8 @@ output:
     reference_docx: "template.docx"
     number_sections: false
     fig_caption: true
+    toc: true
+    toc_depth: 3
 language:
   label:
     fig: "Fig. "
@@ -72,7 +74,7 @@ The wild-origin salmon abundance declines are recognized as a consequence of num
 
 -   **Cory - do we need more citations for end of this paragraph? Do you have some?**
 
-Threats to salmon habitat require a much more coordinated, inter-jurisdictional and inter-departmental approach to evaluate and address. Freshwater habitat, including water quantity (discharge and timing) and water quality (temperature, chemistry, and pollution), are impacted by actions and conditions throughout the entire watershed. Impacts from activities are often indirect, requiring monitoring and long-term studies to identify with confidence [@ulaski2025]. Local activities, such as forestry, agriculture, and urbanization, act cumulatively and compound with climate changes to degrade salmon watersheds [@moore2025] such that the regulation of threats to salmon freshwater habitat in British Columbia requires the application of multiple acts and regulations across both federal and provincial jurisdiction, where the impacts from activities and the benefits of mitigation are uncertain and spread out over time and space. For example, terms specific to pollution (effluent, wastewater, deleterious substances, etc.) occur in 18 Canadian federal acts and 22 British Columbian provincial acts, where the implementation of these acts are the responsibility of 8 Canadian federal ministries and 9 British Columbian provincial ministries [@departmentofjusticecanada2026; @provinceofbritishcolumbia2025].
+Threats to salmon habitat require a much more coordinated, inter-jurisdictional and inter-departmental approach to evaluate and address. Freshwater habitat, including water quantity (discharge and timing) and water quality (temperature, chemistry, and pollution), are impacted by actions and conditions throughout the entire watershed. Impacts from activities are often indirect, requiring monitoring and long-term studies to identify with confidence [@ulaski2025]. Local activities, such as forestry, agriculture, and urbanization, act cumulatively and compound with climate changes to degrade salmon watersheds [@moore2025] such that the regulation of threats to salmon freshwater habitat in British Columbia requires the application of multiple acts and regulations across both federal and provincial jurisdiction, where the impacts from activities and the benefits of mitigation are uncertain and spread out over time and space. For example, terms specific to pollution (effluent, wastewater, deleterious substances, etc.) occur in 18 Canadian federal acts and 22 British Columbian provincial acts, where the implementation of these acts are the responsibility of eight Canadian federal ministries and nine British Columbian provincial ministries [@departmentofjusticecanada2026; @provinceofbritishcolumbia2025].
 
 -   **Marina - I revised the paragraph to hopefully summarize what you'd suggested in your comment. My original paragraph was vague and unfinished. We don't really mention specific gov't branches and structures since they can change arbitrarily. Hopefully, this still covers what you were recommending.**
 
@@ -84,9 +86,13 @@ Rebuilding plans have been developed under the *Fisheries Act* Fish Stock Provis
 
 The need for collaborative, coordinated action to address Pacific salmon declines is recognized by governments throughout policies, plans, and initiatives including the *Wild Salmon Policy* [@dfo2005] and the *Trilateral declaration on the urgent need to address wild Pacific salmon populations in British Columbia* [@dfo2024]. Coordinated action requires adequate organizational capacity and systems for implementation to ensure that regulatory controls and mitigation activities address underlying threats to salmon and their habitat. However, linking threats and recovery actions to the relevant regulatory systems can be complex because salmon are often affected by multiple threats that each span across agencies and governmental jurisdiction.
 
-In this study, we seek to decode the complexity between threats to salmon and coresponding environmental legislation by creating an interface between regulatory language and anthropogenic threat categories. We describe and apply the *Legislation Applicable to Pacific Salmon and their Ecosystems* (LAPSE) database, a repository of federal and provincial legislation and regulations relevant to Pacific salmon in British Columbia. Using a novel method for parsing and classifying legislative clauses, we develop keyword relationships between IUCN threats classifications at the clause (paragraph) level for Canadian federal and British Columbian acts and regulations. By creating an extensive, open-source, and accessible database linking legislation to salmon, we aim to facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia, while providing a framework to support systematic and critical reviews of strengths and shortcomings of regulations with respect to salmon threats.
+-   need to introduce managment domains here
+
+In this study, we seek to decode the complexity between threats to salmon and corresponding environmental legislation by creating an interface between regulatory language and anthropogenic threat categories. We describe and apply the *Legislation Applicable to Pacific Salmon and their Ecosystems* (LAPSE) database, a repository of federal and provincial legislation and regulations relevant to Pacific salmon in British Columbia. Using a novel method for parsing and classifying legislative clauses, we develop keyword relationships between IUCN threats classifications at the clause (paragraph) level for Canadian federal and British Columbian acts and regulations. By creating an extensive, open-source, and accessible database linking legislation to salmon, we aim to facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia, while providing a framework to support systematic and critical reviews of strengths and shortcomings of regulations with respect to salmon threats.
 
 # International Union for Conservation of Nature (IUCN) threat categories
+
+**One widely used risk assessment framework for Pacific salmon is the *International Union for Conservation of Nature* (IUCN) *Direct Threats Classification*[@salafsky2008], which is applied for Recovery Potential Assessments as part of *Species at Risk Act* listing processes and for Committee on the Status of Endangered Wildlife in Canada (COSEWIC) status assessments [@arbeider2020; @dionne2023; @doutaz2023].**
 
 Stewardship decisions and activities related to salmon are often in response to identifiable threats to salmon health and population status.
 
@@ -116,6 +122,10 @@ For this study, the *IUCN - CMP Direct Threats Classification 4.0* [@salafsky202
 
 Legislative clauses that influence Pacific salmon governance in British Columbia are not always associated with conservation threats. As well, some clauses may involve all threats. For example, statutes that outline species status or determine ecological reserves have relevance to how salmon are managed, but can’t be attributed to any one IUCN threat category. Pacific salmon life history also ranges over a broad geography of marine and freshwater habitat (including terrestrial watershed aspects), touching on almost every conservation threat available. We developed management domain categories through this study as a clearer and more comprehensive alignment between regulatory administrative concern and conservation threat categories (Figure \@ref(fig:fig-flowchart-image)).
 
+# Management domain categories
+
+**\*\*We haven't mentioned Management Domains yet before this image!**
+
 ```{r fig-flowchart-image, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Flowchart showing alignment of IUCN Level 2 threat categories with Management Domain in relation to legislation and jurisdiction."}
 library(here)
 library(knitr)
@@ -132,7 +142,7 @@ if (file.exists(image_path)) {
 }
 ```
 
-# A process for clause categorization
+# Parsing legislations: a process for clause categorization
 
 Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the clauses within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable if legislation changes. The process steps are: accumulate and review legislation (CanLii); parse legislation by clause (paragraph), section, and heading; match management domain and IUCN threat keywords to clauses; assign salmon-specific scope categories; match clause type keywords to clauses.
 
@@ -427,9 +437,7 @@ ft <- flextable(count_table) %>%
 ft
 ```
 
-\
-
-## Legistics: parsing legislation
+## Legistics
 
 The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular management domain. Typological device structure and definitions used in this exercise were derived from the Government of Canada’s “Legistics Paragraphing” [@departmentofjusticecanada2022]. For the purpose of this review, we used the individual clause (Figure \@ref(fig:fig-legistics-paragraphing)) as the sample unit for assignment into management domains and other attributes.
 
@@ -454,7 +462,7 @@ Legislation presented on Canadian and British Columbian government websites, and
 -   **DG - Also needs a citation. Note to be consistent in the introduction of R package names. udpipe doesn’t have quotation marks, this one does. The formatting depends on the citation style, so it can be changed later, but a consistent starting point would be good.**
 -   **MW - Define the statute being the Fisheries Act into the figure or title? For some reason, the term statute is confusing me. I had to look up the definition to check if it included regulations or not. I wonder if it should be defined for readability earlier in the report or if people should just know this term.**
 
-## Compendium development
+## The LAPSE framework development
 
 The parsed legislation was stored in a SQLite database with datatables including jurisdiction, act name, legislation name, legislation type, paragraph content, section, heading, management domain, IUCN threat category, scope, and keywords matched. Storing the data as a database rather than one large spreadsheet allowed for a more dynamic and versatile system for querying, while streamlining the parsing and collection process.
 
