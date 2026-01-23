@@ -86,13 +86,13 @@ Rebuilding plans have been developed under the *Fisheries Act* Fish Stock Provis
 
 The need for collaborative, coordinated action to address Pacific salmon declines is recognized by governments throughout policies, plans, and initiatives including the *Wild Salmon Policy* [@dfo2005] and the *Trilateral declaration on the urgent need to address wild Pacific salmon populations in British Columbia* [@dfo2024]. Coordinated action requires adequate organizational capacity and systems for implementation to ensure that regulatory controls and mitigation activities address underlying threats to salmon and their habitat. However, linking threats and recovery actions to the relevant regulatory systems can be complex because salmon are often affected by multiple threats that each span across agencies and governmental jurisdiction. In this study, we seek to decode the complexity between threats to salmon and corresponding environmental legislation by creating an interface between regulatory language and anthropogenic threat categories.
 
-Laws formally codify societal values and expectations [@swerdfager2023] by governing human activity. Salmon population management administered through legislative authority, therefore, relies on a tertiary system where laws control human activity, which impacts the quantity and quality of salmon habitat, which affects the capacity of the habitat to produce salmon. Because this system of control pivots around human activity, we focused this study and tools around human activity as well, employing the hierarchical categorization structure developed by the *International Union for Conservation of Nature* (IUCN) and *Conservation Measures Partnership* (CMP). However, not all aspects of salmon management are specific to threats from human activity. Topics such as species status, spatial designation (parks), and overall governance administration may not connect to a direct human threat, or may encompass all the threats. In order to capture all these threat and non-threat related categories in our legislation-salmonscape interface, we created a "management domain" schema that we define as "discrete areas of administrative concern."
+Laws formally codify societal values and expectations [@swerdfager2023] by governing human activity. Salmon population management administered through legislative authority, therefore, relies on a tertiary system where laws control human activity, which impacts the quantity and quality of salmon habitat, which affects the capacity of the habitat to produce salmon. Because this system of control pivots around human activity, we also focused this study and tools around human activity, employing the hierarchical categorization structure developed by the *International Union for Conservation of Nature* (IUCN) and *Conservation Measures Partnership* (CMP). However, not all aspects of salmon management are specific to threats from human activity. Topics such as restoration, species status, spatial designation (parks), and overall governance administration may not connect to a direct human threat, or may encompass all the threats. In order to capture all these threat and non-threat related categories in our legislation-salmonscape interface, we created a schema of "management domains" that we define as "discrete areas of administrative concern."
 
-We developed the *Legislation Applicable to Pacific Salmon and their Ecosystems* (LAPSE) process and database that parses Canadian federal and British Columbian acts and regulations relevant to Pacific salmon, then uses keyword phrase relationships to match clauses (paragraphs) to our management domains and corresponding IUCN threat categories. By creating an extensive, open-source, and accessible database linking legislation to salmon, we aim to facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia, while providing a framework to support systematic and critical reviews of strengths and shortcomings of regulations with respect to salmon threats.
+We developed and outlined the *Legislation Applicable to Pacific Salmon and their Ecosystems* (LAPSE) as a process and tool to parse Canadian federal and British Columbian provincial acts and regulations relevant to Pacific salmon, then use keyword phrase relationships to match clauses (paragraphs) to our management domains and corresponding IUCN threat categories. By creating an extensive, open-source, and accessible database linking legislation to salmon, we aim to facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia, while providing a framework to support systematic and critical reviews of strengths and shortcomings of regulations with respect to salmon threats.
 
-# Management domains and International Union for Conservation of Nature (IUCN) threat categories
+# Management domains and the International Union for Conservation of Nature (IUCN) threat categories
 
-@salafsky2008 recognized that using a common language or a standard lexicon is essential for conservation science. Threats are a fundamental conservation concept, and can be defined as "current or future human activities or altered natural phenomena that affect one or more ecosystems or species of interest" [@salafsky2024]. Legislated recovery planning also relies on a description of identified threats [@mccune2013]. The IUCN and the CMP began developing classifications of direct threats in the early 2000s, which were then compiled and developed further through an iterative process resulting in the *IUCN – CMP Direct Threats Classification Version 4.0* [@salafsky2024] used for this exercise. The IUCN Direct Threats Classification uses a hierarchical, exclusive, comprehensive, and expandable structure of three levels similar to the Linnean system of grouping by family, genera, and species [@salafsky2008]. First-level categories (Level 1), the broadest, are subdivided into second-level categories (Level 2), which are further subdivided into the most specific, third-level categories (Level 3).
+@salafsky2008 recognized that using a common language and a standard lexicon is essential for conservation science. Threats are a fundamental conservation concept, and can be defined as "current or future human activities or altered natural phenomena that affect one or more ecosystems or species of interest" [@salafsky2024]. Legislated recovery planning also relies on a description of identified threats [@mccune2013]. The IUCN and the CMP began developing classifications of direct threats in the early 2000s, which were then compiled and developed further through an iterative process resulting in the *IUCN – CMP Direct Threats Classification Version 4.0* [@salafsky2024] used for this exercise. The IUCN Direct Threats Classification uses a hierarchical, exclusive, comprehensive, and expandable structure of three levels similar to the Linnean system of grouping by family, genera, and species [@salafsky2008]. First-level categories (Level 1) are the broadest, and are subdivided into second-level categories (Level 2), which are further subdivided into the most specific, third-level categories (Level 3).
 
 Canadian and British Columbian legislation has been enacted on a sector-by-sector basis, which doesn't exactly align well with the IUCN Level 1 categories. The IUCN Level 2 categories fit well with corresponding management domains and legislative categories; however, could be grouped for simplicity and to be more intuitive (Figure \@ref(fig:fig-flowchart-image)). IUCN Level 3 categories were not used in this assessment.
 
@@ -167,7 +167,7 @@ ft
 
 # Parsing legislation: a process for clause categorization
 
-Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the clauses within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable if legislation changes. The process steps are: accumulate and review legislation (CanLii); parse legislation by clause (paragraph), section, and heading; match management domain and IUCN threat keywords to clauses; assign salmon-specific scope categories; match clause type keywords to clauses.
+Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the clauses within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable if legislation changes. The process steps are: 1) accumulate and review legislation (CanLii); 2) parse legislation by clause (paragraph), section, and heading; 3) match management domain and IUCN threat keywords to clauses; 4) assign salmon-specific scope categories; 5) match clause type keywords to clauses.
 
 ## Legislation accumulation and review
 
@@ -398,17 +398,11 @@ if (!is.null(agencies_table)) {
 }
 ```
 
-We accumulated Canadian federal and British Columbian provincial legislation according to their relevance to salmon and habitat stewardship. For this study, the term legislation refers to acts, regulations, codes, and orders. Policies are formal statements about how the government of the day plans to execute the legislative requirements [@marentette2020]. Legislation itself is a better indicator of a jurisdiction's long-term commitment to natural resource stewardship [@bogetti2025] because these policies are more prone to changes in the political, administrative, and budgetary landscape without due process or a parliamentary vote. Specific departmental policy frameworks and processes were not assessed within this exercise.
+We accumulated Canadian federal and British Columbian provincial legislation according to their relevance to Pacific salmon and habitat stewardship. For this study, the term legislation (or statutes) refers to acts, regulations, codes, and orders. Policies are formal statements about how the government of the day plans to execute the legislative requirements [@marentette2020]. Legislation is a better indicator of a jurisdiction's long-term commitment to natural resource stewardship [@bogetti2025] than policies because policies are more prone to changes in the political, administrative, and budgetary landscape, while legislation is subject to due process or a parliamentary vote. Specific departmental policy frameworks and processes were not assessed within this exercise. This study also does not verify the implementation or enforcement in practice of the accumulated statutes by the responsible officials. The accumulated legislation is simply shown as it is written.
 
--   **MW - That’s true, although many sections of the Water Sustainability Act aren’t built out and utilized.**
+Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were also not included explicitly. Although this other legislation is pivotal in the stewardship of Pacific salmon, this regionally diverse administration was outside the scope of this legislative review in terms of feasibility and timelines. However, some of these other conventions may overlap with federal or provincial legislation in their governance. For example, the provincial *Spheres of Concurrent Jurisdiction — Environment and Wildlife Regulation* under the *Community Charter* references municipal jurisdiction in relation to the environment and wildlife.
 
-Indigenous legislation, Yukon Territorial legislation, municipal bylaws, and international conventions were also not included explicitly. Although this other legislation is pivotal in the stewardship of Pacific salmon, this regionally diverse administration was outside the scope of this legislative review in terms of feasibility and timelines.
-
-The *Canadian Legal Information Institute* website, CanLII [@canadianlegalinformationinstitute2025], provides an excellent resource for searching federal and provincial legislation by keyword search. We used CanLii through a step-wise, systematic process to query Pacific salmon specific terms (salmon, Chinook, sockeye, etc.); extract other keywords from the salmon-specific legislation (word frequency analysis using udpipe R package); query found keywords and IUCN Threat description wording in CanLII to find adjacent legislation; filter legislation regionally (excluding provinces other than BC); and download HTML files for relevant legislation directly from government websites.
-
--   **DG - Needs citation - citation("packagename") in R can get you this**
-
-Through the CanLII website, the user may look up the keywords queried in each statute chosen. This allows the user to assess the context of the word in the legislation and determine if the section is relevant to Pacific salmon. The number of statutes collected for inclusion in this study is shown in Table \@ref(tab:legislation-summary-table).
+The *Canadian Legal Information Institute* website, CanLII [@canadianlegalinformationinstitute2025], provides an excellent resource for searching federal and provincial legislation by keyword search. We used CanLII through a step-wise, systematic process to query salmon-specific terms (salmon, Chinook, sockeye, etc.). Often, popular language and phrasing used by practitioners may not appear in legal language due to the age and generality of the documents. In order to capture salmon-specific language that actually occurs in the legal language, we extracted other adjacent keywords and phrases from the salmon-specific legislation using a word frequency analysis with the "udpipe" R package [@wijffels2025]. A list of extracted adjacent keywords and phrases were combined with the IUCN threat description wordings, which were then queried in CanLII. The user may quickly view each individual keyword within the chosen statute through the CanLII website. This allows the user to assess the context of the word in the legislation and determine if the section might be relevant to Pacific salmon. Legislation was filtered by region (excluding provinces other than BC), and the statutes' HTML files were downloaded directly from government websites. The number of statutes collected for inclusion in this study is shown in Table \@ref(tab:legislation-summary-table).
 
 ```{r legislation-summary-table, echo=FALSE, message=FALSE, warning=FALSE}
 # Load required libraries
@@ -462,9 +456,9 @@ ft
 
 ## Legistics
 
-The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular management domain. Typological device structure and definitions used in this exercise were derived from the Government of Canada’s “Legistics Paragraphing” [@departmentofjusticecanada2022]. For the purpose of this review, we used the individual clause (Figure \@ref(fig:fig-legistics-paragraphing)) as the sample unit for assignment into management domains and other attributes.
+The decentralized overlapping patchwork of Pacific salmon legislation in Canada creates a dynamic such that each act and regulation may contain a variety of administrative responsibilities, possibly attributed to different agencies. However, each act and regulation is comprised of sections and subsections that contain individual clauses that are more specific to a particular management domain topic. Typological device structure and definitions used in this exercise were derived from the Government of Canada’s “Legistics Paragraphing” [@departmentofjusticecanada2022]. For the purpose of this review, we used the individual clause (Figure \@ref(fig:fig-legistics-paragraphing)) as the sample unit for assignment into management domains and other attributes.
 
-```{r fig-legistics-paragraphing, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "<span style='font-style: italic; font-family: Times New Roman; font-size: 10px'>Fisheries Act (federal) examples of paragraph parsing from HTML code.</span>"}
+```{r fig-legistics-paragraphing, echo=FALSE, message=FALSE, warning=FALSE, fig.cap = "<span style='font-style: italic; font-family: Times New Roman; font-size: 10px'>Example of HTML code paragraph parsing structure for Section 29 of the Canadian federal *Fisheries Act</em>.*"}
 library(here)
 library(knitr)
 
@@ -480,101 +474,25 @@ if (file.exists(image_path)) {
 }
 ```
 
-Legislation presented on Canadian and British Columbian government websites, and corresponding HTML code, is structured such that each clause is separated individually as a paragraph element. HTML code for paragraph elements is generally consistent across legislation, but section, subsection, and heading elements are not. As shown in Figure \@ref(fig:fig-legistics-paragraphing), “clause” in this study can also refer to subclauses, but also sections, subsections, and opening words (chapeau or umbrella) when they are stand-alone paragraph elements. HTML files were parsed using R and the “rvest” package to extract the text of each clause, then grouped by section and heading.
+Legislation presented on Canadian and British Columbian government websites, and corresponding HTML code, is structured such that each clause is separated individually as a paragraph element. HTML code for paragraph elements is generally consistent across legislation, but section, subsection, and heading elements are not. As shown in Figure \@ref(fig:fig-legistics-paragraphing), “clause” in this study can also refer to subclauses, but also sections, subsections, and opening words (chapeau or umbrella) when they are stand-alone paragraph elements. HTML files were parsed using R and the “rvest” package [@wickham2025], extracting the text of each clause, then grouping by section and heading.
 
--   **DG - Also needs a citation. Note to be consistent in the introduction of R package names. udpipe doesn’t have quotation marks, this one does. The formatting depends on the citation style, so it can be changed later, but a consistent starting point would be good.**
--   **MW - Define the statute being the Fisheries Act into the figure or title? For some reason, the term statute is confusing me. I had to look up the definition to check if it included regulations or not. I wonder if it should be defined for readability earlier in the report or if people should just know this term.**
-
-## The LAPSE framework development
+## The LAPSE process and tool development
 
 The parsed legislation was stored in a SQLite database with datatables including jurisdiction, act name, legislation name, legislation type, paragraph content, section, heading, management domain, IUCN threat category, scope, and keywords matched. Storing the data as a database rather than one large spreadsheet allowed for a more dynamic and versatile system for querying, while streamlining the parsing and collection process.
 
 ## Keyword and keyphrase development
 
-The management domain and IUCN threat matching process pivoted around an established list of keywords and phrases relevant to Pacific salmon stewardship. Keywords act as the language link between categorization and the legislative clauses. Keywords must be specific enough to match an IUCN threat, yet general enough to appear in multiple acts and regulations that span many decades of legislative language.
+The management domain and IUCN threat matching process pivoted around an established list of keywords and phrases relevant to Pacific salmon stewardship. Keywords act as the language link between categorization and the legislative clauses. Keywords must be specific enough to match an IUCN threat, yet general enough to appear in multiple acts and regulations that span many decades of legal language. We derived keyword lists from the *IUCN - CMP Direct Threats Classification 4.0* examples and definitions; word frequency analyses (unigrams, bigrams, and trigrams) of collected legislation; and iterative researcher input and revision.
 
-We derived keyword lists from the *IUCN - CMP Direct Threats Classification 4.0* examples and definitions; word frequency analyses (unigrams, bigrams, and trigrams) of collected legislation; and iterative researcher input and revision. The keyword and keyphrase development process required an iterative researcher revision step because of the varied context of language. While the words used in the IUCN threat definitions may be specific to those threats, they may not be relevant to salmon stewardship and may also have multiple meanings leading to an over-assignment of categories. For example, the word “landfill” is listed on the IUCN threat examples for “1.2 Commercial & Industrial Areas,” in the context of the physical footprint of landfill sites. Much of the collected legislation deals with pollution, in which landfills are mentioned as a source of effluent. However, for salmon habitat, the main threat would come from water effluent, rather than the physical impact of landfill sites proximal to salmon habitat, and pollution would be a more accurate designation. “Landfill” as a keyword adds many clauses that could be considered outside of the scope of this tool, and so “landfill” was removed from the keyword list. Conversely, the word “riparian” is very relevant to salmon habitat stewardship in British Columbia, yet that word doesn’t appear in the IUCN threat examples or word frequency analyses. As well, “riparian” doesn’t appear in word frequency analyses of other legislation. “Riparian” was added as a keyword solely from the researchers’ discretion.
-
--   **DG - I think this example adequately gets across the idea that keywords may have multiple meanings and may be misaligned with threat categories. I’ve provided some edits for consideration that attempt to refine the context of the threat category definitions. Feel free to refine/reject my edits, and let me know if the ideas I’m attempting to introduce don’t make sense. Happy to discuss further.**
-
--   **DG** - **This is the first time that “tool” is used to describe the project. It may be helpful to introduce the concept of this project’s outcomes as a tool in an earlier part of the report, possibly in the section introducing the objectives.**
+The keyword and keyphrase development process required an iterative researcher revision step because of the varied context of language. While the words used in the IUCN threat definitions may be specific to those threats, they may not be relevant to salmon stewardship and may also have multiple meanings leading to an over-assignment of categories. For example, the word “landfill” is listed on the IUCN threat examples for “1.2 Commercial & Industrial Areas,” in the context of the physical footprint of landfill sites. Much of the collected legislation deals with pollution, in which landfills are mentioned as a source of effluent. However, for salmon habitat, the main threat would come from water effluent, rather than the physical impact of landfill sites proximal to salmon habitat, and pollution would be a more accurate designation. “Landfill” as a keyword adds many clauses that could be considered outside of the scope of this tool, and so “landfill” was removed from the keyword list. Conversely, the word “riparian” is very relevant to salmon habitat stewardship in British Columbia, yet that word doesn’t appear in the IUCN threat examples or word frequency analyses of other legislation. “Riparian” was added as a keyword solely from the researchers’ discretion.
 
 Researcher subjectivity can influence the process on two fronts: legislation inclusion, and keyword list development. However, using keyword lists allows for the subjectivity to be acknowledged, and the keyword lists to be reported such that the process may be repeatable. The meaning and context behind keywords, especially single words, can cause mis-categorization in unexpected ways. For example, the word “stock” is an important keyword for salmon stewardship (the Fisheries management domain category). However, as a single word, “stock” can also refer to business holdings, freight cars, and cattle, which do not fit the Fisheries management domain. Revision of “stock” as a keyword is important for the accuracy of categorization. Outputs were reviewed iteratively, and keyword revision was a continuous process to find more relevant bigram or trigram alternatives; remove keywords where sections are already matched with other, more applicable keywords; and search for more specific word variations (plural, past tense, etc.)
 
--   **The number of statutes per se is not generally indicative of overall quality or potential effectiveness of any legal framework [@ray2021]**
+# Results
 
-# Management domains and the LAPSE framework
+## Management domains
 
-Management domains represent a reframing of multi-jurisdictional issues by salmon stewardship concern rather than specific agency. This tool can then be used by practitioners to view binding legislation when considering actions or proposals. Using the IUCN-CMP Direct Threats Classification 4.0, and other broader categories identified through this exercise process, the following management domains were identified (Table \@ref(tab:management-domain-tally)).
-
-```{r management-domain-tally, echo=FALSE, message=FALSE, warning=FALSE}
-library(DBI)
-library(RSQLite)
-library(here)
-library(data.table)
-library(flextable)
-
-db_path <- file.path(here("output"), "legislation.db")
-conn <- dbConnect(SQLite(), dbname = db_path)
-
-# Get Management Domain-labeled paragraphs directly from label_value
-domain_labels <- data.table(dbGetQuery(conn, "
-  SELECT paragraph_id, label_value AS management_domain
-  FROM paragraph_label_table
-  WHERE label_type = 'Management Domain' AND label_value IS NOT NULL
-"))
-
-# Load paragraph metadata
-paragraph_meta <- data.table(dbGetQuery(conn, "
-  SELECT paragraph_id, Section, legislation_id
-  FROM LegislationParagraphs
-  WHERE Section IS NOT NULL
-"))
-
-dbDisconnect(conn)
-
-# Merge with metadata
-merged <- merge(domain_labels, paragraph_meta, by = "paragraph_id", all.x = TRUE)
-
-# Tally by management_domain
-domain_tally <- merged[, .(
-  Statutes = uniqueN(legislation_id),
-  Sections = uniqueN(paste(legislation_id, Section, sep = "_")),
-  Clauses = uniqueN(paragraph_id)
-), by = .(management_domain)][order(management_domain)]
-
-# Rename column for display
-setnames(domain_tally, "management_domain", "Management Domain")
-
-# Calculate totals
-total_row <- data.table(
-  `Management Domain` = "Total",
-  Statutes = uniqueN(merged$legislation_id),
-  Sections = sum(domain_tally$Sections),
-  Clauses = sum(domain_tally$Clauses)
-)
-
-# Append total row
-domain_tally <- rbind(domain_tally, total_row)
-
-# Create flextable for Word output
-ft <- flextable(domain_tally) %>%
-  bold(part = "header") %>%
-  bold(i = nrow(domain_tally), part = "body") %>%
-  hline(i = nrow(domain_tally) - 1, border = officer::fp_border(width = 1)) %>%
-  align(j = 2:4, align = "center", part = "all") %>%
-  align(j = 1, align = "left", part = "body") %>%
-  autofit() %>%
-  set_caption("Count of statutes, sections, and clauses by management domain.")
-
-ft
-```
-
-\
-
-Management domains were identified within all the collected statutes. Pollution was the management domain with the highest section count (Figure \@ref(fig:section-count-by-management-domain)), split almost evenly between federal and provincial jurisdictions. Human Disturbance (research **\*\*scientific?** activities) and Climate Change and Natural Disasters had the fewest section count. Fisheries was in the top three for section count, with a majority of sections under federal jurisdiction. Water Use and Watercourse Modifications was in the top four for section count, with a majority of sections under provincial jurisdiction. This count indicates an underlying possibly dysfunctional relationship where salmon harvest is controlled federally while habitat aspects are governed provincially.
-
--   **MW - The Management Domain of Human Disturbance is just research activities? This seems less intuitive for me than the other management domains since human disturbance could refer to most of them.**
+While the number of statutes, sections, or clauses is not a measure of the quality or effectiveness of the legislation [@ray2021], the LAPSE process and tool can be used by practitioners to view the existing acts, regulations, orders, and codes when considering actions or proposals. Management domains were identified within all the collected statutes. Pollution was the management domain with the highest section count (Figure \@ref(fig:section-count-by-management-domain)), split almost evenly between federal and provincial jurisdictions. Human Disturbance (specifically, 6.3 Other Human Disturbances, as in species research activities) and Climate Change and Natural Disasters had the fewest section count. Fisheries was in the top three for section count, with a majority of sections under federal jurisdiction. Water Use and Watercourse Modifications was in the top four for section count, with a majority of sections under provincial jurisdiction. This count indicates an underlying possibly dysfunctional relationship where salmon harvest is controlled federally while habitat aspects are governed provincially.
 
 ```{r section-count-by-management-domain, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6, fig.cap="Count of sections matched by management domain, stacked by jurisdiction."}
 # Load required libraries
@@ -659,7 +577,7 @@ ggplot(domain_counts, aes(
   )
 ```
 
-## IUCN Level 2 categories
+## IUCN Level 2 threats
 
 IUCN Level 2 categories are more specific, and the categorization process matched to 25 categories (Figure \@ref(fig:fig-section-count-by-iucn)) that parallel the management domain categories. Multiple IUCN threats comprise a management domain; however "9.1 Water-Borne & Other Effluent Pollution" matched with the highest number of sections (as in the management domains) followed by "5.4 Fishing, Harvesting & Controlling Aquatic Species." Eight IUCN threat categories make up the Water Use and Watercourse Modifications management domain, but "7.2 Dams & Water Management / Use" has the majority of matches.
 
@@ -753,133 +671,7 @@ if (!file.exists(db_path)) {
 
 ## Salmon-specific scope
 
-Regulatory language that can be matched to management domain and IUCN threat categories is not inherently relevant to Pacific salmon. However, clauses fall within a relevance spectrum. For example, a clause that states catch limits for Chinook salmon would be much more specific to salmon stewardship than a clause that states that a minister shall include ecological integrity objectives in a park management plan. Both clauses influence salmon governance and stewardship, but one clause is more direct. A “scope” classification was developed as part of this study to parallel management domains and categorize clauses based on their direct application to Pacific salmon. Scope categories were determined by the specificity of the language used in the section (Figure \@ref(fig:multiscope-donut)). The scope categories were defined as: "1 – Salmon" (refers to Pacific salmon specifically); "2 – Fish" (refers to fish that include salmon); "3 – Habitat" (refers to any habitat that includes salmon habitat); and "4 – Governance" (refers to administrative processes and structure).
-
-```{r multiscope-donut, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=7, fig.cap="Proportion of sections by management domain, displayed as concentric rings representing scope categories (inner to outer: 1 - Salmon, 2 - Fish, 3 - Habitat, 4 - Governance)."}
-library(DBI)
-library(RSQLite)
-library(data.table)
-library(here)
-library(dplyr)
-library(ggplot2)
-library(ggforce)
-library(RColorBrewer)
-
-# Connect to the database
-db_path <- file.path(here("output"), "legislation.db")
-conn <- dbConnect(SQLite(), dbname = db_path)
-
-# Load tables
-paragraph_label_table <- as.data.table(dbReadTable(conn, "paragraph_label_table"))
-paragraph_table <- as.data.table(dbReadTable(conn, "LegislationParagraphs"))
-dbDisconnect(conn)
-
-# Get paragraph_ids tagged with Salmon Scope
-salmon_scope_ids <- paragraph_label_table[
-  label_type == "Salmon Scope" & scope == "1 - Salmon", paragraph_id
-]
-
-# Get Management Domain labels linked to those Salmon Scope paragraphs
-salmon_ring <- paragraph_label_table[
-  label_type == "Management Domain" & paragraph_id %in% salmon_scope_ids
-][, scope := "1 - Salmon"]
-
-# Get other Management Domain entries (non-Salmon scopes)
-other_rings <- paragraph_label_table[
-  label_type == "Management Domain" & !(paragraph_id %in% salmon_scope_ids)
-]
-
-# Combine all scope-tagged Management Domain entries
-md_labels <- rbind(salmon_ring, other_rings)
-
-# Merge with paragraph_table to get legislation_id and Section
-merged_data <- merge(
-  md_labels,
-  paragraph_table[, .(paragraph_id, legislation_id, Section)],
-  by = "paragraph_id",
-  all.x = TRUE
-)
-
-# Count unique Sections per legislation_id, grouped by scope and label_value
-raw_counts <- merged_data[
-  , .(SectionCount = uniqueN(Section)), by = .(scope, label_value)
-]
-
-# Ensure all scope × label_value combinations are represented
-all_combos <- CJ(scope = unique(md_labels$scope),
-                 label_value = unique(md_labels$label_value))
-donut_data <- merge(all_combos, raw_counts, by = c("scope", "label_value"), all.x = TRUE)
-donut_data[is.na(SectionCount), SectionCount := 0]
-
-# Assign fixed ring positions for each scope
-scope_levels <- sort(unique(donut_data$scope))
-scope_radii <- data.table(
-  scope = scope_levels,
-  r0 = seq(0.3, by = 0.3, length.out = length(scope_levels)),
-  r = seq(0.5, by = 0.3, length.out = length(scope_levels)),
-  label_radius = seq(0.4, by = 0.3, length.out = length(scope_levels))
-)
-donut_data <- merge(donut_data, scope_radii, by = "scope")
-
-# Compute arc positions
-donut_data <- donut_data %>%
-  group_by(scope) %>%
-  arrange(label_value) %>%
-  mutate(
-    total = sum(SectionCount),
-    fraction = ifelse(total > 0, SectionCount / total, 0),
-    ymax = cumsum(fraction),
-    ymin = lag(ymax, default = 0)
-  ) %>%
-  ungroup()
-
-# Create scope labels
-scope_labels_df <- scope_radii %>%
-  mutate(
-    x = label_radius * cos(pi / 2),
-    y = label_radius * sin(pi / 2)
-  )
-
-# Get number of unique domains for color palette
-n_domains <- length(unique(donut_data$label_value))
-domain_names <- sort(unique(donut_data$label_value))
-
-# Generate color palette based on Federal/Provincial colors
-# Gradient from #996666 (Federal red) through neutral to #668899 (Provincial blue)
-domain_colors <- colorRampPalette(c("#996666", "#b8a090", "#909090", "#8090a8", "#668899"))(n_domains)
-names(domain_colors) <- domain_names
-
-# Plot multi-ring donut chart
-ggplot(donut_data) +
-  geom_arc_bar(aes(
-    x0 = 0, y0 = 0,
-    r0 = r0, r = r,
-    start = 2 * pi * ymin,
-    end = 2 * pi * ymax,
-    fill = label_value
-  ), color = "white", linewidth = 0.5) +
-  geom_text(
-    data = scope_labels_df, 
-    aes(x = x, y = y, label = scope), 
-    size = 3, 
-    fontface = "bold",
-    color = "black"
-  ) +
-  scale_fill_manual(values = domain_colors, na.value = "gray50") +
-  guides(fill = guide_legend(title = "Management Domain", ncol = 1)) +
-  coord_fixed() +
-  theme_void() +
-  theme(
-    legend.position = "right",
-    legend.title = element_text(size = 10, face = "bold"),
-    legend.text = element_text(size = 8),
-    legend.key.size = unit(0.4, "cm"),
-    plot.background = element_rect(fill = "white", color = NA),
-    panel.background = element_rect(fill = "white", color = NA)
-  )
-```
-
--   **DG - This is a super cool figure. I have a couple of questions about it. How was the order of the categories decided? Governance is the largest ring as #4, but it has the fewest management domains, so it could be more easily interpreted as a smaller ring compared to salmon, which relates to many categories but is the smallest ring at #1. I also find the colours difficult to distinguish. I assume this pattern was used because there are so many categories and a categorical colour scheme may be difficult with so many categories. I suggest devising an accessible colour scheme using an online tool for the maximum feasible number of categories, and then perhaps add linework/cross hatching to further distinguish the remaining categories. Currently, the gradient suggests in a way that there’s a relationship between proximal management domains, but it merely is arranged alphabetically.**
+Regulatory language that can be matched to management domain and IUCN threat categories is not inherently relevant to Pacific salmon. However, clauses fall within a relevance spectrum. For example, a clause that states catch limits for Chinook salmon would be much more specific to salmon stewardship than a clause that states that a minister shall include ecological integrity objectives in a park management plan. Both clauses influence salmon governance and stewardship, but one clause is more direct. A “scope” classification was developed as part of this study to parallel management domains and categorize clauses based on their direct application to Pacific salmon. Scope categories were determined by the specificity of the keywords and defined as: "1 – Salmon" (refers to Pacific salmon specifically); "2 – Fish" (refers to fish that include salmon); "3 – Habitat" (refers to any habitat that includes salmon habitat); and "4 – Governance" (refers to administrative processes and structure).
 
 The scope assignment process was linked, but occurred independent of the management domain and IUCN threat assignment process. The “1 – Salmon” scope was assigned based solely on salmon keywords (salmon, Chinook, sockeye, etc.), regardless of management domain or IUCN threat. The “2 – Fish” and “3 – Habitat” scopes align directly to IUCN threats (unless already classified as “1 – Salmon”). The “4 – Governance” scope was applied last in a separate matching process. Language specific to Pacific salmon management was found in far fewer sections than indirect, less specific language (Table \@ref(tab:scope-tally)). More federal legislation sections matched with salmon harvest categories than provincial.
 
@@ -948,7 +740,7 @@ ft
 ```
 
 \
-Pacific salmon-specific language ("1 - Salmon") also matched more federal statutes (Figure \@ref(fig:section-count-salmon-scope), specifically, the British Columbia Sport Fishing Regulations, 1996; National Parks of Canada Fishing Regulations; and Pacific Fishery Regulations 1993. It is also interesting to note that the federal Fisheries Act does not use the word “salmon” or any salmon-specific keywords ("1 - Salmon") at all, only the regulations made under the *Fisheries Act* use salmon-specific language.
+Pacific salmon-specific language ("1 - Salmon") also matched more federal statutes (Figure \@ref(fig:section-count-salmon-scope), specifically, the *British Columbia Sport Fishing Regulations, 1996*; *National Parks of Canada Fishing Regulations*; and *Pacific Fishery Regulations 1993*. The federal *Fisheries Act* does not use the word “salmon” or any salmon-specific keywords at all, only the regulations made under the *Fisheries Act*.
 
 ```{r section-count-salmon-scope, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6, fig.cap="Count of sections by legislation for scope category '1 - Salmon', coloured by jurisdiction."}
 # Load libraries
@@ -1030,7 +822,7 @@ ggplot(summary_data, aes(
   )
 ```
 
-# Legislative factors: clause types
+# Clause types as legislative factors
 
 The process of parsing legislation by clause and section, then matching categories by keywords also allows for other possible categorizations. Similar to management domains and IUCN threats, the nature of the clauses was also matched in terms of the “clause type” (Table \@ref(tab:clause-type-with-domain-tally)). Clauses, in general, fit into groupings by their context and the nature of their intent. For this exercise, the categories and keywords were developed solely by the researchers through a subjective process.
 
