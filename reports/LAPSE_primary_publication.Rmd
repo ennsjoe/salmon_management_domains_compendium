@@ -78,7 +78,7 @@ Threats to salmon habitat require a much more coordinated, inter-jurisdictional 
 
 -   **Marina - I revised the paragraph to hopefully summarize what you'd suggested in your comment. My original paragraph was vague and unfinished. We don't really mention specific gov't branches and structures since they can change arbitrarily. Hopefully, this still covers what you were recommending.**
 
-Assessment frameworks have been developed amidst this uncertainty and complexity to evaluate anthropogenic activities and limiting factors for the survival and recovery of Pacific salmon populations [@chalifour2022; @salafsky2008; @dfo2021]. These frameworks are varied in their approaches, but aim to be comprehensive in assessing the wide range of concerns that may impact salmon across their life cycle to inform status assessments, recovery planning, and conservation strategies. One widely used risk assessment framework for Pacific salmon is the *International Union for Conservation of Nature* (IUCN) *Direct Threats Classification* [@salafsky2008], which is applied for Recovery Potential Assessments as part of *Species at Risk Act* listing processes and for Committee on the Status of Endangered Wildlife in Canada (COSEWIC**)** status assessments [@arbeider2020; @dionne2023; @doutaz2023].
+Assessment frameworks have been developed amidst this uncertainty and complexity to evaluate anthropogenic activities and limiting factors for the survival and recovery of Pacific salmon populations [@chalifour2022; @salafsky2008; @dfo2021]. These frameworks are varied in their approaches, but aim to be comprehensive in assessing the wide range of concerns that may impact salmon across their life cycle to inform status assessments, recovery planning, and conservation strategies. One widely used risk assessment framework for Pacific salmon is the International Union for Conservation of Nature (IUCN) and Conservation Measures Partnership (CMP) Direct Threats Classification [@salafsky2008], which is applied for Recovery Potential Assessments as part of *Species at Risk Act* listing processes and for Committee on the Status of Endangered Wildlife in Canada (COSEWIC**)** status assessments [@arbeider2020; @dionne2023; @doutaz2023].
 
 Rebuilding plans have been developed under the *Fisheries Act* Fish Stock Provisions [@dfo2022] for a small number of Pacific salmon populations including Okanagan Chinook [@DFO2022] and West Coast Vancouver Island Chinook [@dfo2025]. Risk assessments are intended to guide the development of rebuilding plans and mitigation actions with the ultimate aim of reversing declines and improving conservation status, assuming there is agreement upon the most important threats. A key challenge is identifying actions that are impactful and feasible across the wide geographic range and diverse life history of Pacific salmon. In many cases, dispersed authority, regulatory complexities, ambiguous responsibilities, ill-defined standards of management, and unclear conservation objectives across jurisdictions become barriers to effective and timely action.
 
@@ -86,15 +86,15 @@ Rebuilding plans have been developed under the *Fisheries Act* Fish Stock Provis
 
 The need for collaborative, coordinated action to address Pacific salmon declines is recognized by governments throughout policies, plans, and initiatives including the *Wild Salmon Policy* [@dfo2005] and the *Trilateral declaration on the urgent need to address wild Pacific salmon populations in British Columbia* [@dfo2024]. Coordinated action requires adequate organizational capacity and systems for implementation to ensure that regulatory controls and mitigation activities address underlying threats to salmon and their habitat. However, linking threats and recovery actions to the relevant regulatory systems can be complex because salmon are often affected by multiple threats that each span across agencies and governmental jurisdiction. In this study, we seek to decode the complexity between threats to salmon and corresponding environmental legislation by creating an interface between regulatory language and anthropogenic threat categories.
 
-Laws formally codify societal values and expectations [@swerdfager2023] by governing human activity. Salmon population management administered through legislative authority, therefore, relies on a tertiary system where laws control human activity, which impacts the quantity and quality of salmon habitat, which affects the capacity of the habitat to produce salmon. Because this system of control pivots around human activity, we also focused this study and tools around human activity, employing the hierarchical categorization structure developed by the *International Union for Conservation of Nature* (IUCN) and *Conservation Measures Partnership* (CMP). However, not all aspects of salmon management are specific to threats from human activity. Topics such as restoration, species status, spatial designation (parks), and overall governance administration may not connect to a direct human threat, or may encompass all the threats. In order to capture all these threat and non-threat related categories in our legislation-salmonscape interface, we created a schema of "management domains" that we define as "discrete areas of administrative concern."
+Laws formally codify societal values and expectations [@swerdfager2023] by governing human activity. Salmon population management administered through legislative authority, therefore, relies on a tertiary system where laws control human activity, which impacts the quantity and quality of salmon habitat, which affects the capacity of the habitat to produce salmon. Because this system of control pivots around human activity, we also focused this study and tools around human activity, employing the hierarchical categorization structure developed by the IUCN-CMP. However, not all aspects of salmon management are specific to threats from human activity. Topics such as restoration, species status, spatial designation (parks), and overall governance administration may not connect to a direct human threat, or may encompass all the threats. In order to capture all these threat and non-threat related categories in our legislation-salmonscape interface, we created a schema of "management domains" that we define as "discrete areas of administrative concern."
 
 We developed and outlined the *Legislation Applicable to Pacific Salmon and their Ecosystems* (LAPSE) as a process and tool to parse Canadian federal and British Columbian provincial acts and regulations relevant to Pacific salmon, then use keyword phrase relationships to match clauses (paragraphs) to our management domains and corresponding IUCN threat categories. By creating an extensive, open-source, and accessible database linking legislation to salmon, we aim to facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia, while providing a framework to support systematic and critical reviews of strengths and shortcomings of regulations with respect to salmon threats.
 
-# Management domains and the International Union for Conservation of Nature (IUCN) threat categories
+# Management domains and the International Union for Conservation of Nature- Conservation Measures Partnership  threat categories
 
 @salafsky2008 recognized that using a common language and a standard lexicon is essential for conservation science. Threats are a fundamental conservation concept, and can be defined as "current or future human activities or altered natural phenomena that affect one or more ecosystems or species of interest" [@salafsky2024]. Legislated recovery planning also relies on a description of identified threats [@mccune2013]. The IUCN and the CMP began developing classifications of direct threats in the early 2000s, which were then compiled and developed further through an iterative process resulting in the *IUCN – CMP Direct Threats Classification Version 4.0* [@salafsky2024] used for this exercise. The IUCN Direct Threats Classification uses a hierarchical, exclusive, comprehensive, and expandable structure of three levels similar to the Linnean system of grouping by family, genera, and species [@salafsky2008]. First-level categories (Level 1) are the broadest, and are subdivided into second-level categories (Level 2), which are further subdivided into the most specific, third-level categories (Level 3).
 
-Canadian and British Columbian legislation has been enacted on a sector-by-sector basis, which doesn't exactly align well with the IUCN Level 1 categories. The IUCN Level 2 categories fit well with corresponding management domains and legislative categories; however, could be grouped for simplicity and to be more intuitive (Figure \@ref(fig:fig-flowchart-image)). IUCN Level 3 categories were not used in this assessment.
+Canadian and British Columbian legislation has been enacted on a sector-by-sector basis, which doesn't exactly align well with the IUCN-CMP Level 1 categories. The IUCN-CMP Level 2 categories fit well with corresponding management domains and legislative categories; however, could be grouped for simplicity and to be more intuitive (Figure \@ref(fig:fig-flowchart-image)). IUCN-CMP Level 3 categories were not used in this assessment.
 
 ```{r fig-flowchart-image, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Flowchart showing alignment of IUCN Level 2 threat categories with Management Domain in relation to legislation and jurisdiction."}
 library(here)
@@ -112,7 +112,7 @@ if (file.exists(image_path)) {
 }
 ```
 
-Lumping and splitting between IUCN Levels 1 and 2 categories was required to match threats with legislation (Table \@ref(tab:management-domain-threat-table)), which is why the management domain categories were required. For example, aquaculture and hatcheries are important aspects that impact Pacific salmon populations. This topic spans two IUCN Level 1 categories: 2. Agriculture & Aquaculture and 8. Invasive / Other Problematic Species, Genes & Pathogens, but would be more specifically aligned with the IUCN Level 2 categories: 2.4 Marine & Freshwater Aquaculture and 8.3 Introduced Genetic Material. For clarity and better alignment, we created a management domain called "Aquaculture and Hatcheries." A similar misalignment occurs when assessing the provincial "*Forest And Range Practices Act*." Since the management domain categories were derived as close as possible to the IUCN threat categories (a mix of Level 1 and Level 2), most can be viewed as equivalent.
+Lumping and splitting between IUCN-CMP Levels 1 and 2 categories was required to match threats with legislation (Table \@ref(tab:management-domain-threat-table)), which is why the management domain categories were required. For example, aquaculture and hatcheries are important aspects that impact Pacific salmon populations. This topic spans two IUCN-CMP Level 1 categories: 2. Agriculture & Aquaculture and 8. Invasive / Other Problematic Species, Genes & Pathogens, but would be more specifically aligned with the IUCN-CMP Level 2 categories: "2.4 Marine & Freshwater Aquaculture" and "8.3 Introduced Genetic Material." For clarity and better alignment, we created a management domain called "Aquaculture and Hatcheries." A similar misalignment occurs when assessing the provincial "*Forest And Range Practices Act*." Since the management domain categories were derived as close as possible to the IUCN-CMP threat categories (a mix of Level 1 and Level 2), most can be viewed as equivalent.
 
 ```{r management-domain-threat-table}
 library(flextable)
@@ -167,7 +167,7 @@ ft
 
 # Parsing legislation: a process for clause categorization
 
-Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the clauses within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable if legislation changes. The process steps are: 1) accumulate and review legislation (CanLii); 2) parse legislation by clause (paragraph), section, and heading; 3) match management domain and IUCN threat keywords to clauses; 4) assign salmon-specific scope categories; 5) match clause type keywords to clauses.
+Assessment of legislative context is prone to subjective interpretation. The inclusion and exclusion of both the overall acts and the clauses within the acts creates points of assumption and bias. For this exercise we cast as wide a net as possible and created a process that is publicly accessible, automated, and repeatable if legislation changes. The process steps are: 1) accumulate and review legislation (CanLii); 2) parse legislation by clause (paragraph), section, and heading; 3) match management domain and IUCN-CMP threat keywords to clauses; 4) assign salmon-specific scope categories; 5) match clause type keywords to clauses.
 
 ## Legislation accumulation and review
 
@@ -478,13 +478,13 @@ Legislation presented on Canadian and British Columbian government websites, and
 
 ## The LAPSE process and tool development
 
-The parsed legislation was stored in a SQLite database with datatables including jurisdiction, act name, legislation name, legislation type, paragraph content, section, heading, management domain, IUCN threat category, scope, and keywords matched. Storing the data as a database rather than one large spreadsheet allowed for a more dynamic and versatile system for querying, while streamlining the parsing and collection process.
+The parsed legislation was stored in a SQLite database with datatables including jurisdiction, act name, legislation name, legislation type, paragraph content, section, heading, management domain, IUCN-CMP threat category, scope, and keywords matched. Storing the data as a database rather than one large spreadsheet allowed for a more dynamic and versatile system for querying, while streamlining the parsing and collection process.
 
 ## Keyword and keyphrase development
 
-The management domain and IUCN threat matching process pivoted around an established list of keywords and phrases relevant to Pacific salmon stewardship. Keywords act as the language link between categorization and the legislative clauses. Keywords must be specific enough to match an IUCN threat, yet general enough to appear in multiple acts and regulations that span many decades of legal language. We derived keyword lists from the *IUCN - CMP Direct Threats Classification 4.0* examples and definitions; word frequency analyses (unigrams, bigrams, and trigrams) of collected legislation; and iterative researcher input and revision.
+The management domain and IUCN-CMP threat matching process pivoted around an established list of keywords and phrases relevant to Pacific salmon stewardship. Keywords act as the language link between categorization and the legislative clauses. Keywords must be specific enough to match an IUCN-CMP threat, yet general enough to appear in multiple acts and regulations that span many decades of legal language. We derived keyword lists from the *IUCN - CMP Direct Threats Classification 4.0* examples and definitions; word frequency analyses (unigrams, bigrams, and trigrams) of collected legislation; and iterative researcher input and revision.
 
-The keyword and keyphrase development process required an iterative researcher revision step because of the varied context of language. While the words used in the IUCN threat definitions may be specific to those threats, they may not be relevant to salmon stewardship and may also have multiple meanings leading to an over-assignment of categories. For example, the word “landfill” is listed on the IUCN threat examples for “1.2 Commercial & Industrial Areas,” in the context of the physical footprint of landfill sites. Much of the collected legislation deals with pollution, in which landfills are mentioned as a source of effluent. However, for salmon habitat, the main threat would come from water effluent, rather than the physical impact of landfill sites proximal to salmon habitat, and pollution would be a more accurate designation. “Landfill” as a keyword adds many clauses that could be considered outside of the scope of this tool, and so “landfill” was removed from the keyword list. Conversely, the word “riparian” is very relevant to salmon habitat stewardship in British Columbia, yet that word doesn’t appear in the IUCN threat examples or word frequency analyses of other legislation. “Riparian” was added as a keyword solely from the researchers’ discretion.
+The keyword and keyphrase development process required an iterative researcher revision step because of the varied context of language. While the words used in the IUCN-CMP threat definitions may be specific to those threats, they may not be relevant to salmon stewardship and may also have multiple meanings leading to an over-assignment of categories. For example, the word “landfill” is listed on the IUCN-CMP threat examples for “1.2 Commercial & Industrial Areas,” in the context of the physical footprint of landfill sites. Much of the collected legislation deals with pollution, in which landfills are mentioned as a source of effluent. However, for salmon habitat, the main threat would come from water effluent, rather than the physical impact of landfill sites proximal to salmon habitat, and pollution would be a more accurate designation. “Landfill” as a keyword adds many clauses that could be considered outside of the scope of this tool, and so “landfill” was removed from the keyword list. Conversely, the word “riparian” is very relevant to salmon habitat stewardship in British Columbia, yet that word doesn’t appear in the IUCN-CMP threat examples or word frequency analyses of other legislation. “Riparian” was added as a keyword solely from the researchers’ discretion.
 
 Researcher subjectivity can influence the process on two fronts: legislation inclusion, and keyword list development. However, using keyword lists allows for the subjectivity to be acknowledged, and the keyword lists to be reported such that the process may be repeatable. The meaning and context behind keywords, especially single words, can cause mis-categorization in unexpected ways. For example, the word “stock” is an important keyword for salmon stewardship (the Fisheries management domain category). However, as a single word, “stock” can also refer to business holdings, freight cars, and cattle, which do not fit the Fisheries management domain. Revision of “stock” as a keyword is important for the accuracy of categorization. Outputs were reviewed iteratively, and keyword revision was a continuous process to find more relevant bigram or trigram alternatives; remove keywords where sections are already matched with other, more applicable keywords; and search for more specific word variations (plural, past tense, etc.)
 
@@ -577,11 +577,11 @@ ggplot(domain_counts, aes(
   )
 ```
 
-## IUCN Level 2 threats
+## IUCN-CMP Level 2 threats
 
-IUCN Level 2 categories are more specific, and the categorization process matched to 25 categories (Figure \@ref(fig:fig-section-count-by-iucn)) that parallel the management domain categories. Multiple IUCN threats comprise a management domain; however "9.1 Water-Borne & Other Effluent Pollution" matched with the highest number of sections (as in the management domains) followed by "5.4 Fishing, Harvesting & Controlling Aquatic Species." Eight IUCN threat categories make up the Water Use and Watercourse Modifications management domain, but "7.2 Dams & Water Management / Use" has the majority of matches.
+IUCN-CMP Level 2 categories are more specific, and the categorization process matched to 25 categories (Figure \@ref(fig:fig-section-count-by-iucn)) that parallel the management domain categories. Multiple IUCN-CMP threats comprise a management domain; however "9.1 Water-Borne & Other Effluent Pollution" matched with the highest number of sections (as in the management domains) followed by "5.4 Fishing, Harvesting & Controlling Aquatic Species." Eight IUCN-CMP threat categories make up the Water Use and Watercourse Modifications management domain, but "7.2 Dams & Water Management / Use" has the majority of matches.
 
-```{r fig-section-count-by-iucn, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=8, fig.cap="Section counts by IUCN threat category, separated by jurisdiction."}
+```{r fig-section-count-by-iucn, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=8, fig.cap="Section counts by IUCN-CMP threat category, separated by jurisdiction."}
 # 📦 Load required libraries
 library(DBI)
 library(RSQLite)
@@ -671,9 +671,9 @@ if (!file.exists(db_path)) {
 
 ## Salmon-specific scope
 
-Regulatory language that can be matched to management domain and IUCN threat categories is not inherently relevant to Pacific salmon. However, clauses fall within a relevance spectrum. For example, a clause that states catch limits for Chinook salmon would be much more specific to salmon stewardship than a clause that states that a minister shall include ecological integrity objectives in a park management plan. Both clauses influence salmon governance and stewardship, but one clause is more direct. A “scope” classification was developed as part of this study to parallel management domains and categorize clauses based on their direct application to Pacific salmon. Scope categories were determined by the specificity of the keywords and defined as: "1 – Salmon" (refers to Pacific salmon specifically); "2 – Fish" (refers to fish that include salmon); "3 – Habitat" (refers to any habitat that includes salmon habitat); and "4 – Governance" (refers to administrative processes and structure).
+Regulatory language that can be matched to management domain and IUCN-CMP threat categories is not inherently relevant to Pacific salmon. However, clauses fall within a relevance spectrum. For example, a clause that states catch limits for Chinook salmon would be much more specific to salmon stewardship than a clause that states that a minister shall include ecological integrity objectives in a park management plan. Both clauses influence salmon governance and stewardship, but one clause is more direct. A “scope” classification was developed as part of this study to parallel management domains and categorize clauses based on their direct application to Pacific salmon. Scope categories were determined by the specificity of the keywords and defined as: "1 – Salmon" (refers to Pacific salmon specifically); "2 – Fish" (refers to fish that include salmon); "3 – Habitat" (refers to any habitat that includes salmon habitat); and "4 – Governance" (refers to administrative processes and structure).
 
-The scope assignment process was linked, but occurred independent of the management domain and IUCN threat assignment process. The “1 – Salmon” scope was assigned based solely on salmon keywords (salmon, Chinook, sockeye, etc.), regardless of management domain or IUCN threat. The “2 – Fish” and “3 – Habitat” scopes align directly to IUCN threats (unless already classified as “1 – Salmon”). The “4 – Governance” scope was applied last in a separate matching process. Language specific to Pacific salmon management was found in far fewer sections than indirect, less specific language (Table \@ref(tab:scope-tally)). More federal legislation sections matched with salmon harvest categories than provincial.
+The scope assignment process was linked, but occurred independent of the management domain and IUCN-CMP threat assignment process. The “1 – Salmon” scope was assigned based solely on salmon keywords (salmon, Chinook, sockeye, etc.), regardless of management domain or IUCN-CMP threat. The “2 – Fish” and “3 – Habitat” scopes align directly to IUCN-CMP threats (unless already classified as “1 – Salmon”). The “4 – Governance” scope was applied last in a separate matching process. Language specific to Pacific salmon management was found in far fewer sections than indirect, less specific language (Table \@ref(tab:scope-tally)). More federal legislation sections matched with salmon harvest categories than provincial.
 
 ```{r scope-tally, echo=FALSE, message=FALSE, warning=FALSE}
 library(DBI)
@@ -824,7 +824,7 @@ ggplot(summary_data, aes(
 
 ## Clause types as legislative factors
 
-The process of parsing legislation by clause and section, then matching categories by keywords also allows for other possible categorizations. Similar to management domains and IUCN threats, the nature of the clauses was also matched in terms of the “clause type” (Table \@ref(tab:clause-type-with-domain-tally)). Clauses, in general, fit into groupings by their context and the nature of their intent. For this exercise, the categories and keywords were developed solely by the researchers through a subjective process.
+The process of parsing legislation by clause and section, then matching categories by keywords also allows for other possible categorizations. Similar to management domains and IUCN-CMP threats, the nature of the clauses was also matched in terms of the “clause type” (Table \@ref(tab:clause-type-with-domain-tally)). Clauses, in general, fit into groupings by their context and the nature of their intent. For this exercise, the categories and keywords were developed solely by the researchers through a subjective process.
 
 ```{r clause-type-with-domain-tally, echo=FALSE, message=FALSE, warning=FALSE}
 library(DBI)
@@ -913,11 +913,7 @@ ft
 
 The *Committee on the Status of Endangered Wildlife in Canada* (COSEWIC) assesses the status of wildlife species at risk in Canada, which is the first step in the process of listing a wildlife species under the *Species at Risk Act* (SARA). COSEWIC uses Designatable Units (DUs) to assess units below the level of a recognized taxonomic species if it has attributes that make it both “discrete” and “evolutionarily significant” [@cosewic2023]. COSEWIC has delineated DUs within Pacific salmon species according to these criteria for the purposes of its status assessments of these species. When a DU under DFO’s responsibility is designated as Threatened, Endangered, or Extirpated, a DFO-led Recovery Potential Assessment (RPA) process is initiated, which typically includes a threat assessment using the same IUCN-CMP threat classification used in this legislative assessment.
 
-DFO's *Wild Salmon Policy* (WSP) outlines salmon management delineated by Conservation Units (CU), which are defined as: “a group of wild salmon sufficiently isolated from other groups that, if extirpated is very unlikely to recolonize naturally within an acceptable timeframe, such as a human lifetime or a specified number of salmon generations” (Canada 2005). In most cases, DUs and CUs are equivalent with some lumping and splitting for specific populations. Any differences are explained within the RPA documents (\@dfo2022). Since RPA-delineated populations, descriptions, and corresponding threats are conducted in the context of DUs, we incorporated DUs for the purpose of this study (Table 5).
-
--   **This results in most of the CUs/DUs lining up, except for Interior Fraser Coho (assessed as 1 DU in 2016, 5 CUs currently).**
-
--   **Perhaps something to the effect of, “Since the population structure described through the DU and CU systems largely overlaps for most salmon populations, we attribute the RPA threat assessment results for DUs to their corresponding CUs; however, in a case where a DU is represented by multiple CUs (e.g., interior Fraser Coho) or vice versa, we attributed the overall assessment to each component population”.**
+DFO's *Wild Salmon Policy* (WSP) outlines salmon management delineated by Conservation Units (CU), which are defined as: “a group of wild salmon sufficiently isolated from other groups that, if extirpated is very unlikely to recolonize naturally within an acceptable timeframe, such as a human lifetime or a specified number of salmon generations” (Canada 2005). In most cases, DUs and CUs are equivalent with some lumping and splitting for specific populations. Any differences are explained within the RPA documents [@dionne2023; @doutaz2020; @mahony2019; @arbeider2020; @doutaz2023; @dfo2019]. Since RPA-delineated populations, descriptions, and corresponding threats are conducted in the context of DUs, we incorporated DUs for the purpose of this study . We only included salmon populations with published RPAs (Table \@ref(tab:du-species-du-name-table)), and only RPA processes that used comparable IUCN-CMP threat categories. For example, Sakinaw Lake sockeye had an RPA published in 2019, but used a "limiting factor" analysis [@ramshaw2019], which did not align with this analysis.
 
 ```{r du-species-du-name-table, message=FALSE, warning=FALSE, echo=FALSE}
 library(DBI)
@@ -954,19 +950,13 @@ ft <- flextable(du_display) %>%
 ft
 ```
 
--   **DG - I suggest adding a column that has the RPA citation that covers each group of DUs, since I don’t see the RPAs cited anywhere else.**
+<br>
 
--   **DG - For consideration: mapping the CUs to their corresponding DUs in this table. The STREAM platform has a crosswalk for this.**
+The RPA process identified two IUCN-CMP threat categories as being "Extreme" or "Extreme-High" ranking (Figure \@ref(fig:du-ranking-heatmap)). "10.1 Geological Events" received an extreme ranking, and "7.2 Dams & Water Management / Use" received an extreme-high ranking.
 
--   **DG - Following that train of thought, I think a more appropriate caption for this table would be: Designatable Units included in DFO’s Recovery Potential Assessment analyses and their corresponding Conservation Units**
+-   **Dan - thanks for pointing out DU14 and "7.3 Other ecosystem modifications." This confused me for a bit. So... the table in Dionne 2023 (<https://publications.gc.ca/collections/collection_2020/mpo-dfo/fs70-6/Fs70-6-2020-023-eng.pdf>) shows an Extreme-High ranking for "Natural systems modifications (Water management, ecosystems modifications)." That's the only place I could figure out where the "7.3 Other ecosystem modifications" might have come from. But the IUCN - CMP Direct Threats Classification 4.0 doesn't have a "7.3 Other ecosystem modifications," that category is now split; though, "7.3 Earth & Sediment Management" would apply to Bessette. However, earlier in Dionne 2023, they say that: "Water extraction is of particular concern for DU14 (STh-Bessette), which spawn in a drought-sensitive system in an area of extensive water extraction. Agricultural water use creates low summer flows and high stream temperatures to the point where fish kills have been recorded. The town of Lumby is a large contributor to groundwater extraction for the surrounding area, and water demands are expected to increase in the future. Due to the deficit of water caused by anthropogenic activities this threat was deemed to have a high to extreme level of impact on this population." This is why I thought that this threat assessment applied to "7.2 Dams & Water Management / Use," which includes "dam construction, dam operations, levees and dikes, channelization, highway culverts... surface water withdrawals, groundwater pumping..." I've also done juvenile Chinook surveys in Bessette years ago, and this description matches my experience of Bessette Creek. Does that sound correct? Did I miss something, or is there another document I'm missing? It's great that I double-check these specifics! Thanks for reading more deeply into this!**
 
--   **DG - I think it would be worth mentioning how this selection of RPAs done. My understanding is that it only included RPAs that conducted threat assessments following the IUCN threat categories. My recollection is that the Sakinaw Lake Sockeye RPA didn’t exactly follow it, so it was excluded from your analysis. Is this correct?**
-
-The RPA process identified two IUCN threat categories as being "Extreme" or "Extreme-High" ranking (Figure \@ref(fig:cu-ranking-heatmap)). "10.1 Geological Events " received an extreme ranking, and "7.2 Dams & Water Management / Use" received an extreme-high ranking.
-
--   **DG - Did you use the main threat tables in the body of the RPAs? Chinook DU14 also received a High-Extreme threat risk for 7.3 Other ecosystem modifications**
-
-```{r cu-ranking-heatmap, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6, fig.cap="Conservation Unit count across IUCN threat categories and RPA threat rankings. Darker cells indicate more Conservation Units assessed at that threat level."}
+```{r du-ranking-heatmap, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6, fig.cap="Threat ranking categories by IUCN-CMP threat categories for Designatable Units of Pacific salmon assessed through the Recovery Potential Assessment process."}
 # Load libraries
 library(here)
 library(data.table)
@@ -987,7 +977,7 @@ dbDisconnect(conn)
 cu_ranking <- cu_ranking[
   !is.na(rpa_threat_ranking) & rpa_threat_ranking != "" &
   !is.na(iucn_l2) & iucn_l2 != "" &
-  !is.na(cu_index) & cu_index != "" &
+  !is.na(du_name) & du_name != "" &
   !is.na(ranking_id)
 ]
 
@@ -998,16 +988,42 @@ cu_ranking[, ranking_id := as.numeric(ranking_id)]
 ordered_levels <- cu_ranking[order(ranking_id), unique(rpa_threat_ranking)]
 cu_ranking[, rpa_threat_ranking := factor(rpa_threat_ranking, levels = ordered_levels)]
 
-# Aggregate unique cu_index count by combination
-heatmap_data <- cu_ranking[, .(unique_cu_count = uniqueN(cu_index)), by = .(rpa_threat_ranking, iucn_l2)]
+# Extract leading numbers from iucn_l2 for natural sorting
+iucn_levels <- unique(cu_ranking$iucn_l2)
+extract_sort_key <- function(x) {
+  match <- regmatches(x, regexpr("^[0-9]+(\\.[0-9]+)?", x))
+  if (length(match) == 0 || match == "") return(c(Inf, Inf))
+  parts <- as.numeric(unlist(strsplit(match, "\\.")))
+  if (length(parts) == 1) return(c(parts[1], 0))
+  return(c(parts[1], parts[2]))
+}
+sort_keys <- t(sapply(iucn_levels, extract_sort_key))
+iucn_order <- iucn_levels[order(sort_keys[,1], sort_keys[,2])]
+cu_ranking[, iucn_l2 := factor(iucn_l2, levels = iucn_order)]
 
-# Plot heatmap using unique cu_index count as fill
-ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_count)) +
+# Aggregate unique du_name count by combination
+heatmap_data <- cu_ranking[, .(unique_du_count = uniqueN(du_name)), by = .(rpa_threat_ranking, iucn_l2)]
+
+# Define anchor colors for threat rankings
+anchor_colors <- c(
+  "Negligible" = "#FFFFCC",
+  "Low" = "#FAF49A",
+  "Medium" = "#FFD129",
+  "High" = "#F75532",
+  "Extreme" = "#971C2A"
+)
+
+# Create interpolated color palette for all levels
+n_levels <- length(ordered_levels)
+color_ramp <- colorRampPalette(anchor_colors)(n_levels)
+names(color_ramp) <- ordered_levels
+
+# Plot heatmap with fill by ranking
+ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = rpa_threat_ranking)) +
   geom_tile(color = "white", linewidth = 0.5) +
-  scale_fill_gradient(
-    low = "#A9E4D4",
-    high = "#76948C",
-    name = "CU Count"
+  scale_fill_manual(
+    values = color_ramp,
+    guide = "none"
   ) +
   labs(
     x = "IUCN Threat (Level 2)",
@@ -1028,15 +1044,13 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = unique_cu_c
   )
 ```
 
--   **DG - It looks like the x-axis is organized alphabetically, causing some of the threats in categories 10 and 11 to be up at the top.**
+-   Dan - the heatmap chart no longer shows a count for the number of DUs, it just lists the threat rankings available. I think
 
 -   **DG - Certain threat categories (e.g., pathogens) were only assessed in select RPAs (in this case, Interior Fraser Coho I think), which would bias the CU count. I think it would make the analysis more standardized if there was a common subset of threats assessed within each RPA that was chosen.**
 
-## Case Study: IUCN 10.1 Geological events
+## Case Study: IUCN-CMP "10.1 Geological events"
 
-One IUCN threat was assessed as “Extreme” through DFO Recovery Potential Assessment processes, which was “10.1 Geological Events” [doutaz2020; @dfo2022]. This threat was assigned to one sockeye and three Chinook conservation units (Table \@ref(tab:cu-extreme-threat-table)), all in the Fraser Interior area related to the “ongoing effects from Big Bar landslide” in 2018 [doutaz2020; @dfo2022]:
-
--   **DG - Suggest using IUCN-CMP throughout if that’s what we’re starting with.**
+One IUCN-CMP threat was assessed as “Extreme” through DFO Recovery Potential Assessment processes, which was “10.1 Geological Events” [@doutaz2020; @dfo2022]. This threat was assigned to one sockeye and three Chinook conservation units (Table \@ref(tab:cu-extreme-threat-table)), all in the Fraser Interior area related to the “ongoing effects from Big Bar landslide” in 2018 [@doutaz2020; @dfo2022]:
 
 -   **DG - I’m not super familiar with the most recent version of the IUCN-CMP threat classification framework that you’re using in this analysis, but in the RPAs, Geological events is “10” and is a first-level threat, and Avalanches/landslides is “10.1” and is a second-level threat.**
 
@@ -1082,7 +1096,7 @@ ft
 
 “10.1 Geological events” is not a large category to be assigned to appropriate legislation (Figure \@ref(fig:fig-section-count-by-iucn)). Aside from landscape-scale changes due to actions like forestry or mining, much of the nature of this category might not be viewed as human-caused or managed. Subsequently, this threat has a small proportion of keywords that match the relevant legislation. The "Designation" clause type category matched the largest proportion of clauses that also match "10.1 Geological Events." This is largely due to the designation of avalanche and landslide areas. "Instruction" also had a large proportion of clause type matches due to the nature of forestry legislation and the prevalence of forestry actions to result in landslides. "Prohibition, Restriction, or Limitation" clause types matched the fewest clauses.
 
-```{r fig-clause-type-geological-events, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7, fig.height=5, fig.cap="Section counts by clause type for IUCN threat category 10.1 Geological Events."}
+```{r fig-clause-type-geological-events, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7, fig.height=5, fig.cap="Section counts by clause type for IUCN-CMP threat category 10.1 Geological Events."}
 library(DBI)
 library(RSQLite)
 library(here)
@@ -1163,9 +1177,9 @@ if (!file.exists(db_path)) {
 
 -   **Comment on the most relevant legislation and why**
 
-## Case Study: IUCN 7.2 Dams & Water Management / Use
+## Case Study: IUCN-CMP 7.2 Dams & Water Management / Use
 
-One IUCN threat was assessed as “Extreme-High” through DFO Recovery Potential Assessment processes, which was “7.2 Dams & Water Management / Use” [doutaz2020]. Water extraction, including groundwater, for irrigation and domestic purposes is listed as the most significant concern [doutaz2020]. This threat was assigned to one Chinook conservation unit in the Fraser Interior area (Table \@ref(tab:cu-extreme-high-threat-table)).
+One IUCN-CMP threat was assessed as “Extreme-High” through DFO Recovery Potential Assessment processes, which was “7.2 Dams & Water Management / Use” [doutaz2020]. Water extraction, including groundwater, for irrigation and domestic purposes is listed as the most significant concern [doutaz2020]. This threat was assigned to one Chinook conservation unit in the Fraser Interior area (Table \@ref(tab:cu-extreme-high-threat-table)).
 
 -   **DG - And 7.3 Other ecosystem modifications**
 
@@ -1213,9 +1227,9 @@ ft
 
 -   **DG - This made me think that there was going to be a citation at the end of this sentence. Is this statement based on the present analysis? If so, then perhaps something to the effect of “this analysis suggests that watercourse alternations are one of the top…”**
 
-The clause type matches for Dams and Water Management / Use were much more evenly distributed likely due to the large number of clause matches in total for that IUCN threat category. "Interpretation & Purpose" matched the most clauses (includes Definition sections), while "Administration, Application, & Structure" matched the fewest clauses followed by "Prohibition, Restriction, or Limitation."
+The clause type matches for Dams and Water Management / Use were much more evenly distributed likely due to the large number of clause matches in total for that IUCN-CMP threat category. "Interpretation & Purpose" matched the most clauses (includes Definition sections), while "Administration, Application, & Structure" matched the fewest clauses followed by "Prohibition, Restriction, or Limitation."
 
-```{r fig-clause-type-water-use, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7, fig.height=5, fig.cap="Section counts by clause type for IUCN threat category 7.2 Dams & Water Management / Use."}
+```{r fig-clause-type-water-use, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7, fig.height=5, fig.cap="Section counts by clause type for IUCN-CMP threat category 7.2 Dams & Water Management / Use."}
 library(DBI)
 library(RSQLite)
 library(here)
@@ -1319,7 +1333,7 @@ if (!file.exists(db_path)) {
 
 Management domains can overlap within sections and clauses. For example the provincial Land-based Finfish Waste Control Regulation (Environmental Management Act) states in Section 2 that: “The owner of a land-based finfish facility is exempt from section 6 (2) and (3) of the Environmental Management Act with respect to the discharge of wastes from the land-based finfish facility if the owner…” This clause matched appropriately with both the “Aquaculture and Hatcheries” and “Pollution” management domains. Because the matching process allows for multiple keywords to be matched per clause, this method allows for an assessment of co-occurrences and connections between management domains.
 
-The LAPSE keyword matching process allows that multiple management domains (and IUCN threats) can be matched to clauses and sections. This dynamic is not a flaw, but rather a way of showing the complexities of legal language as related to salmon management. For example, Section 7 of the federal Aquaculture Activities Regulations (Fisheries Act) states that: “The owner or the operator of the aquaculture facility must, in depositing a deleterious substance referred to in paragraph 2(a) or (b), take reasonable measures to minimize detriment to fish and fish habitat outside the facility…” Keywords in this clause correctly match to the Pollution, as well as, Aquaculture and Hatcheries management domains. Assigning only one management domain would over-simplify the classification in terms of salmon management as the clause clearly references both aquaculture and pollution. This section could be important for users searching either aquaculture or pollution regulations for a particular watercourse.
+The LAPSE keyword matching process allows that multiple management domains (and IUCN-CMP threats) can be matched to clauses and sections. This dynamic is not a flaw, but rather a way of showing the complexities of legal language as related to salmon management. For example, Section 7 of the federal Aquaculture Activities Regulations (Fisheries Act) states that: “The owner or the operator of the aquaculture facility must, in depositing a deleterious substance referred to in paragraph 2(a) or (b), take reasonable measures to minimize detriment to fish and fish habitat outside the facility…” Keywords in this clause correctly match to the Pollution, as well as, Aquaculture and Hatcheries management domains. Assigning only one management domain would over-simplify the classification in terms of salmon management as the clause clearly references both aquaculture and pollution. This section could be important for users searching either aquaculture or pollution regulations for a particular watercourse.
 
 Domain co-occurrence within sections allows for an interesting study of how management domains overlap (Figure 11). A frequent co-occurrence among management domains doesn’t necessarily represent a relationship in reality, simply the legal framing used to regulate these aspects. The Pollution management domain and Water Use and Watercourse Modifications are in the top four most matched to sections (Figure 4), and expectedly, these domains have the largest number of co-occurrences. Both domains relate generally to the impacts from anthropogenic industrialization and commercial development, which is reflected in the legal language.
 
@@ -1337,7 +1351,7 @@ Pacific salmon stewardship projects (e.g. monitoring, restoration, enhancement, 
 
 -   **DG - I feel as though LAPSE provides practitioners with more than knowledge, but also accessibility and navigability of the legal landscape**
 
-The LAPSE tool provides a novel approach of linking legal language with salmon stewardship categorization by developing management domain categories based on internationally recognized biodiversity threat categories (IUCN threats). The methods developed to identify and match salmon management keywords and keyphrases to clauses allow for multiple outputs and opportunities including: an extensive list of legislation (acts, regulations, sections, and paragraphs) relevant to a human activity or salmon stewardship decisions; assessment of the nature or context of the statute (clause type) by management domain and threat; assessment of the overlap and connectedness in management domains (co-occurrence) to better understand the relationship between salmon threats in legislation. While this process and tool are relatively new and untested, further development could lead to a better integration of salmon stewardship decisions and administrative responsibility.
+The LAPSE tool provides a novel approach of linking legal language with salmon stewardship categorization by developing management domain categories based on internationally recognized biodiversity threat categories (IUCN-CMP threats). The methods developed to identify and match salmon management keywords and keyphrases to clauses allow for multiple outputs and opportunities including: an extensive list of legislation (acts, regulations, sections, and paragraphs) relevant to a human activity or salmon stewardship decisions; assessment of the nature or context of the statute (clause type) by management domain and threat; assessment of the overlap and connectedness in management domains (co-occurrence) to better understand the relationship between salmon threats in legislation. While this process and tool are relatively new and untested, further development could lead to a better integration of salmon stewardship decisions and administrative responsibility.
 
 # References
 
