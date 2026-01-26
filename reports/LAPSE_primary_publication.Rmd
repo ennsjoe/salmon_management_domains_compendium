@@ -822,7 +822,7 @@ ggplot(summary_data, aes(
   )
 ```
 
-# Clause types as legislative factors
+## Clause types as legislative factors
 
 The process of parsing legislation by clause and section, then matching categories by keywords also allows for other possible categorizations. Similar to management domains and IUCN threats, the nature of the clauses was also matched in terms of the “clause type” (Table \@ref(tab:clause-type-with-domain-tally)). Clauses, in general, fit into groupings by their context and the nature of their intent. For this exercise, the categories and keywords were developed solely by the researchers through a subjective process.
 
@@ -832,11 +832,9 @@ library(RSQLite)
 library(here)
 library(data.table)
 library(flextable)
-
 # Connect to database
 db_path <- file.path(here("output"), "legislation.db")
 conn <- dbConnect(SQLite(), dbname = db_path)
-
 # Get Management Domain and Clause Type labels
 label_data <- data.table(dbGetQuery(conn, "
   SELECT paragraph_id, label_type, label_value
@@ -844,53 +842,39 @@ label_data <- data.table(dbGetQuery(conn, "
   WHERE label_type IN ('Management Domain', 'Clause Type') 
     AND label_value IS NOT NULL
 "))
-
 # Load paragraph metadata
 paragraph_meta <- data.table(dbGetQuery(conn, "
   SELECT paragraph_id, Section, legislation_id
   FROM LegislationParagraphs
   WHERE Section IS NOT NULL
 "))
-
 dbDisconnect(conn)
-
 # Extract Management Domain and Clause Type labels separately
 domain_labels <- label_data[label_type == 'Management Domain', .(paragraph_id, management_domain = label_value)]
 clause_labels <- label_data[label_type == 'Clause Type', .(paragraph_id, clause_type = label_value)]
-
 # Merge to get paragraphs with both labels
 merged_labels <- merge(domain_labels, clause_labels, by = "paragraph_id", allow.cartesian = TRUE)
-
 # Merge with paragraph metadata
 merged <- merge(merged_labels, paragraph_meta, by = "paragraph_id", all.x = TRUE)
-
 # Create unique section identifier
 merged[, section_key := paste(legislation_id, Section, sep = "_")]
-
 # Count unique sections by management domain and clause type
 crosstab <- merged[, .(Sections = uniqueN(section_key)), by = .(management_domain, clause_type)]
-
 # Pivot to wide format
 crosstab_wide <- dcast(crosstab, management_domain ~ clause_type, value.var = "Sections", fill = 0)
-
 # Rename first column for display
 setnames(crosstab_wide, "management_domain", "Management Domain")
-
 # Calculate row totals
 clause_cols <- setdiff(names(crosstab_wide), "Management Domain")
 crosstab_wide[, Total := rowSums(.SD), .SDcols = clause_cols]
-
 # Order by Total descending
 crosstab_wide <- crosstab_wide[order(-Total)]
-
 # Calculate column totals
 total_row <- crosstab_wide[, lapply(.SD, sum), .SDcols = c(clause_cols, "Total")]
 total_row[, `Management Domain` := "Total"]
 setcolorder(total_row, names(crosstab_wide))
-
 # Append total row
 crosstab_wide <- rbind(crosstab_wide, total_row)
-
 # Abbreviate long column names to save space
 names(crosstab_wide) <- gsub("Administration, Application, & Structure", "Admin.", names(crosstab_wide))
 names(crosstab_wide) <- gsub("Authorization & Mandate", "Auth.", names(crosstab_wide))
@@ -899,45 +883,43 @@ names(crosstab_wide) <- gsub("Instruction", "Instr.", names(crosstab_wide))
 names(crosstab_wide) <- gsub("Interpretation & Purpose", "Interp.", names(crosstab_wide))
 names(crosstab_wide) <- gsub("Licence, Permitting, & Exemptions", "Licence", names(crosstab_wide))
 names(crosstab_wide) <- gsub("Prohibition, Restriction, or Limitation", "Prohib.", names(crosstab_wide))
-
 # Create flextable for Word output
 ft <- flextable(crosstab_wide) %>%
   # Reduce font size to fit
-
   fontsize(size = 9, part = "all") %>%
   fontsize(size = 8, part = "header") %>%
   # Bold formatting
-
   bold(part = "header") %>%
   bold(i = nrow(crosstab_wide), part = "body") %>%
   # Add line above total row
-
   hline(i = nrow(crosstab_wide) - 1, border = officer::fp_border(width = 1)) %>%
   # Alignment
-
   align(j = 2:ncol(crosstab_wide), align = "center", part = "all") %>%
   align(j = 1, align = "left", part = "body") %>%
   # Fit to page width
   set_table_properties(width = 1, layout = "autofit") %>%
-  # Set caption
-  set_caption("Section counts by management domain and clause type. Column abbreviations: Admin. = Administration, Application, & Structure; Auth. = Authorization & Mandate; Desig. = Designation; Instr. = Instruction; Interp. = Interpretation & Purpose; Licence = Licence, Permitting, & Exemptions; Prohib. = Prohibition, Restriction, or Limitation.")
+  # Set caption (simplified)
+  set_caption("Section counts by management domain and clause type.") %>%
+  # Add footnote with abbreviations
+  add_footer_lines("Abbreviations: Admin. = Administration, Application, & Structure; Auth. = Authorization & Mandate; Desig. = Designation; Instr. = Instruction; Interp. = Interpretation & Purpose; Licence = Licence, Permitting, & Exemptions; Prohib. = Prohibition, Restriction, or Limitation.") %>%
+  # Format the footer
+  fontsize(size = 8, part = "footer") %>%
+  italic(part = "footer")
 
 ft
 ```
-
-\
 
 # Recovery potential assessments (RPA) and threat ranking case studies
 
 The *Committee on the Status of Endangered Wildlife in Canada* (COSEWIC) assesses the status of wildlife species at risk in Canada, which is the first step in the process of listing a wildlife species under the *Species at Risk Act* (SARA). COSEWIC uses Designatable Units (DUs) to assess units below the level of a recognized taxonomic species if it has attributes that make it both “discrete” and “evolutionarily significant” [@cosewic2023]. COSEWIC has delineated DUs within Pacific salmon species according to these criteria for the purposes of its status assessments of these species. When a DU under DFO’s responsibility is designated as Threatened, Endangered, or Extirpated, a DFO-led Recovery Potential Assessment (RPA) process is initiated, which typically includes a threat assessment using the same IUCN-CMP threat classification used in this legislative assessment.
 
-DFO published ***Canada’s Policy for Conservation of Wild Pacific Salmon*****, or the Wild Salmon Policy (WSP)**, in 2005, which outlines managing salmon as Conservation Units (CU), differing somewhat from the DUs used by COSEWIC. Conservation Units are defined in the WSP as: “a group of wild salmon sufficiently isolated from other groups that, if extirpated is very unlikely to recolonize naturally within an acceptable timeframe, such as a human lifetime or a specified number of salmon generations” (Canada 2005). Since CUs are the most current unit for managing salmon in British Columbia, we incorporated CUs in this effort (Table 5).
+DFO's *Wild Salmon Policy* (WSP) outlines salmon management delineated by Conservation Units (CU), which are defined as: “a group of wild salmon sufficiently isolated from other groups that, if extirpated is very unlikely to recolonize naturally within an acceptable timeframe, such as a human lifetime or a specified number of salmon generations” (Canada 2005). In most cases, DUs and CUs are equivalent with some lumping and splitting for specific populations. Any differences are explained within the RPA documents (\@dfo2022). Since RPA-delineated populations, descriptions, and corresponding threats are conducted in the context of DUs, we incorporated DUs for the purpose of this study (Table 5).
 
--   **DG - The COSEWIC status assessments for Pacific salmon have a good discussion of the similarities and differences between DUs and CUs. In my view, there are more similarities than differences, and this sentence seems to frame the two as being different.**
+-   **This results in most of the CUs/DUs lining up, except for Interior Fraser Coho (assessed as 1 DU in 2016, 5 CUs currently).**
 
--   **DG - The RPAs were conducted with respect to DUs, since it is a part of the DFO SARA listing process. What this paragraph may be lacking is a discussion of how the salmon DUs were derived, partly based on the CUs DFO had already described. This results in most of the CUs/DUs lining up, except for Interior Fraser Coho (assessed as 1 DU in 2016, 5 CUs currently). Perhaps something to the effect of, “Since the population structure described through the DU and CU systems largely overlaps for most salmon populations, we attribute the RPA threat assessment results for DUs to their corresponding CUs; however, in a case where a DU is represented by multiple CUs (e.g., interior Fraser Coho) or vice versa, we attributed the overall assessment to each component population”.**
+-   **Perhaps something to the effect of, “Since the population structure described through the DU and CU systems largely overlaps for most salmon populations, we attribute the RPA threat assessment results for DUs to their corresponding CUs; however, in a case where a DU is represented by multiple CUs (e.g., interior Fraser Coho) or vice versa, we attributed the overall assessment to each component population”.**
 
-```{r cu-species-cu-name-table, message=FALSE, warning=FALSE, echo=FALSE}
+```{r du-species-du-name-table, message=FALSE, warning=FALSE, echo=FALSE}
 library(DBI)
 library(RSQLite)
 library(data.table)
@@ -948,28 +930,27 @@ library(flextable)
 db_path <- file.path(here("output"), "legislation.db")
 conn <- dbConnect(SQLite(), dbname = db_path)
 
-# Query and filter the data
-cu_data <- as.data.table(dbReadTable(conn, "cu_ranking"))
-filtered_cu <- cu_data[!is.na(rpa_threat_ranking) & rpa_threat_ranking != "", .(cu_species, cu_name)]
-unique_cu <- unique(filtered_cu)
+# Query the du_list table
+du_data <- as.data.table(dbReadTable(conn, "du_list"))
 
 # Disconnect
 dbDisconnect(conn)
 
-# Order by species then by CU name
-unique_cu <- unique_cu[order(cu_species, cu_name)]
+# Order by species, then by DU name
+du_data <- du_data[order(species, du_name)]
+
+# Select columns for display
+du_display <- du_data[, .(species, du_name, rpa_citation)]
 
 # Rename columns for display
-setnames(unique_cu, c("cu_species", "cu_name"), c("Species", "Conservation Unit"))
+setnames(du_display, c("species", "du_name", "rpa_citation"), c("Species", "Designatable Unit", "RPA Reference"))
 
 # Create flextable for Word output
-ft <- flextable(unique_cu) %>%
+ft <- flextable(du_display) %>%
   bold(part = "header") %>%
-  align(j = 1, align = "left", part = "all") %>%
-  align(j = 2, align = "left", part = "all") %>%
+  align(j = 1:3, align = "left", part = "all") %>%
   set_table_properties(width = 1, layout = "autofit") %>%
-  set_caption("Conservation Units included in the DFO Recovery Potential Assessment analyses.")
-
+  set_caption("Designatable Units included in the DFO Recovery Potential Assessment analyses.")
 ft
 ```
 

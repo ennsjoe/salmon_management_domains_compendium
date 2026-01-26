@@ -4,21 +4,23 @@
 # Date Created: 2025-08-26
 # Last Modified: 2025-01-XX
 # Purpose / Description:
-#   Loads supporting data tables (agencies, conservation units, legislation URLs, 
-#   and actionable clause keywords) into the SQLite database for use in analysis 
-#   and reporting.
+#   Loads supporting data tables (agencies, conservation units, designatable units,
+#   legislation URLs, and actionable clause keywords) into the SQLite database 
+#   for use in analysis and reporting.
 # Dependencies: DBI, RSQLite, data.table, here, beepr
 # Execution: Run in RStudio or via Rscript; ensure working directory is project root
 # Inputs: 
 #   - CSV files in "data/" directory:
 #     * agencies.csv
 #     * cu_ranking.csv
+#     * du_list.csv
 #     * legislation_url.csv
 #     * actionable_clause_keywords.csv
 # Outputs:
-#   - Updates SQLite database "output/legislation.db" with four tables:
+#   - Updates SQLite database "output/legislation.db" with five tables:
 #     * agencies
 #     * cu_ranking
+#     * du_list
 #     * legislation_url
 #     * actionable_clause_keywords
 ################################################################################
@@ -32,6 +34,7 @@ library(beepr)
 ## Define file paths ----
 agencies_path <- here("data", "agencies.csv")
 cu_ranking_path <- here("data", "cu_ranking.csv")
+du_list_path <- here("data", "du_list.csv")
 legislation_url_path <- here("data", "legislation_url.csv")
 actionable_clause_keywords_path <- here("data", "actionable_clause_keywords.csv")
 
@@ -63,6 +66,9 @@ cat("  agencies:", nrow(agencies), "rows\n")
 cu_ranking <- read_csv_clean(cu_ranking_path)
 cat("  cu_ranking:", nrow(cu_ranking), "rows\n")
 
+du_list <- read_csv_clean(du_list_path)
+cat("  du_list:", nrow(du_list), "rows\n")
+
 legislation_url <- read_csv_clean(legislation_url_path)
 # Clean join column
 if("legislation_name" %in% names(legislation_url)) {
@@ -89,6 +95,9 @@ cat("  ✓ agencies table saved\n")
 
 dbWriteTable(conn, "cu_ranking", cu_ranking, overwrite = TRUE)
 cat("  ✓ cu_ranking table saved\n")
+
+dbWriteTable(conn, "du_list", du_list, overwrite = TRUE)
+cat("  ✓ du_list table saved\n")
 
 dbWriteTable(conn, "legislation_url", legislation_url, overwrite = TRUE)
 cat("  ✓ legislation_url table saved\n")
