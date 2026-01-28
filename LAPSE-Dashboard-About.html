@@ -186,94 +186,44 @@
             font-size: 1.3rem;
         }
         
-        .feature-list {
-            list-style: none;
-            margin: 1rem 0;
-        }
-        
-        .feature-list li {
-            padding: 0.75rem 0;
-            padding-left: 2rem;
-            position: relative;
-        }
-        
-        .feature-list li:before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: #668899;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        
         .numbered-steps {
-            counter-reset: step-counter;
-            list-style: none;
-            margin: 1rem 0;
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
         }
         
         .numbered-steps li {
-            counter-increment: step-counter;
-            padding: 1rem;
-            margin: 0.5rem 0;
-            background-color: #f8f9fa;
-            border-left: 4px solid #668899;
-            position: relative;
-            padding-left: 3.5rem;
+            margin-bottom: 0.75rem;
+            padding-left: 0.5rem;
         }
         
-        .numbered-steps li:before {
-            content: counter(step-counter);
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: #668899;
-            color: white;
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
+        .feature-list {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-list li {
+            margin-bottom: 0.5rem;
         }
         
         .tip-box {
             background-color: #e8f4f8;
             border-left: 4px solid #668899;
-            padding: 1rem 1rem 1rem 3rem;
+            padding: 1rem;
             margin: 1.5rem 0;
-            position: relative;
-        }
-        
-        .tip-box:before {
-            content: "💡";
-            position: absolute;
-            left: 1rem;
-            top: 1rem;
-            font-size: 1.5rem;
+            border-radius: 0 4px 4px 0;
         }
         
         .warning-box {
-            background-color: #fff3cd;
+            background-color: #fdf2f2;
             border-left: 4px solid #996666;
-            padding: 1rem 1rem 1rem 3rem;
+            padding: 1rem;
             margin: 1.5rem 0;
-            position: relative;
-        }
-        
-        .warning-box:before {
-            content: "⚠️";
-            position: absolute;
-            left: 1rem;
-            top: 1rem;
-            font-size: 1.5rem;
+            border-radius: 0 4px 4px 0;
         }
         
         .app-container {
             background: white;
-            padding: 1rem;
+            padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             margin-bottom: 2rem;
@@ -282,45 +232,29 @@
         .app-container h2 {
             color: #668899;
             margin-bottom: 1rem;
+            font-size: 1.8rem;
             text-align: center;
         }
         
         .iframe-wrapper {
-            position: relative;
             width: 100%;
-            height: 1200px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            overflow: auto;
+            height: 900px;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
         }
         
         .iframe-wrapper iframe {
-            width: 125%;
-            height: 125%;
+            width: 100%;
+            height: 100%;
             border: none;
-            transform: scale(0.8);
-            transform-origin: top left;
-        }
-        
-        /* Optional: add scrollbar styling */
-        .iframe-wrapper::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .iframe-wrapper::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        
-        .iframe-wrapper::-webkit-scrollbar-thumb {
-            background: #668899;
-            border-radius: 4px;
         }
         
         .footer {
             background-color: #2c3e50;
             color: white;
             padding: 2rem 0;
-            margin-top: 3rem;
+            margin-top: 2rem;
         }
         
         .footer-content {
@@ -331,20 +265,20 @@
         }
         
         .footer p {
-            margin: 0.5rem 0;
+            margin-bottom: 0.5rem;
             opacity: 0.9;
         }
         
         .footer a {
-            color: #668899;
+            color: #88aabb;
             text-decoration: none;
         }
         
         .footer a:hover {
-            color: #7799aa;
             text-decoration: underline;
         }
         
+        /* Responsive Design */
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8rem;
@@ -398,7 +332,7 @@
         <div class="intro-section">
             <h2>Welcome to the LAPSE Dashboard</h2>
             <p>
-                The Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE) Dashboard allows you to explore Canadian federal and British Columbia provincial legislation relevant to Pacific salmon conservation and management. This tool bridges the gap between legal language and natural resource management by mapping legislation to internationally recognized biodiversity threat categories (IUCN threats) through a novel system of management domains which is a framework which links legislation to IUCN threats.
+                The Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE) Dashboard allows you to explore Canadian federal and British Columbian provincial legislation relevant to Pacific salmon stewardship. This tool bridges the gap between legal language and natural resource management by mapping legislation to internationally recognized biodiversity threat categories (IUCN-CMP threats) through a novel system of the management domain framework.
             </p>
             <p>
                 This dashboard allows you to filter and explore legislation by management domain, jurisdiction, and specific acts or regulations—making it easier to understand the regulatory landscape governing Pacific salmon.
@@ -410,9 +344,6 @@
             <div class="action-buttons">
                 <a href="https://ennsjoe.github.io/salmon_management_domains_compendium/LAPSE-Technical-Brief.html" target="_blank" class="btn btn-primary">
                     📄 Read the Full Technical Brief
-                </a>
-                <a href="#" onclick="downloadExcel(); return false;" class="btn btn-secondary">
-                    📊 Download Excel Compendium
                 </a>
                 <a href="https://github.com/ennsjoe/salmon_management_domains_compendium" target="_blank" class="btn btn-outline">
                     💻 View on GitHub
@@ -426,22 +357,25 @@
             
             <h3>Getting Started</h3>
             <ol class="numbered-steps">
-                <li><strong>Select a Management Domain</strong> - On the left sidebar, click on a management domain (e.g., Fisheries, Pollution, Water Use) to filter legislation by that topic. Click "All" to reset.</li>
+                <li><strong>Select a Management Domain</strong> - On the left sidebar, click on a management domain (e.g., Spatial Designation, Pollution, Fisheries) to filter legislation by that topic. Each domain shows the number of relevant sections in brackets. Click "All Domains" to reset.</li>
                 <li><strong>Filter by Jurisdiction</strong> - Use the toggle buttons to view Federal, Provincial, or All legislation.</li>
-                <li><strong>Search for Keywords</strong> - Enter a word or phrase in the search box to find specific content across all legislation. Use the backspace button to clear your search.</li>
-                <li><strong>Select Legislation</strong> - Choose a specific Act from the dropdown menu, then optionally select a Regulation under that Act.</li>
+                <li><strong>Search for Keywords</strong> - Enter a word or phrase in the Search Keywords box to find specific content across all legislation.</li>
+                <li><strong>Select Legislation</strong> - Choose a specific Act from the dropdown menu, then optionally select a Regulation, Code, or Order under that Act.</li>
+                <li><strong>Apply Clause Filters</strong> - Use the Clause Filters panel on the right to narrow results by Clause Type, Actionable Type, Responsible Official, or Discretion Type.</li>
                 <li><strong>Explore Sections</strong> - Click on any section to expand it and read the full legislative text. Keywords will be highlighted for easy reference. Keywords highlighted in red are associated with <em>IUCN Threats</em>, while keywords highlighted in blue are associated with <em>Clause Types</em>.</li>
             </ol>
             
             <h3>Key Features</h3>
             <ul class="feature-list">
-                <li><strong>Management Domains:</strong> 14 categories representing administrative responsibilities for Pacific salmon (e.g., Aquaculture, Climate Change, Fisheries, Forest and Range, Mining and Energy, Spatial Designation, etc.)</li>
+                <li><strong>Management Domains:</strong> Categories representing administrative responsibilities for Pacific salmon (e.g., Spatial Designation, Pollution, Water Use and Watercourse Modifications, Fisheries, Governance Administration, Restoration, Species Status and Assessment, Forest and Range, Transportation Infrastructure, Invasive or Problematic Species and Disease, and more)</li>
                 <li><strong>Dual Jurisdiction View:</strong> Toggle between Federal and Provincial legislation, or view both simultaneously</li>
                 <li><strong>Keyword Search:</strong> Full-text search across all collected legislation with highlighted matches</li>
-                <li><strong>Hierarchical Navigation:</strong> Browse by Act, then drill down to specific Regulations</li>
-                <li><strong>Interactive Visualizations:</strong> View keyword frequency, IUCN threat co-occurrence, and clause type distribution for your selected filters</li>
+                <li><strong>Hierarchical Navigation:</strong> Browse by Act, then drill down to specific Regulations, Codes, or Orders</li>
+                <li><strong>Clause Filters:</strong> Filter results by Clause Type, Actionable Type, Responsible Official, and Discretion Type</li>
+                <li><strong>Interactive Visualizations:</strong> Toggle between Keywords, IUCN threats, and Clause Type views to see distributions for your selected filters</li>
                 <li><strong>Collapsible Sections:</strong> Expand only the sections you want to read for a cleaner viewing experience</li>
                 <li><strong>Direct Links:</strong> Click "View Full Legislation" to access the complete official text on government websites</li>
+                <li><strong>Data Export:</strong> Download filtered results as an XLSX file using the Download button in the Results & Visualizations panel</li>
             </ul>
             
             <div class="tip-box">
@@ -449,19 +383,20 @@
             </div>
             
             <h3>Understanding the Visualizations</h3>
+            <p>Toggle between three visualization types in the Results & Visualizations panel:</p>
             <ul class="feature-list">
-                <li><strong>Keyword Frequency:</strong> Shows the top 10 most common keywords in your filtered results, helping you understand the main themes</li>
-                <li><strong>IUCN Threat Co-occurrence:</strong> Displays which IUCN threat categories appear in your selected management domain or legislation</li>
-                <li><strong>Clause Type Distribution:</strong> Shows the relationship between management domains and clause types (e.g., prohibitions, definitions, penalties)</li>
+                <li><strong>Keywords:</strong> Shows the most common keywords in your filtered results, helping you understand the main themes</li>
+                <li><strong>IUCN:</strong> Displays which IUCN threat categories appear in your selected management domain or legislation</li>
+                <li><strong>Clause Type:</strong> Shows the distribution of clause types (e.g., prohibitions, definitions, penalties) in your selection</li>
             </ul>
             
-            <h3>Scope Classification</h3>
-            <p>Legislation in LAPSE is classified by how directly it applies to Pacific salmon:</p>
+            <h3>Clause Filters</h3>
+            <p>Refine your search using the Clause Filters panel:</p>
             <ul class="feature-list">
-                <li><strong>1 - Salmon:</strong> Explicitly mentions Pacific salmon species (Chinook, Sockeye, etc.)</li>
-                <li><strong>2 - Fish:</strong> Refers to fish that include salmon</li>
-                <li><strong>3 - Habitat:</strong> Refers to habitat that includes salmon habitat</li>
-                <li><strong>4 - Governance:</strong> Administrative processes and structures</li>
+                <li><strong>Clause Type:</strong> Filter by the type of legal clause (e.g., prohibition, requirement, definition)</li>
+                <li><strong>Actionable Type:</strong> Filter by the nature of the action described</li>
+                <li><strong>Responsible Official:</strong> Filter by which official or authority is responsible</li>
+                <li><strong>Discretion Type:</strong> Filter by the level of discretion granted in the legislation</li>
             </ul>
             
             <div class="warning-box">
@@ -480,10 +415,6 @@
                     🔗 Open Full Dashboard in New Tab
                 </a>
             </p>
-            
-            <div class="warning-box" style="margin-bottom: 1rem;">
-                <strong>Can't view the dashboard?</strong> If the interactive app below isn't loading or displaying properly, you can <a href="#" onclick="downloadExcel(); return false;" style="color:#996666; font-weight:600; text-decoration: underline;">download the Excel compendium</a> for offline access to all the legislative data.
-            </div>
             
             <div class="iframe-wrapper">
                 <iframe src="https://ennsjoe.github.io/LAPSE_dashboard/" 
@@ -514,24 +445,12 @@
         <div class="footer-content">
             <p><strong>Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE)</strong></p>
             <p>Authors: Joe Enns, Cory Lagasse</p>
-            <p>Last Updated: November 2025</p>
+            <p>Last Updated: January 2026</p>
             <p>
                 <a href="https://github.com/ennsjoe/salmon_management_domains_compendium">GitHub Repository</a> | 
                 <a href="https://ennsjoe.github.io/salmon_management_domains_compendium/LAPSE-Technical-Brief.html">Technical Brief</a>
             </p>
         </div>
     </div>
-    
-    <script>
-        // Function to download Excel file
-        function downloadExcel() {
-            const link = document.createElement('a');
-            link.href = 'output/LAPSE_full_compendium.xlsx';
-            link.download = 'output/LAPSE_full_compendium.xlsx';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    </script>
 </body>
 </html>
