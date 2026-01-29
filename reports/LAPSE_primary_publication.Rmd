@@ -1095,7 +1095,7 @@ ft
 
 <br>
 
-The Big Bar landslide on the Fraser River in 2018 was a significant event that impacted approximately 80% of the Fraser salmon stocks [@doutaz2023]. The blockage created a massive impediment to returning adult salmon, and occurred in a narrow and remote reach of the Fraser River where few options for mitigation were available. Landslides, in general, can occur naturally, but the severity and frequency can also be exacerbated by human activities [@doutaz2023] such as landscape-scale changes and climate change. This indirect connection to human activities means that “10.1 Geological Events” is not a large category to be matched with regulation (Figure \@ref(fig:fig-section-count-by-iucn)).
+The Big Bar landslide on the Fraser River in 2018 was a significant event that impacted approximately 80% of the Fraser salmon stocks [@doutaz2023]. The blockage created a massive impediment to returning adult salmon, and occurred in a narrow and remote reach of the Fraser River where few options for mitigation were available. Landslides, in general, can occur naturally, but the severity and frequency can also be exacerbated by human activities such as landscape-scale changes and climate change [@doutaz2023]. This indirect connection to human activities means that “10.1 Geological Events” is not a large category to be matched with regulation. The LAPSE process and tool matched eight pieces of federal and provincial legislation specific to "10.1 Geological Events" (Figure \@ref(fig:fig-section-count-by-iucn)), largely related to forestry.
 
 ```{r section-count-iucn-geological, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6, fig.cap="Count of sections by legislation for IUCN threat category '10.1 Geological Events', coloured by jurisdiction."}
 # Load libraries
@@ -1177,7 +1177,7 @@ ggplot(summary_data, aes(
   )
 ```
 
-The "Designation" clause type category matched the largest proportion of clauses that also match "10.1 Geological Events." This is largely due to the designation of avalanche and landslide areas. "Instruction" also had a large proportion of clause type matches due to the nature of forestry legislation and the prevalence of forestry actions to result in landslides. "Prohibition, Restriction, or Limitation" clause types matched the fewest clauses.
+Users of the LAPSE process and tool who might be researching geological events such as landslides can get a list of possibly relevant legislation and will see that this legislation is tied to forestry in British Columbia. As well, the user can see that the nature of the clauses are mostly "Instruction" and "Designation" (Figure \@ref(fig:fig-clause-type-geological-events)). The provincial *Forest Planning and Practices Regulation* under the *Forest and Range Practices Act* appears as one of the most relevant statutes specific to landslides. Examples of matched sections include Section 3, Damage to the environment, which states "(1)For the purpose of section 46 (1) and (1.1) *[protection of the environment]* of the Act, "damage" means any of the following that adversely alters an ecosystem: (a)a landslide..." Section 37, Landslides, states, "An authorized person who carries out a primary forest activity must ensure that the primary forest activity does not cause a landslide that has a material adverse effect in relation to one or more of the subjects listed in section 149 (1) of the Act."
 
 ```{r fig-clause-type-geological-events, echo=FALSE, message=FALSE, warning=FALSE, fig.width=11, fig.height=5, fig.cap="Section counts by clause type and legislation for IUCN-CMP threat category 10.1 Geological Events. Dot size represents section count."}
 library(DBI)
@@ -1302,30 +1302,6 @@ if (!file.exists(db_path)) {
     )
 }
 ```
-
--   **DG - Could be helpful to note the different values on the x-axis between this and the next figure**
-
--   **Comment on the most relevant legislation and why**
-
-This is the outputs of the LAPSE tool and it shows that...
-
-the main legislation specific to landslides and salmon is...
-
-And the nature of that legislation is...
-
-**Forest and Range Practices Act**
-
-**Forest Planning and Practices Regulation**
-
-> **Damage to the environment"**
->
-> **3**   (1)For the purpose of section 46 (1) and (1.1) *[protection of the environment]* of the Act, "damage" means any of the following that adversely alters an ecosystem: (a)a landslide...
-
-**Environmental Management Act**
-
-**Environmental emergency measures**
-
-> **87**   (1)In this section and section 88 *[recovery of costs — environmental emergency]*, "environmental emergency" means an occurrence or natural disaster that affects the environment and includes the following: (a)a flood; (b)a landslide...
 
 ## Case Study: IUCN-CMP "7.2 Dams & Water Management / Use"
 
