@@ -88,7 +88,7 @@ The need for collaborative, coordinated action to address Pacific salmon decline
 
 Laws formally codify societal values and expectations [@swerdfager2023] by governing human activity. Salmon population management administered through legislative authority, therefore, relies on a tertiary system where laws control human activity, which impacts the quantity and quality of salmon habitat, which affects the capacity of the habitat to produce salmon. Because this system of control pivots around human activity, we also focused this study and tools around human activity, employing the hierarchical categorization structure developed by the IUCN-CMP. However, not all aspects of salmon management are specific to threats from human activity. Topics such as restoration, species status, spatial designation (parks), and overall governance administration may not connect to a direct human threat, or may encompass all the threats. In order to capture all these threat and non-threat related categories in our legislation-salmonscape interface, we created a schema of "management domains" that we define as "discrete areas of administrative concern."
 
-We developed and outlined the *Legislation Applicable to Pacific Salmon and their Ecosystems* (LAPSE) as a process and tool to parse Canadian federal and British Columbian provincial acts and regulations relevant to Pacific salmon, then use keyword phrase relationships to match clauses (paragraphs) to our management domains and corresponding IUCN threat categories. By creating an extensive, open-source, and accessible database linking legislation to salmon, we aim to facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia, while providing a framework to support systematic and critical reviews of strengths and shortcomings of regulations with respect to salmon threats.
+We developed and outlined the *Legislation Applicable to Pacific Salmon and their Ecosystems* (LAPSE) as a process and tool to parse Canadian federal and British Columbian provincial acts and regulations relevant to Pacific salmon, then use keyword phrase relationships to match clauses (paragraphs) to our management domains and corresponding IUCN-CMP threat categories. By creating an extensive, open-source, and accessible database linking legislation to salmon, we aim to facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia, while providing a framework to support systematic and critical reviews of strengths and shortcomings of regulations with respect to salmon threats.
 
 # Management domains and the International Union for Conservation of Nature- Conservation Measures Partnership threat categories
 
@@ -112,7 +112,7 @@ if (file.exists(image_path)) {
 }
 ```
 
-Lumping and splitting between IUCN-CMP Levels 1 and 2 categories was required to match threats with legislation (Table \@ref(tab:management-domain-threat-table)), which is why the management domain categories were required. For example, aquaculture and hatcheries are important aspects that impact Pacific salmon populations. This topic spans two IUCN-CMP Level 1 categories: 2. Agriculture & Aquaculture and 8. Invasive / Other Problematic Species, Genes & Pathogens, but would be more specifically aligned with the IUCN-CMP Level 2 categories: "2.4 Marine & Freshwater Aquaculture" and "8.3 Introduced Genetic Material." For clarity and better alignment, we created a management domain called "Aquaculture and Hatcheries." A similar misalignment occurs when assessing the provincial "*Forest And Range Practices Act*." Since the management domain categories were derived as close as possible to the IUCN-CMP threat categories (a mix of Level 1 and Level 2), most can be viewed as equivalent.
+Lumping and splitting between IUCN-CMP Levels 1 and 2 categories was required to match threats with legislation (Table \@ref(tab:management-domain-threat-table)), which is why the management domain categories were required. For example, aquaculture and hatcheries are important aspects that impact Pacific salmon populations. This topic spans two IUCN-CMP Level 1 categories: "2. Agriculture & Aquaculture" and "8. Invasive / Other Problematic Species, Genes & Pathogens", but would be more specifically aligned with the IUCN-CMP Level 2 categories: "2.4 Marine & Freshwater Aquaculture" and "8.3 Introduced Genetic Material." For clarity and better alignment, we created a management domain called "Aquaculture and Hatcheries." A similar misalignment occurs when assessing the provincial "*Forest And Range Practices Act*." Since the management domain categories were derived as close as possible to the IUCN-CMP threat categories (a mix of Level 1 and Level 2), most can be viewed as equivalent.
 
 ```{r management-domain-threat-table}
 library(flextable)
@@ -934,8 +934,8 @@ du_data <- as.data.table(dbReadTable(conn, "du_list"))
 # Disconnect
 dbDisconnect(conn)
 
-# Order by species, then by DU name
-du_data <- du_data[order(species, du_name)]
+# Order by species, then by DU number (ascending)
+du_data <- du_data[order(species, as.numeric(du_number))]
 
 # Select columns for display
 du_display <- du_data[, .(species, du_number, du_name, rpa_citation)]
@@ -953,8 +953,6 @@ ft <- flextable(du_display) %>%
 ft
 ```
 
--   **I could add the DU number, too, if you think that might be helpful and appropriate for this audience**
-
 <br>
 
 The RPA process identified two IUCN-CMP threat categories as being "Extreme" or "Extreme-High" ranking (Figure \@ref(fig:du-ranking-heatmap)). "10.1 Geological Events" received an extreme ranking, and "7.2 Dams & Water Management / Use" received an extreme-high ranking. These two categories were chosen to assess the categories as case studies.
@@ -962,7 +960,7 @@ The RPA process identified two IUCN-CMP threat categories as being "Extreme" or 
 -   **Dan - thanks for pointing out DU14 and "7.3 Other ecosystem modifications." This confused me for a bit. So... the table in DFO 2020 shows an "Extreme-High" ranking for "Natural systems modifications (Water management, ecosystems modifications)." That's the only place I could figure out where the "7.3 Other ecosystem modifications" might have come from.**
 -   **In that same report the "Ecosystems Modifications" section says, "Ecosystems modifications that alter catchment surfaces or increase impervious surfaces can have significant effects on stream temperatures and flow regimes. These activities include water extraction, forestry, wildfires, and development from agricultural, industrial, and residential sectors. Impacts of wildfires are similar to forestry as they alter flow and temperature regimes..."**
 -   **In the Water Extraction section it says, "Water extraction for irrigation and livestock can impact FRC through reduced flows in streams, limiting the wetted area of streams, and potentially increasing water temperatures. Groundwater extraction is of particular concern to... Water extraction is of particular concern for DU14 (STh-Bessette), which spawn in a drought-sensitive system in an area of extensive water extraction. Agricultural water use creates low summer flows and high stream temperatures to the point where fish kills have been recorded. The town of Lumby is a large contributor to groundwater extraction for the surrounding area, and water demands are expected to increase in the future. Due to the deficit of water caused by anthropogenic activities this threat was deemed to have a high to extreme level of impact on this population."**
--   **But the IUCN - CMP Direct Threats Classification 4.0 doesn't have a "7.3 Other ecosystem modifications," that category is now split; though, "7.3 Earth & Sediment Management" would apply to Bessette. This is why I thought that this threat assessment applied to "7.2 Dams & Water Management / Use," which includes "dam construction, dam operations, levees and dikes, channelization, highway culverts... surface water withdrawals, groundwater pumping..."**
+-   **But the IUCN - CMP Direct Threats Classification 4.0 doesn't have a "7.3 Other ecosystem modifications," that category is now split. Although, "7.3 Earth & Sediment Management" could apply to Bessette. This is why I thought that this threat assessment applied more to "7.2 Dams & Water Management / Use," which includes "dam construction, dam operations, levees and dikes, channelization, highway culverts... surface water withdrawals, groundwater pumping..."**
 -   **I've also done juvenile Chinook surveys in Bessette years ago, and this description matches my experience of Bessette Creek.**
 -   **Does that sound correct? Did I miss something, or is there another document I'm missing? It's great that I double-check these specifics! Thanks for reading more deeply into this!**
 
@@ -1058,7 +1056,7 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = rpa_threat_
 
 ## Case Study: IUCN-CMP "10.1 Geological Events"
 
-Geologic events, specifically landslides, were assessed as "Extreme" for three DUs of Fraser River Chinook and one DU of Fraser sockeye (Table \@ref(tab:cu-extreme-threat-table)). This ranking was largely due to the significant landslide on the Fraser River near Big Bar, British Columbia in late 2018 that blocked adult salmon upstream migration [@dfo2020; @doutaz2023]. The published RPAs for these populations refer to this threat category as "Avalanches and Landslides" or "Geological events (Landslides)." @dionne2023 references "IUCN-CMP threat category 10.2." However, the most current *IUCN-CMP Direct Threats Classification version 4.0* uses a slightly altered structure [@salafsky2024] where the the Level 2 threat is called "10.1 Geological Events," and avalanches and landslides are listed as examples of these events. We modified the classification of these assessments to fit the newest IUCN-CMP version for consistency.
+Geologic events, specifically landslides, were rated as "Extreme" for three DUs of Fraser River Chinook and one DU of Fraser sockeye (Table \@ref(tab:cu-extreme-threat-table); @dfo2020; @doutaz2023). This ranking was largely due to a monumental landslide on the Fraser River near Big Bar, British Columbia in late 2018 that blocked adult salmon upstream migration [@dfo2020; @doutaz2023]. The published RPAs for these populations refer to this threat category as "Avalanches and Landslides" or "Geological events (Landslides)." @dionne2023 references "IUCN-CMP threat category 10.2." However, the most current *IUCN-CMP Direct Threats Classification version 4.0* uses a slightly altered structure [@salafsky2024] where the the Level 2 threat is called "10.1 Geological Events," and avalanches and landslides are listed as examples of these events. We modified the classification of these assessments to fit the newest IUCN-CMP version for consistency.
 
 ```{r du-extreme-threat-table, message=FALSE, warning=FALSE, echo=FALSE}
 library(DBI)
@@ -1097,7 +1095,7 @@ ft
 
 <br>
 
-The Big Bar landslide on the Fraser River in 2018 was a significant event that impacted approximately 80% of the Fraser salmon stocks [@doutaz2023]. The blockage created a massive impediment to returning adult salmon, and occurred in a narrow and remote reach of the Fraser River where few options for mitigation were available. Landslides, in general, can occur naturally, but the severity and frequency can also be exacerbated indirectly by human activities [@doutaz2023] such as landscape-scale changes and climate change. This disconnection from human activities means that “10.1 Geological Events” is not a large category to be matched with regulation (Figure \@ref(fig:fig-section-count-by-iucn)).
+The Big Bar landslide on the Fraser River in 2018 was a significant event that impacted approximately 80% of the Fraser salmon stocks [@doutaz2023]. The blockage created a massive impediment to returning adult salmon, and occurred in a narrow and remote reach of the Fraser River where few options for mitigation were available. Landslides, in general, can occur naturally, but the severity and frequency can also be exacerbated by human activities [@doutaz2023] such as landscape-scale changes and climate change. This indirect connection to human activities means that “10.1 Geological Events” is not a large category to be matched with regulation (Figure \@ref(fig:fig-section-count-by-iucn)).
 
 ```{r section-count-iucn-geological, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6, fig.cap="Count of sections by legislation for IUCN threat category '10.1 Geological Events', coloured by jurisdiction."}
 # Load libraries
@@ -1181,12 +1179,13 @@ ggplot(summary_data, aes(
 
 The "Designation" clause type category matched the largest proportion of clauses that also match "10.1 Geological Events." This is largely due to the designation of avalanche and landslide areas. "Instruction" also had a large proportion of clause type matches due to the nature of forestry legislation and the prevalence of forestry actions to result in landslides. "Prohibition, Restriction, or Limitation" clause types matched the fewest clauses.
 
-```{r fig-clause-type-geological-events, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7, fig.height=5, fig.cap="Section counts by clause type for IUCN-CMP threat category 10.1 Geological Events."}
+```{r fig-clause-type-geological-events, echo=FALSE, message=FALSE, warning=FALSE, fig.width=11, fig.height=5, fig.cap="Section counts by clause type and legislation for IUCN-CMP threat category 10.1 Geological Events. Dot size represents section count."}
 library(DBI)
 library(RSQLite)
 library(here)
 library(data.table)
 library(ggplot2)
+library(stringr)
 
 # Connect to the database
 db_path <- file.path(here("output"), "legislation.db")
@@ -1218,6 +1217,12 @@ if (!file.exists(db_path)) {
     WHERE Section IS NOT NULL
   "))
   
+  # Get legislation names
+  legislation_meta <- data.table(dbGetQuery(conn, "
+    SELECT legislation_id, legislation_name
+    FROM LegislationMetadata
+  "))
+  
   dbDisconnect(conn)
   
   # Filter clause labels to only those linked to Geological Events
@@ -1226,32 +1231,74 @@ if (!file.exists(db_path)) {
   # Merge with paragraph metadata
   merged <- merge(clause_geo, paragraph_meta, by = "paragraph_id", all.x = TRUE)
   
-  # Count unique sections by clause type
-  clause_counts <- merged[
+  # Merge with legislation names
+  merged <- merge(merged, legislation_meta, by = "legislation_id", all.x = TRUE)
+  
+  # Count unique sections by clause type and legislation
+  merged_summary <- merged[
     !is.na(Section),
     .(section_count = uniqueN(paste(legislation_id, Section, sep = "_"))),
-    by = clause_type
+    by = .(clause_type, legislation_name)
   ]
   
-  # Order by section count (largest to smallest)
-  clause_counts <- clause_counts[order(-section_count)]
-  clause_counts[, clause_type := factor(clause_type, levels = rev(clause_type))]
+  # Calculate totals by clause type
+  clause_totals <- merged_summary[, .(section_count = sum(section_count)), by = clause_type]
+  clause_totals[, legislation_name := "TOTAL"]
   
-  # Create horizontal bar chart
-  ggplot(clause_counts, aes(x = clause_type, y = section_count)) +
-    geom_bar(stat = "identity", fill = "#76948C", color = "#76948C", width = 0.7) +
-    coord_flip() +
-    labs(
-      x = "Clause Type",
-      y = "Section Count"
+  # Combine with main data
+  merged_summary <- rbind(merged_summary, clause_totals)
+  
+  # Order legislation by total section count, with TOTAL at the end
+  legislation_order <- c(
+    merged_summary[legislation_name != "TOTAL", .(total = sum(section_count)), by = legislation_name][order(-total), legislation_name],
+    "TOTAL"
+  )
+  merged_summary[, legislation_name := factor(legislation_name, levels = legislation_order)]
+  
+  # Order clause types alphabetically (reverse for y-axis so A is at top)
+  clause_order <- sort(unique(merged_summary$clause_type), decreasing = TRUE)
+  merged_summary[, clause_type := factor(clause_type, levels = clause_order)]
+  
+  # Wrap long legislation names
+  merged_summary[, legislation_name_wrapped := str_wrap(legislation_name, width = 20)]
+  merged_summary[, legislation_name_wrapped := factor(legislation_name_wrapped, levels = str_wrap(legislation_order, width = 20))]
+  
+  # Get number of legislation (excluding TOTAL) for vertical line position
+  n_legislation <- length(legislation_order) - 1
+  
+  # Create dot plot heatmap
+  ggplot(merged_summary, aes(
+    x = legislation_name_wrapped,
+    y = clause_type,
+    size = section_count
+  )) +
+    geom_point(aes(color = legislation_name == "TOTAL"), alpha = 0.8) +
+    scale_size_continuous(
+      range = c(2, 12),
+      name = "Section Count"
     ) +
-    theme_minimal(base_size = 12) +
+    scale_color_manual(
+      values = c("FALSE" = "#76948C", "TRUE" = "#4A6A7A"),
+      guide = "none"
+    ) +
+    geom_vline(xintercept = n_legislation + 0.5, linetype = "dashed", color = "grey50") +
+    labs(
+      x = "Legislation",
+      y = "Clause Type"
+    ) +
+    theme_minimal(base_size = 11) +
     theme(
-      axis.text.y = element_text(size = 10),
-      axis.text.x = element_text(size = 10),
+      text = element_text(color = "black"),
+      axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+      axis.text.y = element_text(size = 9),
       axis.title = element_text(size = 11, face = "bold"),
-      panel.grid.major.y = element_blank(),
-      panel.grid.minor = element_blank()
+      legend.position = "right",
+      legend.title = element_text(size = 10, face = "bold"),
+      legend.text = element_text(size = 9),
+      panel.grid.major = element_line(color = "#E0E0E0", linewidth = 0.3),
+      panel.grid.minor = element_blank(),
+      plot.background = element_rect(fill = "white", color = NA),
+      panel.background = element_rect(fill = "white", color = NA)
     )
 }
 ```
@@ -1260,17 +1307,23 @@ if (!file.exists(db_path)) {
 
 -   **Comment on the most relevant legislation and why**
 
-## **Forest and Range Practices Act**
+This is the outputs of the LAPSE tool and it shows that...
 
-## **Forest Planning and Practices Regulation**
+the main legislation specific to landslides and salmon is...
 
-> #### **Damage to the environment"**
+And the nature of that legislation is...
+
+**Forest and Range Practices Act**
+
+**Forest Planning and Practices Regulation**
+
+> **Damage to the environment"**
 >
 > **3**   (1)For the purpose of section 46 (1) and (1.1) *[protection of the environment]* of the Act, "damage" means any of the following that adversely alters an ecosystem: (a)a landslide...
 
-## **Environmental Management Act**
+**Environmental Management Act**
 
-#### **Environmental emergency measures**
+**Environmental emergency measures**
 
 > **87**   (1)In this section and section 88 *[recovery of costs — environmental emergency]*, "environmental emergency" means an occurrence or natural disaster that affects the environment and includes the following: (a)a flood; (b)a landslide...
 
@@ -1422,12 +1475,13 @@ ggplot(summary_data, aes(
 
 The clause type matches for Dams and Water Management / Use were much more evenly distributed likely due to the large number of clause matches in total for that IUCN-CMP threat category. "Interpretation & Purpose" matched the most clauses (includes Definition sections), while "Administration, Application, & Structure" matched the fewest clauses followed by "Prohibition, Restriction, or Limitation."
 
-```{r fig-clause-type-water-use, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7, fig.height=5, fig.cap="Section counts by clause type for IUCN-CMP threat category 7.2 Dams & Water Management / Use."}
+```{r fig-clause-type-water-use, echo=FALSE, message=FALSE, warning=FALSE, fig.width=11, fig.height=5, fig.cap="Section counts by clause type and legislation for IUCN-CMP threat category 7.2 Dams & Water Management / Use. Dot size represents section count. Top 15 legislation shown."}
 library(DBI)
 library(RSQLite)
 library(here)
 library(data.table)
 library(ggplot2)
+library(stringr)
 
 # Connect to the database
 db_path <- file.path(here("output"), "legislation.db")
@@ -1439,7 +1493,7 @@ if (!file.exists(db_path)) {
   conn <- dbConnect(SQLite(), dbname = db_path)
   
   # Get paragraph_ids for Water Management / Use
-  geo_paragraphs <- data.table(dbGetQuery(conn, "
+  water_paragraphs <- data.table(dbGetQuery(conn, "
     SELECT paragraph_id
     FROM paragraph_label_table
     WHERE label_type = 'IUCN' AND label_value = '7.2 Dams & Water Management / Use'
@@ -1459,40 +1513,91 @@ if (!file.exists(db_path)) {
     WHERE Section IS NOT NULL
   "))
   
+  # Get legislation names
+  legislation_meta <- data.table(dbGetQuery(conn, "
+    SELECT legislation_id, legislation_name
+    FROM LegislationMetadata
+  "))
+  
   dbDisconnect(conn)
   
   # Filter clause labels to only those linked to Water Management / Use
-  clause_geo <- merge(clause_labels, geo_paragraphs, by = "paragraph_id")
+  clause_water <- merge(clause_labels, water_paragraphs, by = "paragraph_id")
   
   # Merge with paragraph metadata
-  merged <- merge(clause_geo, paragraph_meta, by = "paragraph_id", all.x = TRUE)
+  merged <- merge(clause_water, paragraph_meta, by = "paragraph_id", all.x = TRUE)
   
-  # Count unique sections by clause type
-  clause_counts <- merged[
+  # Merge with legislation names
+  merged <- merge(merged, legislation_meta, by = "legislation_id", all.x = TRUE)
+  
+  # Count unique sections by clause type and legislation
+  merged_summary <- merged[
     !is.na(Section),
     .(section_count = uniqueN(paste(legislation_id, Section, sep = "_"))),
-    by = clause_type
+    by = .(clause_type, legislation_name)
   ]
   
-  # Order by section count (largest to smallest)
-  clause_counts <- clause_counts[order(-section_count)]
-  clause_counts[, clause_type := factor(clause_type, levels = rev(clause_type))]
+  # Get top 15 legislation by total section count
+  top_legislation <- merged_summary[, .(total = sum(section_count)), by = legislation_name][order(-total)][1:15, legislation_name]
   
-  # Create horizontal bar chart
-  ggplot(clause_counts, aes(x = clause_type, y = section_count)) +
-    geom_bar(stat = "identity", fill = "#76948C", color = "#76948C", width = 0.7) +
-    coord_flip() +
-    labs(
-      x = "Clause Type",
-      y = "Section Count"
+  # Filter to top 15
+  merged_summary <- merged_summary[legislation_name %in% top_legislation]
+  
+  # Calculate totals by clause type
+  clause_totals <- merged_summary[, .(section_count = sum(section_count)), by = clause_type]
+  clause_totals[, legislation_name := "TOTAL"]
+  
+  # Combine with main data
+  merged_summary <- rbind(merged_summary, clause_totals)
+  
+  # Order legislation by total section count, with TOTAL at the end
+  legislation_order <- c(
+    merged_summary[legislation_name != "TOTAL", .(total = sum(section_count)), by = legislation_name][order(-total), legislation_name],
+    "TOTAL"
+  )
+  merged_summary[, legislation_name := factor(legislation_name, levels = legislation_order)]
+  
+  # Order clause types alphabetically (reverse for y-axis so A is at top)
+  clause_order <- sort(unique(merged_summary$clause_type), decreasing = TRUE)
+  merged_summary[, clause_type := factor(clause_type, levels = clause_order)]
+  
+  # Wrap long legislation names
+  merged_summary[, legislation_name_wrapped := str_wrap(legislation_name, width = 20)]
+  merged_summary[, legislation_name_wrapped := factor(legislation_name_wrapped, levels = str_wrap(legislation_order, width = 20))]
+  
+  # Create dot plot heatmap
+  ggplot(merged_summary, aes(
+    x = legislation_name_wrapped,
+    y = clause_type,
+    size = section_count
+  )) +
+    geom_point(aes(color = legislation_name == "TOTAL"), alpha = 0.8) +
+    scale_size_continuous(
+      range = c(2, 12),
+      name = "Section Count"
     ) +
-    theme_minimal(base_size = 12) +
+    scale_color_manual(
+      values = c("FALSE" = "#76948C", "TRUE" = "#4A6A7A"),
+      guide = "none"
+    ) +
+    geom_vline(xintercept = 15.5, linetype = "dashed", color = "grey50") +
+    labs(
+      x = "Legislation",
+      y = "Clause Type"
+    ) +
+    theme_minimal(base_size = 11) +
     theme(
-      axis.text.y = element_text(size = 10),
-      axis.text.x = element_text(size = 10),
+      text = element_text(color = "black"),
+      axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+      axis.text.y = element_text(size = 9),
       axis.title = element_text(size = 11, face = "bold"),
-      panel.grid.major.y = element_blank(),
-      panel.grid.minor = element_blank()
+      legend.position = "right",
+      legend.title = element_text(size = 10, face = "bold"),
+      legend.text = element_text(size = 9),
+      panel.grid.major = element_line(color = "#E0E0E0", linewidth = 0.3),
+      panel.grid.minor = element_blank(),
+      plot.background = element_rect(fill = "white", color = NA),
+      panel.background = element_rect(fill = "white", color = NA)
     )
 }
 ```
