@@ -1,19 +1,19 @@
 ﻿species,du_number,du_name,rpa_citation
 Chinook,1,"Southern Mainland Boundary Bay, Ocean, Fall population",Dionne et al. 2023
-Chinook,2,"Lower Fraser, Ocean, Fall (Harrison)",Doutaz et al. 2020
-Chinook,4,"Lower Fraser, Stream. Summer  (Upper Pitt)",Doutaz et al. 2020
-Chinook,5,"Lower Fraser, Stream, Summer (Lillooet) ",Doutaz et al. 2020
+Chinook,2,"Lower Fraser, Ocean, Fall (Harrison)",DFO 2020
+Chinook,4,"Lower Fraser, Stream. Summer  (Upper Pitt)",DFO 2020
+Chinook,5,"Lower Fraser, Stream, Summer (Lillooet) ",DFO 2020
 Chinook,6,"Lower Fraser, Ocean, Summer (Maria Slough)",Dionne et al. 2023
-Chinook,7,"Middle Fraser, Stream, Spring (FRCanyon)",Doutaz et al. 2020
-Chinook,8,"Middle Fraser, Stream, Fall (Portage)",Doutaz et al. 2020
-Chinook,9,"Middle Fraser, Stream, Spring ",Doutaz et al. 2020
-Chinook,10,"Middle Fraser,Stream, Summer",Doutaz et al. 2020
-Chinook,11,"Upper Fraser, Stream, Spring",Doutaz et al. 2020
+Chinook,7,"Middle Fraser, Stream, Spring (FRCanyon)",DFO 2020
+Chinook,8,"Middle Fraser, Stream, Fall (Portage)",DFO 2020
+Chinook,9,"Middle Fraser, Stream, Spring ",DFO 2020
+Chinook,10,"Middle Fraser,Stream, Summer",DFO 2020
+Chinook,11,"Upper Fraser, Stream, Spring",DFO 2020
 Chinook,13,"South Thompson, Stream, Summer ",Dionne et al. 2023
-Chinook,14,"South Thompson, Stream, Summer (Bessette)",Doutaz et al. 2020
+Chinook,14,"South Thompson, Stream, Summer (Bessette)",DFO 2020
 Chinook,15,"Lower Thompson, Stream, Spring",Dionne et al. 2023
-Chinook,16,"North Thompson, Stream, Spring",Doutaz et al. 2020
-Chinook,17,"North Thompson, Stream, Summer",Doutaz et al. 2020
+Chinook,16,"North Thompson, Stream, Spring",DFO 2020
+Chinook,17,"North Thompson, Stream, Summer",DFO 2020
 Chinook,69,"Okanagan River,Ocean, Summer",Mahony et al. 2021
 Coho,,Interior Fraser Coho,Arbeider et al. 2020
 Sockeye,2,Bowron-ES population,Doutaz et al. 2023

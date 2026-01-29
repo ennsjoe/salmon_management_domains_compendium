@@ -90,7 +90,7 @@ Laws formally codify societal values and expectations [@swerdfager2023] by gover
 
 We developed and outlined the *Legislation Applicable to Pacific Salmon and their Ecosystems* (LAPSE) as a process and tool to parse Canadian federal and British Columbian provincial acts and regulations relevant to Pacific salmon, then use keyword phrase relationships to match clauses (paragraphs) to our management domains and corresponding IUCN threat categories. By creating an extensive, open-source, and accessible database linking legislation to salmon, we aim to facilitate a better understanding of the legislative and regulatory context through which salmon and their ecosystems are governed in British Columbia, while providing a framework to support systematic and critical reviews of strengths and shortcomings of regulations with respect to salmon threats.
 
-# Management domains and the International Union for Conservation of Nature- Conservation Measures Partnership  threat categories
+# Management domains and the International Union for Conservation of Nature- Conservation Measures Partnership threat categories
 
 @salafsky2008 recognized that using a common language and a standard lexicon is essential for conservation science. Threats are a fundamental conservation concept, and can be defined as "current or future human activities or altered natural phenomena that affect one or more ecosystems or species of interest" [@salafsky2024]. Legislated recovery planning also relies on a description of identified threats [@mccune2013]. The IUCN and the CMP began developing classifications of direct threats in the early 2000s, which were then compiled and developed further through an iterative process resulting in the *IUCN – CMP Direct Threats Classification Version 4.0* [@salafsky2024] used for this exercise. The IUCN Direct Threats Classification uses a hierarchical, exclusive, comprehensive, and expandable structure of three levels similar to the Linnean system of grouping by family, genera, and species [@salafsky2008]. First-level categories (Level 1) are the broadest, and are subdivided into second-level categories (Level 2), which are further subdivided into the most specific, third-level categories (Level 3).
 
@@ -911,9 +911,11 @@ ft
 
 # Recovery potential assessments (RPA) and threat ranking case studies
 
-The *Committee on the Status of Endangered Wildlife in Canada* (COSEWIC) assesses the status of wildlife species at risk in Canada, which is the first step in the process of listing a wildlife species under the *Species at Risk Act* (SARA). COSEWIC uses Designatable Units (DUs) to assess units below the level of a recognized taxonomic species if it has attributes that make it both “discrete” and “evolutionarily significant” [@cosewic2023]. COSEWIC has delineated DUs within Pacific salmon species according to these criteria for the purposes of its status assessments of these species. When a DU under DFO’s responsibility is designated as Threatened, Endangered, or Extirpated, a DFO-led Recovery Potential Assessment (RPA) process is initiated, which typically includes a threat assessment using the same IUCN-CMP threat classification used in this legislative assessment.
+The *Committee on the Status of Endangered Wildlife in Canada* (COSEWIC) assesses the status of wildlife species at risk in Canada, which is the first step in the process of listing a wildlife species under the *Species at Risk Act* (SARA). COSEWIC uses Designatable Units (DUs) to assess units below the level of a recognized taxonomic species if a population has attributes that make it both “discrete” and “evolutionarily significant” [@cosewic2023]. COSEWIC outlines DUs within Pacific salmon species according to these criteria for the purposes of its status assessments of these species. When a DU under DFO’s responsibility is designated as threatened, endangered, or extirpated, a DFO-led Recovery Potential Assessment (RPA) process is initiated, which often includes a threat assessment using the same IUCN-CMP threat classification used in this legislative assessment.
 
-DFO's *Wild Salmon Policy* (WSP) outlines salmon management delineated by Conservation Units (CU), which are defined as: “a group of wild salmon sufficiently isolated from other groups that, if extirpated is very unlikely to recolonize naturally within an acceptable timeframe, such as a human lifetime or a specified number of salmon generations” (Canada 2005). In most cases, DUs and CUs are equivalent with some lumping and splitting for specific populations. Any differences are explained within the RPA documents [@dionne2023; @doutaz2020; @mahony2019; @arbeider2020; @doutaz2023; @dfo2019]. Since RPA-delineated populations, descriptions, and corresponding threats are conducted in the context of DUs, we incorporated DUs for the purpose of this study . We only included salmon populations with published RPAs (Table \@ref(tab:du-species-du-name-table)), and only RPA processes that used comparable IUCN-CMP threat categories. For example, Sakinaw Lake sockeye had an RPA published in 2019, but used a "limiting factor" analysis [@ramshaw2019], which did not align with this analysis.
+DFO's *Wild Salmon Policy* (WSP) outlines salmon management delineated by Conservation Units (CU), which are defined as: “a group of wild salmon sufficiently isolated from other groups that, if extirpated is very unlikely to recolonize naturally within an acceptable timeframe, such as a human lifetime or a specified number of salmon generations” [@dfo2005]. In most cases, DUs and CUs are equivalent with some lumping and splitting for specific populations. Any differences are explained within the RPA documents [@dionne2023; @dfo2020; @mahony2019; @arbeider2020; @doutaz2023; @dfo2019].
+
+Since the RPA population and habitat descriptions, and corresponding threats, are conducted in the context of DUs, we incorporated DUs for the purpose of this study. We only included salmon populations with published RPAs (Table \@ref(tab:du-species-du-name-table)), and only RPA processes that used comparable IUCN-CMP threat categories. For example, Sakinaw Lake sockeye had an RPA published in 2019, but used a "limiting factor" analysis [@ramshaw2019], which did not align with this analysis.
 
 ```{r du-species-du-name-table, message=FALSE, warning=FALSE, echo=FALSE}
 library(DBI)
@@ -936,27 +938,35 @@ dbDisconnect(conn)
 du_data <- du_data[order(species, du_name)]
 
 # Select columns for display
-du_display <- du_data[, .(species, du_name, rpa_citation)]
+du_display <- du_data[, .(species, du_number, du_name, rpa_citation)]
 
 # Rename columns for display
-setnames(du_display, c("species", "du_name", "rpa_citation"), c("Species", "Designatable Unit", "RPA Reference"))
+setnames(du_display, c("species", "du_number", "du_name", "rpa_citation"), c("Species", "DU Number", "Designatable Unit", "RPA Reference"))
 
 # Create flextable for Word output
 ft <- flextable(du_display) %>%
   bold(part = "header") %>%
-  align(j = 1:3, align = "left", part = "all") %>%
+  align(j = c(1, 3, 4), align = "left", part = "all") %>%
+  align(j = 2, align = "center", part = "all") %>%
   set_table_properties(width = 1, layout = "autofit") %>%
   set_caption("Designatable Units included in the DFO Recovery Potential Assessment analyses.")
 ft
 ```
 
+-   **I could add the DU number, too, if you think that might be helpful and appropriate for this audience**
+
 <br>
 
-The RPA process identified two IUCN-CMP threat categories as being "Extreme" or "Extreme-High" ranking (Figure \@ref(fig:du-ranking-heatmap)). "10.1 Geological Events" received an extreme ranking, and "7.2 Dams & Water Management / Use" received an extreme-high ranking.
+The RPA process identified two IUCN-CMP threat categories as being "Extreme" or "Extreme-High" ranking (Figure \@ref(fig:du-ranking-heatmap)). "10.1 Geological Events" received an extreme ranking, and "7.2 Dams & Water Management / Use" received an extreme-high ranking. These two categories were chosen to assess the categories as case studies.
 
--   **Dan - thanks for pointing out DU14 and "7.3 Other ecosystem modifications." This confused me for a bit. So... the table in Dionne 2023 (<https://publications.gc.ca/collections/collection_2020/mpo-dfo/fs70-6/Fs70-6-2020-023-eng.pdf>) shows an Extreme-High ranking for "Natural systems modifications (Water management, ecosystems modifications)." That's the only place I could figure out where the "7.3 Other ecosystem modifications" might have come from. But the IUCN - CMP Direct Threats Classification 4.0 doesn't have a "7.3 Other ecosystem modifications," that category is now split; though, "7.3 Earth & Sediment Management" would apply to Bessette. However, earlier in Dionne 2023, they say that: "Water extraction is of particular concern for DU14 (STh-Bessette), which spawn in a drought-sensitive system in an area of extensive water extraction. Agricultural water use creates low summer flows and high stream temperatures to the point where fish kills have been recorded. The town of Lumby is a large contributor to groundwater extraction for the surrounding area, and water demands are expected to increase in the future. Due to the deficit of water caused by anthropogenic activities this threat was deemed to have a high to extreme level of impact on this population." This is why I thought that this threat assessment applied to "7.2 Dams & Water Management / Use," which includes "dam construction, dam operations, levees and dikes, channelization, highway culverts... surface water withdrawals, groundwater pumping..." I've also done juvenile Chinook surveys in Bessette years ago, and this description matches my experience of Bessette Creek. Does that sound correct? Did I miss something, or is there another document I'm missing? It's great that I double-check these specifics! Thanks for reading more deeply into this!**
+-   **Dan - thanks for pointing out DU14 and "7.3 Other ecosystem modifications." This confused me for a bit. So... the table in DFO 2020 shows an "Extreme-High" ranking for "Natural systems modifications (Water management, ecosystems modifications)." That's the only place I could figure out where the "7.3 Other ecosystem modifications" might have come from.**
+-   **In that same report the "Ecosystems Modifications" section says, "Ecosystems modifications that alter catchment surfaces or increase impervious surfaces can have significant effects on stream temperatures and flow regimes. These activities include water extraction, forestry, wildfires, and development from agricultural, industrial, and residential sectors. Impacts of wildfires are similar to forestry as they alter flow and temperature regimes..."**
+-   **In the Water Extraction section it says, "Water extraction for irrigation and livestock can impact FRC through reduced flows in streams, limiting the wetted area of streams, and potentially increasing water temperatures. Groundwater extraction is of particular concern to... Water extraction is of particular concern for DU14 (STh-Bessette), which spawn in a drought-sensitive system in an area of extensive water extraction. Agricultural water use creates low summer flows and high stream temperatures to the point where fish kills have been recorded. The town of Lumby is a large contributor to groundwater extraction for the surrounding area, and water demands are expected to increase in the future. Due to the deficit of water caused by anthropogenic activities this threat was deemed to have a high to extreme level of impact on this population."**
+-   **But the IUCN - CMP Direct Threats Classification 4.0 doesn't have a "7.3 Other ecosystem modifications," that category is now split; though, "7.3 Earth & Sediment Management" would apply to Bessette. This is why I thought that this threat assessment applied to "7.2 Dams & Water Management / Use," which includes "dam construction, dam operations, levees and dikes, channelization, highway culverts... surface water withdrawals, groundwater pumping..."**
+-   **I've also done juvenile Chinook surveys in Bessette years ago, and this description matches my experience of Bessette Creek.**
+-   **Does that sound correct? Did I miss something, or is there another document I'm missing? It's great that I double-check these specifics! Thanks for reading more deeply into this!**
 
-```{r du-ranking-heatmap, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6, fig.cap="Threat ranking categories by IUCN-CMP threat categories for Designatable Units of Pacific salmon assessed through the Recovery Potential Assessment process."}
+```{r du-ranking-heatmap, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6, fig.cap="Threat ranking categories assigned by IUCN-CMP threat categories for Designatable Units of Pacific salmon assessed through the Recovery Potential Assessment process."}
 # Load libraries
 library(here)
 library(data.table)
@@ -1026,7 +1036,7 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = rpa_threat_
     guide = "none"
   ) +
   labs(
-    x = "IUCN Threat (Level 2)",
+    x = "IUCN-CMP Threat (Level 2)",
     y = "RPA Threat Ranking"
   ) +
   theme_minimal(base_size = 11) +
@@ -1044,21 +1054,13 @@ ggplot(heatmap_data, aes(x = iucn_l2, y = rpa_threat_ranking, fill = rpa_threat_
   )
 ```
 
--   Dan - the heatmap chart no longer shows a count for the number of DUs, it just lists the threat rankings available. I think
+-   **Dan - the heatmap chart no longer shows a count for the number of DUs, it just lists the threat rankings available. I think that should help with the bias. I don't list the "Unknown" values in this graphic, I'm making that an assumed category. But I could add the "Unknown" values and treat missing values like Pathogens as an "Unknown"? Let me know what you think.**
 
--   **DG - Certain threat categories (e.g., pathogens) were only assessed in select RPAs (in this case, Interior Fraser Coho I think), which would bias the CU count. I think it would make the analysis more standardized if there was a common subset of threats assessed within each RPA that was chosen.**
+## Case Study: IUCN-CMP "10.1 Geological Events"
 
-## Case Study: IUCN-CMP "10.1 Geological events"
+Geologic events, specifically landslides, were assessed as "Extreme" for three DUs of Fraser River Chinook and one DU of Fraser sockeye (Table \@ref(tab:cu-extreme-threat-table)). This ranking was largely due to the significant landslide on the Fraser River near Big Bar, British Columbia in late 2018 that blocked adult salmon upstream migration [@dfo2020; @doutaz2023]. The published RPAs for these populations refer to this threat category as "Avalanches and Landslides" or "Geological events (Landslides)." @dionne2023 references "IUCN-CMP threat category 10.2." However, the most current *IUCN-CMP Direct Threats Classification version 4.0* uses a slightly altered structure [@salafsky2024] where the the Level 2 threat is called "10.1 Geological Events," and avalanches and landslides are listed as examples of these events. We modified the classification of these assessments to fit the newest IUCN-CMP version for consistency.
 
-One IUCN-CMP threat was assessed as “Extreme” through DFO Recovery Potential Assessment processes, which was “10.1 Geological Events” [@doutaz2020; @dfo2022]. This threat was assigned to one sockeye and three Chinook conservation units (Table \@ref(tab:cu-extreme-threat-table)), all in the Fraser Interior area related to the “ongoing effects from Big Bar landslide” in 2018 [@doutaz2020; @dfo2022]:
-
--   **DG - I’m not super familiar with the most recent version of the IUCN-CMP threat classification framework that you’re using in this analysis, but in the RPAs, Geological events is “10” and is a first-level threat, and Avalanches/landslides is “10.1” and is a second-level threat.**
-
--   **DG - I suggest just citing the RES Docs instead of the SARs**
-
--   **DG - Are we referring to the DFO administrative area or is this a more generic term? If it’s more generic, perhaps something like middle/upper Fraser River area would be more precise for these DUs.**
-
-```{r cu-extreme-threat-table, message=FALSE, warning=FALSE, echo=FALSE}
+```{r du-extreme-threat-table, message=FALSE, warning=FALSE, echo=FALSE}
 library(DBI)
 library(RSQLite)
 library(data.table)
@@ -1070,31 +1072,114 @@ db_path <- file.path(here("output"), "legislation.db")
 conn <- dbConnect(SQLite(), dbname = db_path)
 
 # Query and filter the data for Extreme threat ranking only
-cu_data <- as.data.table(dbReadTable(conn, "cu_ranking"))
-filtered_cu <- cu_data[rpa_threat_ranking == "Extreme", .(cu_species, cu_name)]
-unique_cu <- unique(filtered_cu)
+du_data <- as.data.table(dbReadTable(conn, "cu_ranking"))
+filtered_du <- du_data[rpa_threat_ranking == "Extreme", .(cu_species, du_number, du_name)]
+unique_du <- unique(filtered_du)
 
 # Disconnect
 dbDisconnect(conn)
 
-# Order by species then by CU name
-unique_cu <- unique_cu[order(cu_species, cu_name)]
+# Order by species then by DU name
+unique_du <- unique_du[order(cu_species, du_name)]
 
 # Rename columns for display
-setnames(unique_cu, c("cu_species", "cu_name"), c("Species", "Conservation Unit"))
+setnames(unique_du, c("cu_species", "du_number", "du_name"), c("Species", "DU Number", "Designatable Unit"))
 
 # Create flextable for Word output
-ft <- flextable(unique_cu) %>%
+ft <- flextable(unique_du) %>%
   bold(part = "header") %>%
-  align(j = 1, align = "left", part = "all") %>%
-  align(j = 2, align = "left", part = "all") %>%
+  align(j = c(1, 3), align = "left", part = "all") %>%
+  align(j = 2, align = "center", part = "all") %>%
   set_table_properties(width = 1, layout = "autofit") %>%
-  set_caption("Conservation Units with Extreme RPA threat ranking.")
-
+  set_caption("List of Pacific salmon Designatable Units where an 'Extreme' rating was assigned to the '10.1 Geological Events' IUCN-CMP threat category through the RPA process.")
 ft
 ```
 
-“10.1 Geological events” is not a large category to be assigned to appropriate legislation (Figure \@ref(fig:fig-section-count-by-iucn)). Aside from landscape-scale changes due to actions like forestry or mining, much of the nature of this category might not be viewed as human-caused or managed. Subsequently, this threat has a small proportion of keywords that match the relevant legislation. The "Designation" clause type category matched the largest proportion of clauses that also match "10.1 Geological Events." This is largely due to the designation of avalanche and landslide areas. "Instruction" also had a large proportion of clause type matches due to the nature of forestry legislation and the prevalence of forestry actions to result in landslides. "Prohibition, Restriction, or Limitation" clause types matched the fewest clauses.
+<br>
+
+The Big Bar landslide on the Fraser River in 2018 was a significant event that impacted approximately 80% of the Fraser salmon stocks [@doutaz2023]. The blockage created a massive impediment to returning adult salmon, and occurred in a narrow and remote reach of the Fraser River where few options for mitigation were available. Landslides, in general, can occur naturally, but the severity and frequency can also be exacerbated indirectly by human activities [@doutaz2023] such as landscape-scale changes and climate change. This disconnection from human activities means that “10.1 Geological Events” is not a large category to be matched with regulation (Figure \@ref(fig:fig-section-count-by-iucn)).
+
+```{r section-count-iucn-geological, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6, fig.cap="Count of sections by legislation for IUCN threat category '10.1 Geological Events', coloured by jurisdiction."}
+# Load libraries
+library(DBI)
+library(RSQLite)
+library(here)
+library(dplyr)
+library(ggplot2)
+
+# Connect to the database
+conn <- dbConnect(SQLite(), dbname = file.path(here("output"), "legislation.db"))
+
+# Load relevant tables
+paragraph_labels <- dbGetQuery(conn, "
+  SELECT paragraph_id, label_value
+  FROM paragraph_label_table
+  WHERE label_type = 'IUCN' AND label_value = '10.1 Geological Events'
+")
+
+paragraph_table <- dbGetQuery(conn, "
+  SELECT paragraph_id, legislation_id, Section
+  FROM LegislationParagraphs
+")
+
+legislation_metadata <- dbGetQuery(conn, "
+  SELECT legislation_id, legislation_name, jurisdiction
+  FROM LegislationMetadata
+")
+
+# Disconnect from the database
+dbDisconnect(conn)
+
+# Join tables according to schema
+iucn_data <- paragraph_labels %>%
+  inner_join(paragraph_table, by = "paragraph_id") %>%
+  inner_join(legislation_metadata, by = "legislation_id") %>%
+  filter(!is.na(Section))
+
+# Summarize unique Section-legislation_id counts by legislation and jurisdiction
+summary_data <- iucn_data %>%
+  mutate(section_key = paste(Section, legislation_id)) %>%
+  group_by(legislation_name, jurisdiction) %>%
+  summarise(Unique_sections = n_distinct(section_key), .groups = "drop")
+
+# Reorder legislation by total section count (largest to smallest)
+summary_data <- summary_data %>%
+  arrange(desc(Unique_sections)) %>%
+  mutate(legislation_name = factor(legislation_name, levels = rev(legislation_name)))
+
+# Create horizontal bar chart
+ggplot(summary_data, aes(
+  x = Unique_sections,
+  y = legislation_name,
+  fill = jurisdiction
+)) +
+  geom_bar(stat = "identity", color = "black", linewidth = 0.3, width = 0.8) +
+  scale_fill_manual(
+    values = c("Federal" = "#996666", "Provincial" = "#668899", "Unknown" = "#999999"),
+    guide = guide_legend(reverse = TRUE)
+  ) +
+  labs(
+    x = "Section Count",
+    y = "Legislation",
+    fill = "Jurisdiction"
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    text = element_text(color = "black"),
+    axis.text.y = element_text(size = 9),
+    axis.text.x = element_text(size = 10),
+    axis.title = element_text(size = 11, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_text(size = 10, face = "bold"),
+    legend.text = element_text(size = 9),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA)
+  )
+```
+
+The "Designation" clause type category matched the largest proportion of clauses that also match "10.1 Geological Events." This is largely due to the designation of avalanche and landslide areas. "Instruction" also had a large proportion of clause type matches due to the nature of forestry legislation and the prevalence of forestry actions to result in landslides. "Prohibition, Restriction, or Limitation" clause types matched the fewest clauses.
 
 ```{r fig-clause-type-geological-events, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7, fig.height=5, fig.cap="Section counts by clause type for IUCN-CMP threat category 10.1 Geological Events."}
 library(DBI)
@@ -1173,19 +1258,31 @@ if (!file.exists(db_path)) {
 
 -   **DG - Could be helpful to note the different values on the x-axis between this and the next figure**
 
--   **Add more description of Big Bar slide**
-
 -   **Comment on the most relevant legislation and why**
 
-## Case Study: IUCN-CMP 7.2 Dams & Water Management / Use
+## **Forest and Range Practices Act**
 
-One IUCN-CMP threat was assessed as “Extreme-High” through DFO Recovery Potential Assessment processes, which was “7.2 Dams & Water Management / Use” [doutaz2020]. Water extraction, including groundwater, for irrigation and domestic purposes is listed as the most significant concern [doutaz2020]. This threat was assigned to one Chinook conservation unit in the Fraser Interior area (Table \@ref(tab:cu-extreme-high-threat-table)).
+## **Forest Planning and Practices Regulation**
+
+> #### **Damage to the environment"**
+>
+> **3**   (1)For the purpose of section 46 (1) and (1.1) *[protection of the environment]* of the Act, "damage" means any of the following that adversely alters an ecosystem: (a)a landslide...
+
+## **Environmental Management Act**
+
+#### **Environmental emergency measures**
+
+> **87**   (1)In this section and section 88 *[recovery of costs — environmental emergency]*, "environmental emergency" means an occurrence or natural disaster that affects the environment and includes the following: (a)a flood; (b)a landslide...
+
+## Case Study: IUCN-CMP "7.2 Dams & Water Management / Use"
+
+One IUCN-CMP threat was assessed as “Extreme-High” through DFO Recovery Potential Assessment processes, which was “7.2 Dams & Water Management / Use” [@dfo2020]. Water extraction, including groundwater, for irrigation and domestic purposes is listed as the most significant concern [@dfo2020]. This threat was assigned to one Chinook conservation unit in the Fraser Interior area (Table \@ref(tab:cu-extreme-high-threat-table)).
 
 -   **DG - And 7.3 Other ecosystem modifications**
 
 -   **DG - Likewise, this DU spawns in the South Thompson River watershed, so there’s an opportunity to make this description a bit more precise if wanted.**
 
-```{r cu-extreme-high-threat-table, message=FALSE, warning=FALSE, echo=FALSE}
+```{r du-extreme-high-threat-table, message=FALSE, warning=FALSE, echo=FALSE}
 library(DBI)
 library(RSQLite)
 library(data.table)
@@ -1197,27 +1294,26 @@ db_path <- file.path(here("output"), "legislation.db")
 conn <- dbConnect(SQLite(), dbname = db_path)
 
 # Query and filter the data for Extreme-High threat ranking only
-cu_data <- as.data.table(dbReadTable(conn, "cu_ranking"))
-filtered_cu <- cu_data[rpa_threat_ranking == "Extreme-High", .(cu_species, cu_name)]
-unique_cu <- unique(filtered_cu)
+du_data <- as.data.table(dbReadTable(conn, "cu_ranking"))
+filtered_du <- du_data[rpa_threat_ranking == "Extreme-High", .(cu_species, du_number, du_name)]
+unique_du <- unique(filtered_du)
 
 # Disconnect
 dbDisconnect(conn)
 
-# Order by species then by CU name
-unique_cu <- unique_cu[order(cu_species, cu_name)]
+# Order by species then by DU name
+unique_du <- unique_du[order(cu_species, du_name)]
 
 # Rename columns for display
-setnames(unique_cu, c("cu_species", "cu_name"), c("Species", "Conservation Unit"))
+setnames(unique_du, c("cu_species", "du_number", "du_name"), c("Species", "DU Number", "Designatable Unit"))
 
 # Create flextable for Word output
-ft <- flextable(unique_cu) %>%
+ft <- flextable(unique_du) %>%
   bold(part = "header") %>%
-  align(j = 1, align = "left", part = "all") %>%
-  align(j = 2, align = "left", part = "all") %>%
+  align(j = c(1, 3), align = "left", part = "all") %>%
+  align(j = 2, align = "center", part = "all") %>%
   set_table_properties(width = 1, layout = "autofit") %>%
-  set_caption("Conservation Units with Extreme-High RPA threat ranking.")
-
+  set_caption("Designatable Units with Extreme-High RPA threat ranking.")
 ft
 ```
 
@@ -1226,6 +1322,103 @@ ft
 “7.2 Dams and Water Management / Use” is one of the largest categories matched with appropriate legislation (Figure \@ref(fig:fig-section-count-by-iucn)). Aside from pollution and fisheries, watercourse alterations are recognized as one of the top human activities that require regulation. This threat also has a large proportion of keywords that match the relevant legislation.
 
 -   **DG - This made me think that there was going to be a citation at the end of this sentence. Is this statement based on the present analysis? If so, then perhaps something to the effect of “this analysis suggests that watercourse alternations are one of the top…”**
+
+```{r section-count-iucn-dams-water, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6, fig.cap="Count of sections by legislation for IUCN threat category '7.2 Dams & Water Management / Use', coloured by jurisdiction. Top 15 legislation shown."}
+# Load libraries
+library(DBI)
+library(RSQLite)
+library(here)
+library(dplyr)
+library(ggplot2)
+library(stringr)
+
+# Connect to the database
+conn <- dbConnect(SQLite(), dbname = file.path(here("output"), "legislation.db"))
+
+# Load relevant tables
+paragraph_labels <- dbGetQuery(conn, "
+  SELECT paragraph_id, label_value
+  FROM paragraph_label_table
+  WHERE label_type = 'IUCN' AND label_value = '7.2 Dams & Water Management / Use'
+")
+
+paragraph_table <- dbGetQuery(conn, "
+  SELECT paragraph_id, legislation_id, Section
+  FROM LegislationParagraphs
+")
+
+legislation_metadata <- dbGetQuery(conn, "
+  SELECT legislation_id, legislation_name, jurisdiction
+  FROM LegislationMetadata
+")
+
+# Disconnect from the database
+dbDisconnect(conn)
+
+# Join tables according to schema
+iucn_data <- paragraph_labels %>%
+  inner_join(paragraph_table, by = "paragraph_id") %>%
+  inner_join(legislation_metadata, by = "legislation_id") %>%
+  filter(!is.na(Section))
+
+# Summarize unique Section-legislation_id counts by legislation and jurisdiction
+summary_data <- iucn_data %>%
+  mutate(section_key = paste(Section, legislation_id)) %>%
+  group_by(legislation_name, jurisdiction) %>%
+  summarise(Unique_sections = n_distinct(section_key), .groups = "drop")
+
+# Get top 15 legislation by total section count
+top_legislation <- summary_data %>%
+  group_by(legislation_name) %>%
+  summarise(total = sum(Unique_sections), .groups = "drop") %>%
+  arrange(desc(total)) %>%
+  slice_head(n = 15) %>%
+  pull(legislation_name)
+
+# Filter to top 15
+summary_data <- summary_data %>%
+  filter(legislation_name %in% top_legislation)
+
+# Wrap long legislation names (max 40 characters per line)
+summary_data <- summary_data %>%
+  mutate(legislation_name_wrapped = str_wrap(legislation_name, width = 40))
+
+# Reorder by total section count (largest to smallest)
+summary_data <- summary_data %>%
+  arrange(desc(Unique_sections)) %>%
+  mutate(legislation_name_wrapped = factor(legislation_name_wrapped, levels = rev(unique(legislation_name_wrapped))))
+
+# Create horizontal bar chart
+ggplot(summary_data, aes(
+  x = Unique_sections,
+  y = legislation_name_wrapped,
+  fill = jurisdiction
+)) +
+  geom_bar(stat = "identity", color = "black", linewidth = 0.3, width = 0.8) +
+  scale_fill_manual(
+    values = c("Federal" = "#996666", "Provincial" = "#668899", "Unknown" = "#999999"),
+    guide = guide_legend(reverse = TRUE)
+  ) +
+  labs(
+    x = "Section Count",
+    y = "Legislation",
+    fill = "Jurisdiction"
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    text = element_text(color = "black"),
+    axis.text.y = element_text(size = 9),
+    axis.text.x = element_text(size = 10),
+    axis.title = element_text(size = 11, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_text(size = 10, face = "bold"),
+    legend.text = element_text(size = 9),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA)
+  )
+```
 
 The clause type matches for Dams and Water Management / Use were much more evenly distributed likely due to the large number of clause matches in total for that IUCN-CMP threat category. "Interpretation & Purpose" matched the most clauses (includes Definition sections), while "Administration, Application, & Structure" matched the fewest clauses followed by "Prohibition, Restriction, or Limitation."
 
