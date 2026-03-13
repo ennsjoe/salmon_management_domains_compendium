@@ -110,6 +110,89 @@ The following were outside the scope of this legislative review in terms of feas
 
 ---
 
+# LAPSE Process Overview
+
+The LAPSE framework follows a linear pipeline from legislation collection through to the interactive dashboard. The eight major steps below describe the complete process; subsequent sections of this document provide full technical detail for each step.
+
+```{r lapse-flowchart, fig.width=8, fig.height=10}
+library(DiagrammeR)
+
+grViz("
+digraph LAPSE {
+
+  graph [layout = dot, rankdir = TB, fontname = 'Arial', bgcolor = 'transparent']
+
+  node [fontname = 'Arial', fontsize = 13, style = filled, shape = box,
+        fillcolor = '#f5f8fa', color = '#668899', penwidth = 1.5,
+        margin = '0.2,0.12']
+
+  edge [color = '#668899', penwidth = 1.5, arrowsize = 0.8, fontname = 'Arial',
+        fontsize = 11, fontcolor = '#555555']
+
+  # ── Phase headers (styled differently) ──────────────────────────────────────
+
+  node [shape = rectangle, fillcolor = '#668899', fontcolor = 'white',
+        fontsize = 12, penwidth = 0]
+
+  A [label = '① COLLECT\nLegislation identification & download']
+  C [label = '② BUILD DATABASE\nParse HTML into SQLite']
+  E [label = '③ DEVELOP KEYWORDS\nIterative list development']
+  G [label = '④ LABEL\nTokenize & match keywords']
+  I [label = '⑤ FILTER\nActionable clauses']
+  K [label = '⑥ EXPLORE\nDashboard & outputs']
+
+  # ── Detail nodes ─────────────────────────────────────────────────────────────
+
+  node [shape = box, fillcolor = '#f0f5f7', fontcolor = '#2c3e50',
+        fontsize = 11, penwidth = 1.2]
+
+  B [label = 'Search CanLII with salmon-specific terms\n(salmon, Chinook, sockeye…)\nExtract adjacent keywords via word frequency\nQuery IUCN threat terms in CanLII\nDownload HTML files from federal &\nBC provincial legislation portals\n→  196 statutes (87 federal, 109 provincial)']
+
+  D [label = '01_database_legislation.R\nExtract jurisdiction, type, act name\nfrom HTML metadata\n→  LegislationMetadata table\n\n02_database_paragraphs.R\nParse each clause as HTML paragraph element\nExtract section numbers & headings\nFilter footnotes, amendments, editorial sections\n→  LegislationParagraphs table']
+
+  F [label = 'IUCN–CMP v4.0 examples & definitions\nWord frequency analyses (udpipe)\nResearcher input & iterative revision\nBigram / trigram refinement to\nreduce ambiguous single-word matches\n→  5 keyword CSV files in data/']
+
+  H [label = '03_database_labels.R\nNormalize & tokenize paragraph + heading text (quanteda)\nCompound multi-word phrases (longest-first)\nMatch 4 keyword lists independently\nDuplicate IUCN labels as Management Domain labels\nAssign salmon scope (1–4)\nDeduplicate combined paragraph + heading labels\n→  paragraph_label_table']
+
+  J [label = '05_actionable_clauses.R\nFilter to Acts with Management Domain &\nAuthorization / Instruction / Designation /\nLicence clause type labels\nRequire responsible official keyword\nbefore discretionary verb (within 5 words)\nExtract actionable type, official, discretion\n→  actionable_clauses table + CSV']
+
+  L [label = 'LAPSE Dashboard\nFilter by management domain, jurisdiction,\nkeyword search, clause type, discretion\nView highlighted legislative text\nExplore IUCN threat & keyword distributions\nDownload filtered results as XLSX\n\nPrimary publication\nRecovery planning & threat assessments']
+
+  # ── Connections ──────────────────────────────────────────────────────────────
+
+  A -> B
+  B -> C
+  C -> D
+  D -> E [label = '  legislation.db']
+  E -> F
+  F -> G
+  G -> H
+  H -> I [label = '  legislation.db']
+  I -> J
+  J -> K [label = '  legislation.db + CSV']
+  K -> L
+}
+")
+```
+
+*Figure: The LAPSE process pipeline from legislation collection to end use. Teal headers indicate the six major phases; detail nodes describe the inputs, steps, and outputs within each phase.*
+
+## The six phases
+
+**Phase 1 — Collect.** Relevant Canadian federal and British Columbian provincial legislation is identified through a step-wise keyword search on CanLII, beginning with Pacific salmon-specific terms and expanding outward via word frequency analysis and IUCN threat terminology. HTML files for all relevant statutes are downloaded directly from the federal and BC provincial legislation portals. The result is 196 statutes (87 federal, 109 provincial) stored in `data/legislation_html/`.
+
+**Phase 2 — Build database.** Two R scripts convert the raw HTML files into structured SQLite tables. `01_database_legislation.R` extracts metadata (jurisdiction, legislation type, act name) from each file's HTML structure. `02_database_paragraphs.R` parses each statute clause-by-clause, extracting paragraph text, section numbers, and headings while filtering out footnotes, amendment references, and editorial sections. Outputs are the `LegislationMetadata` and `LegislationParagraphs` tables in `output/legislation.db`.
+
+**Phase 3 — Develop keywords.** Five keyword CSV files are developed and refined through an iterative process drawing on IUCN–CMP threat definitions, word frequency analyses of collected legislation, and researcher expert judgment. Keywords are reviewed and revised continuously — single-word ambiguities are replaced with more specific bigrams or trigrams, domain-irrelevant terms are removed, and salmon-relevant terms absent from IUCN definitions (e.g., *riparian*) are added manually.
+
+**Phase 4 — Label.** `03_database_labels.R` tokenizes all paragraph and heading text using `quanteda`, compounds multi-word keyword phrases (longest-first), then matches four keyword lists independently against each clause. IUCN labels are automatically duplicated as their corresponding Management Domain labels via a lookup table. Scope values (1–4) are assigned to each label row. After deduplication, all results are written to the `paragraph_label_table`.
+
+**Phase 5 — Filter actionable clauses.** `05_actionable_clauses.R` applies a seven-step filtering pipeline to the full labelled dataset to identify the subset of act clauses that authorize or instruct an official to create a specific regulatory product (plan, licence, designation, etc.). The filter requires a responsible official keyword to appear before a mandatory or discretionary verb within five words. Results are written to the `actionable_clauses` table and exported as `output/actionable_clauses.csv`.
+
+**Phase 6 — Explore.** The complete `legislation.db` database is served through the LAPSE Dashboard, which allows users to filter legislation by management domain, jurisdiction, keyword search, clause type, responsible official, and discretion type — viewing highlighted legislative text and dynamic visualizations. Filtered results can be downloaded as XLSX. The database also underlies the primary publication analyses and can support recovery planning, Recovery Potential Assessments, and threat-specific regulatory reviews.
+
+---
+
 # Data Sources
 
 ## Canadian Legal Information Institute (CanLII)
@@ -678,7 +761,7 @@ df_pkg <- data.frame(
     "rvest", "xml2", "quanteda", "udpipe",
     "data.table", "RSQLite", "DBI",
     "stringr", "stringi", "here",
-    "flextable", "networkD3", "ggplot2", "beepr"
+    "DiagrammeR", "flextable", "networkD3", "ggplot2", "beepr"
   ),
   Use = c(
     "HTML parsing of legislation files — node selection, text extraction",
@@ -691,6 +774,7 @@ df_pkg <- data.frame(
     "String manipulation, regex pattern matching, and whitespace normalization",
     "UTF-8 encoding detection, conversion, and transliteration (stri_enc_toutf8, stri_trans_general)",
     "Reproducible relative file path management across operating systems",
+    "Process flowchart and network diagram rendering via Graphviz (this document)",
     "Table formatting in rendered HTML output (this document)",
     "Sankey diagram visualization for legislation-to-ministry alluvial plots",
     "Static chart and bar plot visualization",
@@ -698,7 +782,7 @@ df_pkg <- data.frame(
   ),
   Reference = c(
     "Wickham 2025", "—", "Benoit et al. 2018", "Wijffels 2025",
-    "—", "—", "—", "—", "—", "—", "—", "—", "—", "—"
+    "—", "—", "—", "—", "—", "—", "—", "—", "—", "—", "—"
   )
 )
 lapse_table(df_pkg, caption = "R packages used in the LAPSE pipeline.")
