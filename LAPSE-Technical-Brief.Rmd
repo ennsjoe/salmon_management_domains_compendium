@@ -17,6 +17,9 @@ output:
     css: "brief_style.css"
     theme: flatly
     highlight: tango
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -44,8 +47,8 @@ lapse_table <- function(df, caption = NULL) {
 }
 ```
 
-::: sticky-icon
-<a href="https://dfo-pacific-science.github.io/LAPSE_dashboard/" target="_blank">
+<div style="position:fixed; top:20px; right:20px; background-color:#f9f9f9; padding:12px; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.15); text-align:center; z-index:1001; width:120px;">
+<a href="https://dfo-pacific-science.github.io/LAPSE_dashboard/" target="_blank" style="text-decoration:none;">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="60" height="60"
      style="display:block;margin:0 auto 8px auto;"
      fill="none" stroke="#668899" stroke-width="1.5"
@@ -55,189 +58,240 @@ lapse_table <- function(df, caption = NULL) {
   <rect x="17" y="3" width="4" height="18"/>
   <line x1="1" y1="21" x2="23" y2="21"/>
 </svg>
-<span>Interactive App</span>
+<span style="display:block; font-size:14px; font-weight:bold; color:#2c3e50;">Interactive App</span>
 </a>
-:::
+</div>
 
----
+------------------------------------------------------------------------
 
-> ⚠️ **Disclaimer:** None of the information presented in this document qualifies as legal advice. The authors are aquatic biologists with limited legal training. This tool is intended for research and informational purposes only.
+> ⚠️ **Disclaimer:** None of the information presented in this document
+> qualifies as legal advice. The authors are aquatic biologists with
+> limited legal training. This tool is intended for research and
+> informational purposes only.
 
----
+------------------------------------------------------------------------
 
 # Overview
 
-Pacific salmon (*Oncorhynchus* spp.) populations are generally declining in Canada, while the number of populations monitored continues to drop, despite considerable attention toward policies and recovery programs for salmon conservation. The causes of these declines are varied — including loss or degradation of freshwater habitat, climate change, hatchery pressures, and harvest — and addressing them requires coordinated action across a fragmented governance landscape where federal jurisdiction over fisheries intersects with provincial authority over freshwater habitat.
+Pacific salmon (*Oncorhynchus* spp.) populations are generally declining
+in Canada, while the number of populations monitored continues to drop,
+despite considerable attention toward policies and recovery programs for
+salmon conservation. The causes of these declines are varied — including
+loss or degradation of freshwater habitat, climate change, hatchery
+pressures, and harvest — and addressing them requires coordinated action
+across a fragmented governance landscape where federal jurisdiction over
+fisheries intersects with provincial authority over freshwater habitat.
 
-The **Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE)** framework was developed to bridge this complexity. It is a systematic process and open-source tool that maps Canadian federal and British Columbian provincial legislation to standardized anthropogenic threat categories, enabling stewardship practitioners to navigate the regulatory landscape governing Pacific salmon and their ecosystems. This document serves as the technical manual and methodology reference for the LAPSE process, database, and associated tools.
+The **Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE)**
+framework was developed to bridge this complexity. It is a systematic
+process and open-source tool that maps Canadian federal and British
+Columbian provincial legislation to standardized anthropogenic threat
+categories, enabling stewardship practitioners to navigate the
+regulatory landscape governing Pacific salmon and their ecosystems. This
+document serves as the technical manual and methodology reference for
+the LAPSE process, database, and associated tools.
 
-For results, discussion, and case studies, refer to the primary publication:
+For results, discussion, and case studies, refer to the primary
+publication:
 
-> Enns, J., Lagasse, C., Gillis, D., and Wright, M. (2026). An interface between statutes and salmon: the Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE) framework. *[Journal pending]*
+> Enns, J., Lagasse, C., Gillis, D., and Wright, M. (2026). An interface
+> between statutes and salmon: the Legislation Applicable to Pacific
+> Salmon and Ecosystems (LAPSE) framework. *[Journal pending]*
 
-The LAPSE Dashboard (interactive tool) is available at:
+🔗 LAPSE Pipeline (R scripts) including all source code, data processing
+scripts, keyword lists, and the SQLite database, is available at:
+[https://github.com/dfo-pacific-science/LAPSE_pipeline](https://github.com/dfo-pacific-science/LAPSE_pipeline){target="_blank"}
+
+🔗 LAPSE Dashboard (interactive tool) is available at:
 [https://dfo-pacific-science.github.io/LAPSE_dashboard/](https://dfo-pacific-science.github.io/LAPSE_dashboard/){target="_blank"}
 
-The complete project repository, including all source code, data processing scripts, keyword lists, and the SQLite database, is available at:
-[https://github.com/dfo-pacific-science/salmon_management_domains_compendium](https://github.com/dfo-pacific-science/salmon_management_domains_compendium){target="_blank"}
+🔗 LAPSE About page:
+<https://dfo-pacific-science.github.io/LAPSE_dashboard/LAPSE-Dashboard-About.html>
 
----
+------------------------------------------------------------------------
 
 # Purpose and Scope
 
 ## Objectives
 
-This framework and tool were developed to decode the complexity between threats to Pacific salmon and corresponding environmental legislation by creating an interface between regulatory language and anthropogenic threat categories. The specific objectives were to:
+This framework and tool were developed to decode the complexity between
+threats to Pacific salmon and corresponding environmental legislation by
+creating an interface between regulatory language and anthropogenic
+threat categories. The specific objectives were to:
 
-1. create a process and tool to categorize specific legislation by anthropogenic threats to Pacific salmon;
-2. assess legislative factors by threat categorization across federal and provincial jurisdictions; and
-3. provide a framework to support systematic and critical reviews of the strengths and shortcomings of regulations with respect to salmon threats.
+1.  create a process and tool to categorize specific legislation by
+    anthropogenic threats to Pacific salmon;
+2.  assess legislative factors by threat categorization across federal
+    and provincial jurisdictions; and
+3.  provide a framework to support systematic and critical reviews of
+    the strengths and shortcomings of regulations with respect to salmon
+    threats.
 
 ## What LAPSE covers
 
-LAPSE accumulates and categorizes **Canadian federal** and **British Columbian provincial** legislation relevant to Pacific salmon and habitat stewardship. For this study, the term **legislation** (or *statutes*) refers collectively to acts, regulations, codes, and orders. The scope is limited to legislation as written; this study does not verify the implementation or enforcement of accumulated statutes in practice.
+LAPSE accumulates and categorizes **Canadian federal** and **British
+Columbian provincial** legislation relevant to Pacific salmon and
+habitat stewardship. For this study, the term **legislation** (or
+*statutes*) refers collectively to acts, regulations, codes, and orders.
+The scope is limited to legislation as written; this study does not
+verify the implementation or enforcement of accumulated statutes in
+practice.
 
-Legislation is used as the primary unit of analysis — rather than policy — because legislation is a better indicator of a jurisdiction's long-term commitment to natural resource stewardship (Bogetti and Mason 2025). Policies are formal statements about how the government of the day plans to execute legislative requirements and are more prone to changes in the political, administrative, and budgetary landscape, while legislation is subject to due process or a parliamentary vote. Specific departmental policy frameworks and processes were not assessed.
+Legislation is used as the primary unit of analysis — rather than policy
+— because legislation is a better indicator of a jurisdiction's
+long-term commitment to natural resource stewardship (Bogetti and Mason
+2025). Policies are formal statements about how the government of the
+day plans to execute legislative requirements and are more prone to
+changes in the political, administrative, and budgetary landscape, while
+legislation is subject to due process or a parliamentary vote. Specific
+departmental policy frameworks and processes were not assessed.
 
 ## What LAPSE does not cover
 
-The following were outside the scope of this legislative review in terms of feasibility and timelines, though some may overlap with included federal or provincial legislation:
+The following were outside the scope of this legislative review in terms
+of feasibility and timelines, though some may overlap with included
+federal or provincial legislation:
 
-- Indigenous legislation and land claims agreements (with the exception of select Final Agreement Acts enacted as federal or provincial statutes)
-- Yukon Territorial legislation
-- Municipal bylaws
-- International conventions and treaties
+-   Indigenous legislation and land claims agreements (with the
+    exception of select Final Agreement Acts enacted as federal or
+    provincial statutes)
+-   Yukon Territorial legislation
+-   Municipal bylaws
+-   International conventions and treaties
 
----
+------------------------------------------------------------------------
 
 # LAPSE Process Overview
 
-The LAPSE framework follows a linear pipeline from legislation collection through to the interactive dashboard. The eight major steps below describe the complete process; subsequent sections of this document provide full technical detail for each step.
+The LAPSE framework follows a linear pipeline from legislation
+collection through to the interactive dashboard. The eight major steps
+below describe the complete process; subsequent sections of this
+document provide full technical detail for each step.
 
-```{r lapse-flowchart, fig.width=8, fig.height=10}
-library(DiagrammeR)
-
-grViz("
-digraph LAPSE {
-
-  graph [layout = dot, rankdir = TB, fontname = 'Arial', bgcolor = 'transparent']
-
-  node [fontname = 'Arial', fontsize = 13, style = filled, shape = box,
-        fillcolor = '#f5f8fa', color = '#668899', penwidth = 1.5,
-        margin = '0.2,0.12']
-
-  edge [color = '#668899', penwidth = 1.5, arrowsize = 0.8, fontname = 'Arial',
-        fontsize = 11, fontcolor = '#555555']
-
-  # ── Phase headers (styled differently) ──────────────────────────────────────
-
-  node [shape = rectangle, fillcolor = '#668899', fontcolor = 'white',
-        fontsize = 12, penwidth = 0]
-
-  A [label = '① COLLECT\nLegislation identification & download']
-  C [label = '② BUILD DATABASE\nParse HTML into SQLite']
-  E [label = '③ DEVELOP KEYWORDS\nIterative list development']
-  G [label = '④ LABEL\nTokenize & match keywords']
-  I [label = '⑤ FILTER\nActionable clauses']
-  K [label = '⑥ EXPLORE\nDashboard & outputs']
-
-  # ── Detail nodes ─────────────────────────────────────────────────────────────
-
-  node [shape = box, fillcolor = '#f0f5f7', fontcolor = '#2c3e50',
-        fontsize = 11, penwidth = 1.2]
-
-  B [label = 'Search CanLII with salmon-specific terms\n(salmon, Chinook, sockeye…)\nExtract adjacent keywords via word frequency\nQuery IUCN threat terms in CanLII\nDownload HTML files from federal &\nBC provincial legislation portals\n→  196 statutes (87 federal, 109 provincial)']
-
-  D [label = '01_database_legislation.R\nExtract jurisdiction, type, act name\nfrom HTML metadata\n→  LegislationMetadata table\n\n02_database_paragraphs.R\nParse each clause as HTML paragraph element\nExtract section numbers & headings\nFilter footnotes, amendments, editorial sections\n→  LegislationParagraphs table']
-
-  F [label = 'IUCN–CMP v4.0 examples & definitions\nWord frequency analyses (udpipe)\nResearcher input & iterative revision\nBigram / trigram refinement to\nreduce ambiguous single-word matches\n→  5 keyword CSV files in data/']
-
-  H [label = '03_database_labels.R\nNormalize & tokenize paragraph + heading text (quanteda)\nCompound multi-word phrases (longest-first)\nMatch 4 keyword lists independently\nDuplicate IUCN labels as Management Domain labels\nAssign salmon scope (1–4)\nDeduplicate combined paragraph + heading labels\n→  paragraph_label_table']
-
-  J [label = '05_actionable_clauses.R\nFilter to Acts with Management Domain &\nAuthorization / Instruction / Designation /\nLicence clause type labels\nRequire responsible official keyword\nbefore discretionary verb (within 5 words)\nExtract actionable type, official, discretion\n→  actionable_clauses table + CSV']
-
-  L [label = 'LAPSE Dashboard\nFilter by management domain, jurisdiction,\nkeyword search, clause type, discretion\nView highlighted legislative text\nExplore IUCN threat & keyword distributions\nDownload filtered results as XLSX\n\nPrimary publication\nRecovery planning & threat assessments']
-
-  # ── Connections ──────────────────────────────────────────────────────────────
-
-  A -> B
-  B -> C
-  C -> D
-  D -> E [label = '  legislation.db']
-  E -> F
-  F -> G
-  G -> H
-  H -> I [label = '  legislation.db']
-  I -> J
-  J -> K [label = '  legislation.db + CSV']
-  K -> L
-}
-")
+```{r lapse-flowchart, echo=FALSE, out.width="100%"}
+knitr::include_graphics(here::here("assets", "LAPSE_process_steps.png"))
 ```
 
-*Figure: The LAPSE process pipeline from legislation collection to end use. Teal headers indicate the six major phases; detail nodes describe the inputs, steps, and outputs within each phase.*
+*Figure: The LAPSE process pipeline from legislation collection to end
+use. Teal headers indicate the six major phases; detail nodes describe
+the inputs, steps, and outputs within each phase.*
 
 ## The six phases
 
-**Phase 1 — Collect.** Relevant Canadian federal and British Columbian provincial legislation is identified through a step-wise keyword search on CanLII, beginning with Pacific salmon-specific terms and expanding outward via word frequency analysis and IUCN threat terminology. HTML files for all relevant statutes are downloaded directly from the federal and BC provincial legislation portals. The result is 196 statutes (87 federal, 109 provincial) stored in `data/legislation_html/`.
+**Phase 1 — Collect.** Relevant Canadian federal and British Columbian
+provincial legislation is identified through a step-wise keyword search
+on CanLII, beginning with Pacific salmon-specific terms and expanding
+outward via word frequency analysis and IUCN threat terminology. HTML
+files for all relevant statutes are downloaded directly from the federal
+and BC provincial legislation portals. The result is 196 statutes (87
+federal, 109 provincial) stored in `data/legislation_html/`.
 
-**Phase 2 — Build database.** Two R scripts convert the raw HTML files into structured SQLite tables. `01_database_legislation.R` extracts metadata (jurisdiction, legislation type, act name) from each file's HTML structure. `02_database_paragraphs.R` parses each statute clause-by-clause, extracting paragraph text, section numbers, and headings while filtering out footnotes, amendment references, and editorial sections. Outputs are the `LegislationMetadata` and `LegislationParagraphs` tables in `output/legislation.db`.
+**Phase 2 — Build database.** Two R scripts convert the raw HTML files
+into structured SQLite tables. `01_database_legislation.R` extracts
+metadata (jurisdiction, legislation type, act name) from each file's
+HTML structure. `02_database_paragraphs.R` parses each statute
+clause-by-clause, extracting paragraph text, section numbers, and
+headings while filtering out footnotes, amendment references, and
+editorial sections. Outputs are the `LegislationMetadata` and
+`LegislationParagraphs` tables in `output/legislation.db`.
 
-**Phase 3 — Develop keywords.** Five keyword CSV files are developed and refined through an iterative process drawing on IUCN–CMP threat definitions, word frequency analyses of collected legislation, and researcher expert judgment. Keywords are reviewed and revised continuously — single-word ambiguities are replaced with more specific bigrams or trigrams, domain-irrelevant terms are removed, and salmon-relevant terms absent from IUCN definitions (e.g., *riparian*) are added manually.
+**Phase 3 — Develop keywords.** Five keyword CSV files are developed and
+refined through an iterative process drawing on IUCN–CMP threat
+definitions, word frequency analyses of collected legislation, and
+researcher expert judgment. Keywords are reviewed and revised
+continuously — single-word ambiguities are replaced with more specific
+bigrams or trigrams, domain-irrelevant terms are removed, and
+salmon-relevant terms absent from IUCN definitions (e.g., *riparian*)
+are added manually.
 
-**Phase 4 — Label.** `03_database_labels.R` tokenizes all paragraph and heading text using `quanteda`, compounds multi-word keyword phrases (longest-first), then matches four keyword lists independently against each clause. IUCN labels are automatically duplicated as their corresponding Management Domain labels via a lookup table. Scope values (1–4) are assigned to each label row. After deduplication, all results are written to the `paragraph_label_table`.
+**Phase 4 — Label.** `03_database_labels.R` tokenizes all paragraph and
+heading text using `quanteda`, compounds multi-word keyword phrases
+(longest-first), then matches four keyword lists independently against
+each clause. IUCN labels are automatically duplicated as their
+corresponding Management Domain labels via a lookup table. Scope values
+(1–4) are assigned to each label row. After deduplication, all results
+are written to the `paragraph_label_table`.
 
-**Phase 5 — Filter actionable clauses.** `05_actionable_clauses.R` applies a seven-step filtering pipeline to the full labelled dataset to identify the subset of act clauses that authorize or instruct an official to create a specific regulatory product (plan, licence, designation, etc.). The filter requires a responsible official keyword to appear before a mandatory or discretionary verb within five words. Results are written to the `actionable_clauses` table and exported as `output/actionable_clauses.csv`.
+**Phase 5 — Filter actionable clauses.** `05_actionable_clauses.R`
+applies a seven-step filtering pipeline to the full labelled dataset to
+identify the subset of act clauses that authorize or instruct an
+official to create a specific regulatory product (plan, licence,
+designation, etc.). The filter requires a responsible official keyword
+to appear before a mandatory or discretionary verb within five words.
+Results are written to the `actionable_clauses` table and exported as
+`output/actionable_clauses.csv`.
 
-**Phase 6 — Explore.** The complete `legislation.db` database is served through the LAPSE Dashboard, which allows users to filter legislation by management domain, jurisdiction, keyword search, clause type, responsible official, and discretion type — viewing highlighted legislative text and dynamic visualizations. Filtered results can be downloaded as XLSX. The database also underlies the primary publication analyses and can support recovery planning, Recovery Potential Assessments, and threat-specific regulatory reviews.
+**Phase 6 — Explore.** The complete `legislation.db` database is served
+through the LAPSE Dashboard, which allows users to filter legislation by
+management domain, jurisdiction, keyword search, clause type,
+responsible official, and discretion type — viewing highlighted
+legislative text and dynamic visualizations. Filtered results can be
+downloaded as XLSX. The database also underlies the primary publication
+analyses and can support recovery planning, Recovery Potential
+Assessments, and threat-specific regulatory reviews.
 
----
+------------------------------------------------------------------------
 
 # Data Sources
 
 ## Canadian Legal Information Institute (CanLII)
 
-The primary resource for locating and reviewing Canadian legislation was the **Canadian Legal Information Institute (CanLII)**:
+The primary resource for locating and reviewing Canadian legislation was
+the **Canadian Legal Information Institute (CanLII)**:
 
 [https://www.canlii.org/](https://www.canlii.org/){target="_blank"}
 
-CanLII provides a comprehensive, searchable database of federal and provincial legislation. It was used as the entry point for the step-wise keyword search process used to identify relevant statutes (see Section 6). Users can search by keyword within any jurisdiction and view individual keyword occurrences in context within any statute.
+CanLII provides a comprehensive, searchable database of federal and
+provincial legislation. It was used as the entry point for the step-wise
+keyword search process used to identify relevant statutes (see Section
+6). Users can search by keyword within any jurisdiction and view
+individual keyword occurrences in context within any statute.
 
 ## Federal legislation portal
 
-Official HTML files for Canadian federal legislation were downloaded directly from the Department of Justice Canada:
+Official HTML files for Canadian federal legislation were downloaded
+directly from the Department of Justice Canada:
 
 [https://laws-lois.justice.gc.ca/eng/acts/](https://laws-lois.justice.gc.ca/eng/acts/){target="_blank"}
 
-Responsible ministers for each federal act were confirmed using the **Table of Public Statutes and Responsible Ministers**:
+Responsible ministers for each federal act were confirmed using the
+**Table of Public Statutes and Responsible Ministers**:
 
 [https://laws-lois.justice.gc.ca/PDF/tops/eng/TOPS.pdf](https://laws-lois.justice.gc.ca/PDF/tops/eng/TOPS.pdf){target="_blank"}
 
 ## British Columbia provincial legislation portal
 
-Official HTML files for British Columbian provincial legislation were downloaded from the BC Laws database:
+Official HTML files for British Columbian provincial legislation were
+downloaded from the BC Laws database:
 
 [https://www.bclaws.gov.bc.ca/civix/content/complete/statreg/](https://www.bclaws.gov.bc.ca/civix/content/complete/statreg/){target="_blank"}
 
-Responsible ministers for each provincial act were confirmed using the **Acts – Ministers' Responsibilities** resource:
+Responsible ministers for each provincial act were confirmed using the
+**Acts – Ministers' Responsibilities** resource:
 
 [https://www.bclaws.gov.bc.ca/civix/content/amr/amr/](https://www.bclaws.gov.bc.ca/civix/content/amr/amr/){target="_blank"}
 
 ## IUCN–CMP Direct Threats Classification
 
-The categorization framework used to classify management domains and match legislative clauses to anthropogenic threats is the **IUCN–CMP Direct Threats Classification Version 4.0** (Salafsky et al. 2024):
+The categorization framework used to classify management domains and
+match legislative clauses to anthropogenic threats is the **IUCN–CMP
+Direct Threats Classification Version 4.0** (Salafsky et al. 2024):
 
-[IUCN–CMP v4.0 by threat (Google Sheets)](https://docs.google.com/spreadsheets/d/1yfm7ua9hQJpjycx6FYQJ6Jy5LA4bP0XP61EW3-sX8ZY/edit?gid=179026760#gid=179026760){target="_blank"}
+[IUCN–CMP v4.0 by threat (Google
+Sheets)](https://docs.google.com/spreadsheets/d/1yfm7ua9hQJpjycx6FYQJ6Jy5LA4bP0XP61EW3-sX8ZY/edit?gid=179026760#gid=179026760){target="_blank"}
 
-[IUCN–CMP v4.0 by species (Google Sheets)](https://docs.google.com/spreadsheets/d/1i25GTaEA80HwMvsTiYkdOoXRPWiVPZ5l6KioWx9g2zM/edit?gid=1144804238#gid=1144804238){target="_blank"}
+[IUCN–CMP v4.0 by species (Google
+Sheets)](https://docs.google.com/spreadsheets/d/1i25GTaEA80HwMvsTiYkdOoXRPWiVPZ5l6KioWx9g2zM/edit?gid=1144804238#gid=1144804238){target="_blank"}
 
----
+------------------------------------------------------------------------
 
 # Legislative Scope and Inclusion Criteria
 
 ## Jurisdictions and legislation types
 
-The LAPSE framework covers two jurisdictions: the **Government of Canada** (federal) and the **Province of British Columbia** (provincial). Four legislation types are included:
+The LAPSE framework covers two jurisdictions: the **Government of
+Canada** (federal) and the **Province of British Columbia**
+(provincial). Four legislation types are included:
 
 ```{r table-leg-types}
 df_types <- data.frame(
@@ -268,31 +322,65 @@ lapse_table(df_counts, caption = "Count of legislation by jurisdiction and type.
   bg(i = 3, bg = "#f0f4f6")
 ```
 
-The full list of included legislation is available in Appendix I of the primary publication and in the project repository.
+The full list of included legislation is available in Appendix I of the
+primary publication and in the project repository.
 
 ## The jurisdictional context
 
-The patchwork of legislative authority is most prominent in Pacific salmon management due to the species' geographically widespread, anadromous life cycles that span international boundaries and freshwater and marine ecosystems. While salmon populations and fisheries are regulated federally, water use, watercourse alterations, and the corresponding aquatic habitat are managed provincially. The federal government also regulates navigable waters within provincial boundaries (Becklumb 2013; Swerdfager and Olive 2023), and both levels of government have authority to designate protected areas.
+The patchwork of legislative authority is most prominent in Pacific
+salmon management due to the species' geographically widespread,
+anadromous life cycles that span international boundaries and freshwater
+and marine ecosystems. While salmon populations and fisheries are
+regulated federally, water use, watercourse alterations, and the
+corresponding aquatic habitat are managed provincially. The federal
+government also regulates navigable waters within provincial boundaries
+(Becklumb 2013; Swerdfager and Olive 2023), and both levels of
+government have authority to designate protected areas.
 
-British Columbia is more decentralized than other provinces — particularly with respect to species at risk — because relevant provisions are spread over the greatest number of statutes and regulations (Bogetti and Mason 2025). This means that a single human activity (e.g., forestry) can engage multiple acts across multiple ministries, making the full legislative picture difficult to navigate without a framework like LAPSE.
+British Columbia is more decentralized than other provinces —
+particularly with respect to species at risk — because relevant
+provisions are spread over the greatest number of statutes and
+regulations (Bogetti and Mason 2025). This means that a single human
+activity (e.g., forestry) can engage multiple acts across multiple
+ministries, making the full legislative picture difficult to navigate
+without a framework like LAPSE.
 
----
+------------------------------------------------------------------------
 
 # Management Domain Framework
 
 ## IUCN–CMP threat classification background
 
-The IUCN and the Conservation Measures Partnership (CMP) developed the IUCN–CMP Direct Threats Classification Version 4.0 (Salafsky et al. 2024), which defines threats as "current or future human activities or altered natural phenomena that affect one or more ecosystems or species of interest." The classification uses a three-level hierarchical structure analogous to a Linnean taxonomy:
+The IUCN and the Conservation Measures Partnership (CMP) developed the
+IUCN–CMP Direct Threats Classification Version 4.0 (Salafsky et al.
+2024), which defines threats as "current or future human activities or
+altered natural phenomena that affect one or more ecosystems or species
+of interest." The classification uses a three-level hierarchical
+structure analogous to a Linnean taxonomy:
 
-- **Level 1** — Broadest categories (e.g., *2. Agriculture & Aquaculture*)
-- **Level 2** — Subcategories (e.g., *2.4 Marine & Freshwater Aquaculture*)
-- **Level 3** — Most specific sub-subcategories (not used in this assessment)
+-   **Level 1** — Broadest categories (e.g., *2. Agriculture &
+    Aquaculture*)
+-   **Level 2** — Subcategories (e.g., *2.4 Marine & Freshwater
+    Aquaculture*)
+-   **Level 3** — Most specific sub-subcategories (not used in this
+    assessment)
 
-This classification is widely applied in IUCN Red List assessments, COSEWIC status assessments, and DFO Recovery Potential Assessments (RPAs) for Pacific salmon populations.
+This classification is widely applied in IUCN Red List assessments,
+COSEWIC status assessments, and DFO Recovery Potential Assessments
+(RPAs) for Pacific salmon populations.
 
 ## Why management domains were needed
 
-Canadian and British Columbian legislation has been enacted on a sector-by-sector basis and does not align neatly with IUCN–CMP Level 1 categories. The Level 2 categories fit better with legislative categories but still required lumping and splitting to match how legislation is organized in practice. Additionally, not all aspects of salmon management connect to a direct human threat: topics such as restoration, species status, spatial designation, and governance administration may encompass all threats or none. To capture both threat and non-threat categories, a schema of **management domains** was created, defined as **"discrete areas of administrative concern."**
+Canadian and British Columbian legislation has been enacted on a
+sector-by-sector basis and does not align neatly with IUCN–CMP Level 1
+categories. The Level 2 categories fit better with legislative
+categories but still required lumping and splitting to match how
+legislation is organized in practice. Additionally, not all aspects of
+salmon management connect to a direct human threat: topics such as
+restoration, species status, spatial designation, and governance
+administration may encompass all threats or none. To capture both threat
+and non-threat categories, a schema of **management domains** was
+created, defined as **"discrete areas of administrative concern."**
 
 ## Management domains and IUCN–CMP alignment
 
@@ -340,72 +428,122 @@ lapse_table(
 )
 ```
 
-A flowchart illustrating the alignment between IUCN–CMP Level 2 categories, management domains, sections, acts and regulations, and jurisdiction is provided in the primary publication (Figure 1) and in the project repository (`assets/Management Domain Flowchart.png`).
+A flowchart illustrating the alignment between IUCN–CMP Level 2
+categories, management domains, sections, acts and regulations, and
+jurisdiction is provided in the primary publication (Figure 1) and in
+the project repository (`assets/Management Domain Flowchart.png`).
 
----
+------------------------------------------------------------------------
 
 # Legislation Collection Process
 
 ## Overview of the collection workflow
 
-Relevant legislation was compiled through a step-wise keyword search process using CanLII, designed to be publicly accessible, automated, and repeatable as legislation changes over time. The collection steps were:
+Relevant legislation was compiled through a step-wise keyword search
+process using CanLII, designed to be publicly accessible, automated, and
+repeatable as legislation changes over time. The collection steps were:
 
-1. Query Pacific salmon-specific terms in CanLII (e.g., *salmon*, *Chinook*, *sockeye*, *coho*, *steelhead*)
-2. Extract additional adjacent keywords from salmon-specific legislation using word frequency analysis (see Section 6.2)
-3. Query extracted keywords and IUCN threat description wording in CanLII to find adjacent legislation
-4. Filter results regionally (excluding provinces other than British Columbia)
-5. Download HTML files for relevant legislation directly from government portals
+1.  Query Pacific salmon-specific terms in CanLII (e.g., *salmon*,
+    *Chinook*, *sockeye*, *coho*, *steelhead*)
+2.  Extract additional adjacent keywords from salmon-specific
+    legislation using word frequency analysis (see Section 6.2)
+3.  Query extracted keywords and IUCN threat description wording in
+    CanLII to find adjacent legislation
+4.  Filter results regionally (excluding provinces other than British
+    Columbia)
+5.  Download HTML files for relevant legislation directly from
+    government portals
 
 ## Word frequency extraction for adjacent keywords
 
-Popular practitioner language may not appear in legal text due to the age and generality of legislation. To capture salmon-relevant terms that actually occur in statutes, a word frequency analysis was performed on salmon-specific legislation using the **`udpipe`** R package (Wijffels 2025), extracting unigrams, bigrams, and trigrams that co-occur with salmon-specific terms. These extracted keywords were combined with wording from the IUCN–CMP Direct Threats Classification 4.0 and queried in CanLII to identify additional relevant legislation.
+Popular practitioner language may not appear in legal text due to the
+age and generality of legislation. To capture salmon-relevant terms that
+actually occur in statutes, a word frequency analysis was performed on
+salmon-specific legislation using the **`udpipe`** R package (Wijffels
+2025), extracting unigrams, bigrams, and trigrams that co-occur with
+salmon-specific terms. These extracted keywords were combined with
+wording from the IUCN–CMP Direct Threats Classification 4.0 and queried
+in CanLII to identify additional relevant legislation.
 
 ## Verification via CanLII
 
-Through the CanLII website, individual keywords can be queried within any chosen statute, allowing users to quickly assess the context of a keyword in the legislation and determine whether a section is relevant to Pacific salmon stewardship. This verification step was applied during collection to screen out statutes where keyword matches occurred in contexts unrelated to salmon.
+Through the CanLII website, individual keywords can be queried within
+any chosen statute, allowing users to quickly assess the context of a
+keyword in the legislation and determine whether a section is relevant
+to Pacific salmon stewardship. This verification step was applied during
+collection to screen out statutes where keyword matches occurred in
+contexts unrelated to salmon.
 
 ## Legislation type and ministry assignment
 
 *Script: `01_database_legislation.R`*
 
-Jurisdiction was determined automatically from HTML metadata in each downloaded file: federal legislation was identified by the `meta[name='description']` tag containing `"Federal laws of Canada"`, while provincial legislation was identified by the `meta[name='breadcrumb']` tag containing `"British Columbia"`. Legislation type (Act, Regulation, Order, Code) was inferred from the legislation name using pattern matching on terms "Regulation/Regulations", "Order", "Act", and "Code". For non-Act statutes, the parent act name was extracted from the HTML enabling-act element (`p.EnablingAct a` or `div#actname h2`). Responsible ministers were assigned using:
+Jurisdiction was determined automatically from HTML metadata in each
+downloaded file: federal legislation was identified by the
+`meta[name='description']` tag containing `"Federal laws of Canada"`,
+while provincial legislation was identified by the
+`meta[name='breadcrumb']` tag containing `"British Columbia"`.
+Legislation type (Act, Regulation, Order, Code) was inferred from the
+legislation name using pattern matching on terms
+"Regulation/Regulations", "Order", "Act", and "Code". For non-Act
+statutes, the parent act name was extracted from the HTML enabling-act
+element (`p.EnablingAct a` or `div#actname h2`). Responsible ministers
+were assigned using:
 
-- **Federal:** *Table of Public Statutes and Responsible Ministers* (Department of Justice Canada 2026)
-- **Provincial:** *Acts – Ministers' Responsibilities* (Province of British Columbia 2025)
+-   **Federal:** *Table of Public Statutes and Responsible Ministers*
+    (Department of Justice Canada 2026)
+-   **Provincial:** *Acts – Ministers' Responsibilities* (Province of
+    British Columbia 2025)
 
----
+------------------------------------------------------------------------
 
 # Parsing and Database Structure
 
 ## Legistics and the clause as the unit of analysis
 
-The individual **clause** was used as the sample unit for assignment into management domains and other attributes. Typological device structure and definitions were derived from the Government of Canada's **Legistics Paragraphing** guide:
+The individual **clause** was used as the sample unit for assignment
+into management domains and other attributes. Typological device
+structure and definitions were derived from the Government of Canada's
+**Legistics Paragraphing** guide:
 
 [https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html](https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html){target="_blank"}
 
-"Clause" in this study refers to individual HTML paragraph elements (`<p>`), which may correspond to subclauses, sections, subsections, or opening words (chapeau or umbrella text). The hierarchy of elements from largest to smallest is: **heading → section → subsection → clause → subclause**.
+"Clause" in this study refers to individual HTML paragraph elements
+(`<p>`), which may correspond to subclauses, sections, subsections, or
+opening words (chapeau or umbrella text). The hierarchy of elements from
+largest to smallest is: **heading → section → subsection → clause →
+subclause**.
 
 ## HTML parsing with rvest
 
 *Script: `02_database_paragraphs.R`*
 
-Legislation on Canadian and British Columbian government websites is structured such that each clause appears as a separate HTML paragraph element. HTML files were parsed using R and the **`rvest`** package (Wickham 2025), targeting the following node selector to capture the full range of paragraph contexts across legislation formats:
+Legislation on Canadian and British Columbian government websites is
+structured such that each clause appears as a separate HTML paragraph
+element. HTML files were parsed using R and the **`rvest`** package
+(Wickham 2025), targeting the following node selector to capture the
+full range of paragraph contexts across legislation formats:
 
-```r
+``` r
 html_nodes("p, div p, dl p, dd p, li p, ul p, dfn p, a p, span p")
 ```
 
-Section headings were extracted from marginal notes and heading elements:
+Section headings were extracted from marginal notes and heading
+elements:
 
-```r
+``` r
 html_nodes("p.MarginalNote, h4, h3, h2")
 ```
 
-Each paragraph was assigned the text of its nearest preceding heading using XPath lookup. The editorial prefix `"Marginal note:"` is stripped from heading text before storage.
+Each paragraph was assigned the text of its nearest preceding heading
+using XPath lookup. The editorial prefix `"Marginal note:"` is stripped
+from heading text before storage.
 
 ### Section number extraction
 
-Section numbers were extracted from each paragraph node using a four-strategy cascade, applied in order until a valid section number was found:
+Section numbers were extracted from each paragraph node using a
+four-strategy cascade, applied in order until a valid section number was
+found:
 
 ```{r table-section-strategies}
 df_strat <- data.frame(
@@ -425,11 +563,15 @@ df_strat <- data.frame(
 lapse_table(df_strat, caption = "Section number extraction strategies applied in cascade to each parsed paragraph (02_database_paragraphs.R).")
 ```
 
-Schedule and Appendix headers (e.g., `Schedule A`, `Appendix B`) are detected and used to prefix section numbers within that block (e.g., section 3 within Schedule A becomes `A-3`). The header itself is not stored as a paragraph.
+Schedule and Appendix headers (e.g., `Schedule A`, `Appendix B`) are
+detected and used to prefix section numbers within that block (e.g.,
+section 3 within Schedule A becomes `A-3`). The header itself is not
+stored as a paragraph.
 
 ### Content filtering
 
-Several categories of paragraph content were excluded before writing to the database:
+Several categories of paragraph content were excluded before writing to
+the database:
 
 ```{r table-filters}
 df_filt <- data.frame(
@@ -453,7 +595,11 @@ lapse_table(df_filt, caption = "Content filtering rules applied during HTML pars
 
 ## SQLite database schema
 
-The parsed legislation is stored in a **SQLite** database (`output/legislation.db`). Using a relational database rather than a single spreadsheet allows for dynamic querying and streamlines the parsing and collection process. The database contains the following primary tables:
+The parsed legislation is stored in a **SQLite** database
+(`output/legislation.db`). Using a relational database rather than a
+single spreadsheet allows for dynamic querying and streamlines the
+parsing and collection process. The database contains the following
+primary tables:
 
 ### LegislationMetadata
 
@@ -517,7 +663,9 @@ lapse_table(df_lab, caption = "Fields in the paragraph_label_table.")
 
 *Populated by `03_database_labels.R`*
 
-The following keyword CSV files are also written to the SQLite database during the labelling process, providing a complete, queryable record of all keywords used:
+The following keyword CSV files are also written to the SQLite database
+during the labelling process, providing a complete, queryable record of
+all keywords used:
 
 ```{r table-kw-tables}
 df_kw <- data.frame(
@@ -554,45 +702,80 @@ lapse_table(df_kw, caption = "Keyword lookup tables stored in the SQLite databas
 
 *Populated by `05_actionable_clauses.R`*
 
-Output table produced by the actionable clause filtering pipeline (see Section 9.5). Fields: `paragraph_id`, `act_name`, `jurisdiction`, `Section`, `Heading`, `actionable_type`, `responsible_official`, `discretion_type`, `Paragraph`. Also exported as `output/actionable_clauses.csv`.
+Output table produced by the actionable clause filtering pipeline (see
+Section 9.5). Fields: `paragraph_id`, `act_name`, `jurisdiction`,
+`Section`, `Heading`, `actionable_type`, `responsible_official`,
+`discretion_type`, `Paragraph`. Also exported as
+`output/actionable_clauses.csv`.
 
----
+------------------------------------------------------------------------
 
 # Keyword and Keyphrase Development
 
 ## Sources of keywords
 
-The management domain and IUCN–CMP threat matching process pivoted around established lists of keywords and phrases. Keywords must be specific enough to match an IUCN–CMP threat, yet general enough to appear across multiple acts and regulations spanning many decades of legal language. Keywords were derived from three sources:
+The management domain and IUCN–CMP threat matching process pivoted
+around established lists of keywords and phrases. Keywords must be
+specific enough to match an IUCN–CMP threat, yet general enough to
+appear across multiple acts and regulations spanning many decades of
+legal language. Keywords were derived from three sources:
 
-1. **IUCN–CMP Direct Threats Classification 4.0** examples and definitions (Salafsky et al. 2024)
-2. **Word frequency analyses** (unigrams, bigrams, and trigrams) of all collected legislation, performed using the `udpipe` R package (Wijffels 2025)
-3. **Iterative researcher input and revision** based on domain expertise in Pacific salmon stewardship
+1.  **IUCN–CMP Direct Threats Classification 4.0** examples and
+    definitions (Salafsky et al. 2024)
+2.  **Word frequency analyses** (unigrams, bigrams, and trigrams) of all
+    collected legislation, performed using the `udpipe` R package
+    (Wijffels 2025)
+3.  **Iterative researcher input and revision** based on domain
+    expertise in Pacific salmon stewardship
 
-The full keyword and keyphrase lists by management domain and clause type are available in Appendix II and Appendix III of the primary publication and in the `data/` directory of the project repository.
+The full keyword and keyphrase lists by management domain and clause
+type are available in Appendix II and Appendix III of the primary
+publication and in the `data/` directory of the project repository.
 
 ## Iterative revision process
 
-Keyword development required iterative researcher revision because of the varied context of natural language. Words used in IUCN–CMP threat definitions may be irrelevant to salmon stewardship in the legislative context, and single words in particular can have multiple meanings leading to over-assignment of categories. Two illustrative examples from the primary publication:
+Keyword development required iterative researcher revision because of
+the varied context of natural language. Words used in IUCN–CMP threat
+definitions may be irrelevant to salmon stewardship in the legislative
+context, and single words in particular can have multiple meanings
+leading to over-assignment of categories. Two illustrative examples from
+the primary publication:
 
-- **Removed keyword — "landfill":** Listed in IUCN–CMP examples for *1.2 Commercial & Industrial Areas* in the context of the physical footprint of landfill sites. In collected legislation, "landfill" appears primarily in effluent and water pollution contexts, which are better classified under Pollution. Including it added many clauses outside the tool's scope, so it was removed.
+-   **Removed keyword — "landfill":** Listed in IUCN–CMP examples for
+    *1.2 Commercial & Industrial Areas* in the context of the physical
+    footprint of landfill sites. In collected legislation, "landfill"
+    appears primarily in effluent and water pollution contexts, which
+    are better classified under Pollution. Including it added many
+    clauses outside the tool's scope, so it was removed.
 
-- **Added keyword — "riparian":** Highly relevant to salmon habitat stewardship in British Columbia, yet absent from IUCN–CMP threat examples and word frequency analyses of other legislation. Added solely from researchers' expert judgment.
+-   **Added keyword — "riparian":** Highly relevant to salmon habitat
+    stewardship in British Columbia, yet absent from IUCN–CMP threat
+    examples and word frequency analyses of other legislation. Added
+    solely from researchers' expert judgment.
 
 ## Managing ambiguous keywords
 
-Single-word keywords can cause mis-categorization in unexpected ways. For example, "stock" is important for the Fisheries management domain (referring to salmon populations) but also appears in the context of business holdings, freight cars, and livestock. To address this, outputs were reviewed iteratively and keyword revision was a continuous process to:
+Single-word keywords can cause mis-categorization in unexpected ways.
+For example, "stock" is important for the Fisheries management domain
+(referring to salmon populations) but also appears in the context of
+business holdings, freight cars, and livestock. To address this, outputs
+were reviewed iteratively and keyword revision was a continuous process
+to:
 
-- find more accurate bigram or trigram alternatives that reduce false positives (e.g., *"fish stock"*, *"salmon stock"*)
-- remove keywords where clauses are already matched via more specific alternatives
-- capture relevant word variations (plural, past tense, possessive)
+-   find more accurate bigram or trigram alternatives that reduce false
+    positives (e.g., *"fish stock"*, *"salmon stock"*)
+-   remove keywords where clauses are already matched via more specific
+    alternatives
+-   capture relevant word variations (plural, past tense, possessive)
 
----
+------------------------------------------------------------------------
 
 # Category Assignment
 
 ## Processing pipeline overview
 
-The full categorization pipeline is implemented across four sequential R scripts:
+The full categorization pipeline is implemented across four sequential R
+scripts:
 
 ```{r table-scripts}
 df_scripts <- data.frame(
@@ -623,13 +806,23 @@ lapse_table(df_scripts, caption = "R scripts implementing the LAPSE processing p
 
 *Script: `03_database_labels.R`*
 
-Keyword matching is performed using the **`quanteda`** package (Benoit et al. 2018) rather than simple text search. This allows multi-word phrases (bigrams, trigrams) to be matched as compound tokens before single-word matching is applied, preventing shorter keywords from consuming parts of longer, more specific phrases.
+Keyword matching is performed using the **`quanteda`** package (Benoit
+et al. 2018) rather than simple text search. This allows multi-word
+phrases (bigrams, trigrams) to be matched as compound tokens before
+single-word matching is applied, preventing shorter keywords from
+consuming parts of longer, more specific phrases.
 
-All keyword CSV files are pre-sorted by decreasing keyword length before compounding, so that the most specific phrases are matched first. The matching process is applied independently to **both paragraph text and heading text** for each clause, then the resulting label rows are combined and deduplicated. This ensures that management domain labels are captured even when the relevant terminology appears only in the section heading and not in the clause body.
+All keyword CSV files are pre-sorted by decreasing keyword length before
+compounding, so that the most specific phrases are matched first. The
+matching process is applied independently to **both paragraph text and
+heading text** for each clause, then the resulting label rows are
+combined and deduplicated. This ensures that management domain labels
+are captured even when the relevant terminology appears only in the
+section heading and not in the clause body.
 
 The processing workflow for each text source is:
 
-```r
+``` r
 # 1. Normalize text: lowercase, collapse whitespace, remove punctuation
 cleaned_text <- str_squish(tolower(str_replace_all(text, "[[:punct:]]", " ")))
 
@@ -649,11 +842,21 @@ tokens_obj <- tokens_compound(tokens_obj, pattern = phrase(clause_type_keywords$
 
 ### IUCN-to-Management Domain duplication
 
-After IUCN labels are assigned, each IUCN label is also used to generate a corresponding **Management Domain** label via the `management_domain_threat_table` lookup. For example, a clause matched to IUCN threat *9.1 Water-Borne & Other Effluent Pollution* automatically also receives a *Pollution* Management Domain label. This dual-labelling enables users to search by either the standardized IUCN threat or the more practitioner-oriented management domain, and enables co-occurrence analysis across management domains (see primary publication, Figure 8).
+After IUCN labels are assigned, each IUCN label is also used to generate
+a corresponding **Management Domain** label via the
+`management_domain_threat_table` lookup. For example, a clause matched
+to IUCN threat *9.1 Water-Borne & Other Effluent Pollution*
+automatically also receives a *Pollution* Management Domain label. This
+dual-labelling enables users to search by either the standardized IUCN
+threat or the more practitioner-oriented management domain, and enables
+co-occurrence analysis across management domains (see primary
+publication, Figure 8).
 
 ## Salmon-specific scope
 
-A **scope** classification categorizes each matched clause by its directness of application to Pacific salmon, determined by the matched keyword. Scope is stored per label row in the `paragraph_label_table`.
+A **scope** classification categorizes each matched clause by its
+directness of application to Pacific salmon, determined by the matched
+keyword. Scope is stored per label row in the `paragraph_label_table`.
 
 ```{r table-scope}
 df_scope <- data.frame(
@@ -677,7 +880,10 @@ lapse_table(df_scope, caption = "Salmon-specific scope categories, keyword sourc
 
 ## Clause type classification
 
-The legal character and intent of each clause is classified by **clause type**, enabling users to filter to, for example, all prohibition clauses within a given management domain. Clause type keywords are provided in `data/clause_type_keywords.csv`.
+The legal character and intent of each clause is classified by **clause
+type**, enabling users to filter to, for example, all prohibition
+clauses within a given management domain. Clause type keywords are
+provided in `data/clause_type_keywords.csv`.
 
 ```{r table-clause-types}
 df_ct <- data.frame(
@@ -705,13 +911,20 @@ df_ct <- data.frame(
 lapse_table(df_ct, caption = "Clause type categories, abbreviations, and descriptions.")
 ```
 
-Like management domains, clause types can co-occur within a single clause — a clause may simultaneously receive Authorization and Instruction labels if keywords for both are present.
+Like management domains, clause types can co-occur within a single
+clause — a clause may simultaneously receive Authorization and
+Instruction labels if keywords for both are present.
 
 ## Actionable clause filtering
 
 *Script: `05_actionable_clauses.R`*
 
-A subset of clauses was further filtered to identify **actionable clauses** — defined as clauses that authorize or instruct an official to create or establish a regulatory product (e.g., a water licence, land designation, or management plan). This subset is useful for identifying specific legislative tools that could be invoked to address a given salmon threat. The pipeline applies the following steps in sequence:
+A subset of clauses was further filtered to identify **actionable
+clauses** — defined as clauses that authorize or instruct an official to
+create or establish a regulatory product (e.g., a water licence, land
+designation, or management plan). This subset is useful for identifying
+specific legislative tools that could be invoked to address a given
+salmon threat. The pipeline applies the following steps in sequence:
 
 ```{r table-actionable}
 df_act <- data.frame(
@@ -743,13 +956,19 @@ df_act <- data.frame(
 lapse_table(df_act, caption = "Actionable clause filtering pipeline steps applied in sequence by 05_actionable_clauses.R.")
 ```
 
----
+------------------------------------------------------------------------
 
 # Reproducibility and Versioning
 
 ## Repeatability by design
 
-The LAPSE process was designed to be publicly accessible, automated, and repeatable as legislation changes over time. The collection and parsing pipeline can be re-run to update the database when new legislation is enacted, existing legislation is amended, IUCN–CMP threat categories are updated, or keyword lists are revised. All scripts, keyword CSV files, and the SQLite database are version-controlled in the project GitHub repository:
+The LAPSE process was designed to be publicly accessible, automated, and
+repeatable as legislation changes over time. The collection and parsing
+pipeline can be re-run to update the database when new legislation is
+enacted, existing legislation is amended, IUCN–CMP threat categories are
+updated, or keyword lists are revised. All scripts, keyword CSV files,
+and the SQLite database are version-controlled in the project GitHub
+repository:
 
 [https://github.com/dfo-pacific-science/salmon_management_domains_compendium](https://github.com/dfo-pacific-science/salmon_management_domains_compendium){target="_blank"}
 
@@ -790,27 +1009,56 @@ lapse_table(df_pkg, caption = "R packages used in the LAPSE pipeline.")
 
 ## Transparency of researcher subjectivity
 
-Researcher subjectivity influences the process at two primary points: (1) decisions about whether a given statute is relevant to Pacific salmon stewardship (legislation inclusion), and (2) decisions about which keywords to include, remove, or modify (keyword list development). Using explicit, documented keyword lists allows this subjectivity to be acknowledged, reported, and reproduced. The keyword CSV files are available in the `data/` directory of the repository, enabling other researchers to review decisions, propose revisions, and re-run the process with alternative keyword configurations.
+Researcher subjectivity influences the process at two primary points:
+(1) decisions about whether a given statute is relevant to Pacific
+salmon stewardship (legislation inclusion), and (2) decisions about
+which keywords to include, remove, or modify (keyword list development).
+Using explicit, documented keyword lists allows this subjectivity to be
+acknowledged, reported, and reproduced. The keyword CSV files are
+available in the `data/` directory of the repository, enabling other
+researchers to review decisions, propose revisions, and re-run the
+process with alternative keyword configurations.
 
----
+------------------------------------------------------------------------
 
 # Known Limitations
 
-**1. Keyword-based matching is not semantic.** Keyword matching identifies the presence of a term but does not parse legal intent or the surrounding sentence structure. A keyword may appear in an unrelated context (e.g., "stock" in a livestock regulation). Iterative review and bigram/trigram refinement mitigate but do not eliminate this issue.
+**1. Keyword-based matching is not semantic.** Keyword matching
+identifies the presence of a term but does not parse legal intent or the
+surrounding sentence structure. A keyword may appear in an unrelated
+context (e.g., "stock" in a livestock regulation). Iterative review and
+bigram/trigram refinement mitigate but do not eliminate this issue.
 
-**2. Clause scope does not reflect regulatory effectiveness.** The count of statutes, sections, or clauses matched to a management domain is not a measure of the quality or effectiveness of legislation (Ray et al. 2021). A management domain with many matched clauses may still have weak or discretionary regulatory coverage.
+**2. Clause scope does not reflect regulatory effectiveness.** The count
+of statutes, sections, or clauses matched to a management domain is not
+a measure of the quality or effectiveness of legislation (Ray et al.
+2021). A management domain with many matched clauses may still have weak
+or discretionary regulatory coverage.
 
-**3. Implementation and enforcement are not assessed.** This study reports legislation as written. It does not verify whether responsible agencies actively implement or enforce provisions, nor does it assess the adequacy of resources or capacity available to do so.
+**3. Implementation and enforcement are not assessed.** This study
+reports legislation as written. It does not verify whether responsible
+agencies actively implement or enforce provisions, nor does it assess
+the adequacy of resources or capacity available to do so.
 
-**4. Policy is excluded.** Departmental policy frameworks (e.g., DFO's Wild Salmon Policy) are not included, despite significantly shaping how legislation is applied in practice.
+**4. Policy is excluded.** Departmental policy frameworks (e.g., DFO's
+Wild Salmon Policy) are not included, despite significantly shaping how
+legislation is applied in practice.
 
-**5. Scope of jurisdictions.** Indigenous legislation, Yukon legislation, municipal bylaws, and international conventions are not included, despite their importance to Pacific salmon stewardship.
+**5. Scope of jurisdictions.** Indigenous legislation, Yukon
+legislation, municipal bylaws, and international conventions are not
+included, despite their importance to Pacific salmon stewardship.
 
-**6. Legislation currency.** HTML files were downloaded from government portals at a specific point in time. Legislation is periodically amended and consolidated; users should verify that referenced legislation reflects the current consolidated version.
+**6. Legislation currency.** HTML files were downloaded from government
+portals at a specific point in time. Legislation is periodically amended
+and consolidated; users should verify that referenced legislation
+reflects the current consolidated version.
 
-**7. IUCN–CMP version alignment.** RPAs and COSEWIC assessments used in the primary publication were conducted under earlier versions of the IUCN–CMP classification. Threat categories were updated to align with version 4.0 where possible, but minor inconsistencies may remain.
+**7. IUCN–CMP version alignment.** RPAs and COSEWIC assessments used in
+the primary publication were conducted under earlier versions of the
+IUCN–CMP classification. Threat categories were updated to align with
+version 4.0 where possible, but minor inconsistencies may remain.
 
----
+------------------------------------------------------------------------
 
 # External Resources
 
@@ -869,106 +1117,210 @@ df_fw <- data.frame(
 lapse_table(df_fw, caption = "Classification and assessment framework resources.")
 ```
 
----
+------------------------------------------------------------------------
 
 # References
 
-Arbeider, M., Ritchie, L., Braun, D., Jenewein, B., Rickards, K., Dionne, K., Holt, C., Labelle, M., Nicklin, P., Mozin, P., Grant, P., Parken, C., and Bailey, R. 2020. Interior Fraser Coho Salmon Recovery Potential Assessment. Fisheries and Oceans Canada.
+Arbeider, M., Ritchie, L., Braun, D., Jenewein, B., Rickards, K.,
+Dionne, K., Holt, C., Labelle, M., Nicklin, P., Mozin, P., Grant, P.,
+Parken, C., and Bailey, R. 2020. Interior Fraser Coho Salmon Recovery
+Potential Assessment. Fisheries and Oceans Canada.
 
-Atkinson, E.M., Carturan, B.S., Atkinson, C.P., Bateman, A.W., Connors, K., Hertz, E., and Peacock, S.J. 2024. Monitoring for fisheries or for fish? Declines in monitoring of salmon spawners continue despite a conservation crisis. doi:10.1101/2024.12.01.626233.
+Atkinson, E.M., Carturan, B.S., Atkinson, C.P., Bateman, A.W., Connors,
+K., Hertz, E., and Peacock, S.J. 2024. Monitoring for fisheries or for
+fish? Declines in monitoring of salmon spawners continue despite a
+conservation crisis. <doi:10.1101/2024.12.01.626233>.
 
-Bankes, N., Mascher, S., and Olszynski, M. 2014. Can Environmental Laws Fulfill Their Promise? Stories from Canada. Sustainability 6(9): 6024–6048. doi:10.3390/su6096024.
+Bankes, N., Mascher, S., and Olszynski, M. 2014. Can Environmental Laws
+Fulfill Their Promise? Stories from Canada. Sustainability 6(9):
+6024–6048. <doi:10.3390/su6096024>.
 
-Becklumb, P. 2013. Federal and Provincial Jurisdiction to Regulate Environmental Issues. Library of Parliament, Canada, Ottawa, ON.
+Becklumb, P. 2013. Federal and Provincial Jurisdiction to Regulate
+Environmental Issues. Library of Parliament, Canada, Ottawa, ON.
 
-Benoit, K., Watanabe, K., Wang, H., Nulty, P., Obeng, A., Müller, S., and Matsuo, A. 2018. quanteda: An R package for the quantitative analysis of textual data. Journal of Open Source Software 3(30): 774. doi:10.21105/joss.00774.
+Benoit, K., Watanabe, K., Wang, H., Nulty, P., Obeng, A., Müller, S.,
+and Matsuo, A. 2018. quanteda: An R package for the quantitative
+analysis of textual data. Journal of Open Source Software 3(30): 774.
+<doi:10.21105/joss.00774>.
 
-Bisson, P.A., Dunham, J.B., and Reeves, G.H. 2009. Freshwater Ecosystems and Resilience of Pacific Salmon: Habitat Management Based on Natural Variability. E&S 14(1): art45. doi:10.5751/ES-02784-140145.
+Bisson, P.A., Dunham, J.B., and Reeves, G.H. 2009. Freshwater Ecosystems
+and Resilience of Pacific Salmon: Habitat Management Based on Natural
+Variability. E&S 14(1): art45. <doi:10.5751/ES-02784-140145>.
 
-Bogetti, J.M., and Mason, C.W. 2025. To protect or forget? Comparing species at risk legislation across Canada's common-law provinces. FACETS 10: 1–11. doi:10.1139/facets-2025-0031.
+Bogetti, J.M., and Mason, C.W. 2025. To protect or forget? Comparing
+species at risk legislation across Canada's common-law provinces. FACETS
+10: 1–11. <doi:10.1139/facets-2025-0031>.
 
-Campbell, M.L., and Thomas, V.G. 2002. Constitutional Impacts on Conservation: Effects of Federalism on Biodiversity Protection. Environmental Policy and Law 32(5): 223–232. doi:10.3233/EPL-2002-32_5_13.
+Campbell, M.L., and Thomas, V.G. 2002. Constitutional Impacts on
+Conservation: Effects of Federalism on Biodiversity Protection.
+Environmental Policy and Law 32(5): 223–232.
+<doi:10.3233/EPL-2002-32_5_13>.
 
-Canadian Legal Information Institute. 2025. CanLII. Available from [https://www.canlii.org/](https://www.canlii.org/) [accessed 18 December 2025].
+Canadian Legal Information Institute. 2025. CanLII. Available from
+<https://www.canlii.org/> [accessed 18 December 2025].
 
-Chalifour, L., Holt, C., Camaclang, A.E., Bradford, M.J., Dixon, R., Finn, R.J.R., Hemming, V., Hinch, S.G., Levings, C.D., MacDuffee, M., Nishimura, D.J.H., Pearson, M., Reynolds, J.D., Scott, D.C., Spremberg, U., Stark, S., Stevens, J., Baum, J.K., and Martin, T.G. 2022. Identifying a pathway towards recovery for depleted wild Pacific salmon populations in a large watershed under multiple stressors. Journal of Applied Ecology 59(9): 2212–2226. doi:10.1111/1365-2664.14239.
+Chalifour, L., Holt, C., Camaclang, A.E., Bradford, M.J., Dixon, R.,
+Finn, R.J.R., Hemming, V., Hinch, S.G., Levings, C.D., MacDuffee, M.,
+Nishimura, D.J.H., Pearson, M., Reynolds, J.D., Scott, D.C., Spremberg,
+U., Stark, S., Stevens, J., Baum, J.K., and Martin, T.G. 2022.
+Identifying a pathway towards recovery for depleted wild Pacific salmon
+populations in a large watershed under multiple stressors. Journal of
+Applied Ecology 59(9): 2212–2226. <doi:10.1111/1365-2664.14239>.
 
-Cohen, B.I. 2012. Commission of Inquiry into the Decline of Sockeye Salmon in the Fraser River (Canada): The uncertain future of Fraser River sockeye. Privy Council Office, Ottawa, ON.
+Cohen, B.I. 2012. Commission of Inquiry into the Decline of Sockeye
+Salmon in the Fraser River (Canada): The uncertain future of Fraser
+River sockeye. Privy Council Office, Ottawa, ON.
 
-Collins, L., and Sossin, L. 2019. Approach to Constitutional Principles and Environmental Discretion in Canada. Articles & Book Chapters 52(2740).
+Collins, L., and Sossin, L. 2019. Approach to Constitutional Principles
+and Environmental Discretion in Canada. Articles & Book Chapters
+52(2740).
 
-COSEWIC. 2023. COSEWIC guidelines for recognizing designatable units. Canadian Wildlife Service, Environment and Climate Change Canada, Gatineau, QC.
+COSEWIC. 2023. COSEWIC guidelines for recognizing designatable units.
+Canadian Wildlife Service, Environment and Climate Change Canada,
+Gatineau, QC.
 
-Dallimer, M., and Strange, N. 2015. Why socio-political borders and boundaries matter in conservation. Trends in Ecology & Evolution 30(3): 132–139. doi:10.1016/j.tree.2014.12.004.
+Dallimer, M., and Strange, N. 2015. Why socio-political borders and
+boundaries matter in conservation. Trends in Ecology & Evolution 30(3):
+132–139. <doi:10.1016/j.tree.2014.12.004>.
 
-Del Valle, E., Neal, B., Martínez-Candelas, I., Dann, P., Webb, D., and McClenachan, L. 2024. Fishing in turbulent waters: Resilience, risk, and trust in British Columbia's declining commercial salmon fishery. FACETS 9: 1–17. doi:10.1139/facets-2023-0204.
+Del Valle, E., Neal, B., Martínez-Candelas, I., Dann, P., Webb, D., and
+McClenachan, L. 2024. Fishing in turbulent waters: Resilience, risk, and
+trust in British Columbia's declining commercial salmon fishery. FACETS
+9: 1–17. <doi:10.1139/facets-2023-0204>.
 
-Department of Justice Canada. 2022. Legistics Paragraphing. Available from [https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html](https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html) [accessed 18 December 2025].
+Department of Justice Canada. 2022. Legistics Paragraphing. Available
+from
+<https://www.justice.gc.ca/eng/rp-pr/csj-sjc/legis-redact/legistics/p3p1.html>
+[accessed 18 December 2025].
 
-Department of Justice Canada. 2026. Table of Public Statutes and Responsible Ministers. Available from [https://laws-lois.justice.gc.ca/PDF/tops/eng/TOPS.pdf](https://laws-lois.justice.gc.ca/PDF/tops/eng/TOPS.pdf) [accessed 13 January 2026].
+Department of Justice Canada. 2026. Table of Public Statutes and
+Responsible Ministers. Available from
+<https://laws-lois.justice.gc.ca/PDF/tops/eng/TOPS.pdf> [accessed 13
+January 2026].
 
-DFO. 2005. Canada's Policy for Conservation of Wild Pacific Salmon. Fisheries and Oceans Canada, Vancouver, BC.
+DFO. 2005. Canada's Policy for Conservation of Wild Pacific Salmon.
+Fisheries and Oceans Canada, Vancouver, BC.
 
-DFO. 2019. Recovery Potential Assessment – Cultus Lake Sockeye Salmon (*Oncorhynchus nerka*). Science Advisory Report 2020/011. Canadian Science Advisory Secretariat.
+DFO. 2019. Recovery Potential Assessment – Cultus Lake Sockeye Salmon
+(*Oncorhynchus nerka*). Science Advisory Report 2020/011. Canadian
+Science Advisory Secretariat.
 
-DFO. 2020. Recovery Potential Assessment for 11 Designatable Units of Fraser River Chinook salmon, *Oncorhynchus tshawytcha*, Part 1: Elements 1 to 11. DFO Can. Sci. Advis. Sec. Sci. Advis. Rep.
+DFO. 2020. Recovery Potential Assessment for 11 Designatable Units of
+Fraser River Chinook salmon, *Oncorhynchus tshawytcha*, Part 1: Elements
+1 to 11. DFO Can. Sci. Advis. Sec. Sci. Advis. Rep.
 
-DFO. 2021. Wild Salmon Policy: 2018–2022 Implementation Plan, Annual Report 2020–21. Fisheries and Oceans Canada, Vancouver, BC.
+DFO. 2021. Wild Salmon Policy: 2018–2022 Implementation Plan, Annual
+Report 2020–21. Fisheries and Oceans Canada, Vancouver, BC.
 
-DFO. 2022a. Guidelines for writing rebuilding plans per the Fish Stocks Provisions and A Fishery Decision-making Framework Incorporating the Precautionary Approach. Fisheries and Oceans Canada, Ottawa, ON.
+DFO. 2022a. Guidelines for writing rebuilding plans per the Fish Stocks
+Provisions and A Fishery Decision-making Framework Incorporating the
+Precautionary Approach. Fisheries and Oceans Canada, Ottawa, ON.
 
-DFO. 2022b. Rebuilding plan: Okanagan Chinook Salmon [*Oncorhynchus tshawytscha*]. Fisheries and Oceans Canada, Ottawa, ON.
+DFO. 2022b. Rebuilding plan: Okanagan Chinook Salmon [*Oncorhynchus
+tshawytscha*]. Fisheries and Oceans Canada, Ottawa, ON.
 
-DFO. 2024. Trilateral declaration on the urgent need to address wild Pacific salmon populations in British Columbia. Fisheries and Oceans Canada.
+DFO. 2024. Trilateral declaration on the urgent need to address wild
+Pacific salmon populations in British Columbia. Fisheries and Oceans
+Canada.
 
-DFO. 2025. Rebuilding plan: West Coast of Vancouver Island Chinook, *Oncorhynchus tshawystcha*. Fisheries and Oceans Canada, Vancouver, BC.
+DFO. 2025. Rebuilding plan: West Coast of Vancouver Island Chinook,
+*Oncorhynchus tshawystcha*. Fisheries and Oceans Canada, Vancouver, BC.
 
-Dionne, K. 2023. Recovery potential assessment for southern British Columbian chinook populations, Fraser and southern mainland chinook designatable units (1, 6, 13 and 15). Canadian Science Advisory Secretariat (CSAS), Ottawa, ON.
+Dionne, K. 2023. Recovery potential assessment for southern British
+Columbian chinook populations, Fraser and southern mainland chinook
+designatable units (1, 6, 13 and 15). Canadian Science Advisory
+Secretariat (CSAS), Ottawa, ON.
 
-Doutaz, D., Huang, A.-M., Decker, S., and Vivian, T. 2023. Recovery potential assessment for Fraser River sockeye salmon (*Oncorhynchus nerka*), nine designatable units part 2. Canadian Science Advisory Secretariat (CSAS), Ottawa, ON.
+Doutaz, D., Huang, A.-M., Decker, S., and Vivian, T. 2023. Recovery
+potential assessment for Fraser River sockeye salmon (*Oncorhynchus
+nerka*), nine designatable units part 2. Canadian Science Advisory
+Secretariat (CSAS), Ottawa, ON.
 
 Government of British Columbia. 2002. Forest and Range Practices Act.
 
-Government of Canada. 2005. Order Giving Notice of Decisions not to add Certain Species to the List of Endangered Species.
+Government of Canada. 2005. Order Giving Notice of Decisions not to add
+Certain Species to the List of Endangered Species.
 
-Grant, S.C.H., MacDonald, B.L., and Winston, M.L. 2019. State of the Canadian Pacific salmon: Response to changing climate and habitats. Department of Fisheries and Oceans, Nanaimo, BC.
+Grant, S.C.H., MacDonald, B.L., and Winston, M.L. 2019. State of the
+Canadian Pacific salmon: Response to changing climate and habitats.
+Department of Fisheries and Oceans, Nanaimo, BC.
 
-Kraus, D., Murphy, S., and Armitage, D. 2021. Ten bridges on the road to recovering Canada's endangered species. FACETS 6: 1088–1127. doi:10.1139/facets-2020-0084.
+Kraus, D., Murphy, S., and Armitage, D. 2021. Ten bridges on the road to
+recovering Canada's endangered species. FACETS 6: 1088–1127.
+<doi:10.1139/facets-2020-0084>.
 
-Mahony, A., Challenger, W., Robichaud, D., Wright, H., Bussanich, R., Sharma, R., and Enns, J. 2019. Recovery Potential Assessment for the Okanagan Chinook Salmon (*Oncorhynchus tshawytscha*) (2019).
+Mahony, A., Challenger, W., Robichaud, D., Wright, H., Bussanich, R.,
+Sharma, R., and Enns, J. 2019. Recovery Potential Assessment for the
+Okanagan Chinook Salmon (*Oncorhynchus tshawytscha*) (2019).
 
-Marentette, J.R., and Kronlund, A.R. 2020. A cross-jurisdictional review of international fisheries policies, standards and guidelines. Fisheries and Oceans Canada, Ottawa, ON.
+Marentette, J.R., and Kronlund, A.R. 2020. A cross-jurisdictional review
+of international fisheries policies, standards and guidelines. Fisheries
+and Oceans Canada, Ottawa, ON.
 
-McCleary, R.J., and Thomson, D.A. 2021. Hydrogeology and Environmental Flow Needs Assessment of a Groundwater Licence Application near Lumby, B.C. Province of British Columbia, Victoria, BC.
+McCleary, R.J., and Thomson, D.A. 2021. Hydrogeology and Environmental
+Flow Needs Assessment of a Groundwater Licence Application near Lumby,
+B.C. Province of British Columbia, Victoria, BC.
 
-McCune, J.L., Harrower, W.L., Avery-Gomm, S., and others. 2013. Threats to Canadian species at risk: An analysis of finalized recovery strategies. Biological Conservation 166: 254–265. doi:10.1016/j.biocon.2013.07.006.
+McCune, J.L., Harrower, W.L., Avery-Gomm, S., and others. 2013. Threats
+to Canadian species at risk: An analysis of finalized recovery
+strategies. Biological Conservation 166: 254–265.
+<doi:10.1016/j.biocon.2013.07.006>.
 
-McDonald, K. 2021. Pacific Salmon: Ensuring the Long-term Health of Wild Populations and Associated Fisheries. House of Commons Canada, Ottawa, ON.
+McDonald, K. 2021. Pacific Salmon: Ensuring the Long-term Health of Wild
+Populations and Associated Fisheries. House of Commons Canada, Ottawa,
+ON.
 
 Minister of Justice Canada. 1985. Fisheries Act.
 
-Moore, J.W., Ulaski, M.E., Wilson, K.L., Martin, T.G., and others. 2025. A Safe Operating Space for Salmon Watersheds Under Rapid Climate Change. Fish and Fisheries 26(6): 1213–1228. doi:10.1111/faf.70027.
+Moore, J.W., Ulaski, M.E., Wilson, K.L., Martin, T.G., and others. 2025.
+A Safe Operating Space for Salmon Watersheds Under Rapid Climate Change.
+Fish and Fisheries 26(6): 1213–1228. <doi:10.1111/faf.70027>.
 
-Price, M.H.H., English, K.K., Rosenberger, A.G., MacDuffee, M., and Reynolds, J.D. 2017. Canada's Wild Salmon Policy: An assessment of conservation progress in British Columbia. Can. J. Fish. Aquat. Sci. 74(10): 1507–1518. doi:10.1139/cjfas-2017-0127.
+Price, M.H.H., English, K.K., Rosenberger, A.G., MacDuffee, M., and
+Reynolds, J.D. 2017. Canada's Wild Salmon Policy: An assessment of
+conservation progress in British Columbia. Can. J. Fish. Aquat. Sci.
+74(10): 1507–1518. <doi:10.1139/cjfas-2017-0127>.
 
-Province of British Columbia. 2025. Acts – Ministers' Responsibilities. Government of British Columbia.
+Province of British Columbia. 2025. Acts – Ministers' Responsibilities.
+Government of British Columbia.
 
-Ramshaw, B., Luedke, W., and Korman, J. 2019. Recovery Potential Assessment for the Sakinaw Lake Sockeye Salmon (*Oncorhynchus nerka*) (2017). DFO Can. Sci. Advis. Sec. Res. Doc.
+Ramshaw, B., Luedke, W., and Korman, J. 2019. Recovery Potential
+Assessment for the Sakinaw Lake Sockeye Salmon (*Oncorhynchus nerka*)
+(2017). DFO Can. Sci. Advis. Sec. Res. Doc.
 
-Ray, J.C., Grimm, J., and Olive, A. 2021. The biodiversity crisis in Canada: Failures and challenges of federal and sub-national strategic and legal frameworks. FACETS 6: 1044–1068. doi:10.1139/facets-2020-0075.
+Ray, J.C., Grimm, J., and Olive, A. 2021. The biodiversity crisis in
+Canada: Failures and challenges of federal and sub-national strategic
+and legal frameworks. FACETS 6: 1044–1068.
+<doi:10.1139/facets-2020-0075>.
 
-Salafsky, N., Relton, C., Young, B.E., and others. 2024. Classification of direct threats to the conservation of ecosystems and species 4.0. Conservation Biology 39(3): e14434. doi:10.1111/cobi.14434.
+Salafsky, N., Relton, C., Young, B.E., and others. 2024. Classification
+of direct threats to the conservation of ecosystems and species 4.0.
+Conservation Biology 39(3): e14434. <doi:10.1111/cobi.14434>.
 
-Salafsky, N., Salzer, D., Stattersfield, A.J., and others. 2008. A Standard Lexicon for Biodiversity Conservation: Unified Classifications of Threats and Actions. Conservation Biology 22(4): 897–911. doi:10.1111/j.1523-1739.2008.00937.x.
+Salafsky, N., Salzer, D., Stattersfield, A.J., and others. 2008. A
+Standard Lexicon for Biodiversity Conservation: Unified Classifications
+of Threats and Actions. Conservation Biology 22(4): 897–911.
+<doi:10.1111/j.1523-1739.2008.00937.x>.
 
-Swerdfager, T., and Olive, A. 2023. Laws matter: A foundational approach to biodiversity conservation in Canada. FACETS 8: 1–13. doi:10.1139/facets-2022-0095.
+Swerdfager, T., and Olive, A. 2023. Laws matter: A foundational approach
+to biodiversity conservation in Canada. FACETS 8: 1–13.
+<doi:10.1139/facets-2022-0095>.
 
-Thompson, P.C. 1974. Institutional Constraints in Fisheries Management. J. Fish. Res. Board Can 31: 1965–1981.
+Thompson, P.C. 1974. Institutional Constraints in Fisheries Management.
+J. Fish. Res. Board Can 31: 1965–1981.
 
-Turcotte, A., Kermany, N., Foster, S., and others. 2021. Fixing the Canadian Species at Risk Act. FACETS 6: 1474–1494. doi:10.1139/facets-2020-0064.
+Turcotte, A., Kermany, N., Foster, S., and others. 2021. Fixing the
+Canadian Species at Risk Act. FACETS 6: 1474–1494.
+<doi:10.1139/facets-2020-0064>.
 
-Ulaski, M.E., Moore, J.W., Carlson, D., and others. 2025. Barriers and opportunities for the effective management of cumulative effects in salmon ecosystems in British Columbia, Canada. FACETS 10: 1–25. doi:10.1139/facets-2024-0348.
+Ulaski, M.E., Moore, J.W., Carlson, D., and others. 2025. Barriers and
+opportunities for the effective management of cumulative effects in
+salmon ecosystems in British Columbia, Canada. FACETS 10: 1–25.
+<doi:10.1139/facets-2024-0348>.
 
-Wickham, H. 2025. rvest: Easily Harvest (Scrape) Web Pages. doi:10.32614/CRAN.package.rvest.
+Wickham, H. 2025. rvest: Easily Harvest (Scrape) Web Pages.
+<doi:10.32614/CRAN.package.rvest>.
 
-Wijffels, J. 2025. udpipe: Tokenization, Parts of Speech Tagging, Lemmatization and Dependency Parsing with the 'UDPipe' 'NLP' Toolkit. doi:10.32614/CRAN.package.udpipe.
+Wijffels, J. 2025. udpipe: Tokenization, Parts of Speech Tagging,
+Lemmatization and Dependency Parsing with the 'UDPipe' 'NLP' Toolkit.
+<doi:10.32614/CRAN.package.udpipe>.
