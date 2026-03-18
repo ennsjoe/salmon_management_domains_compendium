@@ -1,6 +1,6 @@
 ---
 title: "Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE)"
-subtitle: "Technical Manual and Methodology"
+subtitle: "Technical Brief"
 author: "Joe Enns, Cory Lagasse, Daniel Gillis, Marina Wright"
 date: "`r Sys.Date()`"
 output:
@@ -10,7 +10,7 @@ output:
       collapsed: false
       smooth_scroll: true
     toc_depth: 3
-    number_sections: true
+    number_sections: false
     self_contained: true
     fig_caption: true
     code_folding: none
@@ -47,20 +47,19 @@ lapse_table <- function(df, caption = NULL) {
 }
 ```
 
-<div style="position:fixed; top:20px; right:20px; background-color:#f9f9f9; padding:12px; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.15); text-align:center; z-index:1001; width:120px;">
+::: {style="position:fixed; top:20px; right:20px; background-color:#f9f9f9; padding:12px; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.15); text-align:center; z-index:1001; width:120px;"}
 <a href="https://dfo-pacific-science.github.io/LAPSE_dashboard/" target="_blank" style="text-decoration:none;">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="60" height="60"
      style="display:block;margin:0 auto 8px auto;"
      fill="none" stroke="#668899" stroke-width="1.5"
      stroke-linecap="round" stroke-linejoin="round">
-  <rect x="3" y="12" width="4" height="9"/>
-  <rect x="10" y="7" width="4" height="14"/>
-  <rect x="17" y="3" width="4" height="18"/>
-  <line x1="1" y1="21" x2="23" y2="21"/>
-</svg>
-<span style="display:block; font-size:14px; font-weight:bold; color:#2c3e50;">Interactive App</span>
+<rect x="3" y="12" width="4" height="9"/>
+<rect x="10" y="7" width="4" height="14"/>
+<rect x="17" y="3" width="4" height="18"/>
+<line x1="1" y1="21" x2="23" y2="21"/> </svg> [Interactive
+App]{style="display:block; font-size:14px; font-weight:bold; color:#2c3e50;"}
 </a>
-</div>
+:::
 
 ------------------------------------------------------------------------
 
@@ -73,23 +72,19 @@ lapse_table <- function(df, caption = NULL) {
 
 # Overview
 
-Pacific salmon (*Oncorhynchus* spp.) populations are generally declining
-in Canada, while the number of populations monitored continues to drop,
-despite considerable attention toward policies and recovery programs for
-salmon conservation. The causes of these declines are varied — including
-loss or degradation of freshwater habitat, climate change, hatchery
-pressures, and harvest — and addressing them requires coordinated action
-across a fragmented governance landscape where federal jurisdiction over
-fisheries intersects with provincial authority over freshwater habitat.
-
-The **Legislation Applicable to Pacific Salmon and Ecosystems (LAPSE)**
-framework was developed to bridge this complexity. It is a systematic
-process and open-source tool that maps Canadian federal and British
-Columbian provincial legislation to standardized anthropogenic threat
-categories, enabling stewardship practitioners to navigate the
-regulatory landscape governing Pacific salmon and their ecosystems. This
-document serves as the technical manual and methodology reference for
-the LAPSE process, database, and associated tools.
+Eurocentric colonial stewardship of natural resources such as Pacific
+salmon (*Oncorhynchus* spp.) in Canada is administered through an
+overlapping patchwork of federal, provincial, and territorial authority.
+This decentralized mosaic often undermines expensive conservation
+efforts, especially when legislation is not considered during
+conservation, protection, and restoration planning. The **Legislation
+Applicable to Pacific Salmon and Ecosystems (LAPSE)** process and
+framework was developed to bridge this complexity for salmon stewards.
+LAPSE is an open-source tool that maps Canadian federal and British
+Columbian provincial legislation to standardized human threat categories
+that allows practitioners to navigate the regulatory landscape specific
+to salmon. This document serves as the technical manual and methodology
+reference for the LAPSE process, database, and associated tools.
 
 For results, discussion, and case studies, refer to the primary
 publication:
@@ -97,6 +92,8 @@ publication:
 > Enns, J., Lagasse, C., Gillis, D., and Wright, M. (2026). An interface
 > between statutes and salmon: the Legislation Applicable to Pacific
 > Salmon and Ecosystems (LAPSE) framework. *[Journal pending]*
+
+## Associated Links
 
 🔗 LAPSE Pipeline (R scripts) including all source code, data processing
 scripts, keyword lists, and the SQLite database, is available at:
@@ -114,10 +111,12 @@ scripts, keyword lists, and the SQLite database, is available at:
 
 ## Objectives
 
-This framework and tool were developed to decode the complexity between
-threats to Pacific salmon and corresponding environmental legislation by
-creating an interface between regulatory language and anthropogenic
-threat categories. The specific objectives were to:
+\>\>\>\>\>\>\>\>\>\>\>\>\>\>\>
+
+This framework and tool were developed to **decode** the complexity
+between threats to Pacific salmon and corresponding environmental
+legislation by creating an interface between regulatory language and
+anthropogenic threat categories. The specific objectives were to:
 
 1.  create a process and tool to categorize specific legislation by
     anthropogenic threats to Pacific salmon;
