@@ -7,7 +7,7 @@ output:
   html_document:
     toc: true
     toc_float:
-      collapsed: false
+      collapsed: true
       smooth_scroll: true
     toc_depth: 3
     number_sections: false
@@ -70,7 +70,7 @@ App]{style="display:block; font-size:14px; font-weight:bold; color:#2c3e50;"}
 
 ------------------------------------------------------------------------
 
-# Overview
+# Introduction
 
 Stewardship of natural resources such as Pacific salmon (*Oncorhynchus*
 spp.) in Canada is administered through an overlapping patchwork of
@@ -92,7 +92,7 @@ For results, discussion, and case studies, refer to the publication:
 > between statutes and salmon: the Legislation Applicable to Pacific
 > Salmon and Ecosystems (LAPSE) framework. *[Journal pending]*
 
-## Associated Links
+## LAPSE resources
 
 🔗 LAPSE About page:
 [https://dfo-pacific-science.github.io/LAPSE_dashboard/LAPSE-Dashboard-About.html](https://dfo-pacific-science.github.io/LAPSE_dashboard/LAPSE-Dashboard-About.html){target="_blank"}
@@ -109,7 +109,7 @@ scripts, keyword lists, and the SQLite database:
 
 ------------------------------------------------------------------------
 
-# Purpose and Scope
+# Purpose and scope
 
 ## Objectives
 
@@ -158,83 +158,95 @@ federal or provincial legislation:
 
 ------------------------------------------------------------------------
 
-# LAPSE Process Overview
+# Management domain framework
 
-The LAPSE process follows a workflow pipeline from legislation
-collection through to the interactive dashboard. Steps within that
-workflow pipeline can be broken down into four phases (Figure 1).
+## IUCN–CMP threat classification background
 
-```{r lapse-flowchart, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("assets", "LAPSE_process_steps.png"))
+The IUCN and the Conservation Measures Partnership (CMP) developed the
+IUCN–CMP Direct Threats Classification Version 4.0 (Salafsky et al.
+2024), which defines threats as "current or future human activities or
+altered natural phenomena that affect one or more ecosystems or species
+of interest." The classification uses a three-level hierarchical
+structure:
+
+-   **Level 1** — Broadest categories (e.g., *2. Agriculture &
+    Aquaculture*)
+-   **Level 2** — Subcategories (e.g., *2.4 Marine & Freshwater
+    Aquaculture*)
+-   **Level 3** — Most specific sub-subcategories (not used in this
+    assessment)
+
+This classification is widely applied in IUCN Red List assessments and
+COSEWIC Recovery Potential Assessments (RPAs) for Pacific salmon
+populations.
+
+## Why management domains
+
+Canada and BC legislation has been enacted on a sector-by-sector basis
+and does not align neatly with IUCN–CMP Level 1 categories. The Level 2
+categories fit better with legislative categories but still required
+lumping and splitting to match how legislation is organized in practice.
+Additionally, not all aspects of salmon management connects to a direct
+human threat: topics such as restoration, species status, spatial
+designation, and governance administration may encompass all threats or
+none. To capture both threat and non-threat categories, a schema of
+**management domains** was created, defined as **"discrete areas of
+administrative concern."**
+
+```{r mgmt-domain-flowchart, echo=FALSE, out.width="100%"}
+knitr::include_graphics(here::here("assets", "Management Domain Flowchart.png"))
 ```
 
-*Figure 1. The LAPSE workflow pipeline.*
+*Figure 2. Relationship between management domains, IUCN-CMP threat
+categories, and Canadian legislation.*
 
-**Phase 1 — Collect legislation.** Relevant Canadian federal and British
-Columbia provincial legislation is identified through a step-wise
-keyword search on CanLII, beginning with Pacific salmon-specific terms
-and expanding outward through word frequency analyses, IUCN-CMP threat
-terminologym, and researcher input. HTML files for all relevant statutes
-are downloaded directly from the federal and BC provincial legislation
-portals. The result is 196 statutes (87 federal, 109 provincial) stored
-in `data/legislation_html/`.
-
-**Phase 2 — Parse statutes by clause.** Two R scripts convert the raw
-HTML files into structured SQLite tables. `01_database_legislation.R`
-extracts metadata (jurisdiction, legislation type, act name) from each
-file's HTML structure. `02_database_paragraphs.R` parses each statute
-clause-by-clause, extracting paragraph text, section numbers, and
-headings while filtering out footnotes, amendment references, and
-editorial sections. Outputs are the `LegislationMetadata` and
-`LegislationParagraphs` tables in `output/legislation.db`.
-
-**Phase 3 — Match keywords to clauses.** Five keyword CSV files are
-developed and refined through an iterative process drawing on IUCN–CMP
-threat definitions, word frequency analyses of collected legislation,
-and researcher expert judgment. Keywords are reviewed and revised
-continuously — single-word ambiguities are replaced with more specific
-bigrams or trigrams, domain-irrelevant terms are removed, and
-salmon-relevant terms absent from IUCN-CMP definitions (e.g.,
-*riparian*) are added manually.
-
-`03_database_labels.R` tokenizes all paragraph and heading text using
-`quanteda`, compounds multi-word keyword phrases (longest-first), then
-matches four keyword lists independently against each clause. IUCN
-labels are automatically duplicated as their corresponding Management
-Domain labels via a lookup table. Scope values (1–4) are assigned to
-each label row. After deduplication, all results are written to the
-`paragraph_label_table`.
-
-`05_actionable_clauses.R` applies a seven-step filtering pipeline to the
-full labelled dataset to identify the subset of act clauses that
-authorize or instruct an official to create a specific regulatory
-product (plan, licence, designation, etc.). The filter requires a
-responsible official keyword to appear before a mandatory or
-discretionary verb within five words. Results are written to the
-`actionable_clauses` table and exported as
-`output/actionable_clauses.csv`.
-
-**Phase 4 — Navigate and assess outputs.** The complete `legislation.db`
-database is served through the LAPSE Dashboard, a React-based static web
-application hosted on GitHub Pages. The dashboard reads CSV exports from
-the pipeline and assembles them client-side into a three-panel
-interface: a left sidebar for navigating and searching by management
-domain, a center panel for browsing filtered legislation, and a right
-panel for dynamic visualizations and clause-level sub-filters. Results
-are displayed at the section level to preserve legislative context, with
-matched keywords highlighted in the paragraph text.
-
-Users can filter simultaneously by management domain, jurisdiction, act,
-regulation, free-text keyword, clause type, actionable type, responsible
-official, and discretion type. All filters apply AND logic and reset
-hierarchically when a higher-level selection changes. A direct link to
-the source statute on the federal or provincial legislation portal is
-provided when a specific act or regulation is selected. Filtered results
-can be downloaded as XLSX for offline analysis.
+```{r table-domains}
+df_domains <- data.frame(
+  `Management Domain` = c(
+    "Agriculture",
+    "Aquaculture and Hatcheries",
+    "Climate Change and Natural Disasters",
+    "Fisheries",
+    "Forest and Range",
+    "Governance Administration",
+    "Human Disturbance",
+    "Invasive or Problematic Species and Disease",
+    "Mining and Energy",
+    "Pollution",
+    "Restoration",
+    "Spatial Designation",
+    "Species Status and Assessment",
+    "Transportation Infrastructure",
+    "Water Use and Watercourse Modifications"
+  ),
+  `IUCN–CMP Level 2` = c(
+    "2.1 Annual & Perennial Non-Timber Crops",
+    "2.4 Marine & Freshwater Aquaculture; 8.3 Introduced Genetic Material",
+    "10.1 Geological Events; 11.2 Changes in Temperature Regimes; 11.3 Changes in Precipitation & Hydrological Regimes",
+    "5.4 Fishing, Harvesting & Controlling Aquatic Species",
+    "2.2 Wood & Pulp Plantations; 2.3 Terrestrial Animal Farming, Ranching & Herding; 5.3 Logging, Harvesting & Controlling Trees",
+    "N/A",
+    "6.3 Other Human Disturbances",
+    "8.1 Invasive Non-Native / Alien Species; 8.2 Problematic Native Species; 8.4 Pathogens",
+    "3.1 Oil & Gas Exploration & Extraction; 3.2 Mining & Quarrying; 3.3 Renewable Energy",
+    "9.1 Water-Borne & Other Effluent Pollution; 9.2 Garbage & Solid Waste",
+    "N/A",
+    "N/A",
+    "N/A",
+    "4.1 Roads, Trails & Railroads; 4.2 Utility & Service Lines; 4.3 Shipping Lanes",
+    "1.1 Residential Areas; 7.2 Dams & Water Management / Use; 7.3 Earth & Sediment Management; 7.5 Biological System Management"
+  ),
+  check.names = FALSE
+)
+lapse_table(
+  df_domains,
+  caption = "Management domains and corresponding IUCN–CMP Level 2 threat categories. Restoration, Spatial Designation, and Species Status and Assessment do not correspond to direct threat categories but represent important governance areas for Pacific salmon stewardship."
+)
+```
 
 ------------------------------------------------------------------------
 
-# Data Sources
+# Data sources
 
 ## Canadian Legal Information Institute (CanLII)
 
@@ -288,7 +300,84 @@ Sheets)](https://docs.google.com/spreadsheets/d/1yfm7ua9hQJpjycx6FYQJ6Jy5LA4bP0X
 
 ------------------------------------------------------------------------
 
-# Legislative Scope and Inclusion Criteria
+# LAPSE process overview
+
+## Workflow pipeline
+
+The LAPSE process follows a workflow pipeline from legislation
+collection through to the interactive dashboard. Steps within that
+workflow pipeline can be broken down into four phases (Figure 1).
+
+```{r lapse-flowchart, echo=FALSE, out.width="100%"}
+knitr::include_graphics(here::here("assets", "LAPSE_process_steps.png"))
+```
+
+*Figure 1. The LAPSE workflow pipeline.*
+
+**Phase 1 — Collect legislation.** Relevant Canadian federal and British Columbia provincial legislation is
+identified through a step-wise keyword search on CanLII, beginning with
+Pacific salmon-specific terms and expanding outward through word
+frequency analyses, IUCN-CMP threat terminologym, and researcher input.
+HTML files for all relevant statutes are downloaded directly from the
+federal and BC provincial legislation portals. The result is 196
+statutes (87 federal, 109 provincial) stored in
+`data/legislation_html/`.
+
+**Phase 2 — Parse statutes by clause.** Two R scripts convert the raw HTML files into structured SQLite tables.
+`01_database_legislation.R` extracts metadata (jurisdiction, legislation
+type, act name) from each file's HTML structure.
+`02_database_paragraphs.R` parses each statute clause-by-clause,
+extracting paragraph text, section numbers, and headings while filtering
+out footnotes, amendment references, and editorial sections. Outputs are
+the `LegislationMetadata` and `LegislationParagraphs` tables in
+`output/legislation.db`.
+
+**Phase 3 — Match keywords to clauses.** Five keyword CSV files are developed and refined through an iterative
+process drawing on IUCN–CMP threat definitions, word frequency analyses
+of collected legislation, and researcher expert judgment. Keywords are
+reviewed and revised continuously — single-word ambiguities are replaced
+with more specific bigrams or trigrams, domain-irrelevant terms are
+removed, and salmon-relevant terms absent from IUCN-CMP definitions
+(e.g., *riparian*) are added manually.
+
+`03_database_labels.R` tokenizes all paragraph and heading text using
+`quanteda`, compounds multi-word keyword phrases (longest-first), then
+matches four keyword lists independently against each clause. IUCN
+labels are automatically duplicated as their corresponding Management
+Domain labels via a lookup table. Scope values (1–4) are assigned to
+each label row. After deduplication, all results are written to the
+`paragraph_label_table`.
+
+`05_actionable_clauses.R` applies a seven-step filtering pipeline to the
+full labelled dataset to identify the subset of act clauses that
+authorize or instruct an official to create a specific regulatory
+product (plan, licence, designation, etc.). The filter requires a
+responsible official keyword to appear before a mandatory or
+discretionary verb within five words. Results are written to the
+`actionable_clauses` table and exported as
+`output/actionable_clauses.csv`.
+
+**Phase 4 — Navigate and assess outputs.** The complete `legislation.db`database is served through the LAPSE
+Dashboard, a React-based static web application hosted on GitHub Pages.
+The dashboard reads CSV exports from the pipeline and assembles them
+client-side into a three-panel interface: a left sidebar for navigating
+and searching by management domain, a center panel for browsing filtered
+legislation, and a right panel for dynamic visualizations and
+clause-level sub-filters. Results are displayed at the section level to
+preserve legislative context, with matched keywords highlighted in the
+paragraph text.
+
+Users can filter simultaneously by management domain, jurisdiction, act,
+regulation, free-text keyword, clause type, actionable type, responsible
+official, and discretion type. All filters apply AND logic and reset
+hierarchically when a higher-level selection changes. A direct link to
+the source statute on the federal or provincial legislation portal is
+provided when a specific act or regulation is selected. Filtered results
+can be downloaded as XLSX for offline analysis.
+
+------------------------------------------------------------------------
+
+# Phase 1 - LAPSE legislation compendium
 
 ## Jurisdictions and legislation types
 
@@ -327,99 +416,9 @@ lapse_table(df_counts, caption = "Count of legislation by jurisdiction and type.
 
 ------------------------------------------------------------------------
 
-# Management Domain Framework
+## Legislation Collection Process
 
-## IUCN–CMP threat classification background
-
-The IUCN and the Conservation Measures Partnership (CMP) developed the
-IUCN–CMP Direct Threats Classification Version 4.0 (Salafsky et al.
-2024), which defines threats as "current or future human activities or
-altered natural phenomena that affect one or more ecosystems or species
-of interest." The classification uses a three-level hierarchical
-structure analogous to a Linnean taxonomy:
-
--   **Level 1** — Broadest categories (e.g., *2. Agriculture &
-    Aquaculture*)
--   **Level 2** — Subcategories (e.g., *2.4 Marine & Freshwater
-    Aquaculture*)
--   **Level 3** — Most specific sub-subcategories (not used in this
-    assessment)
-
-This classification is widely applied in IUCN Red List assessments and
-COSEWIC Recovery Potential Assessments (RPAs) for Pacific salmon
-populations.
-
-## Why management domains were needed
-
-Canada and BC legislation has been enacted on a sector-by-sector basis
-and does not align neatly with IUCN–CMP Level 1 categories. The Level 2
-categories fit better with legislative categories but still required
-lumping and splitting to match how legislation is organized in practice.
-Additionally, not all aspects of salmon management connects to a direct
-human threat: topics such as restoration, species status, spatial
-designation, and governance administration may encompass all threats or
-none. To capture both threat and non-threat categories, a schema of
-**management domains** was created, defined as **"discrete areas of
-administrative concern."**
-
-```{r mgmt-domain-flowchart, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("assets", "Management Domain Flowchart.png"))
-```
-
-*Figure 2. Relationship between management domains, IUCN-CMP threat
-categories, and Canadian legislation.*
-
-## Management domains and IUCN–CMP alignment
-
-```{r table-domains}
-df_domains <- data.frame(
-  `Management Domain` = c(
-    "Agriculture",
-    "Aquaculture and Hatcheries",
-    "Climate Change and Natural Disasters",
-    "Fisheries",
-    "Forest and Range",
-    "Governance Administration",
-    "Human Disturbance",
-    "Invasive or Problematic Species and Disease",
-    "Mining and Energy",
-    "Pollution",
-    "Restoration",
-    "Spatial Designation",
-    "Species Status and Assessment",
-    "Transportation Infrastructure",
-    "Water Use and Watercourse Modifications"
-  ),
-  `IUCN–CMP Level 2` = c(
-    "2.1 Annual & Perennial Non-Timber Crops",
-    "2.4 Marine & Freshwater Aquaculture; 8.3 Introduced Genetic Material",
-    "10.1 Geological Events; 11.2 Changes in Temperature Regimes; 11.3 Changes in Precipitation & Hydrological Regimes",
-    "5.4 Fishing, Harvesting & Controlling Aquatic Species",
-    "2.2 Wood & Pulp Plantations; 2.3 Terrestrial Animal Farming, Ranching & Herding; 5.3 Logging, Harvesting & Controlling Trees",
-    "N/A",
-    "6.3 Other Human Disturbances",
-    "8.1 Invasive Non-Native / Alien Species; 8.2 Problematic Native Species; 8.4 Pathogens",
-    "3.1 Oil & Gas Exploration & Extraction; 3.2 Mining & Quarrying; 3.3 Renewable Energy",
-    "9.1 Water-Borne & Other Effluent Pollution; 9.2 Garbage & Solid Waste",
-    "N/A",
-    "N/A",
-    "N/A",
-    "4.1 Roads, Trails & Railroads; 4.2 Utility & Service Lines; 4.3 Shipping Lanes",
-    "1.1 Residential Areas; 7.2 Dams & Water Management / Use; 7.3 Earth & Sediment Management; 7.5 Biological System Management"
-  ),
-  check.names = FALSE
-)
-lapse_table(
-  df_domains,
-  caption = "Management domains and corresponding IUCN–CMP Level 2 threat categories. Restoration, Spatial Designation, and Species Status and Assessment do not correspond to direct threat categories but represent important governance areas for Pacific salmon stewardship."
-)
-```
-
-------------------------------------------------------------------------
-
-# Legislation Collection Process
-
-## Overview of the collection workflow
+### Overview of the collection workflow
 
 Relevant legislation was compiled through a step-wise keyword search
 process using CanLII, designed to be publicly accessible, automated, and
@@ -435,7 +434,7 @@ repeatable as legislation changes over time. The collection steps were:
 5.  Download HTML files for relevant legislation directly from
     government portals
 
-## Word frequency extraction for adjacent keywords
+### Word frequency extraction for adjacent keywords
 
 Popular modern biologist language may not appear in legal text due to
 the age and generality of legislation. To capture salmon-relevant terms
@@ -448,7 +447,7 @@ Classification 4.0 and queried in CanLII to identify additional relevant
 legislation. This process also created an iterative salmon keyword list
 that to be used in the keyword matching process.
 
-## Verification via CanLII
+### Verification via CanLII
 
 Through the CanLII website, individual keywords can be queried within
 any chosen statute, allowing users to quickly assess the context of a
@@ -457,17 +456,19 @@ to Pacific salmon stewardship. This verification step was applied during
 collection to screen out statutes where keyword matches occurred in
 contexts unrelated to salmon.
 
-## Legislation type and ministry assignment
+------------------------------------------------------------------------
 
-*Script: `01_database_legislation.R`*
+# Phase 2 - Parsing statutes and database structure
 
-Jurisdiction was determined automatically from HTML metadata in each
-downloaded file: federal legislation was identified by the
-`meta[name='description']` tag containing `"Federal laws of Canada"`,
-while provincial legislation was identified by the
-`meta[name='breadcrumb']` tag containing `"British Columbia"`.
-Legislation type (Act, Regulation, Order, Code) was inferred from the
-legislation name using pattern matching on terms
+## Extracting legislation metadata
+
+*Script: `01_database_legislation.R`* Jurisdiction was determined
+automatically from HTML metadata in each downloaded file: federal
+legislation was identified by the `meta[name='description']` tag
+containing `"Federal laws of Canada"`, while provincial legislation was
+identified by the `meta[name='breadcrumb']` tag containing
+`"British Columbia"`. Legislation type (Act, Regulation, Order, Code)
+was inferred from the legislation name using pattern matching on terms
 "Regulation/Regulations", "Order", "Act", and "Code". For non-Act
 statutes, the parent act name was extracted from the HTML enabling-act
 element (`p.EnablingAct a` or `div#actname h2`). Responsible ministers
@@ -477,10 +478,6 @@ were assigned using:
     (Department of Justice Canada 2026)
 -   **Provincial:** *Acts – Ministers' Responsibilities* (Province of
     British Columbia 2025)
-
-------------------------------------------------------------------------
-
-# Parsing and Database Structure
 
 ## Legistics and the clause as the unit of analysis
 
@@ -497,7 +494,7 @@ opening words (chapeau or umbrella text). The hierarchy of elements from
 largest to smallest is: **heading → section → subsection → clause →
 subclause**.
 
-## Processing pipeline overview
+## Processing pipeline
 
 The full categorization pipeline is implemented across four sequential R
 scripts:
@@ -671,9 +668,13 @@ df_kw <- data.frame(
 lapse_table(df_kw, caption = "Keyword lookup tables stored in the SQLite database.")
 ```
 
-# Keyword and Keyphrase Development
+------------------------------------------------------------------------
 
-## Sources of keywords
+# Phase 3 - Keyword matching and clause labelling
+
+## Keyword and keyphrase development
+
+### Sources of keywords
 
 The management domain and IUCN–CMP threat matching process pivoted
 around established lists of keywords and phrases. Keywords must be
@@ -693,7 +694,7 @@ The full keyword and keyphrase lists by management domain and clause
 type are available in Appendix II and Appendix III of the primary
 publication and in the `data/` directory of the project repository.
 
-## Iterative revision process
+### Iterative revision process
 
 Keyword development requires iterative researcher revision because of
 the varied context of natural language. Words used in IUCN–CMP threat
@@ -714,7 +715,7 @@ the primary publication:
     frequency analyses of other legislation. Added solely from
     researchers' expert judgment.
 
-## Managing ambiguous keywords
+### Managing ambiguous keywords
 
 Single-word keywords can cause mis-categorization in unexpected ways.
 For example, "stock" is important for the Fisheries management domain
@@ -852,6 +853,173 @@ lapse_table(df_act, caption = "Actionable clause filtering pipeline steps applie
 
 ------------------------------------------------------------------------
 
+# Phase 4 - Navigating and assessing outputs
+
+## Overview
+
+*App: LAPSE Dashboard (`App.tsx` and supporting components)*
+
+The LAPSE Dashboard is a React-based static web application that serves
+as the primary interface for exploring the outputs of the LAPSE
+pipeline. It is hosted on GitHub Pages and requires no server or
+database at runtime:
+
+[https://dfo-pacific-science.github.io/LAPSE_dashboard/](https://dfo-pacific-science.github.io/LAPSE_dashboard/){target="_blank"}
+
+The dashboard source code is maintained separately from the pipeline:
+
+[https://github.com/dfo-pacific-science/LAPSE_dashboard](https://github.com/dfo-pacific-science/LAPSE_dashboard){target="_blank"}
+
+## Data inputs
+
+Rather than querying the SQLite database directly, the dashboard reads
+four flat CSV files exported from the pipeline and assembles them
+client-side into a fully indexed, filterable interface. The dashboard
+loads four CSV files from the `public/` directory of the deployed site.
+These files are generated at the end of the LAPSE pipeline and must be
+re-exported and redeployed when the database is updated. All filtering,
+search, and aggregation logic runs in the browser using memorized data
+structures derived from the loaded CSVs.
+
+```{r table-dashboard-inputs}
+df_dash_inputs <- data.frame(
+  File = c(
+    "paragraph_output.csv",
+    "legislation_output.csv",
+    "iucn_l2_keywords.csv",
+    "governance_keywords.csv"
+  ),
+  `Pipeline source` = c(
+    "Joined export of LegislationParagraphs, LegislationMetadata, paragraph_label_table, and actionable_clauses",
+    "LegislationMetadata with added URL field linking to source legislation portal",
+    "iucn_l2_keywords table from legislation.db",
+    "governance_keywords table from legislation.db"
+  ),
+  `Key fields` = c(
+    "paragraph_id, legislation_id, jurisdiction, legislation_type, act_name, legislation_name, section, heading, paragraph, management_domain, mgmt_d_keyword, iucn_threat, clause_type, actionable_type, responsible_official, discretion_type, scope",
+    "legislation_id, act_name, legislation_name, jurisdiction, legislation_type, url",
+    "keyword, label_value (IUCN Level 2 threat)",
+    "keyword, label_value (Management Domain)"
+  ),
+  check.names = FALSE
+)
+lapse_table(df_dash_inputs, caption = "CSV files consumed by the LAPSE Dashboard and their pipeline sources.")
+```
+
+Source legislation URLs are stored in `legislation_output.csv` and
+joined to paragraph records client-side, enabling direct links from any
+selected act or regulation to its source on the federal or BC provincial
+legislation portal.
+
+## Interface layout
+
+The dashboard is organized into a fixed header, a collapsible info bar,
+and a three-column main panel.
+
+### Header
+
+The header displays the full LAPSE title and an **About** button that
+opens a modal with version information, a data dictionary, and
+deployment help.
+
+### Dashboard info bar
+
+A collapsible bar below the header displays four persistent elements:
+(1) a collapsible disclaimer noting that LAPSE does not constitute legal
+advice; (2) the date the CSV data was last processed by the pipeline;
+(3) the total count of unique statutes in the loaded dataset; and (4)
+quick-link cards to the LAPSE About page and this Technical Brief.
+
+### Left sidebar — Management domain navigation
+
+The left sidebar lists all 15 management domains with a keyword-match
+count for each, sorted by count in descending order. Counts reflect only
+the data visible under the current jurisdiction, act, and legislation
+filters, updating dynamically as those filters change. Selecting a
+domain narrows the centre and right panels to clauses tagged to that
+domain. A **keyword search bar** also resides in the sidebar; search is
+applied across the `act_name`, `legislation_name`, `heading`, and
+`paragraph` fields simultaneously. On viewports narrower than the large
+breakpoint, the sidebar is replaced by a compact dropdown selector.
+
+### Centre panel — Legislation panel
+
+The centre panel contains two stacked sections: the filter controls
+(described below) and the clause results list. Clauses are displayed at
+the **section level** — if any paragraph within a section passes all
+active filters, the full section is shown to preserve legislative
+context. Matched keywords are highlighted in the paragraph text. When a
+specific act or regulation is selected, a **View Full Legislation**
+button links directly to the source statute on the relevant government
+portal.
+
+### Right panel — Results and visualizations
+
+The right panel contains a **Download XLSX** button, dynamic summary
+visualizations, and the clause-level sub-filter controls. All chart
+content and sub-filter option counts update in real time as filters
+change. The panel is always visible alongside the centre panel on
+desktop viewports.
+
+## Filtering system
+
+Filters are applied with AND logic across all active criteria. The nine
+available filters are:
+
+```{r table-filters-dash}
+df_dash_filt <- data.frame(
+  Filter = c(
+    "Management domain",
+    "Keyword search",
+    "Jurisdiction",
+    "Act",
+    "Regulation / Code / Order",
+    "Clause type",
+    "Actionable type",
+    "Responsible official",
+    "Discretion type"
+  ),
+  Panel = c(
+    "Left sidebar",
+    "Left sidebar",
+    "Centre — Legislation panel",
+    "Centre — Legislation panel",
+    "Centre — Legislation panel",
+    "Right — Results & Visualizations",
+    "Right — Results & Visualizations",
+    "Right — Results & Visualizations",
+    "Right — Results & Visualizations"
+  ),
+  Description = c(
+    "Narrows results to clauses tagged to a single management domain. Selecting 'All Domains' removes this constraint. Domain counts in the sidebar reflect the current jurisdiction, act, and legislation context.",
+    "Free-text search applied across act_name, legislation_name, heading, and paragraph fields. Results are filtered at the clause level but shown at the section level.",
+    "Toggle group (All / Federal / Provincial). Changing jurisdiction resets the Act and Regulation selectors.",
+    "Dropdown of all acts available in the current jurisdiction and content-filter context, with clause counts. Selecting an act resets the Regulation selector.",
+    "Dropdown of all regulations, codes, and orders under the selected act. When a specific regulation is selected, only that instrument is shown; when no regulation is selected and an act is chosen, only the act itself is shown.",
+    "Filters by the legal character of the clause (e.g., Authorization & Mandate, Prohibition, Restriction, or Limitation). Options and counts are context-sensitive to the active domain, jurisdiction, and legislation filters.",
+    "Filters to clauses that authorize or instruct an official to create a specific regulatory product (e.g., plan, licence, designation). Only available for actionable clauses (Acts only).",
+    "Filters to clauses where a specific responsible official is named (e.g., Minister, Governor in Council, Director). Options are derived from the responsible_official field of actionable clauses.",
+    "Filters by the discretionary character of the clause: mandatory (shall / must) or discretionary (may). Derived from the discretion_type field of actionable clauses."
+  ),
+  check.names = FALSE
+)
+lapse_table(df_dash_filt, caption = "Dashboard filter controls, their location in the interface, and their behaviour.")
+```
+
+A **Reset All Filters** button in the centre panel returns all controls
+to their default state simultaneously.
+
+## Export
+
+Filtered results are exported as an XLSX file via the **Download XLSX**
+button in the right panel. The exported file contains one row per clause
+and includes all fields from `paragraph_output.csv` for every row
+passing the active filters. The filename is automatically dated
+(`LAPSE_Export_YYYY-MM-DD.xlsx`). Export is disabled when no clauses are
+returned by the current filter combination.
+
+------------------------------------------------------------------------
+
 # Reproducibility and Versioning
 
 ## Repeatability by design
@@ -892,10 +1060,6 @@ df_pkg <- data.frame(
     "Sankey diagram visualization for legislation-to-ministry alluvial plots",
     "Static chart and bar plot visualization",
     "Audio notification on pipeline completion"
-  ),
-  Reference = c(
-    "Wickham 2025", "—", "Benoit et al. 2018", "Wijffels 2025",
-    "—", "—", "—", "—", "—", "—", "—", "—", "—", "—", "—"
   )
 )
 lapse_table(df_pkg, caption = "R packages used in the LAPSE pipeline.")
@@ -942,7 +1106,7 @@ legislation is applied in practice.
 legislation, municipal bylaws, and international conventions are not
 included, despite their importance to Pacific salmon stewardship.
 
-**6. Legislation currency.** HTML files were downloaded from government
+**6. Legislation updates.** HTML files were downloaded from government
 portals at a specific point in time. Legislation is periodically amended
 and consolidated; users should verify that referenced legislation
 reflects the current consolidated version.
