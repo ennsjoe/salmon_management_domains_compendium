@@ -6,7 +6,7 @@
 # Ignore legislation database and HTML files
 output/legislation.db
 output/legislation_html/
-legislation_html/
+data/legislation_html/
 data/*.xlsx
 *.xlsx
 
